@@ -1,7 +1,7 @@
 class MechaGolem {
 	constructor(gameEngine) {
 		this.gameEngine = gameEngine;
-		this.animator = this.idleRight();
+		this.animator = this.deathLeft();
 	}
 
 	update() {
@@ -13,13 +13,12 @@ class MechaGolem {
 	}
 
 	// -- RIGHT ANIMATIONS
-
 	idleRight() {
 		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 0, 100, 100, 4, 0.1, false, true);
 	}
 
 	glowingRight() {
-		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 100, 100, 100, 8, 0.1, false, false);
+		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 100, 100, 100, 8, 0.1, false, true);
 	}
 
 	rangeAttackRight() {
@@ -40,39 +39,35 @@ class MechaGolem {
 
 	// Missing last 4 images.
 	deathRight() {
-		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 700, 100, 100, 10, 0.1, false, false);
+		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 700, 100, 100, 14, 0.1, false, false);
 	}
-
 	
 	// -- LEFT ANIMATIONS
 	idleLeft() {
-		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 1600, 0, 100, 100, 4, 0.1, true, false);
+		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 2400, 0, 100, 100, 4, 0.1, true, true);
 	}
 
 	glowingLeft() {
-		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 1200, 100, 100, 100, 8, 0.1, true, false);
+		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 2000, 100, 100, 100, 8, 0.1, true, true);
 	}
 
 	rangeAttackLeft() {
-		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 1100, 200, 100, 100, 9, 0.1, true, false);
+		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 1900, 200, 100, 100, 9, 0.1, true, false);
 	}
 
 	blockLeft() {
-		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 1200, 300, 100, 100, 8, 0.1, true, false);
+		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 2000, 300, 100, 100, 8, 0.1, true, false);
 	}
 
 	meleeLeft() {
-		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 1300, 400, 100, 100, 7, 0.1, true, false);
+		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 2100, 400, 100, 100, 7, 0.1, true, false);
 	}
 
 	laserLeft() {
-		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 1300, 500, 100, 100, 7, 0.1, true, false);
+		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 2100, 500, 100, 100, 7, 0.1, true, false);
 	}
 
-	// Missing last 4 images.
 	deathLeft() {
-		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 900, 700, 100, 100, 10, 0.1, true, false);
+		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 1400, 700, 100, 100, 14, 0.1, true, false);
 	}
-
-
 }

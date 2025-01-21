@@ -14,14 +14,15 @@ class Animator {
             if (this.loop) {
                 this.elapsedTime = 0;
             } else {
-                
+                this.elapsedTime = this.elapsedTime - tick;
             }
         }
 
         let frame = this.reverse ?  this.frameCount - this.currentFrame() - 1 : this.currentFrame();
-       
+               
         ctx.drawImage(this.spritesheet,
-            this.xStart + frame * this.width, this.yStart, //source from sheet
+            this.xStart + frame * this.width, 
+            this.yStart,
             this.width, this.height,
             x, y,
             this.width * scale,
