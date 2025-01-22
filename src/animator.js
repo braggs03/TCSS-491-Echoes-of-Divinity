@@ -21,7 +21,7 @@ class Animator {
                 this.elapsedTime = this.elapsedTime - tick;
             }
         }
-
+      
         let frame = this.reverse ?  this.frameCount - this.currentFrame() - 1 : this.currentFrame();
                
         ctx.drawImage(
