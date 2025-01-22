@@ -1,18 +1,33 @@
 class MechaGolem {
 	constructor(gameEngine) {
-		this.gameEngine = gameEngine;
-		this.animator = this.deathLeft();
+        this.gameEngine = gameEngine;
+        this.animator = this.idleRight();
+        this.x = 100;
+        this.y = 100;
+        this.speed = 5; 
+		this.facing = RIGHT;
 	}
 
-	update() {
-
-	}
+    update() {
+        if (this.gameEngine.keys["ArrowLeft"]) {
+            this.x -= this.speed;
+			if (this.facing != LEFT) {
+				this.animator = this.idleLeft();
+				this.facing = LEFT;
+			}
+        } else if (this.gameEngine.keys["ArrowRight"]) {
+            this.x += this.speed;
+			if (this.facing != RIGHT) {
+				this.animator = this.idleRight();
+			}
+			this.facing = RIGHT;
+        }
+    }
 
 	draw(ctx) {
 		this.animator.drawFrame(this.gameEngine.clockTick, ctx, 0, 0, 4);
 	}
 
-	// -- RIGHT ANIMATIONS
 	idleRight() {
 		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 0, 100, 100, 4, 0.1, false, true);
 	}
@@ -37,12 +52,10 @@ class MechaGolem {
 		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 500, 100, 100, 7, 0.1, false, false);
 	}
 
-	// Missing last 4 images.
 	deathRight() {
 		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 700, 100, 100, 14, 0.1, false, false);
 	}
 	
-	// -- LEFT ANIMATIONS
 	idleLeft() {
 		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 2400, 0, 100, 100, 4, 0.1, true, true);
 	}

@@ -5,6 +5,10 @@ class Animator {
         this.elapsedTime = 0;
         this.totalTime = this.frameCount * this.frameDuration;
 
+        this.dead = false;
+        this.facing = RIGHT;
+        this.state = IDLE;
+
     };
 
     drawFrame(tick, ctx, x, y, scale) {
@@ -20,13 +24,15 @@ class Animator {
 
         let frame = this.reverse ?  this.frameCount - this.currentFrame() - 1 : this.currentFrame();
                
-        ctx.drawImage(this.spritesheet,
+        ctx.drawImage(
+            this.spritesheet,
             this.xStart + frame * this.width, 
             this.yStart,
             this.width, this.height,
             x, y,
             this.width * scale,
-            this.height * scale);
+            this.height * scale
+        );
     };
 
     currentFrame() {
