@@ -27,19 +27,23 @@ ASSET_MANAGER.queueDownload("../resources/CelesLightCharge.png")
 ASSET_MANAGER.queueDownload("../resources/CelesRun.png")
 ASSET_MANAGER.queueDownload("../resources/CelesWalk.png")
 ASSET_MANAGER.queueDownload("../resources/Title.png")
+ASSET_MANAGER.queueDownload("./resources/NightBorneWarrior.png"); // looked pixely to me
+ASSET_MANAGER.queueDownload("./resources/Attack_1.png");
+ASSET_MANAGER.queueDownload("./resources/Attack_2.png");
+ASSET_MANAGER.queueDownload("./resources/Attack_3.png");
+ASSET_MANAGER.queueDownload("./resources/Dead.png");
+ASSET_MANAGER.queueDownload("./resources/Hurt.png");
+ASSET_MANAGER.queueDownload("./resources/Idle.png"); 
+ASSET_MANAGER.queueDownload("./resources/Jump.png"); 
+ASSET_MANAGER.queueDownload("./resources/Run.png"); // looks kind off
+ASSET_MANAGER.queueDownload("./resources/Run+Attack.png"); 
+ASSET_MANAGER.queueDownload("./resources/walk.png");
 
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameWorld");
 	const ctx = canvas.getContext("2d");
 	ctx.imageSmoothingEnabled = false;
-
-	//gameEngine.addEntity(new azucendaIdle(gameEngine, ctx))
-	//gameEngine.addEntity(new reinaIdle(gameEngine, ctx))
-	//gameEngine.addEntity(new lightning(gameEngine, ctx))
-	gameEngine.addEntity(new gorgon(gameEngine, ctx));
-	//gameEngine.addEntity(new celes(gameEngine, ctx));
-	//gameEngine.addEntity(new title(gameEngine, ctx));
-
+  
 	gameEngine.init(ctx);
 
 	gameEngine.start();
