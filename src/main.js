@@ -2,6 +2,9 @@ const gameEngine = new GameEngine();
 
 const ASSET_MANAGER = new AssetManager();
 
+const KNIGHT = './resources/knight/';
+const SKELETON_WARRIOR = './resources/skeletonwarrior/'
+
 ASSET_MANAGER.queueDownload(MECHA_GOLEM);
 ASSET_MANAGER.queueDownload("../resources/Azucena.png")
 ASSET_MANAGER.queueDownload("../resources/Reina.png")
@@ -39,11 +42,38 @@ ASSET_MANAGER.queueDownload("./resources/Jump.png");
 ASSET_MANAGER.queueDownload("./resources/Run.png"); // looks kind off
 ASSET_MANAGER.queueDownload("./resources/Run+Attack.png"); 
 ASSET_MANAGER.queueDownload("./resources/walk.png");
+//Knight
+ASSET_MANAGER.queueDownload(KNIGHT + "Attack2.png")
+ASSET_MANAGER.queueDownload(KNIGHT + "AttackCombo.png")
+ASSET_MANAGER.queueDownload(KNIGHT + "Crouch.png")
+ASSET_MANAGER.queueDownload(KNIGHT + "CrouchWalk.png")
+ASSET_MANAGER.queueDownload(KNIGHT + "Death.png")
+ASSET_MANAGER.queueDownload(KNIGHT + "Fall.png")
+ASSET_MANAGER.queueDownload(KNIGHT + "Idle.png")
+ASSET_MANAGER.queueDownload(KNIGHT + "Jump.png")
+ASSET_MANAGER.queueDownload(KNIGHT + "Roll.png")
+ASSET_MANAGER.queueDownload(KNIGHT + "Run.png")
+//Skeleton Warrior
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Attack_1.png")
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Attack_2.png")
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Attack_3.png")
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Dead.png")
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Hurt.png")
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Idle.png")
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Protect.png")
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Run.png")
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Run+attack.png")
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Walk.png")
+
 
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameWorld");
 	const ctx = canvas.getContext("2d");
 	ctx.imageSmoothingEnabled = false;
+
+	// gameEngine.addEntity(new Knight(gameEngine, ctx));
+	// gameEngine.addEntity(new SkeletonWarrior(gameEngine, ctx));
+	
 	gameEngine.init(ctx);
 
 	gameEngine.start();
