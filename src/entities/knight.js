@@ -3,7 +3,10 @@ class Knight {
 		this.game = game;
         this.x = x;
         this.y = y;
+        this.speed = 4; 
 		this.removeFromWorld = false;
+        this.facing = RIGHT;
+
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT + "Attack2.png"), 0, 0, 125.5, 80, 6, 0.1, false, false),
             RightAttack2 : new Animator(ASSET_MANAGER.getAsset(KNIGHT + "AttackCombo.png"), 0, 0, 95, 100, 10, 0.1, false, false),
@@ -30,6 +33,7 @@ class Knight {
         }
 
         this.currentState = 'RightIdle';
+        this.animationLocked = false;
 
        
 
@@ -44,10 +48,33 @@ class Knight {
     }
 
 	update() {
+        if (this.game.keys["ArrowLeft"]) {
+            this.x -= this.speed;
+			if (this.facing == RIGHT) {
+				this.currentState = 'LeftRun';
+			} else if (this.facing == LEFT) {
+                this.currentState = 'LeftRun';
+            }
+            this.facing = LEFT;
+        } else if (this.game.keys["ArrowRight"]) {
+            this.x += this.speed;
+			if (this.facing == RIGHT) {
+				this.currentState = 'RightRun';
+			}
+			this.facing = RIGHT;
+        } else if (this.game.keys["e"]) {
+			this.currentState = this.facing == RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';   
+		} else {
+            if(this.facing == LEFT) {
+                this.currentState = 'LeftIdle';
+            } else if (this.facing == RIGHT) {
+                this.currentState = 'RightIdle';
+            }
+        }
 
 	};
 
 	draw(ctx) {
-		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, 0, 0, 3);
+		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x, this.y, 3);
 	};
 };

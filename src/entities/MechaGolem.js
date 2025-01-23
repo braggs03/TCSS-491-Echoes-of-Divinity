@@ -9,21 +9,21 @@ class MechaGolem {
 	}
 
     update() {
-        if (this.gameEngine.keys["ArrowLeft"]) {
-            this.x -= this.speed;
-			if (this.facing != LEFT) {
-				this.animator = this.idleLeft();
-				this.facing = LEFT;
-			}
-        } else if (this.gameEngine.keys["ArrowRight"]) {
-            this.x += this.speed;
-			if (this.facing != RIGHT) {
-				this.animator = this.idleRight();
-			}
-			this.facing = RIGHT;
-        } else if (this.gameEngine.keys["e"]) {
-			this.animator = this.facing == RIGHT ? this.rangeAttackRight() : this.rangeAttackLeft();
-		}
+        // if (this.gameEngine.keys["ArrowLeft"]) {
+        //     this.x -= this.speed;
+		// 	if (this.facing != LEFT) {
+		// 		this.animator = this.idleLeft();
+		// 		this.facing = LEFT;
+		// 	}
+        // } else if (this.gameEngine.keys["ArrowRight"]) {
+        //     this.x += this.speed;
+		// 	if (this.facing != RIGHT) {
+		// 		this.animator = this.idleRight();
+		// 	}
+		// 	this.facing = RIGHT;
+        // } else if (this.gameEngine.keys["e"]) {
+		// 	this.animator = this.facing == RIGHT ? this.rangeAttackRight() : this.rangeAttackLeft();
+		// }
     }
 
 	draw(ctx) {

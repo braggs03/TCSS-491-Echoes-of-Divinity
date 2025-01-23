@@ -20,7 +20,7 @@ class SceneManager {
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
 
-        this.knight = new Knight(this.game, 100, 100);
+        //this.knight = new Knight(this.game, 100, 100);
 
         this.loadLevel(levelOne, 100, 100, false, true);
     };
@@ -38,8 +38,10 @@ class SceneManager {
         this.clearEntities();
         this.x = 0;
 
-        this.knight = new Knight(this.game, 100, 100);
-        this.game.addEntity(this.knight);
+        // this.knight = new Knight(this.game, 100, 1);
+        // this.game.addEntity(this.knight);
+
+        this.game.addEntity(new Knight(this.game, 0 , 435));
 
         if (transition) {
             this.game.addEntity(new TransitionScreen(this.game, level, x, y, title));
