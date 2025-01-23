@@ -1,11 +1,10 @@
-const gameEngine = new GameEngine();
-
-const ASSET_MANAGER = new AssetManager();
-
 const KNIGHT = './resources/knight/';
 const SKELETON_WARRIOR = './resources/skeletonwarrior/'
 
+const ASSET_MANAGER = new AssetManager();
+
 ASSET_MANAGER.queueDownload(MECHA_GOLEM);
+ASSET_MANAGER.queueDownload(DUNGEON);
 ASSET_MANAGER.queueDownload("../resources/Azucena.png")
 ASSET_MANAGER.queueDownload("../resources/Reina.png")
 ASSET_MANAGER.queueDownload("../resources/Lightning.png")
@@ -67,14 +66,14 @@ ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Walk.png")
 
 
 ASSET_MANAGER.downloadAll(() => {
+	const gameEngine = new GameEngine();
 	const canvas = document.getElementById("gameWorld");
 	const ctx = canvas.getContext("2d");
 	ctx.imageSmoothingEnabled = false;
-
-	// gameEngine.addEntity(new Knight(gameEngine, ctx));
-	// gameEngine.addEntity(new SkeletonWarrior(gameEngine, ctx));
 	
 	gameEngine.init(ctx);
+
+	new SceneManager(gameEngine);
 
 	gameEngine.start();
 });

@@ -1,10 +1,9 @@
 class Knight {
-	constructor(game, ctx) {
+	constructor(game, x, y) {
 		this.game = game;
-        this.ctx = ctx;
-        this.x = 0;
-        this.y = 0;
-		
+        this.x = x;
+        this.y = y;
+		this.removeFromWorld = false;
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT + "Attack2.png"), 0, 0, 125.5, 80, 6, 0.1, false, false),
             RightAttack2 : new Animator(ASSET_MANAGER.getAsset(KNIGHT + "AttackCombo.png"), 0, 0, 95, 100, 10, 0.1, false, false),
@@ -49,6 +48,6 @@ class Knight {
 	};
 
 	draw(ctx) {
-		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x, this.y, 3);
+		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, 0, 0, 3);
 	};
 };

@@ -1,9 +1,9 @@
 class MechaGolem {
-	constructor(gameEngine) {
+	constructor(gameEngine, x, y) {
         this.gameEngine = gameEngine;
         this.animator = this.idleRight();
-        this.x = 100;
-        this.y = 100;
+        this.x = x;
+        this.y = y;
         this.speed = 5; 
 		this.facing = RIGHT;
 	}
@@ -21,11 +21,13 @@ class MechaGolem {
 				this.animator = this.idleRight();
 			}
 			this.facing = RIGHT;
-        }
+        } else if (this.gameEngine.keys["e"]) {
+			this.animator = this.facing == RIGHT ? this.rangeAttackRight() : this.rangeAttackLeft();
+		}
     }
 
 	draw(ctx) {
-		this.animator.drawFrame(this.gameEngine.clockTick, ctx, 0, 0, 4);
+		this.animator.drawFrame(this.gameEngine.clockTick, ctx, this.x, this.y, 4);
 	}
 
 	idleRight() {
