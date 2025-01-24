@@ -14,7 +14,7 @@ class DungeonGround {
 
     draw(ctx) {
         for (let i = 0; i < this.w; i++) {
-            ctx.drawImage(this.spritesheet, 200, 1432, 31, 8, this.x + i * DUNEGON_GROUND_WIDTH * this.scale, this.y * DUNEGON_GROUND_HEIGHT * this.scale, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
+            ctx.drawImage(this.spritesheet, 200, 1432, 31, 8, (this.x + i * DUNEGON_GROUND_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_GROUND_HEIGHT * this.scale, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
         }
         // if (PARAMS.DEBUG) {
         //     ctx.strokeStyle = 'Red';
@@ -40,7 +40,7 @@ class DungeonBackground {
     draw(ctx) {
         for (let k = 0; k < this.h; k++) {
             for (let i = 0; i < this.w; i++) {
-                ctx.drawImage(this.spritesheet, 808, 968, DUNEGON_BACKGROUND_WIDTH, DUNEGON_BACKGROUND_HEIGHT, this.x + i * DUNEGON_BACKGROUND_WIDTH * this.scale, this.y + k * DUNEGON_BACKGROUND_HEIGHT * this.scale, DUNEGON_BACKGROUND_WIDTH * this.scale, DUNEGON_BACKGROUND_HEIGHT * this.scale);
+                ctx.drawImage(this.spritesheet, 808, 968, DUNEGON_BACKGROUND_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x + i * DUNEGON_BACKGROUND_WIDTH * this.scale) - this.game.camera.x, this.y + k * DUNEGON_BACKGROUND_HEIGHT * this.scale, DUNEGON_BACKGROUND_WIDTH * this.scale, DUNEGON_BACKGROUND_HEIGHT * this.scale);
             }
         }
         // if (PARAMS.DEBUG) {

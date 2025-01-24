@@ -1,6 +1,6 @@
 class MechaGolem {
-	constructor(gameEngine, x, y) {
-        this.gameEngine = gameEngine;
+	constructor(game, x, y) {
+        this.game = game;
         this.animator = this.idleRight();
         this.x = x;
         this.y = y;
@@ -27,7 +27,7 @@ class MechaGolem {
     }
 
 	draw(ctx) {
-		this.animator.drawFrame(this.gameEngine.clockTick, ctx, this.x, this.y, 4);
+		this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y, 4);
 	}
 
 	idleRight() {

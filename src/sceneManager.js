@@ -3,6 +3,7 @@ class SceneManager {
         this.game = game;
         this.game.camera = this;
         this.x = 0;
+        this.y = 0;
         this.score = 0;
         this.gameOver = false;
 
@@ -26,7 +27,7 @@ class SceneManager {
     };
 
     clearEntities() {
-        this.game.entities.forEach(function (entity) {
+        this.game.entities.forEach((entity) => {
             entity.removeFromWorld = true;
         });
     };
@@ -37,11 +38,10 @@ class SceneManager {
         this.level = level;
         this.clearEntities();
         this.x = 0;
+        //this.game.addEntity(this.knight);
 
-        // this.knight = new Knight(this.game, 100, 1);
-        // this.game.addEntity(this.knight);
-
-        this.game.addEntity(new Knight(this.game, 0 , 435));
+        this.knight = new Knight(this.game, PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2);
+        this.game.addEntity(this.knight);
 
         if (transition) {
             this.game.addEntity(new TransitionScreen(this.game, level, x, y, title));
@@ -76,29 +76,14 @@ class SceneManager {
             this.game.camera.paused = false;
         }
 
-        // if (level.lifts) {
-        //     for (var i = 0; i < level.lifts.length; i++) {
-        //         let lift = level.lifts[i];
-        //         this.game.addEntity(new Lift(this.game, lift.x * PARAMS.BLOCKWIDTH, lift.y * PARAMS.BLOCKWIDTH, lift.goingDown));
-        //     }
-        // }
-        //this.game.addEntity(this.mario);
-
     };
 
     update() { 
 
-        let midpoint = 100000;
+        let midpoint = PARAMS.SCREENWIDTH / 2 - 50;
 
-        if (this.x < this.knight.x - midpoint) this.x = this.knight.x - midpoint;
-
-        // NOTE: THIS FOLLOWING CODE HAS A BUG WHERE CANVAS COLOR WON'T CHANGE BACK TO BLUE.
-        var canvas = document.getElementById("gameWorld");
-        if (this.underground) {
-            canvas.style.backgroundColor = "black";
-        } else {
-            canvas.style.backgroundColor = "#049cd8";
-        }
+        //if (this.x < this.knight.x - midpoint) this.x = this.knight.x - midpoint;
+        this.x = this.knight.x - midpoint;
     };
 
     draw(ctx) {
