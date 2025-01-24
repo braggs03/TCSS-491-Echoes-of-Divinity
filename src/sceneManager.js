@@ -40,7 +40,8 @@ class SceneManager {
         this.x = 0;
         //this.game.addEntity(this.knight);
 
-        this.knight = new Knight(this.game, PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2);
+        // this.knight = new Knight(this.game, PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2);
+        this.knight = new Knight(this.game, (PARAMS.SCREENWIDTH / 2 - 50), 435);
         this.game.addEntity(this.knight);
 
         if (transition) {
