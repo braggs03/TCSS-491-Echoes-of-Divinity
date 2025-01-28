@@ -4,7 +4,8 @@ class SkeletonWarrior {
         this.ctx = ctx;
         this.x = 0;
         this.y = 0;
-		
+        this.updateBB();
+
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(SKELETON_WARRIOR + "Attack_1.png"), 0, 0, 130, 200, 5, 0.1, false, false),
             RightAttack2 : new Animator(ASSET_MANAGER.getAsset(SKELETON_WARRIOR + "Attack_2.png"), 0, 0, 130, 200, 6, 0.1, false, false),
@@ -42,8 +43,21 @@ class SkeletonWarrior {
         }
     }
 
-	update() {
+    updateBB() {
+        this.lastBB = this.BB;
+        this.BB = new BoundingBox(this.x, this.y, 128, 128)
+    }
 
+	update() {
+        if (this.currentState === 'RightRun' || this.currentState === 'RightRunattack') {
+            this.x += 500 * this.game.clockTick;
+        } else if (this.currentState === 'LeftRun' || this.currentState === 'LeftRunattack') {
+            this.x -= 500 * this.game.clockTick;
+        } else if (this.currentState === 'RightWalk') {
+            this.x += 100 * this.game.clockTick;
+        }else if (this.currentState === 'LeftWalk') {
+            this.x -= 100 * this.game.clockTick;
+        }
 	};
 
 	draw(ctx) {
