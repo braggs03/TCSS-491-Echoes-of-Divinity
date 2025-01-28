@@ -75,3 +75,49 @@ class DungeonBackground {
     };
 };
 
+const DUNEGON_DOOR_WIDTH = 47;
+const DUNEGON_DOOR_HEIGHT = 39;
+
+class DungeonDoor {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 5.5;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 1840, 1904, DUNEGON_DOOR_WIDTH, DUNEGON_DOOR_HEIGHT, this.x - this.game.camera.x, this.y, DUNEGON_DOOR_WIDTH * this.scale, DUNEGON_DOOR_HEIGHT * this.scale);
+        // if (PARAMS.DEBUG) {
+        //     ctx.strokeStyle = 'Red';
+        //     ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        // }
+    };
+};
+
+const DUNEGON_TORCH_WIDTH = 20;
+const DUNEGON_TORCH_HEIGHT = 39;
+
+class DungeonTorch {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.animator = this.torch();
+        this.scale = 5.5;
+    };
+
+    update() {
+    };
+
+	draw(ctx) {
+		this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y, 4);
+	}
+
+    torch() {
+		return new Animator(ASSET_MANAGER.getAsset(TORCH), 0, 0, 21, 27, 4, 0.1, false, true);
+	}
+};
+
+

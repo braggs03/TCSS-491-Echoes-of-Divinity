@@ -4,26 +4,14 @@ class SceneManager {
         this.game.camera = this;
         this.x = 0;
         this.y = 0;
-        this.score = 0;
-        this.gameOver = false;
+        this.embers = 0;
 
-        this.title = true;
-        this.credits = false;
-        this.level = null;
-
-        this.menuSelect = {
-            mario: false,
-            luigi: false,
-            credits: false
-        }
         this.menuSelectIndex = -10;
         this.creditsLineIndex = 0;
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
 
-        //this.knight = new Knight(this.game, 100, 100);
-
-        this.loadLevel(shopkeeper, 0, 0, false, true);
+        this.loadLevel(shopkeeper, 1515, 440, false, true);
     };
 
     clearEntities() {
@@ -39,8 +27,7 @@ class SceneManager {
         this.clearEntities();
         this.x = 0;
 
-
-        this.knight = new Knight(this.game, 100, 435);
+        this.knight = new Knight(this.game, x, y);
         this.game.addEntity(this.knight);
 
         if (level.tent) {
@@ -71,10 +58,76 @@ class SceneManager {
             }
         }
 
+        if (level.azucendaIdle) {
+            for (let i = 0; i < level.azucendaIdle.length; i++) {
+                let azucendaIdle = level.azucendaIdle[i];
+                this.game.addEntity(new AzucendaIdle(this.game, azucendaIdle.x, azucendaIdle.y));
+            }
+        }
+
+        if (level.boxes) {
+            for (let i = 0; i < level.boxes.length; i++) {
+                let boxes = level.boxes[i];
+                this.game.addEntity(new Boxes(this.game, boxes.x, boxes.y, boxes.h));
+            }
+        }
+
+
         if (level.dungeonWall) {
             for (let i = 0; i < level.dungeonWall.length; i++) {
                 let wall = level.dungeonWall[i];
                 this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
+            }
+        }
+
+        if (level.dungeonTorch) {
+            for (let i = 0; i < level.dungeonTorch.length; i++) {
+                let torch = level.dungeonTorch[i];
+                this.game.addEntity(new DungeonTorch(this.game, torch.x, torch.y));
+            }
+        }
+
+        if (level.swordRack) {
+            for (let i = 0; i < level.swordRack.length; i++) {
+                let swordRack = level.swordRack[i];
+                this.game.addEntity(new SwordRack(this.game, swordRack.x, swordRack.y));
+            }
+        }
+
+        if (level.dungeonWorkbench) {
+            for (let i = 0; i < level.dungeonWorkbench.length; i++) {
+                let workbench = level.dungeonWorkbench[i];
+                this.game.addEntity(new DungeonWorkbench(this.game, workbench.x, workbench.y));
+            }
+        }
+
+        if (level.shieldRack) {
+            for (let i = 0; i < level.shieldRack.length; i++) {
+                let shieldRack = level.shieldRack[i];
+                this.game.addEntity(new ShieldRack(this.game, shieldRack.x, shieldRack.y));
+            }
+        }
+
+
+        if (level.wallAxe) {
+            for (let i = 0; i < level.wallAxe.length; i++) {
+                let wallAxe = level.wallAxe[i];
+                this.game.addEntity(new WallAxe(this.game, wallAxe.x, wallAxe.y));
+            }
+        }
+
+        if (level.dungeonAnvil) {
+            for (let i = 0; i < level.dungeonAnvil.length; i++) {
+                let anvil = level.dungeonAnvil[i];
+                this.game.addEntity(new DungeonAnvil(this.game, anvil.x, anvil.y));
+            }
+        }
+
+        if (level.dungeonDoor) {
+            for (let i = 0; i < level.dungeonDoor.length; i++) {
+                let door = level.dungeonDoor[i];
+                this.game.addEntity(new DungeonDoor
+                    (this.game, door.x, door.y, door.h));
             }
         }
 
@@ -91,14 +144,6 @@ class SceneManager {
                 this.game.addEntity(new DungeonBackground(this.game, background.x, background.y, background.w, background.h));
             }
         }
-
-        if (level.music && !this.title) {
-            ASSET_MANAGER.pauseBackgroundMusic();
-            ASSET_MANAGER.playAsset(level.music);
-        }
-        if (level == shopkeeper) {
-
-        }
     };
 
     update() { 
@@ -106,7 +151,6 @@ class SceneManager {
         let middlepoint = PARAMS.SCREENWIDTH / 2 - 50;
         this.x = this.knight.x - middlepoint;
         //if (this.x < this.knight.x - midpoint) this.x = this.knight.x - midpoint;
-
 
         if (this.level == shopkeeper && this.knight.x > 2000 && this.game.keys["e"]) {
             this.loadLevel(one, 0, 0, false, false)
