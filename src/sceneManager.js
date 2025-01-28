@@ -51,13 +51,6 @@ class SceneManager {
             }
         }
 
-        if (level.dungeonGround) {
-            for (let i = 0; i < level.dungeonGround.length; i++) {
-                let ground = level.dungeonGround[i];
-                this.game.addEntity(new DungeonGround(this.game, ground.x, ground.y, ground.w));
-            }
-        }
-
         if (level.azucendaIdle) {
             for (let i = 0; i < level.azucendaIdle.length; i++) {
                 let azucendaIdle = level.azucendaIdle[i];
@@ -72,11 +65,21 @@ class SceneManager {
             }
         }
 
+        if (level.dungeonGround) {
+            for (let i = 0; i < level.dungeonGround.length; i++) {
+                let ground = level.dungeonGround[i];
+                for (let k = 0; k < ground.w; k++) {
+                    this.game.addEntity(new DungeonGround(this.game, ground.x + k, ground.y));
+                }
+            }
+        }
 
         if (level.dungeonWall) {
             for (let i = 0; i < level.dungeonWall.length; i++) {
                 let wall = level.dungeonWall[i];
-                this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
+                for (let k = 0; k < wall.h; k++) {
+                    this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y + k));
+                }
             }
         }
 

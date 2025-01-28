@@ -1,11 +1,11 @@
 class Knight {
 	constructor(game, x, y) {
 		this.game = game;
-        this.ctx = ctx;
-        this.x = 0;
-        this.y = 0;
+        this.x = x;
+        this.y = y;
         this.speed = 10;
         this.updateBB();
+        this.colliding = false;
 		
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT + "Attack2.png"), 0, 0, 125.5, 80, 6, 0.05, false, false),
@@ -57,22 +57,36 @@ class Knight {
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x + 50, this.y + 128, 128, 128);
+        this.BB = new BoundingBox((this.x + 50) - this.game.camera.x, this.y + 128, 128, 128);
     }
 
 	update() {
+        let that = this;
+        this.game.entities.forEach((entity) => {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+                if (entity instanceof DungeonWall) {
+                    this.colliding = true;
+                    if (that.facing == LEFT && entity.x > that.x) {
+                        that.setState('LeftIdle');
+                    } else if (that.facing == RIGHT && entity.x < that.x) {
+                        that.setState('RightIdle')
+                    } else {
+                        this.colliding = false;
+                    }
+                } 
+            }
+        });
+        this.updateBB();
         if (this.game.keys["ArrowLeft"]) {
-            this.x -= this.speed;
-            if (this.facing === RIGHT) {
+            if (this.facing === LEFT && !this.colliding) {
                 this.currentState = 'LeftRun';
-            } else if (this.facing === LEFT) {
-                this.currentState = 'LeftRun';
+                this.x -= this.speed;
             }
             this.facing = LEFT;
         } else if (this.game.keys["ArrowRight"]) {
-            this.x += this.speed;
-            if (this.facing === RIGHT) {
+            if (this.facing === RIGHT && !this.colliding) {
                 this.currentState = 'RightRun';
+                this.x += this.speed;
             }
             this.facing = RIGHT;
         } else if (this.game.keys["e"]) {
@@ -84,11 +98,10 @@ class Knight {
                 this.currentState = 'RightIdle';
             }
         }
-        this.updateBB();
     };
 
 	draw(ctx) {
-		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x, this.y, 3);
+		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 3);
         this.BB.draw(ctx)
 	};
 }
