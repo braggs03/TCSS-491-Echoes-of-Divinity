@@ -19,11 +19,17 @@ ASSET_MANAGER.queueDownload("./resources/walk.png");
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameWorld");
 	const ctx = canvas.getContext("2d");
+<<<<<<< Updated upstream
 	ctx.imageSmoothingEnabled = false ; 
 
 	gameEngine.addEntity (new NightbornWarrior(gameEngine, ctx));
 	gameEngine.addEntity(new Werewolf(gameEngine, ctx));
 
+=======
+	
+	ctx.imageSmoothingEnabled = false;
+	
+>>>>>>> Stashed changes
 	gameEngine.init(ctx);
 
 	gameEngine.start();
