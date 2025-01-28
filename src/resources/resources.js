@@ -1,6 +1,7 @@
-// Entities
+const MECHA_GOLEM = './src/resources/MechaGolem.png'
+const SKELETON_WARRIOR = './resources/skeletonwarrior/'
+const KNIGHT_SPRITE = './resources/knight/knightsprite.png'
 
-const MECHA_GOLEM = './resources/MechaGolem.png'
 const GORGON = './resources/Gorgon/Gorgon'
 const CELES = './resources/Celes/Celes'
 

@@ -107,6 +107,15 @@ class Knight {
             } else if (this.facing === RIGHT) {
                 this.currentState = 'RightIdle';
             }
+            this.resetAnimations();
+        }
+    };
+
+    resetAnimations() {
+        for (const key in this.animations) {
+            if (this.animations.hasOwnProperty(key)) {
+                this.animations[key].elapsedTime = 0;
+            }
         }
     };
 

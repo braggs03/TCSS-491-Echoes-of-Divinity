@@ -1,5 +1,3 @@
-const KNIGHT = './resources/knight/';
-const SKELETON_WARRIOR = './resources/skeletonwarrior/';
 const REINA = './resources/Reina.png';
 
 const ASSET_MANAGER = new AssetManager();
