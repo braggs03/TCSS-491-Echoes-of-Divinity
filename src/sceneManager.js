@@ -23,7 +23,7 @@ class SceneManager {
 
         //this.knight = new Knight(this.game, 100, 100);
 
-        this.loadLevel(levelOne, 100, 100, false, true);
+        this.loadLevel(shopkeeper, 0, 0, false, true);
     };
 
     clearEntities() {
@@ -38,55 +38,81 @@ class SceneManager {
         this.level = level;
         this.clearEntities();
         this.x = 0;
-        //this.game.addEntity(this.knight);
 
-        // this.knight = new Knight(this.game, PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2);
-        this.knight = new Knight(this.game, (PARAMS.SCREENWIDTH / 2 - 50), 435);
+
+        this.knight = new Knight(this.game, 100, 435);
         this.game.addEntity(this.knight);
 
-        if (transition) {
-            this.game.addEntity(new TransitionScreen(this.game, level, x, y, title));
-        } else {
-            if (level.mechagolem) {
-                for (let i = 0; i < level.mechagolem.length; i++) {
-                    let mechagolem = level.mechagolem[i];
-                    this.game.addEntity(new MechaGolem(this.game, mechagolem.x, mechagolem.y));
-                }
+        if (level.tent) {
+            for (let i = 0; i < level.tent.length; i++) {
+                let tent = level.tent[i];
+                this.game.addEntity(new ShopkeeperTent(this.game, tent.x, tent.y));
             }
-
-            if (level.dungeonGround) {
-                for (let i = 0; i < level.dungeonGround.length; i++) {
-                    let ground = level.dungeonGround[i];
-                    this.game.addEntity(new DungeonGround(this.game, ground.x, ground.y, ground.w));
-                }
-            }
-
-            if (level.dungeonBackground) {
-                for (let i = 0; i < level.dungeonBackground.length; i++) {
-                    let background = level.dungeonBackground[i];
-                    this.game.addEntity(new DungeonBackground(this.game, background.x, background.y, background.w, background.h));
-                }
-            }
-
-            if (level.music && !this.title) {
-                ASSET_MANAGER.pauseBackgroundMusic();
-                ASSET_MANAGER.playAsset(level.music);
-            }
-
-            // this.time = 400;
-            this.game.camera.paused = false;
         }
 
+        if (level.reinaIdle) {
+            for (let i = 0; i < level.reinaIdle.length; i++) {
+                let reinaIdle = level.reinaIdle[i];
+                this.game.addEntity(new ReinaIdle(this.game, reinaIdle.x, reinaIdle.y));
+            }
+        }
+
+        if (level.mechagolem) {
+            for (let i = 0; i < level.mechagolem.length; i++) {
+                let mechagolem = level.mechagolem[i];
+                this.game.addEntity(new MechaGolem(this.game, mechagolem.x, mechagolem.y));
+            }
+        }
+
+        if (level.dungeonGround) {
+            for (let i = 0; i < level.dungeonGround.length; i++) {
+                let ground = level.dungeonGround[i];
+                this.game.addEntity(new DungeonGround(this.game, ground.x, ground.y, ground.w));
+            }
+        }
+
+        if (level.dungeonWall) {
+            for (let i = 0; i < level.dungeonWall.length; i++) {
+                let wall = level.dungeonWall[i];
+                this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
+            }
+        }
+
+        if (level.chandelier) {
+            for (let i = 0; i < level.chandelier.length; i++) {
+                let chandelier = level.chandelier[i];
+                this.game.addEntity(new Chandelier(this.game, chandelier.x, chandelier.y));
+            }
+        }
+
+        if (level.dungeonBackground) {
+            for (let i = 0; i < level.dungeonBackground.length; i++) {
+                let background = level.dungeonBackground[i];
+                this.game.addEntity(new DungeonBackground(this.game, background.x, background.y, background.w, background.h));
+            }
+        }
+
+        if (level.music && !this.title) {
+            ASSET_MANAGER.pauseBackgroundMusic();
+            ASSET_MANAGER.playAsset(level.music);
+        }
+        if (level == shopkeeper) {
+
+        }
     };
 
     update() { 
 
-        let midpoint = PARAMS.SCREENWIDTH / 2 - 50;
-
+        let middlepoint = PARAMS.SCREENWIDTH / 2 - 50;
+        this.x = this.knight.x - middlepoint;
         //if (this.x < this.knight.x - midpoint) this.x = this.knight.x - midpoint;
-        this.x = this.knight.x - midpoint;
+
+
+        if (this.level == shopkeeper && this.knight.x > 2000 && this.game.keys["e"]) {
+            this.loadLevel(one, 0, 0, false, false)
+        }
     };
 
     draw(ctx) {
-    };
+    };  
 };

@@ -1,12 +1,13 @@
 const KNIGHT = './resources/knight/';
-const SKELETON_WARRIOR = './resources/skeletonwarrior/'
+const SKELETON_WARRIOR = './resources/skeletonwarrior/';
+const REINA = './resources/Reina.png';
 
 const ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload(MECHA_GOLEM);
 ASSET_MANAGER.queueDownload(DUNGEON);
-ASSET_MANAGER.queueDownload("../resources/Azucena.png")
-ASSET_MANAGER.queueDownload("../resources/Reina.png")
+ASSET_MANAGER.queueDownload("./resources/Azucena.png")
+ASSET_MANAGER.queueDownload(REINA);
 ASSET_MANAGER.queueDownload("../resources/Lightning.png")
 ASSET_MANAGER.queueDownload("../resources/GorgonAttack1.png")
 ASSET_MANAGER.queueDownload("../resources/GorgonAttack2.png")

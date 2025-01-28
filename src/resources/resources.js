@@ -1,11 +1,6 @@
-const MECHA_GOLEM = './src/resources/MechaGolem.png'
+// Entities
 
-
-
-
-
-
-
+const MECHA_GOLEM = './resources/MechaGolem.png'
 
 // World
 

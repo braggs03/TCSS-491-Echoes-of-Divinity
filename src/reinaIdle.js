@@ -1,22 +1,34 @@
-class reinaIdle {
-    constructor(game, ctx) {
+class ReinaIdle {
+    constructor(game, x, y) {
         this.game = game;
-        this.ctx = ctx;
-        this.animator = this.idleRight();
+        this.x = x;
+        this.y = y;
+        this.facing = LEFT;
+        this.animator = this.idleLeft();
     };
 
     update() {
-
+        if (this.game.camera.knight.x < this.x) {
+            if (this.facing != LEFT) {
+                this.facing = LEFT;
+                this.animator = this.idleLeft();
+            }
+        } else {
+            if (this.facing != RIGHT) {
+                this.facing = RIGHT;
+                this.animator = this.idleRight();
+            }
+        }
     };
 
     idleLeft() {
-        return new animator(ASSET_MANAGER.getAsset("../resources/Reina.png"), 384, 0, 64, 64, 6, 0.125, true, true);
+        return new Animator(ASSET_MANAGER.getAsset(REINA), 384, 0, 64, 64, 6, 0.125, true, true);
     }
 
     idleRight() {
-        return new animator(ASSET_MANAGER.getAsset("../resources/Reina.png"), 0, 0, 64, 64, 6, 0.125, false, true);
+        return new Animator(ASSET_MANAGER.getAsset(REINA), 0, 0, 64, 64, 6, 0.125, false, true);
     }
     draw(ctx) {
-        this.animator.drawFrame(this.game.clockTick, ctx, 300, 20);
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 2.7);
     }
 }
