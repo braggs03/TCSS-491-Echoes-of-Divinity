@@ -88,6 +88,7 @@ class GameEngine {
         for (let i = this.entities.length - 1; i >= 0; i--) {
             this.entities[i].draw(this.ctx, this);
         }
+        this.camera.draw(this.ctx);
     };
 
     update() {
@@ -100,7 +101,7 @@ class GameEngine {
                 entity.update();
             }
         }
-
+        this.camera.update(this.ctx);
         for (let i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
                 this.entities.splice(i, 1);

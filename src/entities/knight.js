@@ -3,7 +3,7 @@ class Knight {
 		this.game = game;
         this.x = x;
         this.y = y;
-        this.speed = 5; 
+        this.speed = 4; 
 		this.removeFromWorld = false;
         this.facing = RIGHT;
 
@@ -34,10 +34,8 @@ class Knight {
 
         this.currentState = 'RightIdle';
         this.animationLocked = false;
-        this.updateBB();
-        this.dead = false;
 
-       // make knight block or cratch to works as well as add aggro for golem and switch bettwen atfcks  then include 
+       
 
 	};
 
@@ -49,24 +47,7 @@ class Knight {
         }
     }
 
-    updateBB() {
-        this.BB = new BoundingBox(this.x, this.y , 120*2, 100*3);
-    }
-    die() {
-        if (!this.dead) {
-            this.dead = true;
-            this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
-            console.log("Knight has died!");
-
-            // Optionally mark for removal after the death animation
-            setTimeout(() => {
-                this.removeFromWorld = true;
-            }, 1000); // Adjust timing to match the death animation duration
-        }
-    }
-
 	update() {
-        if (this.dead) return;
         if (this.game.keys["ArrowLeft"]) {
             this.x -= this.speed;
 			if (this.facing == RIGHT) {
@@ -82,13 +63,7 @@ class Knight {
 			}
 			this.facing = RIGHT;
         } else if (this.game.keys["e"]) {
-			this.currentState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';  
-            // Check for collision with golem
-            const golem = this.game.entities.find(entity => entity instanceof MechaGolem && !entity.dead);
-            if (golem && this.BB.collide(golem.BB)) {
-                golem.die(); // Trigger golem's death animation
-                console.log("Knight kills the MechaGolem!");
-            } 
+			this.currentState = this.facing == RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';   
 		} else {
             if(this.facing == LEFT) {
                 this.currentState = 'LeftIdle';
@@ -101,9 +76,5 @@ class Knight {
 
 	draw(ctx) {
 		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 3);
-        if (PARAMS.DEBUG) {
-            ctx.strokeStyle = "red";
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
-        }
 	};
 };

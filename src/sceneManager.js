@@ -31,7 +31,6 @@ class SceneManager {
             entity.removeFromWorld = true;
         });
     };
-    
     loadLevel(level, x, y, transition, title) {
 
         this.title = title;

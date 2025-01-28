@@ -1,106 +1,34 @@
 class MechaGolem {
-    constructor(game, x, y) {
+	constructor(game, x, y) {
         this.game = game;
-        this.animator = this.idleRight(); // Default idle animation
+        this.animator = this.idleRight();
         this.x = x;
         this.y = y;
-        this.speed = 4; 
-        this.facing = RIGHT; 
-        this.range = 300; // Detection range
-        this.attackRange = 90; // Attack range
-        this.target = null; // Target (Knight)
-        this.attackCooldown = 0; // Cooldown timer for attacks
-        this.updateBB(); // Initialize bounding box
-        this.dead = false; // Alive state
-    }
-
-    updateBB() {
-        this.BB = new BoundingBox(this.x , this.y , 300, 300);
-    }
-
-    die() {
-        this.dead = true;
-        this.animator = this.facing === RIGHT ? this.deathRight() : this.deathLeft();
-        console.log("MechaGolem dies!");
-    }
+        this.speed = 5; 
+		this.facing = RIGHT;
+	}
 
     update() {
-		
-		if (this.dead) return; // Stop actions if dead
-	
-		// Check if the target is still valid
-		if (this.target && (this.target.dead || this.target.removeFromWorld)) {
-			this.target = null; 
-
-			
-		}
-	
-		// Find a new target if none exists
-		if (!this.target) {
-			this.target = this.game.entities.find(entity => entity instanceof Knight && !entity.dead);
-		}
-	
-		if (this.target) {
-			const dx = this.target.x - this.x; // Distance to the target in x-axis
-			const distance = Math.abs(dx);
-	
-			// Determine facing direction based on knight's position
-			this.facing = dx > 0 ? RIGHT : LEFT;
-	
-			if (distance <= this.range) {
-				// Knight is within detection range
-				if (distance > this.attackRange) {
-					// Move toward the knight
-					this.x += dx > 0 ? this.speed : -this.speed;
-					this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
-				} else if (this.attackCooldown <= 0) {
-					// Knight is within attack range
-					this.animator = this.facing === RIGHT ? this.meleeRight() : this.meleeLeft();
-					console.log("Golem attacks knight!");
-	
-					// Delay the attack effect until the animation finishes
-					if (!this.attackInProgress) {
-						this.attackInProgress = true;
-						setTimeout(() => {
-							if (this.BB.collide(this.target.BB) && !this.target.dead) {
-								console.log("Knight dies!");
-								this.target.die();
-							}
-							this.attackInProgress = false;
-							// Return to idle after the attack
-							this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
-						}, 700); // Adjust timing to match the attack animation duration
-					}
-	
-					// Set cooldown to avoid spamming attacks
-					this.attackCooldown = 2; // 2-second cooldown
-				}
-			} else {
-				// Knight is out of range, return to idle
-				this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
-			}
-		} else {
-			// No target, return to idle
-			this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
-		}
-	
-		if (this.attackCooldown > 0) {
-			this.attackCooldown -= this.game.clockTick; // Reduce cooldown timer
-		}
-	
-		this.updateBB(); // Update bounding box after movement
-	}
-	
-
-    draw(ctx) {
-        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 4);
-
-		if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
-        }
+        // if (this.gameEngine.keys["ArrowLeft"]) {
+        //     this.x -= this.speed;
+		// 	if (this.facing != LEFT) {
+		// 		this.animator = this.idleLeft();
+		// 		this.facing = LEFT;
+		// 	}
+        // } else if (this.gameEngine.keys["ArrowRight"]) {
+        //     this.x += this.speed;
+		// 	if (this.facing != RIGHT) {
+		// 		this.animator = this.idleRight();
+		// 	}
+		// 	this.facing = RIGHT;
+        // } else if (this.gameEngine.keys["e"]) {
+		// 	this.animator = this.facing == RIGHT ? this.rangeAttackRight() : this.rangeAttackLeft();
+		// }
     }
 
+	draw(ctx) {
+		this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y, 4);
+	}
 
 	idleRight() {
 		return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 0, 100, 100, 4, 0.1, false, true);
