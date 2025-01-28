@@ -4,6 +4,8 @@ class Knight {
         this.ctx = ctx;
         this.x = 0;
         this.y = 0;
+        this.speed = 10;
+        this.updateBB();
 		
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT + "Attack2.png"), 0, 0, 125.5, 80, 6, 0.1, false, false),
@@ -37,6 +39,14 @@ class Knight {
 	};
 
     setState(state) {
+        for (let key in this.animations) {
+            if (this.currentState === key) {
+
+            } else if (this.animations.hasOwnProperty(key)) {
+                // Reset each Animator instance
+                this.animations[key].reset();
+            }
+        }
         if (this.animations[state]) {
             this.currentState = state;
         } else {
@@ -44,11 +54,40 @@ class Knight {
         }
     }
 
-	update() {
+    updateBB() {
+        this.lastBB = this.BB;
+        this.BB = new BoundingBox(this.x + 50, this.y + 128, 128, 128);
+    }
 
-	};
+	update() {
+        if (this.game.keys["ArrowLeft"]) {
+            this.x -= this.speed;
+            if (this.facing === RIGHT) {
+                this.currentState = 'LeftRun';
+            } else if (this.facing === LEFT) {
+                this.currentState = 'LeftRun';
+            }
+            this.facing = LEFT;
+        } else if (this.game.keys["ArrowRight"]) {
+            this.x += this.speed;
+            if (this.facing === RIGHT) {
+                this.currentState = 'RightRun';
+            }
+            this.facing = RIGHT;
+        } else if (this.game.keys["e"]) {
+            this.currentState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
+        } else {
+            if(this.facing === LEFT) {
+                this.currentState = 'LeftIdle';
+            } else if (this.facing === RIGHT) {
+                this.currentState = 'RightIdle';
+            }
+        }
+        this.updateBB();
+    };
 
 	draw(ctx) {
 		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x, this.y, 3);
+        this.BB.draw(ctx)
 	};
-};
+}
