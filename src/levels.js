@@ -2,6 +2,7 @@ const one = {
     dngeonBackground: [{ x: 0, y: 0, w: 40, h: 40 }],
     dungeonGround: [{ x: 0, y: 17, w: 8 }],
     mechagolem: [{ x: 900, y: 350 }],
+    dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
 };
 
 const shopkeeper = {

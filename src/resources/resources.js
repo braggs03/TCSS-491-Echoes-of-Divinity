@@ -9,3 +9,4 @@ const CELES = './resources/Celes/Celes'
 
 const DUNGEON = './resources/dungeon.png'
 const TORCH = './resources/torch.png'
+const DUNGEON_BACKGROUND_IMAGE = './resources/dungeonbackground.png'

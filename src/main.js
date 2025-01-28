@@ -28,6 +28,7 @@ ASSET_MANAGER.queueDownload(CELES + "LightBall.png")
 ASSET_MANAGER.queueDownload(CELES + "LightCharge.png")
 ASSET_MANAGER.queueDownload(CELES + "Run.png")
 ASSET_MANAGER.queueDownload(CELES + "Walk.png")
+ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND_IMAGE);
 ASSET_MANAGER.queueDownload("../resources/Title.png")
 ASSET_MANAGER.queueDownload("./resources/NightBorneWarrior.png"); // looked pixely to me
 ASSET_MANAGER.queueDownload("./resources/Attack_1.png");
