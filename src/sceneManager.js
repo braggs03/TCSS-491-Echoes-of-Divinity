@@ -68,6 +68,13 @@ class SceneManager {
                 }
             }
 
+            if (level.dungeonBackground2) {
+                for (let i = 0; i < level.dungeonBackground2.length; i++) {
+                    let background2 = level.dungeonBackground2[i];
+                    this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
+                }
+            }
+
             if (level.music && !this.title) {
                 ASSET_MANAGER.pauseBackgroundMusic();
                 ASSET_MANAGER.playAsset(level.music);

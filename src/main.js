@@ -2,6 +2,7 @@ const ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload(MECHA_GOLEM);
 ASSET_MANAGER.queueDownload(DUNGEON);
+ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND_IMAGE);
 ASSET_MANAGER.queueDownload("../resources/Azucena.png")
 ASSET_MANAGER.queueDownload("../resources/Reina.png")
 ASSET_MANAGER.queueDownload("../resources/Lightning.png")

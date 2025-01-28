@@ -80,6 +80,7 @@ class Knight {
             } else if (this.facing == RIGHT) {
                 this.currentState = 'RightIdle';
             }
+            this.resetAnimations();
         }
 
 	};
@@ -87,4 +88,12 @@ class Knight {
 	draw(ctx) {
 		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 3);
 	};
+
+    resetAnimations() {
+        for (const key in this.animations) {
+            if (this.animations.hasOwnProperty(key)) {
+                this.animations[key].elapsedTime = 0;
+            }
+        }
+    }
 };

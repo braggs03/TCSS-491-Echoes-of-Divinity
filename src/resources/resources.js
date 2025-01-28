@@ -12,3 +12,4 @@ const KNIGHT_SPRITE = './resources/knight/knightsprite.png'
 // World
 
 const DUNGEON = './resources/dungeon.png'
+const DUNGEON_BACKGROUND_IMAGE = './resources/dungeonbackground.png'
