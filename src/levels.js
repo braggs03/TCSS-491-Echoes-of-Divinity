@@ -1,7 +1,8 @@
 const one = {
-    dngeonBackground: [{ x: 0, y: 0, w: 40, h: 40 }],
-    dungeonGround: [{ x: 0, y: 17, w: 8 }],
+    dungeonGround: [{ x: 0, y: 17, w: 40 }],
     mechagolem: [{ x: 900, y: 350 }],
+    dungeonWall: [{ x: 0, y: 0, h: 5 }],
+    dungeonDoor: [{ x: 117, y: 465 }],
     dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
 };
 

@@ -11,7 +11,7 @@ class SceneManager {
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
 
-        this.loadLevel(shopkeeper, 1515, 440, false, true);
+        this.loadLevel(one, 0, 440, false, true);
     };
 
     clearEntities() {
@@ -35,19 +35,12 @@ class SceneManager {
                 let tent = level.tent[i];
                 this.game.addEntity(new ShopkeeperTent(this.game, tent.x, tent.y));
             }
+        }
 
-            if (level.dungeonGround) {
-                for (let i = 0; i < level.dungeonGround.length; i++) {
-                    let ground = level.dungeonGround[i];
-                    this.game.addEntity(new DungeonGround(this.game, ground.x, ground.y, ground.w));
-                }
-            }
-
-            if (level.dungeonBackground2) {
-                for (let i = 0; i < level.dungeonBackground2.length; i++) {
-                    let background2 = level.dungeonBackground2[i];
-                    this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
-                }
+        if (level.dungeonGround) {
+            for (let i = 0; i < level.dungeonGround.length; i++) {
+                let ground = level.dungeonGround[i];
+                this.game.addEntity(new DungeonGround(this.game, ground.x, ground.y, ground.w));
             }
         }
 
@@ -161,6 +154,13 @@ class SceneManager {
                 this.game.addEntity(new DungeonBackground(this.game, background.x, background.y, background.w, background.h));
             }
         }
+
+        if (level.dungeonBackground2) {
+            for (let i = 0; i < level.dungeonBackground2.length; i++) {
+                let background2 = level.dungeonBackground2[i];
+                this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
+            }
+        }
     };
 
     update() { 
@@ -169,8 +169,9 @@ class SceneManager {
         this.x = this.knight.x - middlepoint;
         //if (this.x < this.knight.x - midpoint) this.x = this.knight.x - midpoint;
 
-        if (this.level == shopkeeper && this.knight.x > 2000 && this.game.keys["e"]) {
-            this.loadLevel(one, 0, 0, false, false)
+        if (this.level == shopkeeper && this.knight.x > 0 && this.knight.x < 100 && this.game.keys["f"]) {
+            this.loadLevel(one, 85, 440, false, false);
+            this.game.update();
         }
     };
 
