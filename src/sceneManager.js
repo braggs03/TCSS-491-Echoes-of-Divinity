@@ -11,7 +11,7 @@ class SceneManager {
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
 
-        this.loadLevel(one, 0, 440, false, true);
+        this.loadLevel(shopkeeper, 0, 440, false, true);
     };
 
     clearEntities() {
@@ -19,7 +19,8 @@ class SceneManager {
             entity.removeFromWorld = true;
         });
     };
-    loadLevel(level, x, y, transition, title) {
+
+    loadLevel(level, x, y, title) {
 
         this.title = title;
         this.level = level;
@@ -34,35 +35,6 @@ class SceneManager {
                 let tent = level.tent[i];
                 this.game.addEntity(new ShopkeeperTent(this.game, tent.x, tent.y));
             }
-            
-            if (level.dungeonGround) {
-                for (let i = 0; i < level.dungeonGround.length; i++) {
-                    let ground = level.dungeonGround[i];
-                    this.game.addEntity(new DungeonGround(this.game, ground.x, ground.y, ground.w));
-                }
-            }
-
-            if (level.dungeonBackground) {
-                for (let i = 0; i < level.dungeonBackground.length; i++) {
-                    let background = level.dungeonBackground[i];
-                    this.game.addEntity(new DungeonBackground(this.game, background.x, background.y, background.w, background.h));
-                }
-            }
-
-            if (level.dungeonBackground2) {
-                for (let i = 0; i < level.dungeonBackground2.length; i++) {
-                    let background2 = level.dungeonBackground2[i];
-                    this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
-                }
-            }
-
-            if (level.music && !this.title) {
-                ASSET_MANAGER.pauseBackgroundMusic();
-                ASSET_MANAGER.playAsset(level.music);
-            }
-
-            // this.time = 400;
-            this.game.camera.paused = false;
         }
 
         if (level.dungeonGround) {
