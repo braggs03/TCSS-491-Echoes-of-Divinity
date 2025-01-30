@@ -1,14 +1,15 @@
 const KNIGHT = './resources/knight/';
 const SKELETON_WARRIOR = './resources/skeletonwarrior/';
 const werewolf = './resources/werewolf/';
+const REINA = './resources/Reina.png';
 
 const ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload(MECHA_GOLEM);
 ASSET_MANAGER.queueDownload(DUNGEON);
-ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND_IMAGE);
-ASSET_MANAGER.queueDownload("../resources/Azucena.png")
-ASSET_MANAGER.queueDownload("../resources/Reina.png")
+ASSET_MANAGER.queueDownload(TORCH);
+ASSET_MANAGER.queueDownload("./resources/Azucena.png");
+ASSET_MANAGER.queueDownload(REINA);
 ASSET_MANAGER.queueDownload("../resources/Magic/Lightning.png")
 ASSET_MANAGER.queueDownload(GORGON + "Attack1.png")
 ASSET_MANAGER.queueDownload(GORGON + "Attack2.png")
@@ -30,6 +31,7 @@ ASSET_MANAGER.queueDownload(CELES + "LightBall.png")
 ASSET_MANAGER.queueDownload(CELES + "LightCharge.png")
 ASSET_MANAGER.queueDownload(CELES + "Run.png")
 ASSET_MANAGER.queueDownload(CELES + "Walk.png")
+ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND_IMAGE);
 ASSET_MANAGER.queueDownload("../resources/Title.png")
 ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneWarrior.png"); 
 ASSET_MANAGER.queueDownload(werewolf +"Attack_1.png");
