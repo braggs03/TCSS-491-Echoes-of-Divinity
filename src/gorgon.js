@@ -8,6 +8,7 @@ class gorgon {
         this.dead = false;
         this.aggro = false;
         this.facingLeft = true;
+        this.attackNumber = Math.floor(Math.random() * 3);
         this.updateBB();
 
         this.animations = {
@@ -15,7 +16,7 @@ class gorgon {
             LeftAttack2: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack2.png"), 896, 0, 128, 128, 7, 0.15, true, false),
             LeftAttack3: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack3.png"), 1280, 0, 128, 128, 10, 0.15, true, false),
             LeftDead: new Animator(ASSET_MANAGER.getAsset(GORGON + "Dead.png"), 384, 0, 128, 128, 3, 0.2, true, false),
-            LeftHurt: new Animator(ASSET_MANAGER.getAsset(GORGON + "Hurt.png"), 384, 0, 128, 128, 3, 0.15, true, false),
+            LeftHurt: new Animator(ASSET_MANAGER.getAsset(GORGON + "Hurt.png"), 384, 0, 128, 128, 3, 0.1, true, false),
             LeftIdle1: new Animator(ASSET_MANAGER.getAsset(GORGON + "Idle1.png"), 896, 0, 128, 128, 7, 0.15, true, true),
             LeftIdle2: new Animator(ASSET_MANAGER.getAsset(GORGON + "Idle2.png"), 640, 0, 128, 128, 5, 0.15, true, true),
             LeftRun: new Animator(ASSET_MANAGER.getAsset(GORGON + "Run.png"), 896, 0, 128, 128, 7, 0.1, true, true),
@@ -63,7 +64,15 @@ class gorgon {
 
     update() {
         if (this.dead) {
-             this.setState('LeftDead');
+            return;
+        }
+        if (this.hp <= 0) {
+            if (this.facingLeft) {
+                this.setState('LeftDead');
+            } else {
+                this.setState('RightDead');
+            }
+             this.dead = true;
         }
 
         let that = this;
@@ -86,14 +95,47 @@ class gorgon {
                         that.setState('RightWalk')
                     }
                 } else if (entity instanceof Knight && that.aggro) {
-                    if (that.facingLeft) {
-                        that.setState('LeftAttack2');
+                    if (entity.currentState === 'RightAttack1') {
+                        that.setState('LeftHurt')
+                        that.hp -= entity.damage;
+                        that.x += 50;
+                        return;
+                    } else if (entity.currentState === 'LeftAttack1') {
+                        that.setState('RightHurt')
+                        that.hp -= entity.damage;
+                        that.x -= 50;
+                        return;
+                    } else if (entity.currentState === 'LeftRoll' || entity.currentState === 'RightRoll') {
+
                     } else {
-                        that.setState('RightAttack2')
+                        if (that.facingLeft) {
+                            entity.setState('RightDeath');
+                        } else {
+                            entity.setState('LeftDeath');
+                        }
+                        entity.dead = true;
+                    }
+                    if (that.facingLeft) {
+                        if (that.attackNumber === 0) {
+                            that.setState('LeftAttack1');
+                        } else if (that.attackNumber === 1) {
+                            that.setState('LeftAttack2');
+                        } else {
+                            that.setState('LeftAttack3');
+                        }
+                    } else {
+                        if (that.attackNumber === 0) {
+                            that.setState('RightAttack1');
+                        } else if (that.attackNumber === 1) {
+                            that.setState('RightAttack2');
+                        } else {
+                            that.setState('RightAttack3');
+                        }
                     }
                 }
             } else if (entity instanceof Knight) {
                 if (that.animations[that.currentState].getDone()) {
+                    that.attackNumber = Math.floor(Math.random() * 3);
                     if (entity.x > that.x) {
                         // Knight is to the right
                         if (that.aggro) {

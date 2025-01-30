@@ -5,6 +5,9 @@ class Knight {
         this.x = 0;
         this.y = 0;
         this.speed = 10;
+        this.damage = 100;
+        this.dead = false;
+        this.hp = 100;
         this.updateBB();
 		
         this.animations = {
@@ -59,7 +62,10 @@ class Knight {
         this.BB = new BoundingBox(this.x + 50, this.y + 128, 128, 128);
     }
 
-	update() {
+    update() {
+        if (this.dead) {
+            return;
+        }
         if (this.game.keys["ArrowLeft"]) {
             this.x -= this.speed;
             if (this.facing === RIGHT) {
@@ -75,16 +81,43 @@ class Knight {
             }
             this.facing = RIGHT;
         } else if (this.game.keys["e"]) {
-            this.currentState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
+            if (this.currentState === 'LeftAttack1' || this.currentState === 'RightAttack1') {
+                if (this.animations[this.currentState].getDone()) {
+                    this.currentState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
+                }
+            } else {
+                this.currentState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
+            }
+        } else if (this.game.keys["r"]) {
+            this.currentState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
+            if (this.facing === RIGHT) {
+                this.x += this.speed;
+            } else {
+                this.x -= this.speed;
+            }
         } else {
             if(this.facing === LEFT) {
                 this.currentState = 'LeftIdle';
             } else if (this.facing === RIGHT) {
                 this.currentState = 'RightIdle';
             }
+            this.resetAnimations();
         }
+
         this.updateBB();
     };
+
+    draw(ctx) {
+        this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 3);
+    };
+
+    resetAnimations() {
+        for (const key in this.animations) {
+            if (this.animations.hasOwnProperty(key)) {
+                this.animations[key].elapsedTime = 0;
+            }
+        }
+    }
 
 	draw(ctx) {
 		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x, this.y, 3);
