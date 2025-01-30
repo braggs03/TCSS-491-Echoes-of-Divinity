@@ -42,4 +42,12 @@ class Animator {
     isDone() {
         return (this.elapsedTime >= this.totalTime);
     };
+     getDone() {
+        return this.animationDone;
+    }
+
+    reset() {
+        this.animationDone = false;
+        this.elapsedTime = 0;
+    }
 };

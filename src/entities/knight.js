@@ -1,11 +1,14 @@
-class Knight {
-	constructor(game, x, y) {
-		this.game = game;
+ class Knight {
+    constructor(game, x, y) {
+        this.game = game;
         this.x = x;
         this.y = y;
-        this.speed = 4; 
-		this.removeFromWorld = false;
+        this.speed = 10; 
+        this.hp = 1000;
+        this.removeFromWorld = false;
         this.facing = RIGHT;
+        this.flickerFlag = true;
+        this.flickerDuration = 0;
 
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT + "Attack2.png"), 0, 0, 125.5, 80, 6, 0.05, false, false),
@@ -34,47 +37,123 @@ class Knight {
 
         this.currentState = 'RightIdle';
         this.animationLocked = false;
+        
+        this.dead = false;
+        this.updateBB();
 
-       
+       // make knight block or cratch to works as well as add aggro for golem and switch bettwen atfcks  then include 
 
-	};
-
+    };
     setState(state) {
+        for (let key in this.animations) {
+            if (this.currentState === key) {
+
+            } else if (this.animations.hasOwnProperty(key)) {
+                // Reset each Animator instance
+                this.animations[key].reset();
+            }
+        }
         if (this.animations[state]) {
             this.currentState = state;
         } else {
             console.error("State '${state}' not found.");
         }
     }
+    // setState(state) {
+    //     if (this.animations[state]) {
+    //         this.currentState = state;
+    //     } else {
+    //         console.error("State '${state}' not found.");
+    //     }
+    // }
 
-	update() {
+    updateBB() {
+        this.lastBB =this.BB;
+        this.BB = new BoundingBox((this.x + 50) - this.game.camera.x , this.y +128 , 128, 128);
+    }
+    takeDamage(amount) {
+        this.hp -= amount;
+        console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
+        if (this.hp <= 0) {
+            this.die();
+        } else {
+            this.flickerDuration = 0.3; // Flicker for 0.5 seconds
+        }
+    }
+    die() {
+        if (!this.dead) {
+            this.dead = true;
+            this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
+            console.log("Knight has died!");
+
+            // Optionally mark for removal after the death animation
+            setTimeout(() => {
+                this.removeFromWorld = true;
+            }, 1000); // Adjust timing to match the death animation duration
+        }
+    }
+
+    update() {
+        if (this.dead) return;
+        if (this.flickerDuration > 0) {
+            this.flickerDuration -= this.game.clockTick;
+            this.flickerFlag = !this.flickerFlag;
+        }
         if (this.game.keys["ArrowLeft"]) {
             this.x -= this.speed;
-			if (this.facing == RIGHT) {
-				this.currentState = 'LeftRun';
-			} else if (this.facing == LEFT) {
+            if (this.facing == RIGHT) {
+                this.currentState = 'LeftRun';
+            } else if (this.facing == LEFT) {
                 this.currentState = 'LeftRun';
             }
             this.facing = LEFT;
         } else if (this.game.keys["ArrowRight"]) {
             this.x += this.speed;
-			if (this.facing == RIGHT) {
-				this.currentState = 'RightRun';
-			}
-			this.facing = RIGHT;
+            if (this.facing == RIGHT) {
+                this.currentState = 'RightRun';
+            }
+            this.facing = RIGHT;
         } else if (this.game.keys["e"]) {
-			this.currentState = this.facing == RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';   
-		} else {
+            if (!this.attackAnimationActive) {
+                this.attackAnimationActive = true;
+                this.currentState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';  
+                // Check for collision with golem
+                const golem = this.game.entities.find(entity => entity instanceof MechaGolem && !entity.dead);
+                if (golem && this.BB.collide(golem.BB)) {
+                    golem.takeDamage(100);
+                    console.log("Knight attacks the MechaGolem!");
+                } 
+                setTimeout(() => {
+                    this.attackAnimationActive = false; // Reset flag when animation is complete
+                }, 900); // Match the duration of the attack animation
+            } 
+        } else if (this.game.keys["r"]) {
+            this.currentState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
+        } else {
             if(this.facing == LEFT) {
                 this.currentState = 'LeftIdle';
             } else if (this.facing == RIGHT) {
                 this.currentState = 'RightIdle';
             }
+            this.resetAnimations();
         }
+        this.updateBB();
+    };
 
-	};
-
-	draw(ctx) {
-		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 3);
-	};
+    draw(ctx) {
+        if (this.flickerDuration > 0 && !this.flickerFlag) return; 
+        this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 3);
+        //this.BB.draw(ctx);
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = "red";
+            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        }
+    };
+    resetAnimations() {
+        for (const key in this.animations) {
+            if (this.animations.hasOwnProperty(key)) {
+                this.animations[key].elapsedTime = 0;
+            }
+        }
+    }
 };

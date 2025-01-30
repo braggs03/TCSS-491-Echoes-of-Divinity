@@ -1,5 +1,6 @@
 const KNIGHT = './resources/knight/';
-const SKELETON_WARRIOR = './resources/skeletonwarrior/'
+const SKELETON_WARRIOR = './resources/skeletonwarrior/';
+const werewolf = './resources/werewolf/';
 
 const ASSET_MANAGER = new AssetManager();
 
@@ -30,17 +31,17 @@ ASSET_MANAGER.queueDownload("../resources/CelesLightCharge.png")
 ASSET_MANAGER.queueDownload("../resources/CelesRun.png")
 ASSET_MANAGER.queueDownload("../resources/CelesWalk.png")
 ASSET_MANAGER.queueDownload("../resources/Title.png")
-ASSET_MANAGER.queueDownload("./resources/NightBorneWarrior.png"); // looked pixely to me
-ASSET_MANAGER.queueDownload("./resources/Attack_1.png");
-ASSET_MANAGER.queueDownload("./resources/Attack_2.png");
-ASSET_MANAGER.queueDownload("./resources/Attack_3.png");
-ASSET_MANAGER.queueDownload("./resources/Dead.png");
-ASSET_MANAGER.queueDownload("./resources/Hurt.png");
-ASSET_MANAGER.queueDownload("./resources/Idle.png"); 
-ASSET_MANAGER.queueDownload("./resources/Jump.png"); 
-ASSET_MANAGER.queueDownload("./resources/Run.png"); // looks kind off
-ASSET_MANAGER.queueDownload("./resources/Run+Attack.png"); 
-ASSET_MANAGER.queueDownload("./resources/walk.png");
+ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneWarrior.png"); 
+ASSET_MANAGER.queueDownload(werewolf +"Attack_1.png");
+ASSET_MANAGER.queueDownload(werewolf +"Attack_2.png");
+ASSET_MANAGER.queueDownload(werewolf + "Attack_3.png");
+ASSET_MANAGER.queueDownload(werewolf + "Dead.png");
+ASSET_MANAGER.queueDownload(werewolf + "Hurt.png");
+ASSET_MANAGER.queueDownload(werewolf + "Idle.png"); 
+ASSET_MANAGER.queueDownload(werewolf + "Jump.png"); 
+ASSET_MANAGER.queueDownload(werewolf + "Run.png"); 
+ASSET_MANAGER.queueDownload(werewolf + "Run+Attack.png"); 
+ASSET_MANAGER.queueDownload(werewolf + "walk.png");
 //Knight
 ASSET_MANAGER.queueDownload(KNIGHT + "Attack2.png")
 ASSET_MANAGER.queueDownload(KNIGHT + "AttackCombo.png")

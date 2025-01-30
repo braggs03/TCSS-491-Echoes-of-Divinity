@@ -52,13 +52,6 @@ class SceneManager {
                     this.game.addEntity(new MechaGolem(this.game, mechagolem.x, mechagolem.y));
                 }
             }
-             if (level.nightbornWarrior) {
-                for ( let i = 0; i < level.nightbornWarrior.length; i++) {
-                    let nightbornWarrior = level.nightbornWarrior[i];
-                    this.game.addEntity(new NightbornWarrior(this.game, nightbornWarrior.x, nightbornWarrior.y));
-                }
-             }
-
             if (level.dungeonGround) {
                 for (let i = 0; i < level.dungeonGround.length; i++) {
                     let ground = level.dungeonGround[i];

@@ -6,26 +6,26 @@ class Werewolf {
 		this.y = 25;
 		this.speed = 300;
 		this.animators = {
-			WalkRight: new Animator(ASSET_MANAGER.getAsset("./resources/walk.png"), 0, 0, 128, 128, 11, 0.1, false, true),
-			runRight: new Animator(ASSET_MANAGER.getAsset("./resources/Run.png"), 0, 0, 128, 128, 9, 0.1, false, true),
-			run_attackRight: new Animator(ASSET_MANAGER.getAsset("./resources/Run+Attack.png"), 0, 0, 128, 128, 7, 0.1, false, false),
-			JumpRight: new Animator(ASSET_MANAGER.getAsset("./resources/Jump.png"), 0, 0, 128, 128, 11, 0.1, false, false),
-			idleRight: new Animator(ASSET_MANAGER.getAsset("./resources/Idle.png"), 0, 0, 128, 128, 8, 0.1, false, true),
-			HurtRight: new Animator(ASSET_MANAGER.getAsset("./resources/Hurt.png"), 0, 0, 128, 128, 2, 0.15, false, false),
-			DeadRight: new Animator(ASSET_MANAGER.getAsset("./resources/Dead.png"), 0, 0, 128, 128, 2, 0.2, false, false),
-			Attack_3Right: new Animator(ASSET_MANAGER.getAsset("./resources/Attack_3.png"), 0, 0, 128, 128, 5, 0.1, false, false),
-			Attack_2Right: new Animator(ASSET_MANAGER.getAsset("./resources/Attack_2.png"), 0, 0, 128, 128, 4, 0.1, false, false),
-			Attack_1Right: new Animator(ASSET_MANAGER.getAsset("./resources/Attack_1.png"), 0, 0, 128, 128, 6, 0.1, false, false),
-			WalkLeft: new Animator(ASSET_MANAGER.getAsset("./resources/walk.png"), 1408, 0, 128, 128, 11, 0.1, true, true),
-			runLeft: new Animator(ASSET_MANAGER.getAsset("./resources/Run.png"), 1152, 0, 128, 128, 9, 0.1, true, true),
-			run_attackLeft: new Animator(ASSET_MANAGER.getAsset("./resources/Run+Attack.png"), 896, 0, 128, 128, 7, 0.1, true, false),
-			JumpLeft: new Animator(ASSET_MANAGER.getAsset("./resources/Jump.png"), 1408, 0, 128, 128, 11, 0.1, true, false),
-			idleLeft: new Animator(ASSET_MANAGER.getAsset("./resources/Idle.png"), 1024, 0, 128, 128, 8, 0.1, true, true),
-			HurtLeft: new Animator(ASSET_MANAGER.getAsset("./resources/Hurt.png"), 256, 0, 128, 128, 2, 0.15, true, false),
-			DeadLeft: new Animator(ASSET_MANAGER.getAsset("./resources/Dead.png"), 256, 0, 128, 128, 2, 0.2, true, false),
-			Attack_3Left: new Animator(ASSET_MANAGER.getAsset("./resources/Attack_3.png"), 640, 0, 128, 128, 5, 0.1, true, false),
-			Attack_2Left: new Animator(ASSET_MANAGER.getAsset("./resources/Attack_2.png"), 512, 0, 128, 128, 4, 0.1, true, false),
-			Attack_1Left: new Animator(ASSET_MANAGER.getAsset("./resources/Attack_1.png"), 768, 0, 128, 128, 6, 0.1, true, false)
+			WalkRight: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/walk.png"), 0, 0, 128, 128, 11, 0.1, false, true),
+			runRight: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Run.png"), 0, 0, 128, 128, 9, 0.1, false, true),
+			run_attackRight: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Run+Attack.png"), 0, 0, 128, 128, 7, 0.1, false, false),
+			JumpRight: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Jump.png"), 0, 0, 128, 128, 11, 0.1, false, false),
+			idleRight: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Idle.png"), 0, 0, 128, 128, 8, 0.1, false, true),
+			HurtRight: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Hurt.png"), 0, 0, 128, 128, 2, 0.15, false, false),
+			DeadRight: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Dead.png"), 0, 0, 128, 128, 2, 0.2, false, false),
+			Attack_3Right: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Attack_3.png"), 0, 0, 128, 128, 5, 0.1, false, false),
+			Attack_2Right: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Attack_2.png"), 0, 0, 128, 128, 4, 0.1, false, false),
+			Attack_1Right: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Attack_1.png"), 0, 0, 128, 128, 6, 0.1, false, false),
+			WalkLeft: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/walk.png"), 1408, 0, 128, 128, 11, 0.1, true, true),
+			runLeft: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Run.png"), 1152, 0, 128, 128, 9, 0.1, true, true),
+			run_attackLeft: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Run+Attack.png"), 896, 0, 128, 128, 7, 0.1, true, false),
+			JumpLeft: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Jump.png"), 1408, 0, 128, 128, 11, 0.1, true, false),
+			idleLeft: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Idle.png"), 1024, 0, 128, 128, 8, 0.1, true, true),
+			HurtLeft: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Hurt.png"), 256, 0, 128, 128, 2, 0.15, true, false),
+			DeadLeft: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Dead.png"), 256, 0, 128, 128, 2, 0.2, true, false),
+			Attack_3Left: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Attack_3.png"), 640, 0, 128, 128, 5, 0.1, true, false),
+			Attack_2Left: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Attack_2.png"), 512, 0, 128, 128, 4, 0.1, true, false),
+			Attack_1Left: new Animator(ASSET_MANAGER.getAsset("./resources/werewolf/Attack_1.png"), 768, 0, 128, 128, 6, 0.1, true, false)
 		}
 		this.State = 'idleLeft';
 	};
