@@ -81,7 +81,7 @@
 
     updateBB() {
         this.lastBB =this.BB;
-        this.BB = new BoundingBox((this.x + 50) - this.game.camera.x , this.y +128 , 128, 128);
+        this.BB = new BoundingBox((this.x + 128) - this.game.camera.x , this.y +128 , 128, 128);
     }
     takeDamage(amount) {
         this.hp -= amount;

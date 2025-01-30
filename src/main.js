@@ -1,6 +1,3 @@
-const werewolf = './resources/werewolf/';
-const REINA = './resources/Reina.png';
-
 const ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload(MECHA_GOLEM);
@@ -32,16 +29,16 @@ ASSET_MANAGER.queueDownload(CELES + "Walk.png")
 ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND_IMAGE);
 ASSET_MANAGER.queueDownload("../resources/Title.png")
 ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneWarrior.png"); 
-ASSET_MANAGER.queueDownload(werewolf +"Attack_1.png");
-ASSET_MANAGER.queueDownload(werewolf +"Attack_2.png");
-ASSET_MANAGER.queueDownload(werewolf + "Attack_3.png");
-ASSET_MANAGER.queueDownload(werewolf + "Dead.png");
-ASSET_MANAGER.queueDownload(werewolf + "Hurt.png");
-ASSET_MANAGER.queueDownload(werewolf + "Idle.png"); 
-ASSET_MANAGER.queueDownload(werewolf + "Jump.png"); 
-ASSET_MANAGER.queueDownload(werewolf + "Run.png"); 
-ASSET_MANAGER.queueDownload(werewolf + "Run+Attack.png"); 
-ASSET_MANAGER.queueDownload(werewolf + "walk.png");
+ASSET_MANAGER.queueDownload(WEREWOLF +"Attack_1.png");
+ASSET_MANAGER.queueDownload(WEREWOLF +"Attack_2.png");
+ASSET_MANAGER.queueDownload(WEREWOLF + "Attack_3.png");
+ASSET_MANAGER.queueDownload(WEREWOLF + "Dead.png");
+ASSET_MANAGER.queueDownload(WEREWOLF + "Hurt.png");
+ASSET_MANAGER.queueDownload(WEREWOLF + "Idle.png"); 
+ASSET_MANAGER.queueDownload(WEREWOLF + "Jump.png"); 
+ASSET_MANAGER.queueDownload(WEREWOLF + "Run.png"); 
+ASSET_MANAGER.queueDownload(WEREWOLF + "Run+Attack.png"); 
+ASSET_MANAGER.queueDownload(WEREWOLF + "walk.png");
 //Knight
 ASSET_MANAGER.queueDownload(KNIGHT_SPRITE)
 //Skeleton Warrior

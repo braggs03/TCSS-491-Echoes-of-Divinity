@@ -6,6 +6,8 @@ const SKELETON_WARRIOR = './resources/skeletonwarrior/'
 const KNIGHT_SPRITE = './resources/knight/knightsprite.png'
 const GORGON = './resources/Gorgon/Gorgon'
 const CELES = './resources/Celes/Celes'
+const WEREWOLF = './resources/werewolf/';
+const REINA = './resources/Reina.png';
 
 // World
 
