@@ -127,18 +127,16 @@
                 } 
             }
         });
-        if (this.game.keys["ArrowLeft"] && !this.colliding) {
-            this.x -= this.speed;
-            if (this.facing == RIGHT) {
+        if (this.game.keys["ArrowLeft"]) {
+            if (this.facing === LEFT && !this.colliding) {
                 this.currentState = 'LeftRun';
-            } else if (this.facing == LEFT) {
-                this.currentState = 'LeftRun';
+                this.x -= this.speed;
             }
             this.facing = LEFT;
-        } else if (this.game.keys["ArrowRight"] && !this.colliding) {
-            this.x += this.speed;
-            if (this.facing == RIGHT) {
+        } else if (this.game.keys["ArrowRight"]) {
+            if (this.facing === RIGHT && !this.colliding) {
                 this.currentState = 'RightRun';
+                this.x += this.speed;
             }
             this.facing = RIGHT;
         } else if (this.game.keys["e"]) {
