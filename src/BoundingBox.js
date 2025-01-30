@@ -9,8 +9,7 @@ class BoundingBox {
     };
 
     collide(oth) {
-        if (this.right > oth.left && this.left < oth.right && this.top < oth.bottom && this.bottom > oth.top) return true;
-        return false;
+        return this.right > oth.left && this.left < oth.right && this.top < oth.bottom && this.bottom > oth.top;
     };
 
     overlap(oth) {
@@ -25,4 +24,10 @@ class BoundingBox {
 
         return {x: ox, y: oy};
     };
-};
+
+    draw(ctx, color = "red") {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(this.left, this.top, this.width, this.height);
+    }
+}
