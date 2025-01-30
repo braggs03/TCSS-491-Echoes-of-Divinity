@@ -139,8 +139,13 @@
                     this.attackAnimationActive = false; // Reset flag when animation is complete
                 }, 900); // Match the duration of the attack animation
             } 
-        } else if (this.game.keys["r"]) {
+        }  else if (this.game.keys["r"]) {
             this.currentState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
+            if (this.facing === RIGHT) {
+                this.x += this.speed;
+            } else {
+                this.x -= this.speed;
+            }
         } else {
             if(this.facing == LEFT) {
                 this.currentState = 'LeftIdle';
