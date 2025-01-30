@@ -10,6 +10,7 @@
         this.facing = RIGHT;
         this.flickerFlag = true;
         this.flickerDuration = 0;
+        this.colliding = false;
         this.updateBB();
 
         this.animations = {
