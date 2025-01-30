@@ -5,10 +5,12 @@
         this.y = y;
         this.speed = 10; 
         this.hp = 1000;
+        this.damage = 100;
         this.removeFromWorld = false;
         this.facing = RIGHT;
         this.flickerFlag = true;
         this.flickerDuration = 0;
+        this.updateBB();
 
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT + "Attack2.png"), 0, 0, 125.5, 80, 6, 0.05, false, false),

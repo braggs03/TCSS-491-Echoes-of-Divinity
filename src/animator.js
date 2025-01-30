@@ -5,6 +5,7 @@ class Animator {
         this.elapsedTime = 0;
         this.totalTime = this.frameCount * this.frameDuration;
 
+        this.animationDone = false;
         this.dead = false;
         this.facing = RIGHT;
         this.state = IDLE;
@@ -18,6 +19,7 @@ class Animator {
             if (this.loop) {
                 this.elapsedTime = 0;
             } else {
+                this.animationDone = true;
                 this.elapsedTime = this.elapsedTime - tick;
             }
         }
@@ -42,7 +44,8 @@ class Animator {
     isDone() {
         return (this.elapsedTime >= this.totalTime);
     };
-     getDone() {
+
+    getDone() {
         return this.animationDone;
     }
 
@@ -50,4 +53,4 @@ class Animator {
         this.animationDone = false;
         this.elapsedTime = 0;
     }
-};
+}

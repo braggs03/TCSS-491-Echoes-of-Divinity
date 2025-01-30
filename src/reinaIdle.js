@@ -10,13 +10,13 @@ class reinaIdle {
     };
 
     idleLeft() {
-        return new animator(ASSET_MANAGER.getAsset("../resources/Reina.png"), 384, 0, 64, 64, 6, 0.125, true, true);
+        return new Animator(ASSET_MANAGER.getAsset("../resources/Reina.png"), 384, 0, 64, 64, 6, 0.125, true, true);
     }
 
     idleRight() {
-        return new animator(ASSET_MANAGER.getAsset("../resources/Reina.png"), 0, 0, 64, 64, 6, 0.125, false, true);
+        return new Animator(ASSET_MANAGER.getAsset("../resources/Reina.png"), 0, 0, 64, 64, 6, 0.125, false, true);
     }
     draw(ctx) {
-        this.animator.drawFrame(this.game.clockTick, ctx, 300, 20);
+        this.animator.drawFrame(this.game.clockTick, ctx, 300, 20, 2);
     }
 }
