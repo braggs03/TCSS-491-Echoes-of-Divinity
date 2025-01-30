@@ -111,7 +111,22 @@
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
         }
-        if (this.game.keys["ArrowLeft"]) {
+        let that = this;
+        this.game.entities.forEach((entity) => {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+                if (entity instanceof DungeonWall) {
+                    this.colliding = true;
+                    if (that.facing == LEFT && entity.x > that.x) {
+                        that.setState('LeftIdle');
+                    } else if (that.facing == RIGHT && entity.x < that.x) {
+                        that.setState('RightIdle')
+                    } else {
+                        this.colliding = false;
+                    }
+                } 
+            }
+        });
+        if (this.game.keys["ArrowLeft"] && !this.colliding) {
             this.x -= this.speed;
             if (this.facing == RIGHT) {
                 this.currentState = 'LeftRun';
@@ -119,7 +134,7 @@
                 this.currentState = 'LeftRun';
             }
             this.facing = LEFT;
-        } else if (this.game.keys["ArrowRight"]) {
+        } else if (this.game.keys["ArrowRight"] && !this.colliding) {
             this.x += this.speed;
             if (this.facing == RIGHT) {
                 this.currentState = 'RightRun';
