@@ -1,5 +1,3 @@
-const KNIGHT = './resources/knight/';
-const SKELETON_WARRIOR = './resources/skeletonwarrior/';
 const werewolf = './resources/werewolf/';
 const REINA = './resources/Reina.png';
 
