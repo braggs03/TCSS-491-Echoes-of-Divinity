@@ -136,7 +136,75 @@ const KNIGHT_Y_OFFSET = 130;
                 } 
             }
         });
-        if (this.game.keys["ArrowLeft"]) {
+        if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1'
+            || this.currentState === 'RightRoll' || this.currentState === 'LeftRoll'
+            || this.currentState === 'RightFall' || this.currentState === 'LeftFall'
+            || this.currentState === 'RightJump' || this.currentState === 'LeftJump') {
+            if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
+                if (this.facing === RIGHT) {
+                    this.x += this.speed;
+                } else {
+                    this.x -= this.speed;
+                }
+            } else if (this.currentState === 'RightJump' || this.currentState === 'LeftJump') {
+                if (this.y === this.jumpPoint) {
+                    this.chosenState = this.facing === RIGHT ? this.currentState = 'RightFall' : this.currentState = 'LeftFall';
+                    this.setState(this.chosenState);
+                }
+                this.y -= this.speed;
+            } else if (this.currentState === 'RightFall' || this.currentState === 'LeftFall') {
+                this.y += this.speed;
+            }
+
+            if (this.currentState !== 'RightAttack1' && this.currentState !== 'LeftAttack1'
+                && this.currentState !== 'RightRoll' && this.currentState !== 'LeftRoll') {
+                if (this.game.keys["ArrowLeft"]) {
+                    if (this.facing === LEFT && !this.colliding) {
+                        this.x -= this.speed;
+                    }
+                    this.facing = LEFT;
+                } else if (this.game.keys["ArrowRight"]) {
+                    if (this.facing === RIGHT && !this.colliding) {
+                        this.x += this.speed;
+                    }
+                    this.facing = RIGHT;
+                }
+            }
+            this.updateBB();
+            if (!this.animations[this.currentState].getDone()) {
+                return;
+            } else {
+                this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
+                this.setState(this.chosenState);
+            }
+        }
+
+        if (this.game.keys["e"]) {
+            if (!this.attackAnimationActive) {
+                this.attackAnimationActive = true;
+                this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
+                this.setState(this.chosenState);
+                // Check for collision with golem
+                const golem = this.game.entities.find(entity => entity instanceof MechaGolem && !entity.dead);
+                if (golem && this.BB.collide(golem.BB)) {
+                    golem.takeDamage(100);
+                    console.log("Knight attacks the MechaGolem!");
+                }
+                setTimeout(() => {
+                    this.attackAnimationActive = false; // Reset flag when animation is complete
+                }, 900); // Match the duration of the attack animation
+            }
+        } else if (this.game.keys["r"]) {
+            this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
+            this.setState(this.chosenState);
+        } else if (this.game.keys["ArrowUp"]) {
+            this.currentState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
+            if (this.facing === RIGHT) {
+                this.setState('RightJump');
+            } else {
+                this.setState('LeftJump');
+            }
+        } else if (this.game.keys["ArrowLeft"]) {
             if (this.facing === LEFT && !this.colliding) {
                 this.currentState = 'LeftRun';
                 this.x -= this.speed;
