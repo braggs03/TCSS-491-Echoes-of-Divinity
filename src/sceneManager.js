@@ -163,7 +163,10 @@ class SceneManager {
         }
     };
 
-    update() { 
+    update() {
+        if (this.knight.hp <= 0) {
+
+        }
 
         let middlepoint = PARAMS.SCREENWIDTH / 2 - 50;
         this.x = this.knight.x - middlepoint;
