@@ -1,5 +1,7 @@
 const one = {
-    dungeonGround: [{ x: 0, y: 17, w: 40 }],
+    width: 30000,
+    height: 0,
+    dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
     mechagolem: [{ x: 900, y: 350 }],
     dungeonWall: [{ x: 0, y: 0, h: 5 }],
     dungeonDoor: [{ x: 117, y: 465 }],
@@ -7,14 +9,16 @@ const one = {
 };
 
 const shopkeeper = {
-    dungeonBackground: [{ x: 0, y: 0, w: 15, h: 5 }],
+    width: 1085,
+    height: 0,
+    dungeonBackground: [{ x: 0, y: 30, w: 25, h: 7 }],
     chandelier: [{ x: 550, y: 40 }, { x: 1650, y: 40 }],
-    dungeonGround: [{ x: 0, y: 0, w: 15 }, { x: 0, y: 17, w: 15 }],
+    dungeonGround: [{ x: 0, y: 0, w: 15, h: 1 }, { x: 0, y: 17, w: 15, h: 1 }],
     dungeonWorkbench: [{ x: 1500, y: 510 }],
     dungeonAnvil: [{ x: 1730, y: 613 }],
     dungeonDoor: [{ x: 100, y: 465 }],
     dungeonTorch: [{ x: 103, y: 465 }, { x: 278, y: 465 }],
-    dungeonWall: [{ x: 0, y: 0, h: 5 }, { x: 58, y: 0, h: 5 }],
+    dungeonWall: [{ x: 0, y: 0, h: 4 }, { x: 0, y: 3.5, h: 1 }, { x: 58, y: 0, h: 4 }, { x: 58, y: 3.645, h: 1 }],
     wallAxe: [{ x: 1726, y: 520 }],
     swordRack: [{ x: 1300, y: 608 }],
     shieldRack: [{ x: 1400, y: 608 }],

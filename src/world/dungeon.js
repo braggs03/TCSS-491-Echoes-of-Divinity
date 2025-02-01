@@ -13,13 +13,13 @@ class DungeonGround {
     };
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 200, 1432, 31, 8, (this.x * DUNEGON_GROUND_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_GROUND_HEIGHT * this.scale, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
+        ctx.drawImage(this.spritesheet, 200, 1432, 31, 8, this.x * DUNEGON_GROUND_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
         this.BB.draw(ctx);
     };
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox((this.x * DUNEGON_GROUND_WIDTH * this.scale) - this.game.camera.x,  this.y * DUNEGON_GROUND_HEIGHT * this.scale, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
+        this.BB = new BoundingBox((this.x * DUNEGON_GROUND_WIDTH * this.scale) - this.game.camera.x,  this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
     }
 };
 
@@ -39,13 +39,13 @@ class DungeonWall {
     };
     
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 232, 1400, DUNEGON_WALL_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x * DUNEGON_WALL_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_WALL_HEIGHT * this.scale, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
+        ctx.drawImage(this.spritesheet, 232, 1400, DUNEGON_WALL_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x * DUNEGON_WALL_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
         this.BB.draw(ctx);
     };
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox((this.x * DUNEGON_WALL_WIDTH * this.scale) - this.game.camera.x,  this.y * DUNEGON_WALL_HEIGHT * this.scale, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
+        this.BB = new BoundingBox((this.x * DUNEGON_WALL_WIDTH * this.scale) - this.game.camera.x,  this.y * DUNEGON_WALL_HEIGHT * this.scale  - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
     };
 };
 
@@ -57,7 +57,7 @@ class DungeonBackground {
         Object.assign(this, { game, x, y, w, h});
 
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
-        this.scale = 5;
+        this.scale = 3;
     };
 
     update() {
@@ -66,7 +66,7 @@ class DungeonBackground {
     draw(ctx) {
         for (let k = 0; k < this.h; k++) {
             for (let i = 0; i < this.w; i++) {
-                ctx.drawImage(this.spritesheet, 808, 968, DUNEGON_BACKGROUND_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x + i * DUNEGON_BACKGROUND_WIDTH * this.scale) - this.game.camera.x, this.y + k * DUNEGON_BACKGROUND_HEIGHT * this.scale, DUNEGON_BACKGROUND_WIDTH * this.scale, DUNEGON_BACKGROUND_HEIGHT * this.scale);
+                ctx.drawImage(this.spritesheet, 808, 968, DUNEGON_BACKGROUND_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x + i * DUNEGON_BACKGROUND_WIDTH * this.scale) - this.game.camera.x, this.y + k * DUNEGON_BACKGROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_BACKGROUND_WIDTH * this.scale, DUNEGON_BACKGROUND_HEIGHT * this.scale);
             }
         }
         // if (PARAMS.DEBUG) {
@@ -94,13 +94,13 @@ class DungeonDoor {
 
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 1840, 1904, DUNEGON_DOOR_WIDTH, DUNEGON_DOOR_HEIGHT, this.x - this.game.camera.x, this.y, DUNEGON_DOOR_WIDTH * this.scale, DUNEGON_DOOR_HEIGHT * this.scale);
+        ctx.drawImage(this.spritesheet, 1840, 1904, DUNEGON_DOOR_WIDTH, DUNEGON_DOOR_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, DUNEGON_DOOR_WIDTH * this.scale, DUNEGON_DOOR_HEIGHT * this.scale);
         this.BB.draw(ctx);
     };
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox((this.x) - this.game.camera.x,  this.y, DUNEGON_DOOR_WIDTH * this.scale, DUNEGON_DOOR_HEIGHT * this.scale);
+        this.BB = new BoundingBox(this.x - this.game.camera.x,  this.y - this.game.camera.y, DUNEGON_DOOR_WIDTH * this.scale, DUNEGON_DOOR_HEIGHT * this.scale);
     }
 };
 
@@ -118,7 +118,7 @@ class DungeonTorch {
     };
 
 	draw(ctx) {
-		this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y, 4);
+		this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, 4);
 	}
 
     torch() {
@@ -144,7 +144,7 @@ class DungeonBackground2 {
     draw(ctx) {
         for (let k = 0; k < this.h; k++) {
             for (let i = 0; i < this.w; i++) {
-                ctx.drawImage(this.spritesheet, 0, 0, DUNEGON_BACKGROUND2_WIDTH, DUNEGON_BACKGROUND2_HEIGHT, (this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale, DUNEGON_BACKGROUND2_WIDTH * this.scale, DUNEGON_BACKGROUND2_HEIGHT * this.scale);
+                ctx.drawImage(this.spritesheet, 0, 0, DUNEGON_BACKGROUND2_WIDTH, DUNEGON_BACKGROUND2_HEIGHT, (this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_BACKGROUND2_WIDTH * this.scale, DUNEGON_BACKGROUND2_HEIGHT * this.scale);
             }
         }
     };

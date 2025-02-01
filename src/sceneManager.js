@@ -29,6 +29,12 @@ class SceneManager {
 
         this.knight = new Knight(this.game, x, y);
         this.game.addEntity(this.knight);
+        this.game.ctx.fillRect(50, 50, 100, 100);
+        if (level.black) {
+            for (let i = 0; i < level.tent.length; i++) {
+                ctx.fillRect(50, 50, 100, 100);
+            }
+        }
 
         if (level.tent) {
             for (let i = 0; i < level.tent.length; i++) {
@@ -40,7 +46,11 @@ class SceneManager {
         if (level.dungeonGround) {
             for (let i = 0; i < level.dungeonGround.length; i++) {
                 let ground = level.dungeonGround[i];
-                this.game.addEntity(new DungeonGround(this.game, ground.x, ground.y, ground.w));
+                for (let l = 0; l < ground.h; l++) {
+                    for (let k = 0; k < ground.w; k++) {
+                        this.game.addEntity(new DungeonGround(this.game, ground.x + k, ground.y + l));
+                    }
+                }
             }
         }
 
@@ -75,8 +85,10 @@ class SceneManager {
         if (level.dungeonGround) {
             for (let i = 0; i < level.dungeonGround.length; i++) {
                 let ground = level.dungeonGround[i];
-                for (let k = 0; k < ground.w; k++) {
-                    this.game.addEntity(new DungeonGround(this.game, ground.x + k, ground.y));
+                for (let l = 0; l < ground.h; l++) {
+                    for (let k = 0; k < ground.w; k++) {
+                        this.game.addEntity(new DungeonGround(this.game, ground.x + k, ground.y + l));
+                    }
                 }
             }
         }
@@ -168,9 +180,13 @@ class SceneManager {
 
         }
 
-        let middlepoint = PARAMS.SCREENWIDTH / 2 - 50;
-        this.x = this.knight.x - middlepoint;
-        //if (this.x < this.knight.x - midpoint) this.x = this.knight.x - midpoint;
+        let middlepointX = PARAMS.SCREENWIDTH / 2 - 50;
+        //this.x = this.knight.x - middlepointX;
+
+        let middlepointY = PARAMS.SCREENHEIGHT / 2 - 50;
+
+        if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) this.x = this.knight.x - middlepointX;
+        if (0 < this.knight.y - middlepointY && this.level.height > this.knight.y - middlepointY) this.y = this.knight.y - middlepointY;
 
         if (this.level == shopkeeper && this.knight.x > 0 && this.knight.x < 100 && this.game.keys["f"]) {
             this.loadLevel(one, 85, 440, false, false);
