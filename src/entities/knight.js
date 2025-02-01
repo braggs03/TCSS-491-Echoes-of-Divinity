@@ -143,7 +143,8 @@
                 this.y += this.speed;
             }
 
-            if (this.currentState !== 'RightAttack1' && this.currentState !== 'LeftAttack1') {
+            if (this.currentState !== 'RightAttack1' && this.currentState !== 'LeftAttack1'
+                && this.currentState !== 'RightRoll' && this.currentState !== 'LeftRoll') {
                 if (this.game.keys["ArrowLeft"]) {
                     if (this.facing === LEFT && !this.colliding) {
                         this.x -= this.speed;
