@@ -42,6 +42,7 @@ class MechaGolem {
         this.dead = true;
         this.animator = this.facing === RIGHT ? this.deathRight() : this.deathLeft();
         console.log("MechaGolem dies!");
+        this.target.emberCount += 200;
 		setTimeout(() => {
 			this.removeFromWorld = true;
 		}, 1000); // Adjust timing to match the death animation duration
@@ -74,8 +75,8 @@ class MechaGolem {
             } else if (this.BB.collide(this.target.BB)) {
                 this.aggro = true;
             }
-            
             if (this.aggro) {
+
                 this.facing = dx > 0 ? RIGHT : LEFT;
                 
                 if (distance > this.attackRange) {
