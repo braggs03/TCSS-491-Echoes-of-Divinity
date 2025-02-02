@@ -5,7 +5,9 @@
         this.y = y;
         this.jumpPoint = this.y - 150;
         this.speed = 10;
-        this.hp = 100;
+        this.hp = 1000;
+        this.emberCount = 0;
+        this.invinsible = false;
         this.attackspeed = 0.1
         this.damage = 100;
         this.removeFromWorld = false;
@@ -81,13 +83,15 @@
         this.BB = new BoundingBox((this.x + 128) - this.game.camera.x , this.y +128 , 128, 128);
     }
     takeDamage(amount) {
-        this.hp -= amount;
-        console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
-        if (this.hp <= 0) {
-            this.die();
-        } else {
-            this.flickerDuration = 0.3; // Flicker for 0.5 seconds
-        }
+         if (!this.invinsible) {
+             this.hp -= amount;
+             console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
+             if (this.hp <= 0) {
+                 this.die();
+             } else {
+                 this.flickerDuration = 0.3; // Flicker for 0.5 seconds
+             }
+         }
     }
     die() {
         if (!this.dead) {
@@ -119,7 +123,7 @@
             if (entity.BB && that.BB.collide(entity.BB)) {
                 if (entity instanceof DungeonWall) {
                     this.colliding = true;
-                    if (that.facing == LEFT && entity.x > that.x) {
+                    if (that.facing === LEFT && entity.x > that.x) {
                         that.setState('LeftIdle');
                     } else if (that.facing == RIGHT && entity.x < that.x) {
                         that.setState('RightIdle')
@@ -189,6 +193,7 @@
             }
         } else if (this.game.keys["r"]) {
             this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
+            this.invinsible = true;
             this.setState(this.chosenState);
         } else if (this.game.keys["ArrowUp"]) {
             this.currentState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
@@ -210,6 +215,7 @@
             }
             this.facing = RIGHT;
         } else {
+            this.invinsible = false;
             this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
             this.setState(this.chosenState);
         }
