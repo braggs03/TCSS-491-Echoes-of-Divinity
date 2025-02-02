@@ -5,7 +5,7 @@
         this.y = y;
         this.jumpPoint = this.y - 150;
         this.speed = 10;
-        this.hp = 1000;
+        this.hp = 100;
         this.attackspeed = 0.1
         this.damage = 100;
         this.removeFromWorld = false;
@@ -98,12 +98,18 @@
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
-            }, 1000); // Adjust timing to match the death animation duration
+                this.game.camera.loadLevel(shopkeeper, 100, 440, false, false)
+            }, 1000); 
+            // Adjust timing to match the death animation duration
         }
     }
 
     update() {
-        if (this.dead) return;
+
+        const TICK = this.game.clockTick;
+
+        if(this.dead) return;
+
         if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
