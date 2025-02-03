@@ -37,7 +37,7 @@ class Knight {
         this.updateBB();      
 
         this.animations = {
-            RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, 0.1, false, false),
+            RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
             RightAttack2 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 80, 95, 100, 10, 0.1, false, false),
             RightCrouch : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 160, 48, 100, 3, 0.1, false, false),
             RightCrouchAttack : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 240, 48, 100, 4, 0.1, false, false),
@@ -77,7 +77,6 @@ class Knight {
         this.dead = false;
         this.updateBB();
 
-       // make knight block or cratch to works as well as add aggro for golem and switch bettwen atfcks  then include 
 
     };
 
@@ -130,6 +129,7 @@ class Knight {
             setTimeout(() => {
                 this.removeFromWorld = true;
             }, 1000); // Adjust timing to match the death animation duration
+        
         }
     }
 
@@ -277,11 +277,5 @@ class Knight {
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
         }
     };
-    resetAnimations() {
-        for (const key in this.animations) {
-            if (this.animations.hasOwnProperty(key)) {
-                this.animations[key].elapsedTime = 0;
-            }
-        }
-    }
-};
+}
+

@@ -178,5 +178,31 @@ class SceneManager {
     };
 
     draw(ctx) {
+        ctx.fillStyle = "White";
+        ctx.fillText("Health Bar", 200, 80);
+        ctx.font = '24px "Open+Sans"';
+        const boxX = 200; 
+        const boxY = 90; 
+        const boxWidth = 300; 
+        const boxHeight = 50;
+        ctx.strokeStyle = "White";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+        ctx.fillText("0", 200, 180);
+        ctx.fillText("1000", 450, 180);
+        const health = this.knight.hp;
+        const fillWidth = boxWidth * health/1000;
+        ctx.fillStyle = "Green";
+        ctx.fillRect(boxX, boxY, fillWidth, boxHeight);
+        if (fillWidth < boxWidth) {
+            ctx.fillStyle = "Black";
+            ctx.fillRect(boxX + fillWidth, boxY, boxWidth - fillWidth, boxHeight);
+        }
+        ctx.fillStyle = "White";
+        ctx.font = '36px "Open+Sans"';
+        ctx.fillText("Ember", 590, 80);
+        ctx.fillText(this.knight.emberCount, 600, 120);
+        const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
+        ctx.drawImage(emberImage, 1520, 2328, 8, 16, 550, 60, 40, 80);
     };  
 };
