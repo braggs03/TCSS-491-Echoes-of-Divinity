@@ -4,32 +4,49 @@
 <head>
     <meta charset="utf-8">
     <title>Echoes of Divinity</title>
-  
+    <style>
+        html {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+
+    <!-- Core Game Files -->
     <script type="text/javascript" src="./src/levels.js"></script>
-    <script type="text/javascript" src="./src/world/dungeon.js"></script>
-    <script type="text/javascript" src="./src/entities/state.js"></script>
-    <script type="text/javascript" src="./src/resources/resources.js"></script>
+    <script type="text/javascript" src="./src/state.js"></script>
+    <script type="text/javascript" src="./src/resources.js"></script>
     <script type="text/javascript" src="./src/assetmanager.js"></script>
     <script type="text/javascript" src="./src/timer.js"></script>
     <script type="text/javascript" src="./src/gameengine.js"></script>
     <script type="text/javascript" src="./src/util.js"></script>
-    <script type="text/javascript" src="./src/BoundingBox.js"></script>
     <script type="text/javascript" src="./src/animator.js"></script>
-    <script type="text/javascript" src="./src/azucenaIdle.js"></script>
-    <script type="text/javascript" src="./src/reinaIdle.js"></script>
-    <script type="text/javascript" src="./src/lightning.js"></script>
-    <script type="text/javascript" src="./src/gorgon.js"></script>
-    <script type="text/javascript" src="./src/celes.js"></script>
-    <script type="text/javascript" src="./src/entities/MechaGolem.js"></script>
-    <script type="text/javascript" src="./src/title.js"></script>
-    <script type="text/javascript" src="./src/Werewolf.js"></script>
-    <script type="text/javascript" src="./src/NightbornWarrior.js"></script>
+    <script type="text/javascript" src="./src/boundingbox.js"></script>
+
+    <!-- World -->
+    <script type="text/javascript" src="./src/world/shopkeeper.js"></script>
+    <script type="text/javascript" src="./src/world/dungeon.js"></script>
+
+    <!-- Entities -->
+    <script type="text/javascript" src="./src/entities/azucenaIdle.js"></script>
+    <script type="text/javascript" src="./src/entities/reinaIdle.js"></script>
+    <script type="text/javascript" src="./src/entities/lightning.js"></script>
+    <script type="text/javascript" src="./src/entities/Werewolf.js"></script>
+    <script type="text/javascript" src="./src/entities/NightbornWarrior.js"></script>
     <script type="text/javascript" src="./src/entities/knight.js"></script>    
     <script type="text/javascript" src="./src/entities/skeletonwarrior.js"></script>
-    <script type="text/javascript" src="./src/sceneManager.js"></script>    
+    <script type="text/javascript" src="./src/entities/gorgon.js"></script>
+    <script type="text/javascript" src="./src/entities/celes.js"></script>
+    <script type="text/javascript" src="./src/entities/MechaGolem.js"></script>
+    <script type="text/javascript" src="./src/title.js"></script>
+
+    <script type="text/javascript" src="./src/sceneManager.js"></script>  
     <script type="text/javascript" src="./src/main.js"></script>
 </head>
-<body>
-    <canvas id="gameWorld" width="1280" height="720" style="background: white; border: 1px solid black" tabindex="0" autofocus></canvas>
+<body style="background-color: black;">
+    <div>
+        <canvas id="gameWorld" width="1280" height="720" tabindex="0" autofocus></canvas>
+    </div>
 </body>
 </html>
