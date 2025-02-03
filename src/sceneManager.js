@@ -11,7 +11,7 @@ class SceneManager {
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
 
-        this.loadLevel(shopkeeper, 0, 440, false, true);
+        this.loadLevel(shopkeeper, 0, 460, false, true);
     };
 
     clearEntities() {
@@ -40,17 +40,6 @@ class SceneManager {
             for (let i = 0; i < level.tent.length; i++) {
                 let tent = level.tent[i];
                 this.game.addEntity(new ShopkeeperTent(this.game, tent.x, tent.y));
-            }
-        }
-
-        if (level.dungeonGround) {
-            for (let i = 0; i < level.dungeonGround.length; i++) {
-                let ground = level.dungeonGround[i];
-                for (let l = 0; l < ground.h; l++) {
-                    for (let k = 0; k < ground.w; k++) {
-                        this.game.addEntity(new DungeonGround(this.game, ground.x + k, ground.y + l));
-                    }
-                }
             }
         }
 
@@ -85,20 +74,14 @@ class SceneManager {
         if (level.dungeonGround) {
             for (let i = 0; i < level.dungeonGround.length; i++) {
                 let ground = level.dungeonGround[i];
-                for (let l = 0; l < ground.h; l++) {
-                    for (let k = 0; k < ground.w; k++) {
-                        this.game.addEntity(new DungeonGround(this.game, ground.x + k, ground.y + l));
-                    }
-                }
+                this.game.addEntity(new DungeonGround(this.game, ground.x, ground.y, ground.w, ground.h));
             }
         }
 
         if (level.dungeonWall) {
             for (let i = 0; i < level.dungeonWall.length; i++) {
                 let wall = level.dungeonWall[i];
-                for (let k = 0; k < wall.h; k++) {
-                    this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y + k));
-                }
+                this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
             }
         }
 
@@ -180,7 +163,7 @@ class SceneManager {
 
         }
 
-        let middlepointX = PARAMS.SCREENWIDTH / 2 - 50;
+        let middlepointX = PARAMS.SCREENWIDTH / 2 - KNIGHT_HEIGHT * 2;
         //this.x = this.knight.x - middlepointX;
 
         let middlepointY = PARAMS.SCREENHEIGHT / 2 - 50;

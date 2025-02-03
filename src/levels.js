@@ -18,7 +18,7 @@ const shopkeeper = {
     dungeonAnvil: [{ x: 1730, y: 613 }],
     dungeonDoor: [{ x: 100, y: 465 }],
     dungeonTorch: [{ x: 103, y: 465 }, { x: 278, y: 465 }],
-    dungeonWall: [{ x: 0, y: 0, h: 4 }, { x: 0, y: 3.5, h: 1 }, { x: 58, y: 0, h: 4 }, { x: 58, y: 3.645, h: 1 }],
+    dungeonWall: [{ x: 0, y: 0, h: 5 }, { x: 58, y: 0, h: 5 }],
     wallAxe: [{ x: 1726, y: 520 }],
     swordRack: [{ x: 1300, y: 608 }],
     shieldRack: [{ x: 1400, y: 608 }],

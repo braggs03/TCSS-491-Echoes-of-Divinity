@@ -2,50 +2,47 @@ const DUNEGON_GROUND_WIDTH = 31;
 const DUNEGON_GROUND_HEIGHT = 8;
 
 class DungeonGround {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(game, x, y, w, h) {
+        Object.assign(this, { game, x, y, w, h });
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5;
+        this.BB = new BoundingBox(this.x * DUNEGON_GROUND_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * w * this.scale, DUNEGON_GROUND_HEIGHT * h * this.scale);
     };
 
     update() {
-        this.updateBB();
+        this.BB = new BoundingBox(this.x * DUNEGON_GROUND_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * this.w * this.scale, DUNEGON_GROUND_HEIGHT * this.h * this.scale);
     };
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 200, 1432, 31, 8, this.x * DUNEGON_GROUND_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
+        for (let l = 0; l < this.h; l++) {
+            for (let k = 0; k < this.w; k++) {
+                ctx.drawImage(this.spritesheet, 200, 1432, DUNEGON_GROUND_WIDTH, DUNEGON_GROUND_HEIGHT, this.x + (k * DUNEGON_GROUND_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
+            }
+        }
         this.BB.draw(ctx);
     };
-
-    updateBB() {
-        this.lastBB = this.BB;
-        this.BB = new BoundingBox((this.x * DUNEGON_GROUND_WIDTH * this.scale) - this.game.camera.x,  this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
-    }
 };
 
 const DUNEGON_WALL_WIDTH = 8;
 const DUNEGON_WALL_HEIGHT = 31;
 
 class DungeonWall {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
-
+    constructor(game, x, y, h) {
+        Object.assign(this, { game, x, y, h });
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5;
+        this.BB = new BoundingBox(this.x * DUNEGON_WALL_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * h * this.scale);
     };
 
     update() {
-        this.updateBB();
+        this.BB = new BoundingBox(this.x * DUNEGON_WALL_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.h * this.scale);
     };
     
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 232, 1400, DUNEGON_WALL_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x * DUNEGON_WALL_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
+        for (let l = 0; l < this.h; l++) {
+            ctx.drawImage(this.spritesheet, 232, 1400, DUNEGON_WALL_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x * DUNEGON_WALL_WIDTH * this.scale) - this.game.camera.x, this.y + l * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
+        }
         this.BB.draw(ctx);
-    };
-
-    updateBB() {
-        this.lastBB = this.BB;
-        this.BB = new BoundingBox((this.x * DUNEGON_WALL_WIDTH * this.scale) - this.game.camera.x,  this.y * DUNEGON_WALL_HEIGHT * this.scale  - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
     };
 };
 
