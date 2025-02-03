@@ -95,7 +95,7 @@ class Knight {
             console.error("State '${state}' not found.");
         }
     }
-    
+
     // setState(state) {
     //     if (this.animations[state]) {
     //         this.currentState = state;
@@ -220,6 +220,9 @@ class Knight {
             } else {
                 this.velocityX = 5;
             }
+        } else if (this.game.keys["ArrowUp"] && that.colliding.up) {
+            this.colliding.up = false;
+            this.velocityY -= 10;
         } else if (this.game.keys["ArrowLeft"] && !that.colliding.right) {
             this.facing = LEFT;
             this.velocityX -= this.accelerationX;
@@ -228,31 +231,31 @@ class Knight {
             this.facing = RIGHT;
             this.velocityX += this.accelerationX;
             this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
-        } else if (this.game.keys["ArrowUp"] && that.colliding.up) {
-            this.colliding.up = false;
-            this.velocityY -= 10;
         }
 
-        if (this.game.keys["e"]) {
-            if (!this.attackAnimationActive) {
-                this.velocityX = 0;
-                this.attackAnimationActive = true;
-                this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
-                this.setState(this.chosenState);
-                // Check for collision with golem
-                const golem = this.game.entities.find(entity => entity instanceof MechaGolem && !entity.dead);
-                if (golem && this.BB.collide(golem.BB)) {
-                    golem.takeDamage(100);
-                    console.log("Knight attacks the MechaGolem!");
+        if (this.currentState !== 'RightFall' && this.currentState !== 'LeftFall'
+            && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
+            if (this.game.keys["e"]) {
+                if (!this.attackAnimationActive) {
+                    this.velocityX = 0;
+                    this.attackAnimationActive = true;
+                    this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
+                    this.setState(this.chosenState);
+                    // Check for collision with golem
+                    const golem = this.game.entities.find(entity => entity instanceof MechaGolem && !entity.dead);
+                    if (golem && this.BB.collide(golem.BB)) {
+                        golem.takeDamage(100);
+                        console.log("Knight attacks the MechaGolem!");
+                    }
+                    setTimeout(() => {
+                        this.attackAnimationActive = false; // Reset flag when animation is complete
+                    }, 900); // Match the duration of the attack animation
                 }
-                setTimeout(() => {
-                    this.attackAnimationActive = false; // Reset flag when animation is complete
-                }, 900); // Match the duration of the attack animation
+            } else if (this.game.keys["r"]) {
+                this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
+                this.invinsible = true;
+                this.setState(this.chosenState);
             }
-        } else if (this.game.keys["r"]) {
-            this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
-            this.invinsible = true;
-            this.setState(this.chosenState);
         }
 
         if (this.velocityX > 0) {
