@@ -5,15 +5,15 @@ class MechaGolem {
         this.y = y;
         this.speed = 4;
         this.facing = RIGHT;
-        this.range = 300;
-        this.attackRange = 90;
+        this.range = 350;
+        this.attackRange = 80;
         this.dead = false;
         this.target = null;
         this.attackCooldown = 0;
         this.aggro = false;
         this.attackInProgress = false;
-		this.hp = 1000;
-		this.flickerFlag = true;
+        this.hp = 1000;
+        this.flickerFlag = true;
         this.flickerDuration = 0;
         this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft(); 
         this.updateBB();
@@ -21,14 +21,15 @@ class MechaGolem {
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(
-            this.x - this.game.camera.x + (this.aggro ? 96 : -128), 
-            this.y + 96, 
-            this.aggro ? 200 : 700, 
-            200
-        );
+        //this.lastBB = this.BB;
+        if (this.aggro) {
+            this.BB = new BoundingBox(this.x - this.game.camera.x + 96, this.y + 96, 200, 200);
+        } else {
+            this.BB = new BoundingBox(this.x - this.game.camera.x - 128, this.y + 96, 700, 200);
+        }
     }
-	takeDamage(amount) {
+    takeDamage(amount) {
+        if (!this.aggro) return;
         this.hp -= amount;
         console.log(`MechaGolem takes ${amount} damage, remaining health: ${this.hp}`);
         if (this.hp <= 0) {
@@ -42,14 +43,16 @@ class MechaGolem {
         this.dead = true;
         this.animator = this.facing === RIGHT ? this.deathRight() : this.deathLeft();
         console.log("MechaGolem dies!");
-		setTimeout(() => {
-			this.removeFromWorld = true;
-		}, 1000); // Adjust timing to match the death animation duration
+        this.target.emberCount += 200;
+        setTimeout(() => {
+            this.removeFromWorld = true;
+        }, 1000); 
+        
     }
 
     update() {
         if (this.dead) return;
-		if (this.flickerDuration > 0) {
+        if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
         }
@@ -71,7 +74,7 @@ class MechaGolem {
             if (distance > this.range) {
                 this.aggro = false;
                 this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
-            } else if (this.BB.collide(this.target.BB)) {
+            } else if (this.BB.collide(this.target.BB)&& !this.aggro) {
                 this.aggro = true;
             }
             
@@ -82,15 +85,14 @@ class MechaGolem {
                     this.x += dx > 0 ? this.speed : -this.speed;
                     this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
                 } else if (this.attackCooldown <= 0) {
-					if (this.target.attackAnimationActive && Math.random() < 0.5) {
+                    if (this.target.attackAnimationActive && Math.random() < 0.5) {
                         this.animator = this.facing === RIGHT ? this.blockRight() : this.blockLeft();
                     }
-                    const attackType = Math.random() < 0.5 ? "attack1" : "attack2";
+                    const attackType = Math.random() < 0.5 ? "attack1" : "attack2" ;
                     this.animator = attackType === "attack1" 
                         ? (this.facing === RIGHT ? this.meleeRight() : this.meleeLeft()) 
                         : (this.facing === RIGHT ? this.rangeAttackRight() : this.rangeAttackLeft());
                     console.log("Golem attacks knight!");
-                    
                     
                     if (!this.attackInProgress) {
                         this.attackInProgress = true;
@@ -102,7 +104,7 @@ class MechaGolem {
                             this.attackInProgress = false;
                         }, 700);
                     }
-                    this.attackCooldown = 1;
+                    this.attackCooldown = 2;
                 }
             }
         }
@@ -114,13 +116,16 @@ class MechaGolem {
     }
 
     draw(ctx) {
-		if (this.flickerDuration > 0 && !this.flickerFlag) return; // Skip drawing on flicker frames
+        if (this.flickerDuration > 0 && !this.flickerFlag) return; // Skip drawing on flicker frames
         this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 4);
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = "red";
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
         }
     }
+
+
+
 
     idleRight() {
         return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 0, 100, 100, 4, 0.1, false, true);
