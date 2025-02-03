@@ -1,12 +1,12 @@
 class gorgon {
-    constructor(game, ctx) {
+    constructor(game, x, y) {
         this.game = game;
-        this.ctx = ctx;
         this.hp = 1000;
-        this.x = 700;
-        this.y = 0;
+        this.x = x
+        this.y = y;
         this.dead = false;
         this.aggro = false;
+        this.target = null;
         this.facingLeft = true;
         this.attackNumber = Math.floor(Math.random() * 3);
         this.updateBB();
@@ -64,6 +64,7 @@ class gorgon {
 
     update() {
         if (this.dead) {
+            this.target.emberCount += 300;
             return;
         }
         if (this.hp <= 0) {
@@ -88,6 +89,7 @@ class gorgon {
             }
             if (entity.BB && that.BB.collide(entity.BB)) {
                 if (entity instanceof Knight && !that.aggro) {
+                    that.target = entity;
                     that.aggro = true;
                     if (that.facingLeft) {
                         that.setState('LeftWalk');

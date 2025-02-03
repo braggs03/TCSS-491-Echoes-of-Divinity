@@ -20,6 +20,9 @@ class Knight {
         this.jumpSpeed = 10;
         
         this.hp = 1000;
+        this.emberCount = 0;
+        this.invinsible = false;
+        this.attackspeed = 0.1
         this.damage = 100;
         this.removeFromWorld = false;
         this.facing = RIGHT;
@@ -107,13 +110,15 @@ class Knight {
         this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x , this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
     }
     takeDamage(amount) {
-        this.hp -= amount;
-        console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
-        if (this.hp <= 0) {
-            this.die();
-        } else {
-            this.flickerDuration = 0.3; // Flicker for 0.5 seconds
-        }
+         if (!this.invinsible) {
+             this.hp -= amount;
+             console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
+             if (this.hp <= 0) {
+                 this.die();
+             } else {
+                 this.flickerDuration = 0.3; // Flicker for 0.5 seconds
+             }
+         }
     }
     die() {
         if (!this.dead) {

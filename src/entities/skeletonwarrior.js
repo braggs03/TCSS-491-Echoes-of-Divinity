@@ -1,9 +1,9 @@
 class SkeletonWarrior {
-	constructor(game, ctx) {
+	constructor(game, x, y) {
 		this.game = game;
-        this.ctx = ctx;
-        this.x = 0;
-        this.y = 0;
+        this.target = null;
+        this.x = x
+        this.y = y
         this.updateBB();
 
         this.animations = {
@@ -49,6 +49,98 @@ class SkeletonWarrior {
     }
 
 	update() {
+        if (this.dead) {
+            this.target.emberCount += 100;
+            return;
+        }
+        if (this.hp <= 0) {
+            if (this.facingLeft) {
+                this.setState('LeftDead');
+            } else {
+                this.setState('RightDead');
+            }
+            this.dead = true;
+        }
+
+        let that = this;
+        this.game.entities.forEach(function (entity) {
+            if (entity.x - that.x > 500) {
+                that.aggro = false;
+                that.facingLeft = false;
+                that.setState('RightIdle1')
+            } else if (that.x - entity.x > 500) {
+                that.aggro = false;
+                that.facingLeft = true;
+                that.setState('LeftIdle1')
+            }
+            if (entity.BB && that.BB.collide(entity.BB)) {
+                if (entity instanceof Knight && !that.aggro) {
+                    that.aggro = true;
+                    if (that.facingLeft) {
+                        that.setState('LeftWalk');
+                    } else {
+                        that.setState('RightWalk')
+                    }
+                } else if (entity instanceof Knight && that.aggro) {
+                    if (entity.currentState === 'RightAttack1') {
+                        that.setState('LeftHurt')
+                        that.hp -= entity.damage;
+                        that.x += 50;
+                        return;
+                    } else if (entity.currentState === 'LeftAttack1') {
+                        that.setState('RightHurt')
+                        that.hp -= entity.damage;
+                        that.x -= 50;
+                        return;
+                    } else if (entity.currentState === 'LeftRoll' || entity.currentState === 'RightRoll') {
+
+                    } else {
+                        if (that.facingLeft) {
+                            entity.setState('RightDeath');
+                        } else {
+                            entity.setState('LeftDeath');
+                        }
+                        entity.dead = true;
+                    }
+                    if (that.facingLeft) {
+                        if (that.attackNumber === 0) {
+                            that.setState('LeftAttack1');
+                        } else if (that.attackNumber === 1) {
+                            that.setState('LeftAttack2');
+                        } else {
+                            that.setState('LeftAttack3');
+                        }
+                    } else {
+                        if (that.attackNumber === 0) {
+                            that.setState('RightAttack1');
+                        } else if (that.attackNumber === 1) {
+                            that.setState('RightAttack2');
+                        } else {
+                            that.setState('RightAttack3');
+                        }
+                    }
+                }
+            } else if (entity instanceof Knight) {
+                that.target = entity;
+                if (that.animations[that.currentState].getDone()) {
+                    that.attackNumber = Math.floor(Math.random() * 3);
+                    if (entity.x > that.x) {
+                        // Knight is to the right
+                        if (that.aggro) {
+                            that.facingLeft = false;
+                            that.setState('RightRun');
+                        }
+                    } else if (entity.x < that.x) {
+                        // Knight is to the left
+                        if (that.aggro) {
+                            that.facingLeft = true;
+                            that.setState('LeftRun');
+                        }
+                    }
+                }
+            }
+        });
+
         if (this.currentState === 'RightRun' || this.currentState === 'RightRunattack') {
             this.x += 500 * this.game.clockTick;
         } else if (this.currentState === 'LeftRun' || this.currentState === 'LeftRunattack') {
@@ -58,9 +150,10 @@ class SkeletonWarrior {
         }else if (this.currentState === 'LeftWalk') {
             this.x -= 100 * this.game.clockTick;
         }
+        this.updateBB();
 	};
 
 	draw(ctx) {
 		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
 	};
-};
+}
