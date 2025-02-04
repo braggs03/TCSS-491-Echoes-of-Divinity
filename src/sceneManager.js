@@ -11,6 +11,8 @@ class SceneManager {
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
 
+        this.knight = new Knight(this.game, this.x, this.y);
+
         this.loadLevel(shopkeeper, 0, 440, false, false);
         
     };
@@ -20,6 +22,7 @@ class SceneManager {
             entity.removeFromWorld = true;
         });
     };
+
 
     loadLevel(level, x, y, transition, title) {
 
@@ -32,7 +35,7 @@ class SceneManager {
         this.game.addEntity(this.knight);
 
         if(transition) {
-            this.game.addEntity(new TransitionScreen(this.game, level, x, y))
+            this.game.addEntity(new TransitionScreen(this.game, level, x, y, false))
         } else {
             if (level.tent) {
                 for (let i = 0; i < level.tent.length; i++) {
@@ -140,8 +143,7 @@ class SceneManager {
             if (level.dungeonDoor) {
                 for (let i = 0; i < level.dungeonDoor.length; i++) {
                     let door = level.dungeonDoor[i];
-                    this.game.addEntity(new DungeonDoor
-                        (this.game, door.x, door.y, door.h));
+                    this.game.addEntity(new DungeonDoor(this.game, door.x, door.y));
                 }
             }
 
@@ -165,6 +167,10 @@ class SceneManager {
                     this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
                 }
             }
+            // this.knight.x = x;
+            // this.knight.y = y;
+            // this.knight.removeFromWorld = false;
+            // this.game.addEntity(this.knight);
     }
     };
 
@@ -175,9 +181,9 @@ class SceneManager {
         //if (this.x < this.knight.x - midpoint) this.x = this.knight.x - midpoint;
 
         if (this.level == shopkeeper && this.knight.x > 0 && this.knight.x < 100 && this.game.keys["f"]) {
-            this.loadLevel(one, 85, 440, false, false);
+            this.loadLevel(one, 85, 440, true, false);
             this.game.update();
-        }
+        } 
     };
 
     draw(ctx) {
