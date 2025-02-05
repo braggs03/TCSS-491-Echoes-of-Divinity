@@ -53,6 +53,10 @@ ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Run.png")
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Run+attack.png")
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Walk.png")
 
+//Music
+ASSET_MANAGER.queueDownload('../resources/background.ogg')
+ASSET_MANAGER.queueDownload('../resources/maintheme.ogg')
+
 
 ASSET_MANAGER.downloadAll(() => {
 	const gameEngine = new GameEngine();

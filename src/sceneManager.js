@@ -11,7 +11,7 @@ class SceneManager {
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
 
-        this.loadLevel("shopkeeper", false, true);
+        this.loadLevel("startScreen", true);
     };
 
     clearEntities() {
@@ -27,13 +27,27 @@ class SceneManager {
         level = levels[level];
         this.clearEntities();
         this.x = 0;
+        this.cutsceneStartTime = Date.now();
 
-        this.knight = new Knight(this.game, this.level.knightPos.x, this.level.knightPos.y);
-        this.game.addEntity(this.knight);
-        this.game.ctx.fillRect(50, 50, 100, 100);
-        if (level.black) {
-            for (let i = 0; i < level.tent.length; i++) {
-                ctx.fillRect(50, 50, 100, 100);
+        if (!this.title) {
+            this.knight = new Knight(this.game, this.level.knightPos.x, this.level.knightPos.y);
+            this.game.addEntity(this.knight);
+            this.game.ctx.fillRect(50, 50, 100, 100);
+        }
+
+        if (level.text) {
+            level.text.forEach((text) => {
+                text.opacity = 0; // Set initial opacity to 0 (invisible)
+            });
+            this.game.textOverlay = level.text;
+        } else {
+            this.game.textOverlay = null;
+        }
+
+        if(level.title) {
+            for (let i = 0; i < level.title.length; i++) {
+                let title = level.title[i];
+                this.game.addEntity(new gameTitle(this.game, title.x, title.y));
             }
         }
 
@@ -159,6 +173,52 @@ class SceneManager {
     };
 
     update() {
+        if (this.level === levels.startScreen && this.game.keys[' ']) {
+            this.loadLevel('storyRecap', true);
+            this.music = new Audio("../resources/maintheme.ogg");
+            this.music.loop = true;
+            this.music.preload = 'auto';
+            this.music.volume = 0.5;
+
+            // Ensure the audio is fully loaded before allowing playback
+            this.music.addEventListener("canplaythrough", () => {
+                this.music.play();
+            });
+        }
+        if (this.game.textOverlay) {
+            const currentTime = Date.now();
+
+            // Calculate time since the cutscene started
+            const elapsedTime = currentTime - this.cutsceneStartTime;
+
+            // Duration to fade in each text
+            let fadeDuration = this.level.fadeTime;  // Duration for each text to fade in.
+
+            // Determine which text should be active based on the elapsed time
+            let textIndex = Math.floor(elapsedTime / fadeDuration);  // Which text should be fading in
+
+            // Ensure we don't go beyond the number of text elements
+            textIndex = Math.min(textIndex, this.game.textOverlay.length);
+
+            // Update the opacity for each text
+            for (let i = 0; i < textIndex; i++) {
+                // Texts that should have fully faded in
+                this.game.textOverlay[i].opacity = 1;
+            }
+
+            // Fade the current text (only one text is fading at a time)
+            if (textIndex < this.game.textOverlay.length) {
+                const currentText = this.game.textOverlay[textIndex];
+                const timeIntoFade = elapsedTime - (textIndex * fadeDuration);
+
+                // Fade in this text over its duration
+                currentText.opacity = Math.min(timeIntoFade / fadeDuration, 1);
+            }
+            if (textIndex === this.game.textOverlay.length && elapsedTime >= (this.game.textOverlay.length * fadeDuration)) {
+                this.loadLevel("mainMenu", true);  // Load the next level
+            }
+        }
+        return;
         if (this.knight.hp <= 0) {
 
         }
@@ -173,6 +233,25 @@ class SceneManager {
     };
 
     draw(ctx) {
+        if (this.game.textOverlay) {
+            // Draw the black background
+            ctx.fillStyle = this.level.background;
+            ctx.fillRect(0, 0, this.level.width, this.level.height);
+
+            // Loop through the texts and apply opacity
+            this.game.textOverlay.forEach(text => {
+                ctx.fillStyle = text.color;
+                ctx.font = text.font;
+                ctx.textAlign = "center";
+                ctx.globalAlpha = text.opacity;  // Apply opacity
+
+                // Draw the text
+                ctx.fillText(text.message, text.x, text.y);
+            });
+            return;
+        } else {
+            return;
+        }
         ctx.fillStyle = "White";
         ctx.fillText("Health Bar", 200, 80);
         ctx.font = '24px "Open+Sans"';
