@@ -19,7 +19,7 @@ class Knight {
         this.accelerationY = 0.25; 
         this.jumpSpeed = 10;
         
-        this.hp = 1000;
+        this.hp = 10;
         this.emberCount = 0;
         this.invinsible = false;
         this.attackspeed = 0.1
@@ -128,7 +128,7 @@ class Knight {
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
-                this.game.camera.loadLevel(shopkeeper, 100, 440, true, false)
+                this.game.camera.loadLevel("shopkeeper", true, false)
             }, 1000); 
             // Adjust timing to match the death animation duration
         }
