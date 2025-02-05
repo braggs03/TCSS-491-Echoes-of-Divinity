@@ -11,7 +11,7 @@ class SceneManager {
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
 
-        this.loadLevel(shopkeeper, 0, 460, false, true);
+        this.loadLevel("shopkeeper", false, true);
     };
 
     clearEntities() {
@@ -20,14 +20,15 @@ class SceneManager {
         });
     };
 
-    loadLevel(level, x, y, title) {
+    loadLevel(level, title) {
 
         this.title = title;
-        this.level = level;
+        this.level = levels[level];
+        level = levels[level];
         this.clearEntities();
         this.x = 0;
 
-        this.knight = new Knight(this.game, x, y);
+        this.knight = new Knight(this.game, this.level.knightPos.x, this.level.knightPos.y);
         this.game.addEntity(this.knight);
         this.game.ctx.fillRect(50, 50, 100, 100);
         if (level.black) {
@@ -131,8 +132,7 @@ class SceneManager {
         if (level.dungeonDoor) {
             for (let i = 0; i < level.dungeonDoor.length; i++) {
                 let door = level.dungeonDoor[i];
-                this.game.addEntity(new DungeonDoor
-                    (this.game, door.x, door.y, door.h));
+                this.game.addEntity(new DungeonDoor(this.game, door.x, door.y, door.level));
             }
         }
 
@@ -170,11 +170,6 @@ class SceneManager {
 
         if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) this.x = this.knight.x - middlepointX;
         if (0 < this.knight.y - middlepointY && this.level.height > this.knight.y - middlepointY) this.y = this.knight.y - middlepointY;
-
-        if (this.level == shopkeeper && this.knight.x > 0 && this.knight.x < 100 && this.game.keys["f"]) {
-            this.loadLevel(one, 85, 440, false, false);
-            this.game.update();
-        }
     };
 
     draw(ctx) {

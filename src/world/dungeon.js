@@ -77,16 +77,30 @@ const DUNEGON_DOOR_WIDTH = 47;
 const DUNEGON_DOOR_HEIGHT = 39;
 
 class DungeonDoor {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(game, x, y, level) {
+        Object.assign(this, { game, x, y, level });
 
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5.5;
+        this.BB = new BoundingBox(this.x - this.game.camera.x,  this.y - this.game.camera.y, DUNEGON_DOOR_WIDTH * this.scale, DUNEGON_DOOR_HEIGHT * this.scale);
+        this.fReleased = false;
     };
 
     update() {
-        this.updateBB();
-        
+
+        this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, DUNEGON_DOOR_WIDTH * 2.2, DUNEGON_DOOR_HEIGHT * 4.3);
+
+        const that = this;
+        if (this.game.keys["f"]) {
+            this.game.entities.forEach((entity) => {
+                if (this.fReleased && entity.BB && that.BB.collide(entity.BB) && entity instanceof Knight) {
+                    console.dir(that.level);
+                    that.game.camera.loadLevel(that.level);
+                }
+            });
+        } else {
+            this.fReleased = true;
+        }
     };
 
 
@@ -94,11 +108,6 @@ class DungeonDoor {
         ctx.drawImage(this.spritesheet, 1840, 1904, DUNEGON_DOOR_WIDTH, DUNEGON_DOOR_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, DUNEGON_DOOR_WIDTH * this.scale, DUNEGON_DOOR_HEIGHT * this.scale);
         this.BB.draw(ctx);
     };
-
-    updateBB() {
-        this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x - this.game.camera.x,  this.y - this.game.camera.y, DUNEGON_DOOR_WIDTH * this.scale, DUNEGON_DOOR_HEIGHT * this.scale);
-    }
 };
 
 const DUNEGON_TORCH_WIDTH = 20;

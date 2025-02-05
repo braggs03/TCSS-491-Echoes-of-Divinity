@@ -145,6 +145,8 @@ class Knight {
         
         let left = 0;
         let right = 0;
+        let up = 0;
+        let down = 0;
         this.game.entities.forEach((entity) => {
             if (entity.BB && that.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(that.BB);
@@ -152,22 +154,20 @@ class Knight {
                     if (entity.BB.x < that.BB.x) {
                         right++;
                         that.x += overlap.x;
-                        that.velocityX = 0; 
                     } else if (entity.BB.x > that.BB.x) {
                         left++;
                         that.x -= overlap.x;
-                        that.velocityX = 0; 
                     }
+                    that.velocityX = 0; 
                 } else if (entity instanceof DungeonGround) {
                     if (entity.BB.y < that.BB.y) {
-                        that.colliding.down = true;
+                        down++;
                         that.y += overlap.y;
-                        that.velocityY = 0; 
                     } else if (entity.BB.y > that.BB.y) {
-                        that.colliding.up = true;
-                        that.y -= overlap.y;
-                        that.velocityY = 0; 
+                        up++;
+                        that.y -= overlap.y - 1;
                     }       
+                    that.velocityY = 0; 
                 }
             }
         });
@@ -182,6 +182,18 @@ class Knight {
             that.colliding.right = true;
         } else {
             that.colliding.right = false;
+        }
+
+        if (down > 0) {
+            that.colliding.down = true;
+        } else {
+            that.colliding.down = false;
+        }
+
+        if (up > 0) {
+            that.colliding.up = true;
+        } else {
+            that.colliding.up = false;
         }
 
         if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1'
@@ -201,7 +213,6 @@ class Knight {
         }
 
         if (!that.colliding.up) {
-            console.dir(this);
             if (this.velocityY > 0) {
                 this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
             } else {
@@ -222,7 +233,7 @@ class Knight {
             }
         } else if (this.game.keys["ArrowUp"] && that.colliding.up) {
             this.colliding.up = false;
-            this.velocityY -= 10;
+            this.velocityY -= this.jumpSpeed;
         } else if (this.game.keys["ArrowLeft"] && !that.colliding.right) {
             this.facing = LEFT;
             this.velocityX -= this.accelerationX;
