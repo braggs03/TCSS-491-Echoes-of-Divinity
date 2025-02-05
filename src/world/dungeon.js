@@ -82,7 +82,7 @@ class DungeonDoor {
 
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5.5;
-        this.BB = new BoundingBox(this.x - this.game.camera.x,  this.y - this.game.camera.y, DUNEGON_DOOR_WIDTH * this.scale, DUNEGON_DOOR_HEIGHT * this.scale);
+        this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, DUNEGON_DOOR_WIDTH * 2.2, DUNEGON_DOOR_HEIGHT * 4.3);
         this.fReleased = false;
     };
 
