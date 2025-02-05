@@ -208,6 +208,7 @@ class Knight {
             if (!this.animations[this.currentState].getDone()) {
                 return;
             } else {
+                this.invinsible = false;
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                 this.setState(this.chosenState);
             }
