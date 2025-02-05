@@ -22,8 +22,8 @@ class SceneManager {
         });
     };
 
-    loadLevel(levelIndex, transition, title) {
-
+    loadLevel(levelIndex, transition, title, dead) {
+        this.dead = false;
         this.title = title;        
         this.level = levels[levelIndex];
         // level = levels[level];
@@ -32,11 +32,12 @@ class SceneManager {
 
         this.knight = new Knight(this.game, this.level.knightPos.x, this.level.knightPos.y);
         this.game.addEntity(this.knight);
+        
         this.game.ctx.fillRect(50, 50, 100, 100);
         if(transition) {
-            console.log(this.level)
-            console.log(this.level.knightPos)
-            this.game.addEntity(new TransitionScreen(this.game, levelIndex))
+            // console.log(this.level)
+            // console.log(this.level.knightPos)
+            this.game.addEntity(new TransitionScreen(this.game, levelIndex, dead))
         } else {
             if  (this.level.black) {
                 for (let i = 0; i < this.level.tent.length; i++) {

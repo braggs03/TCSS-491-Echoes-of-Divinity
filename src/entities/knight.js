@@ -128,7 +128,7 @@ class Knight {
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
-                this.game.camera.loadLevel("shopkeeper", true, false)
+                this.game.camera.loadLevel("shopkeeper", true, false, true)
             }, 1000); 
             // Adjust timing to match the death animation duration
         }
