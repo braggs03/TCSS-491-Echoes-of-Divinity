@@ -53,7 +53,7 @@ class MechaGolem {
 
    
     resetAggro() {
-        this.target = null;
+        //this.target = null;
         this.aggro = false;
         this.engaged = false;
         this.attackInProgress = false;
@@ -74,7 +74,7 @@ class MechaGolem {
         if (this.hp <= 0) {
             this.die();
         } else {
-            this.flickerDuration = 0.2;
+            this.flickerDuration = 0.4;
         }
     }
 
@@ -100,6 +100,7 @@ class MechaGolem {
 
         if (this.target && (this.target.dead || this.target.removeFromWorld)) {
             this.resetAggro();
+            this.target = null; // Explicitly clear the target
         }
     
      
@@ -137,6 +138,9 @@ class MechaGolem {
                     this.canAttackAgain = true;
                 }
             }
+        } else {
+            // No target available, return to idle
+            this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
         }
     
       
@@ -160,7 +164,7 @@ class MechaGolem {
     
 
         setTimeout(() => {
-            if (this.BB.collide(this.target.BB) && !this.target.dead) {
+            if (this.target && this.BB.collide(this.target.BB) && !this.target.dead) {
                 console.log("Knight takes damage!");
                 this.target.takeDamage(100);
             }
@@ -171,11 +175,12 @@ class MechaGolem {
             this.attackInProgress = false;
             this.attackCooldown = 1;
             
-
-            if (!this.BB.collide(this.target.BB)) {
-                this.canAttackAgain = true; 
+            if (!this.target || this.target.dead) {
+                console.log("No target to attack; returning to idle.");
+                this.resetAggro(); // Reset if the Knight is gone or dead
+            } else if (!this.BB.collide(this.target.BB)) {
+                this.canAttackAgain = true;
             } else {
- 
                 this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
             }
         }, 700);
