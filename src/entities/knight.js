@@ -19,7 +19,7 @@ class Knight {
         this.accelerationY = 0.25; 
         this.jumpSpeed = 10;
         
-        this.hp = 10;
+        this.hp = 1000;
         this.emberCount = 0;
         this.invinsible = false;
         this.attackspeed = 0.1
