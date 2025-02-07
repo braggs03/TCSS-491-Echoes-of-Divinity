@@ -186,12 +186,12 @@ class SceneManager {
         const boxX = 200; 
         const boxY = 90; 
         const boxWidth = 300; 
-        const boxHeight = 50;
+        const boxHeight = 40;
         ctx.strokeStyle = "White";
         ctx.lineWidth = 2;
         ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
-        ctx.fillText("0", 200, 180);
-        ctx.fillText("1000", 450, 180);
+        ctx.fillText("0", 200, 165);
+        ctx.fillText("1000", 450, 165);
         const health = this.knight.hp;
         const fillWidth = boxWidth * health/1000;
         ctx.fillStyle = "Green";
