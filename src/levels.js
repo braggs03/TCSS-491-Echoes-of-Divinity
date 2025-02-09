@@ -6,7 +6,8 @@ const levels = {
         fadeTime: 1500,
         text: [
             { x: 640, y: 360, message: "START", font: "40px Arial", color: "white" },
-            { x: 640, y: 400, message: "Press SPACE to start", font: "20px Arial", color: "white" }
+            { x: 640, y: 400, message: "Press SPACE to start or press ENTER to skip story recap", font: "20px Arial", color: "white" },
+            { x: 640, y: 440, message: "(It's like a minute and 30 seconds long, you try summarizing 11 pages of lore.)", font: "20px Arial", color: "white" },
         ]
     },
 
@@ -24,7 +25,7 @@ const levels = {
             { x: 640, y: 220, message: "The war culminated in the Battle of the Twin Fates, where Mica emerged victorious.", font: "20px Arial", color: "white" },
             { x: 640, y: 259, message: "Sparing her brother, Mica stole Duma's power and exiled him to an eternal life without power.", font: "20px Arial", color: "white" },
             { x: 640, y: 298, message: "Mica united the world under the name, Aurathis, forming the Kingdom of Thalador at it's center.", font: "20px Arial", color: "white" },
-            { x: 640, y: 337, message: "Aurathis saw 4000 years of peace under by Mica’s guidance. However, Duma’s anger never waned.", font: "20px Arial", color: "white" },
+            { x: 640, y: 337, message: "Aurathis saw 4000 years of peace under Mica’s guidance. However, Duma’s anger never waned.", font: "20px Arial", color: "white" },
             { x: 640, y: 376, message: "After millennia of exile, he returned, sowing seeds of greed and ambition among mankind’s powerful, turning them against Mica. ", font: "20px Arial", color: "white" },
             { x: 640, y: 415, message: "The betrayal culminated in Mica’s death at Duma’s hands, and the world was plunged into chaos once more as Duma reclaimed his godly power.", font: "20px Arial", color: "white" },
             { x: 640, y: 454, message: "Before her death, Mica bestowed the last remnants of her power upon a young knight, granting him the ability to return from death.", font: "20px Arial", color: "white" },
@@ -40,7 +41,11 @@ const levels = {
         width: 800,
         height: 600,
         background: "black",
-        title: [{ x: 640, y: 150 }],
+        title: [{ x: 340, y: 70 }],
+        menuBackground: [{ x: 0, y: 0, w: 1, h: 1}],
+        text: [
+            { x: 640, y: 400, message: "Press SPACE to start", font: "20px Arial", color: "white" }
+        ]
     },
 
     one: {

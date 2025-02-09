@@ -27,6 +27,7 @@ ASSET_MANAGER.queueDownload(CELES + "LightCharge.png")
 ASSET_MANAGER.queueDownload(CELES + "Run.png")
 ASSET_MANAGER.queueDownload(CELES + "Walk.png")
 ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND_IMAGE);
+ASSET_MANAGER.queueDownload("../resources/menuScreen.png");
 ASSET_MANAGER.queueDownload("../resources/Title.png")
 ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneWarrior.png"); 
 ASSET_MANAGER.queueDownload(WEREWOLF +"Attack_1.png");
