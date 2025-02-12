@@ -29,7 +29,6 @@ const levels = {
         
 
     },
-
     shopkeeper: {
         width: 1085,
         height: 0,
