@@ -20,10 +20,11 @@ class SceneManager {
         });
     };
 
-    loadLevel(level, x, y, title) {
-
-        this.title = title;
-        this.level = level;
+    loadLevel(levelIndex, transition, title, dead) {
+        this.dead = false;
+        this.title = title;        
+        this.level = levels[levelIndex];
+        // level = levels[level];
         this.clearEntities();
         this.x = 0;
 
@@ -160,10 +161,47 @@ class SceneManager {
                 let background2 = level.dungeonBackground2[i];
                 this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
             }
+            if (this.level.dungeonGround2) {
+                for (let i = 0; i < this.level.dungeonGround2.length; i++) {
+                    let ground2 = this.level.dungeonGround2[i];
+                    this.game.addEntity(new DungeonGround2(this.game, ground2.x, ground2.y, ground2.w, ground2.h));
+                }
+            }
+
+            if (this.level.dungeonWall2) {
+                for (let i = 0; i < this.level.dungeonWall2.length; i++) {
+                    let wall2 = this.level.dungeonWall2[i];
+                    this.game.addEntity(new DungeonWall2(this.game, wall2.x, wall2.y, wall2.h));
+                }
+            }
+
+            if (this.level.dungeonDoor2) {
+                for (let i = 0; i < this.level.dungeonDoor2.length; i++) {
+                    let door2 = this.level.dungeonDoor2[i];
+                    this.game.addEntity(new DungeonDoor2(this.game, door2.x, door2.y, door2.level));
+                }
+            }
+            if (this.level.dungeonWaterfall) {
+                for(let i = 0; i < this.level.dungeonWaterfall.length; i++) {
+                    let waterfall = this.level.dungeonWaterfall[i];
+                    this.game.addEntity(new DungeonWaterfall(this.game, waterfall.x, waterfall.y));
+                }
+            }
+
+            if (this.level.dungeonBackground3) {
+                for (let i = 0; i < this.level.dungeonBackground3.length; i++) {
+                    let background3 = this.level.dungeonBackground3[i];
+                    this.game.addEntity(new DungeonBackground3(this.game, background3.x, background3.y, background3.w, background3.h));
+                }
+            }
+
+           
+
         }
+        
     };
 
-    update() { 
+    update() {
 
         let middlepoint = PARAMS.SCREENWIDTH / 2 - 50;
         this.x = this.knight.x - middlepoint;
@@ -176,9 +214,15 @@ class SceneManager {
     };
 
     draw(ctx) {
+        // Save the current context state
+        ctx.save();
+        
+        // Reset any potential transformations
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.font = '24px "Open+Sans"';
         ctx.fillStyle = "White";
         ctx.fillText("Health Bar", 200, 80);
-        ctx.font = '24px "Open+Sans"';
         const boxX = 200; 
         const boxY = 90; 
         const boxWidth = 300; 
@@ -202,5 +246,5 @@ class SceneManager {
         ctx.fillText(this.knight.emberCount, 600, 120);
         const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
         ctx.drawImage(emberImage, 1520, 2328, 8, 16, 550, 60, 40, 80);
-    };  
+    }; 
 };

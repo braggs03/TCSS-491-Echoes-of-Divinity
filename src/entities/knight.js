@@ -121,7 +121,27 @@ class Knight {
                     } else {
                         this.colliding = false;
                     }
-                } 
+                    that.velocityX = 0; 
+                } else if (entity instanceof DungeonGround) {
+                    if (entity.BB.y < that.BB.y) {
+                        down++;
+                        that.y += overlap.y;
+                    } else if (entity.BB.y > that.BB.y) {
+                        up++;
+                        that.y -= overlap.y - 1;
+                    }       
+                    that.velocityY = 0; 
+                } else if (entity instanceof DungeonGround2) {
+                    if (entity.BB.y < that.BB.y) {
+                        down++;
+                        that.y += overlap.y;
+                    } else if (entity.BB.y > that.BB.y) {
+                        up++;
+                        that.y -= overlap.y - 1;
+                    }       
+                    that.velocityY = 0; 
+                }
+                
             }
         });
         if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1'

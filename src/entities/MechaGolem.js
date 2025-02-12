@@ -69,7 +69,7 @@ class MechaGolem {
             this.removeFromWorld = true;
         }, 1000);
     }
-
+    // slow down golem aarcks whenknight is rolling: 
     update() {
         if (this.dead) return;
 

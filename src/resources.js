@@ -14,3 +14,5 @@ const REINA = './resources/Reina.png';
 const DUNGEON = './resources/dungeon.png'
 const TORCH = './resources/torch.png'
 const DUNGEON_BACKGROUND_IMAGE = './resources/dungeonbackground.png'
+const WATERFALL = './resources/waterfall.png'
+const DUNGEON_BACKGROUND = './resources/dungeonwater2.png'
