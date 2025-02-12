@@ -11,6 +11,8 @@ class SceneManager {
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
 
+        this.currentCheckpoint = null;
+
         this.knight = new Knight(this.game, this.x, this.y);
 
         this.loadLevel("shopkeeper", false, true);
@@ -22,21 +24,43 @@ class SceneManager {
         });
     };
 
+    respawnKnight(knight) {
+        if (this.currentCheckpoint) {
+            const levelIndex = this.currentCheckpoint.level;
+            if (levels[levelIndex]) { 
+                this.loadLevel(levelIndex, true, false, true);
+                knight.x = this.currentCheckpoint.x;
+                knight.y = this.currentCheckpoint.y;
+                console.log(`Respawn @ checkpoint (${knight.x}, ${knight.y}) @ level ${levelIndex}`);
+            } else {
+                console.error(`Checkpoint "${levelIndex}" not found.`);
+            }
+        } else {
+            this.loadLevel("shopkeeper", true, false, true);
+            console.log("Respawning @ default shopkeeper level.");
+        }
+    }
+
     loadLevel(levelIndex, transition, title, dead) {
+        this.checkpoint = false;
         this.dead = false;
         this.title = title;        
         this.level = levels[levelIndex];
-        // level = levels[level];
         this.clearEntities();
         this.x = 0;
 
-        this.knight = new Knight(this.game, this.level.knightPos.x, this.level.knightPos.y);
-        this.game.addEntity(this.knight);
+        if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex) {
+            this.knight = new Knight(this.game, this.currentCheckpoint.x, this.currentCheckpoint.y);
+            console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);
+        } else {
+            this.knight = new Knight(this.game, this.level.knightPos.x, this.level.knightPos.y);
+            console.log(`Loading level ${levelIndex} @ default spawn (${this.level.knightPos.x}, ${this.level.knightPos.y})`);
+        }
         
+        this.game.addEntity(this.knight);        
         this.game.ctx.fillRect(50, 50, 100, 100);
+
         if(transition) {
-            // console.log(this.level)
-            // console.log(this.level.knightPos)
             this.game.addEntity(new TransitionScreen(this.game, levelIndex, dead))
         } else {
             if  (this.level.black) {
@@ -151,6 +175,13 @@ class SceneManager {
                 }
             }
 
+            if  (this.level.bonFire) {
+                for (let i = 0; i < this.level.bonFire.length; i++) {
+                    let bonfire = this.level.bonFire[i];
+                    this.game.addEntity(new Bonfire(this.game, bonfire.x, bonfire.y, bonfire.level));
+                }
+            }
+
             if  (this.level.dungeonBackground) {
                 for (let i = 0; i < this.level.dungeonBackground.length; i++) {
                     let background = this.level.dungeonBackground[i];
@@ -179,7 +210,7 @@ class SceneManager {
         if (0 < this.knight.y - middlepointY && this.level.height > this.knight.y - middlepointY) this.y = this.knight.y - middlepointY;
     };
 
-    draw(ctx) {
+    userInterface(ctx) {
         ctx.fillStyle = "White";
         ctx.fillText("Health Bar", 200, 80);
         ctx.font = '24px "Open+Sans"';
@@ -193,7 +224,7 @@ class SceneManager {
         ctx.fillText("0", 200, 180);
         ctx.fillText("1000", 450, 180);
         const health = this.knight.hp;
-        const fillWidth = boxWidth * health/1000;
+        const fillWidth = boxWidth * health / 1000;
         ctx.fillStyle = "Green";
         ctx.fillRect(boxX, boxY, fillWidth, boxHeight);
         if (fillWidth < boxWidth) {
@@ -206,5 +237,10 @@ class SceneManager {
         ctx.fillText(this.knight.emberCount, 600, 120);
         const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
         ctx.drawImage(emberImage, 1520, 2328, 8, 16, 550, 60, 40, 80);
+    }
+
+    draw(ctx) {
+        this.userInterface(ctx);
+        
     }; 
 };

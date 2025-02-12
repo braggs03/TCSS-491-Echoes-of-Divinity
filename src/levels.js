@@ -6,10 +6,15 @@ const levels = {
             x: 87,
             y: 400,
         },
+        checkpoint:{ //bonFire position change both
+            x: 400,
+            y: 465,
+        },
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 },{ x: 20, y: 11, w: 1, h: 1 }],
         mechagolem: [{ x: 900, y: 350 }],
         dungeonWall: [{ x: 0, y: 0, h: 5 }],
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper" }],
+        bonFire: [{ x: 400, y: 465, level: "one" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 
@@ -19,6 +24,10 @@ const levels = {
         knightPos: {
             x: 70,
             y: 400,
+        },
+        checkpoint:{ //bonFire position change both
+            x: 400,
+            y: 465,
         },
         dungeonBackground: [{ x: 0, y: 30, w: 25, h: 7 }],
         chandelier: [{ x: 550, y: 40 }, { x: 1650, y: 40 }],
@@ -35,5 +44,6 @@ const levels = {
         reinaIdle: [{ x: 1620, y: 537 }],
         azucendaIdle: [{ x: 870, y: 510 }],
         tent: [{ x: 700, y: 478 }],
+        bonFire: [{ x: 400, y: 465, level: "shopkeeper" }],
     },
 };

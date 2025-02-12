@@ -19,7 +19,7 @@ class Knight {
         this.accelerationY = 0.25; 
         this.jumpSpeed = 10;
         
-        this.hp = 1000;
+        this.hp = 10;
         this.emberCount = 0;
         this.invinsible = false;
         this.attackspeed = 0.1
@@ -45,7 +45,7 @@ class Knight {
             RightDeath : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 400, 120, 100, 10, 0.1, false, false),
             RightFall : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 480, 120, 100, 3, 0.1, false, true),
             RightIdle : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 560, 120, 100, 10, 0.1, false, true),
-            RightJump : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 640, 120, 100, 2, 0.1, false, true),
+            RightJump : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 640, 120, 90, 2, 0.1, false, true),
             RightRoll : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 6, 720, 120, 100, 12, 0.04, false, false),
             RightRun : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 800, 120, 100, 10, 0.1, false, true),
             RightTurn : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 880, 120, 100, 3, 0.02, false, true),
@@ -61,7 +61,7 @@ class Knight {
             LeftDeath : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1680, 400, 120, 80, 10, 0.1, true, false),
             LeftFall : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2531, 480, 120, 100, 3, 0.1, true, true),
             LeftIdle : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1691, 560, 120, 100, 10, 0.1, true, true),
-            LeftJump : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2651, 640, 120, 100, 2, 0.1, true, true),
+            LeftJump : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2651, 640, 120, 80, 2, 0.1, true, true),
             LeftRoll : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1440, 720, 120, 100, 12, 0.04, true, false),
             LeftRun : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1691, 800, 120, 100, 10, 0.1, true, true),
             LeftTurn : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2520, 880, 120, 100, 3, 0.1, false, true),
@@ -128,7 +128,7 @@ class Knight {
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
-                this.game.camera.loadLevel("shopkeeper", true, false, true)
+                this.game.camera.respawnKnight(this);
             }, 1000); 
             // Adjust timing to match the death animation duration
         }

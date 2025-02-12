@@ -139,7 +139,6 @@ const DUNEGON_BACKGROUND2_HEIGHT = 144;
 class DungeonBackground2 {
     constructor(game, x, y, w, h) {
         Object.assign(this, { game, x, y, w, h});
-
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON_BACKGROUND_IMAGE);
         this.scale = 5;
     };
@@ -155,3 +154,69 @@ class DungeonBackground2 {
         }
     };
 };
+
+const BONFIRE_WIDTH = 56;
+const BONFIRE_HEIGHT = 56;
+
+class Bonfire {
+    constructor(game, x, y, level) {
+        Object.assign(this, { game, x, y, level });
+
+        this.animator1 = this.bonfireAnimationLit();
+        this.animator2 = this.bonfireAnimationUnlit();
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.otherspritesheet = ASSET_MANAGER.getAsset("../resources/bonfire_unlit.png");
+        this.scale = 3;
+        this.BB = new BoundingBox(this.x - this.game.camera.x,  this.y - this.game.camera.y, BONFIRE_WIDTH * this.scale, BONFIRE_HEIGHT * this.scale);
+        this.fReleased = false;
+        this.discovered = false;
+        this.isCurrent = false;
+    };
+
+    update() {
+
+        this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, BONFIRE_HEIGHT * 2.2, BONFIRE_HEIGHT * 4.3);
+
+        if (this.game.keys["f"]) {
+            this.game.entities.forEach((entity) => {
+                if (this.fReleased && entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
+                    console.dir(this.level);
+                    this.activateCheckpoint();
+                    this.fReleased = false;
+                }
+            });
+        } else {
+            this.fReleased = true;
+        }
+    };
+
+    bonfireAnimationLit() {
+        return new Animator(ASSET_MANAGER.getAsset(DUNGEON), 2236, 775, 64, 56, 6, 0.1, false, true);
+    }
+
+    bonfireAnimationUnlit() {
+        return new Animator(ASSET_MANAGER.getAsset(DUNGEON), 2620, 775, 64, 56, 1, 0.1, false, true);
+    }
+
+
+    activateCheckpoint() {
+        this.discovered = true;
+        this.isCurrent = true;
+
+        this.game.camera.currentCheckpoint = this;
+        console.log(`Checkpoint activated at (${this.x}, ${this.y}) in level: ${this.level}`)
+        // this.game.camera.loadLevel(this.level, false, false, false);
+    }
+
+
+    draw(ctx) {
+        if(this.discovered){
+            this.animator1.drawFrame(this.game.clockTick, ctx, this.x + 50 - this.game.camera.x, this.y + 40 - this.game.camera.y, this.scale);
+        } else {
+            this.animator2.drawFrame(this.game.clockTick, ctx, this.x + 50 - this.game.camera.x, this.y + 40 - this.game.camera.y, this.scale);
+        }
+        // ctx.drawImage(this.spritesheet, 2240, 776, BONFIRE_WIDTH, BONFIRE_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, BONFIRE_WIDTH * this.scale, BONFIRE_HEIGHT * this.scale);
+        this.BB.draw(ctx);
+    };
+};
+
