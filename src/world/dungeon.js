@@ -220,3 +220,25 @@ class Bonfire {
     };
 };
 
+const MENU_BACKGROUND_WIDTH = 640;
+const MENU_BACKGROUND_HEIGHT = 320;
+
+class menuBackground {
+    constructor(game, x, y, w, h) {
+        Object.assign(this, { game, x, y, w, h});
+
+        this.spritesheet = ASSET_MANAGER.getAsset('../resources/menuScreen.png');
+        this.scale = 2.24;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        for (let k = 0; k < this.h; k++) {
+            for (let i = 0; i < this.w; i++) {
+                ctx.drawImage(this.spritesheet, 0, 0, MENU_BACKGROUND_WIDTH, MENU_BACKGROUND_HEIGHT, (this.x + i * MENU_BACKGROUND_WIDTH * this.scale), this.y * MENU_BACKGROUND_HEIGHT * this.scale, MENU_BACKGROUND_WIDTH * this.scale, MENU_BACKGROUND_HEIGHT * this.scale);
+            }
+        }
+    };
+}
