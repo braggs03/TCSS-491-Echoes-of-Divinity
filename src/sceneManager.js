@@ -62,10 +62,12 @@ class SceneManager {
             this.game.addEntity(this.knight);
             this.game.ctx.fillRect(50, 50, 100, 100);
         }
+
         if(transition) {
             this.game.addEntity(new TransitionScreen(this.game, levelIndex, dead))
             return;
         }
+
         if (this.level.text) {
             if (this.level !== levels.mainMenu) {
                 this.level.text.forEach((text) => {
@@ -100,6 +102,13 @@ class SceneManager {
             for (let i = 0; i < this.level.reinaIdle.length; i++) {
                 let reinaIdle = this.level.reinaIdle[i];
                 this.game.addEntity(new ReinaIdle(this.game, reinaIdle.x, reinaIdle.y));
+            }
+        }
+
+        if (this.level.gorgon) {
+            for (let i = 0; i < this.level.gorgon.length; i++) {
+                let gorgon = this.level.gorgon[i];
+                this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
             }
         }
 
@@ -195,19 +204,27 @@ class SceneManager {
             }
         }
 
-        if (this.level.dungeonBackground) {
+        if  (this.level.bonFire) {
+            for (let i = 0; i < this.level.bonFire.length; i++) {
+                let bonfire = this.level.bonFire[i];
+                this.game.addEntity(new Bonfire(this.game, bonfire.x, bonfire.y, bonfire.level));
+            }
+        }
+
+        if  (this.level.dungeonBackground) {
             for (let i = 0; i < this.level.dungeonBackground.length; i++) {
                 let background = this.level.dungeonBackground[i];
                 this.game.addEntity(new DungeonBackground(this.game, background.x, background.y, background.w, background.h));
             }
         }
 
-        if (this.level.dungeonBackground2) {
+        if  (this.level.dungeonBackground2) {
             for (let i = 0; i < this.level.dungeonBackground2.length; i++) {
                 let background2 = this.level.dungeonBackground2[i];
                 this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
             }
         }
+
     };
 
     update() {
@@ -266,6 +283,7 @@ class SceneManager {
             }
             return;
         }
+
         if (this.knight.hp <= 0) {
 
         }
@@ -277,6 +295,7 @@ class SceneManager {
 
         if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) this.x = this.knight.x - middlepointX;
         if (0 < this.knight.y - middlepointY && this.level.height > this.knight.y - middlepointY) this.y = this.knight.y - middlepointY;
+
     };
 
     userInterface(ctx) {
@@ -315,7 +334,7 @@ class SceneManager {
         ctx.fillText("0", 200, 180);
         ctx.fillText("1000", 450, 180);
         const health = this.knight.hp;
-        const fillWidth = boxWidth * health/1000;
+        const fillWidth = boxWidth * health / 1000;
         ctx.fillStyle = "Green";
         ctx.fillRect(boxX, boxY, fillWidth, boxHeight);
         if (fillWidth < boxWidth) {
@@ -332,5 +351,6 @@ class SceneManager {
 
     draw(ctx) {
         this.userInterface(ctx);
-    }
+    };
+
 }
