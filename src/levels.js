@@ -51,5 +51,6 @@ const levels = {
         reinaIdle: [{ x: 1620, y: 537 }],
         azucendaIdle: [{ x: 870, y: 510 }],
         tent: [{ x: 700, y: 478 }],
+        potion: [{ x: 788, y: 570}, { x: 888, y: 570}, { x: 990, y: 570}],
     },
 };

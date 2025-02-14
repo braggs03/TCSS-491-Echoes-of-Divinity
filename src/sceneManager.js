@@ -44,7 +44,12 @@ class SceneManager {
                     ctx.fillRect(50, 50, 100, 100);
                 }
             }
-
+            if  (this.level.potion) {
+                for (let i = 0; i < this.level.potion.length; i++) {
+                    let potion = this.level.potion[i];
+                    this.game.addEntity(new Potion(this.game, potion.x, potion.y));
+                }
+            }
             if  (this.level.tent) {
                 for (let i = 0; i < this.level.tent.length; i++) {
                     let tent = this.level.tent[i];
@@ -212,17 +217,17 @@ class SceneManager {
 
     draw(ctx) {
         ctx.fillStyle = "White";
-        ctx.fillText("Health Bar", 200, 80);
+        //ctx.fillText("Health Bar", 200, 80);
         ctx.font = '24px "Open+Sans"';
-        const boxX = 200; 
+        const boxX = 500; 
         const boxY = 90; 
         const boxWidth = 300; 
         const boxHeight = 40;
         ctx.strokeStyle = "White";
         ctx.lineWidth = 2;
         ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
-        ctx.fillText("0", 200, 165);
-        ctx.fillText("1000", 450, 165);
+        ctx.fillText("0", 500, 165);
+        ctx.fillText("1000", 750, 165);
         const health = this.knight.hp;
         const fillWidth = boxWidth * health/1000;
         ctx.fillStyle = "Green";
@@ -231,11 +236,14 @@ class SceneManager {
             ctx.fillStyle = "Black";
             ctx.fillRect(boxX + fillWidth, boxY, boxWidth - fillWidth, boxHeight);
         }
-        ctx.fillStyle = "White";
-        ctx.font = '36px "Open+Sans"';
-        ctx.fillText("Ember", 590, 80);
-        ctx.fillText(this.knight.emberCount, 600, 120);
+         ctx.fillStyle = "White";
+         ctx.font = '36px "Open+Sans"';
+        //  ctx.fillText("Ember", 590, 80);
+        ctx.fillText(this.knight.emberCount, 160, 120);
         const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
-        ctx.drawImage(emberImage, 1520, 2328, 8, 16, 550, 60, 40, 80);
+        ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
+        ctx.fillText(this.knight.potionCount, 280, 120);
+        ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80 );
+
     }; 
 };

@@ -151,3 +151,27 @@ class Boxes {
         ctx.drawImage(this.spritesheet, 1200, 1648, BOXES_WIDTH, BOXES_HEIGHT, this.x - this.game.camera.x, this.y, BOXES_WIDTH * this.scale, BOXES_HEIGHT * this.scale);
     };
 };
+
+const POTION_WIDTH = 16;
+const POTION_HEIGHT = 16;
+
+class Potion {
+    constructor(game, x, y) {
+        Object.assign(this, {game, x, y});
+
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 4;
+        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
+    };
+
+    update() {
+        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
+
+    };
+//1736 - green, 1712 - red
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 1712, 2216, POTION_WIDTH, POTION_HEIGHT, this.x - this.game.camera.x, this.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
+        this.BB.draw(ctx); 
+    }
+
+}
