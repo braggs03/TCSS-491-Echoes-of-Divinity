@@ -1,4 +1,4 @@
-class gorgon {
+class Gorgon {
     constructor(game, x, y) {
         this.game = game;
         this.hp = 1000;
@@ -56,9 +56,9 @@ class gorgon {
     updateBB() {
         this.lastBB = this.BB;
         if (this.aggro) {
-            this.BB = new BoundingBox(this.x + 64, this.y + 128, 128, 128);
+            this.BB = new BoundingBox(this.x - this.game.camera.x + 128, this.y + 128, 100, 128);
         } else {
-            this.BB = new BoundingBox(this.x - 128, this.y + 128, 500, 128);
+            this.BB = new BoundingBox(this.x - this.game.camera.x - 128, this.y + 128, 500, 128);
         }
     }
 
@@ -78,11 +78,11 @@ class gorgon {
 
         let that = this;
         this.game.entities.forEach(function (entity) {
-            if (entity.x - that.x > 500) {
+            if (entity instanceof Knight && entity.x - that.x > 1000) {
                 that.aggro = false;
                 that.facingLeft = false;
                 that.setState('RightIdle1')
-            } else if (that.x - entity.x > 500) {
+            } else if (entity instanceof Knight && that.x - entity.x > 1000) {
                 that.aggro = false;
                 that.facingLeft = true;
                 that.setState('LeftIdle1')
@@ -92,7 +92,8 @@ class gorgon {
                     that.target = entity;
                     that.aggro = true;
                     if (that.facingLeft) {
-                        that.setState('LeftWalk');
+                        console.log('true')
+                        that.setState('LeftRun');
                     } else {
                         that.setState('RightWalk')
                     }
@@ -168,7 +169,7 @@ class gorgon {
     }
 
     draw(ctx) {
-        this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
+        this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
         this.BB.draw(ctx);
     }
 }

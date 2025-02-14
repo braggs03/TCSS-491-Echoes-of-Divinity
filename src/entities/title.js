@@ -1,7 +1,8 @@
-class title {
-    constructor(game, ctx) {
+class gameTitle {
+    constructor(game, x, y) {
         this.game = game;
-        this.ctx = ctx;
+        this.x = x;
+        this.y = y;
         this.animator = new Animator(ASSET_MANAGER.getAsset("../resources/Title.png"), 0, 0, 155, 47, 5, 0.125, false, true);
     };
 
@@ -10,6 +11,6 @@ class title {
     };
 
     draw(ctx) {
-        this.animator.drawFrame(this.game.clockTick, ctx, 100, 0, 3);
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x, this.y, 3);
     }
 }
