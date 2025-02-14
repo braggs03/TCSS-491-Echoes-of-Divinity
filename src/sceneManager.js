@@ -44,10 +44,10 @@ class SceneManager {
             }
         }
 
-        if (level.reinaIdle) {
-            for (let i = 0; i < level.reinaIdle.length; i++) {
-                let reinaIdle = level.reinaIdle[i];
-                this.game.addEntity(new ReinaIdle(this.game, reinaIdle.x, reinaIdle.y));
+        if (level.reina) {
+            for (let i = 0; i < level.reina.length; i++) {
+                let reina = level.reina[i];
+                this.game.addEntity(new Reina(this.game, reina.x, reina.y));
             }
         }
 
@@ -58,10 +58,10 @@ class SceneManager {
             }
         }
 
-        if (level.azucendaIdle) {
-            for (let i = 0; i < level.azucendaIdle.length; i++) {
-                let azucendaIdle = level.azucendaIdle[i];
-                this.game.addEntity(new AzucendaIdle(this.game, azucendaIdle.x, azucendaIdle.y));
+        if (level.azucena) {
+            for (let i = 0; i < level.azucena.length; i++) {
+                let azucena = level.azucena[i];
+                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y));
             }
         }
 
@@ -158,6 +158,22 @@ class SceneManager {
         }
     };
 
+    showInteractive(entity, text) {
+        this.knight.moveable = false;
+        this.interactable = new Interaction(this.game, this, entity, text);1
+        let oldEntities = this.game.entities;
+        this.game.entities = [];
+        this.game.addEntity(this.interactable);
+        oldEntities.map((entity) => this.game.addEntity(entity)); 
+    }
+
+    removeInteractive() {
+        this.knight.moveable = true;
+        this.interactable.entity.dialogCompleted = true;
+        this.interactable.removeFromWorld = true;
+        this.interactable = undefined;
+    }
+
     update() {
         if (this.knight.hp <= 0) {
 
@@ -174,7 +190,6 @@ class SceneManager {
 
     draw(ctx) {
         ctx.fillStyle = "White";
-        ctx.fillText("Health Bar", 200, 80);
         ctx.font = '24px "Open+Sans"';
         const boxX = 200; 
         const boxY = 90; 
@@ -195,7 +210,6 @@ class SceneManager {
         }
         ctx.fillStyle = "White";
         ctx.font = '36px "Open+Sans"';
-        ctx.fillText("Ember", 590, 80);
         ctx.fillText(this.knight.emberCount, 600, 120);
         const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
         ctx.drawImage(emberImage, 1520, 2328, 8, 16, 550, 60, 40, 80);

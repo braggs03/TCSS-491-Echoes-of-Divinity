@@ -26,16 +26,19 @@ class Chandelier {
 
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5;
+        this.animator = this.chandelier();
     };
 
     update() {
     };
 
     draw(ctx) {
-        ctx.save();
-        ctx
-        ctx.drawImage(this.spritesheet, 2096, 208, CHANDELIER_WIDTH, CHANDELIER_HEIGHT, this.x  - this.game.camera.x, this.y - this.game.camera.y, CHANDELIER_WIDTH * this.scale, CHANDELIER_HEIGHT * this.scale);
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, 5, 9);
     };
+
+    chandelier() {
+		return new Animator(ASSET_MANAGER.getAsset(DUNGEON), 2096, 208, CHANDELIER_WIDTH, CHANDELIER_HEIGHT, 4, 0.1, false, true);
+	}
 };
 
 const WORKBENCH_WIDTH = 39;
@@ -44,7 +47,7 @@ const WORKBENCH_HEIGHT = 31;
 class DungeonWorkbench {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
-
+        
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5.5;
     };

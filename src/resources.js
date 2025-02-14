@@ -8,6 +8,7 @@ const GORGON = './resources/Gorgon/Gorgon'
 const CELES = './resources/Celes/Celes'
 const WEREWOLF = './resources/werewolf/';
 const REINA = './resources/Reina.png';
+const AZUCENA = "./resources/Azucena.png";
 
 // World
 

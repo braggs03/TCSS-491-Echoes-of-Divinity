@@ -60,7 +60,7 @@ const getDistance = (p1, p2) => {
 
 
 const PARAMS = {
-    DEBUG: true,
+    DEBUG: false,
     SCREENWIDTH: 1280,
     SCREENHEIGHT: 720,
 }

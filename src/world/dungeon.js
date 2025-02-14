@@ -16,7 +16,7 @@ class DungeonGround {
     draw(ctx) {
         for (let l = 0; l < this.h; l++) {
             for (let k = 0; k < this.w; k++) {
-                ctx.drawImage(this.spritesheet, 200, 1432, DUNEGON_GROUND_WIDTH, DUNEGON_GROUND_HEIGHT, this.x + (k * DUNEGON_GROUND_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
+                ctx.drawImage(this.spritesheet, 200, 1432, DUNEGON_GROUND_WIDTH, DUNEGON_GROUND_HEIGHT, this.x * DUNEGON_GROUND_WIDTH * this.scale + k * DUNEGON_GROUND_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
             }
         }
         this.BB.draw(ctx);
@@ -94,7 +94,6 @@ class DungeonDoor {
         if (this.game.keys["f"]) {
             this.game.entities.forEach((entity) => {
                 if (this.fReleased && entity.BB && that.BB.collide(entity.BB) && entity instanceof Knight) {
-                    console.dir(that.level);
                     that.game.camera.loadLevel(that.level);
                 }
             });
@@ -154,4 +153,28 @@ class DungeonBackground2 {
             }
         }
     };
+};
+
+const DUNEGON_FIRE_WIDTH = 15;
+const DUNEGON_FIRE_HEIGHT = 23;
+
+class DungeonFire {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.animator = this.fire();
+        this.scale = 5;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, 5, 9);
+    };
+
+    fire() {
+		return new Animator(ASSET_MANAGER.getAsset(DUNGEON), 912, 1368, DUNEGON_FIRE_WIDTH, DUNEGON_FIRE_HEIGHT, 5, 0.1, false, true);
+	}
 };
