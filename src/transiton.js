@@ -19,7 +19,8 @@ class TransitionScreen {
         }
     }
 
-    draw(ctx) {       
+    draw(ctx) {   
+        this.game.camera.knight.removeFromWorld = true;    
         if(this.dead) {
             ctx.fillStyle = "Black";
             ctx.fillRect(0, 0, PARAMS.SCREENWIDTH, PARAMS.SCREENHEIGHT);
