@@ -309,7 +309,6 @@ class SceneManager {
 
         if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) this.x = this.knight.x - middlepointX;
         if (0 < this.knight.y - middlepointY && this.level.height > this.knight.y - middlepointY) this.y = this.knight.y - middlepointY;
-
     };
 
     userInterface(ctx) {
@@ -344,8 +343,8 @@ class SceneManager {
         ctx.strokeStyle = "White";
         ctx.lineWidth = 2;
         ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
-        ctx.fillText("0", 200, 165);
-        ctx.fillText("1000", 450, 165);
+        ctx.fillText("0", 500, 165);
+        ctx.fillText("1000", 750, 165);
         const health = this.knight.hp;
         const fillWidth = boxWidth * health / 1000;
         ctx.fillStyle = "Green";
@@ -364,5 +363,4 @@ class SceneManager {
     draw(ctx) {
         this.userInterface(ctx);
     };
-
 }
