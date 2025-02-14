@@ -90,7 +90,12 @@ class SceneManager {
                 this.game.addEntity(new menuBackground(this.game, background.x, background.y, background.w, background.h));
             }
         }
-
+        if  (this.level.potion) {
+                for (let i = 0; i < this.level.potion.length; i++) {
+                    let potion = this.level.potion[i];
+                    this.game.addEntity(new Potion(this.game, potion.x, potion.y));
+                }
+            }
         if (this.level.tent) {
             for (let i = 0; i < this.level.tent.length; i++) {
                 let tent = this.level.tent[i];
@@ -223,6 +228,37 @@ class SceneManager {
                 this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
             }
         }
+        if (this.level.dungeonGround2) {
+                for (let i = 0; i < this.level.dungeonGround2.length; i++) {
+                    let ground2 = this.level.dungeonGround2[i];
+                    this.game.addEntity(new DungeonGround2(this.game, ground2.x, ground2.y, ground2.w, ground2.h));
+                }
+            }
+        if (this.level.dungeonWall2) {
+            for (let i = 0; i < this.level.dungeonWall2.length; i++) {
+                let wall2 = this.level.dungeonWall2[i];
+                this.game.addEntity(new DungeonWall2(this.game, wall2.x, wall2.y, wall2.h));
+            }
+        }
+
+        if (this.level.dungeonDoor2) {
+            for (let i = 0; i < this.level.dungeonDoor2.length; i++) {
+                let door2 = this.level.dungeonDoor2[i];
+                this.game.addEntity(new DungeonDoor2(this.game, door2.x, door2.y, door2.level));
+            }
+        }
+        if (this.level.dungeonWaterfall) {
+            for(let i = 0; i < this.level.dungeonWaterfall.length; i++) {
+                let waterfall = this.level.dungeonWaterfall[i];
+                this.game.addEntity(new DungeonWaterfall(this.game, waterfall.x, waterfall.y));
+            }
+        }
+        if (this.level.dungeonBackground3) {
+            for (let i = 0; i < this.level.dungeonBackground3.length; i++) {
+                let background3 = this.level.dungeonBackground3[i];
+                this.game.addEntity(new DungeonBackground3(this.game, background3.x, background3.y, background3.w, background3.h));
+            }
+        }
     };
 
     showInteractive(entity, text) {
@@ -335,29 +371,33 @@ class SceneManager {
         }
         ctx.globalAlpha = 1;
         ctx.fillStyle = "White";
+        
         ctx.font = '24px "Open+Sans"';
-        const boxX = 200;
-        const boxY = 90;
-        const boxWidth = 300;
-        const boxHeight = 50;
+        const boxX = 500; 
+        const boxY = 90; 
+        const boxWidth = 300; 
+        const boxHeight = 40;
         ctx.strokeStyle = "White";
         ctx.lineWidth = 2;
         ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
         ctx.fillText("0", 500, 165);
         ctx.fillText("1000", 750, 165);
         const health = this.knight.hp;
-        const fillWidth = boxWidth * health / 1000;
+        const fillWidth = boxWidth * health/1000;
         ctx.fillStyle = "Green";
         ctx.fillRect(boxX, boxY, fillWidth, boxHeight);
         if (fillWidth < boxWidth) {
             ctx.fillStyle = "Black";
             ctx.fillRect(boxX + fillWidth, boxY, boxWidth - fillWidth, boxHeight);
         }
-        ctx.fillStyle = "White";
-        ctx.font = '36px "Open+Sans"';
-        ctx.fillText(this.knight.emberCount, 600, 120);
-        const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
-        ctx.drawImage(emberImage, 1520, 2328, 8, 16, 550, 60, 40, 80);
+         ctx.fillStyle = "White";
+         ctx.font = '36px "Open+Sans"';
+        
+        ctx.fillText(this.knight.emberCount, 160, 120);
+        const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
+        ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
+        ctx.fillText(this.knight.potionCount, 280, 120);
+        ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80 );
     };
 
     draw(ctx) {
