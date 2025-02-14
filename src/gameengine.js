@@ -14,6 +14,10 @@ class GameEngine {
         this.mouse = null;
         this.wheel = null;
         this.keys = {};
+
+        this.options = options || {
+            debugging: false,
+        };
     };
 
     init(ctx) {

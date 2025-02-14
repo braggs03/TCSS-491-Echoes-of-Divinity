@@ -98,9 +98,9 @@ class SceneManager {
             }
         }
 
-        if (level.reina) {
-            for (let i = 0; i < level.reina.length; i++) {
-                let reina = level.reina[i];
+        if (this.level.reina) {
+            for (let i = 0; i < this.level.reina.length; i++) {
+                let reina = this.level.reina[i];
                 this.game.addEntity(new Reina(this.game, reina.x, reina.y));
             }
         }
@@ -119,9 +119,9 @@ class SceneManager {
             }
         }
 
-        if (level.azucena) {
-            for (let i = 0; i < level.azucena.length; i++) {
-                let azucena = level.azucena[i];
+        if (this.level.azucena) {
+            for (let i = 0; i < this.level.azucena.length; i++) {
+                let azucena = this.level.azucena[i];
                 this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y));
             }
         }
