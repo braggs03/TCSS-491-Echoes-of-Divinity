@@ -12,7 +12,7 @@ class Animator {
 
     };
 
-    drawFrame(tick, ctx, x, y, scale) {
+    drawFrame(tick, ctx, x, y, scale, padding = 0) {
         this.elapsedTime += tick;
 
         if (this.isDone()) {    
@@ -28,7 +28,7 @@ class Animator {
                
         ctx.drawImage(
             this.spritesheet,
-            this.xStart + frame * this.width, 
+            this.xStart + padding * frame + frame * this.width, 
             this.yStart,
             this.width, this.height,
             x, y,

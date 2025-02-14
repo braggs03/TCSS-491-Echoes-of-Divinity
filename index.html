@@ -12,14 +12,15 @@
             justify-content: center;
             align-items: center;
         }
+
         body {
             font-family: 'Open Sans', serif;
             font-size: 24px;
         }
+
         div {
             text-align: center;
         }
-
     </style>
 
     <!-- Core Game Files -->
@@ -32,32 +33,48 @@
     <script type="text/javascript" src="./src/util.js"></script>
     <script type="text/javascript" src="./src/animator.js"></script>
     <script type="text/javascript" src="./src/boundingbox.js"></script>
+    <script type="text/javascript" src="./src/interaction.js"></script>
+    <script type="text/javascript" src="./src/text.js"></script>
 
     <!-- World -->
     <script type="text/javascript" src="./src/world/shopkeeper.js"></script>
     <script type="text/javascript" src="./src/world/dungeon.js"></script>
 
     <!-- Entities -->
-    <script type="text/javascript" src="./src/entities/azucenaIdle.js"></script>
-    <script type="text/javascript" src="./src/entities/reinaIdle.js"></script>
+    <script type="text/javascript" src="./src/entities/azucena.js"></script>
+    <script type="text/javascript" src="./src/entities/reina.js"></script>
     <script type="text/javascript" src="./src/entities/lightning.js"></script>
-    <script type="text/javascript" src="./src/entities/Werewolf.js"></script>
-    <script type="text/javascript" src="./src/entities/NightbornWarrior.js"></script>
+    <script type="text/javascript" src="./src/entities/werewolf.js"></script>
+    <script type="text/javascript" src="./src/entities/nightbornwarrior.js"></script>
     <script type="text/javascript" src="./src/entities/knight.js"></script>    
     <script type="text/javascript" src="./src/entities/skeletonwarrior.js"></script>
     <script type="text/javascript" src="./src/entities/gorgon.js"></script>
     <script type="text/javascript" src="./src/entities/celes.js"></script>
-    <script type="text/javascript" src="./src/entities/MechaGolem.js"></script>
+    <script type="text/javascript" src="./src/entities/mechagolem.js"></script>
     <script type="text/javascript" src="./src/entities/title.js"></script>
 
     <!-- Main -->
     <script type="text/javascript" src="./src/transiton.js"></script>  
     <script type="text/javascript" src="./src/sceneManager.js"></script>  
     <script type="text/javascript" src="./src/main.js"></script>
+
+    <script>
+        window.onload = () => {
+            document.getElementById("debug").checked = false;
+        };
+
+        const toggleDebug = (checkBox) => {
+            PARAMS.DEBUG = checkBox.checked;
+        }
+    </script>
 </head>
 <body style="background-color: black;">
     <div>
         <canvas id="gameWorld" width="1280" height="720" tabindex="0" autofocus></canvas>
+    </div>
+    <div>
+        <input type="checkbox" id="debug" onchange="toggleDebug(this)" />
+        <label for="debug" style="color: white;">Debug</label>
     </div>
 </body>
 </html>

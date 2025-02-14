@@ -67,7 +67,7 @@ const levels = {
         width: 1085,
         height: 0,
         knightPos: {
-            x: 70,
+            x: 300,
             y: 400,
         },
         checkpoint:{ //bonFire position change both
@@ -86,8 +86,8 @@ const levels = {
         swordRack: [{ x: 1300, y: 608 }],
         shieldRack: [{ x: 1400, y: 608 }],
         boxes: [{ x: 800, y: 524 }, { x: 950, y: 524 }],
-        reinaIdle: [{ x: 1620, y: 537 }],
-        azucendaIdle: [{ x: 870, y: 510 }],
+        reina: [{ x: 1620, y: 537 }],
+        azucena: [{ x: 870, y: 510 }],
         tent: [{ x: 700, y: 478 }],
         bonFire: [{ x: 400, y: 465, level: "shopkeeper" }],
     },
