@@ -26,16 +26,19 @@ class Chandelier {
 
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5;
+        this.animator = this.chandelier();
     };
 
     update() {
     };
 
     draw(ctx) {
-        ctx.save();
-        ctx
-        ctx.drawImage(this.spritesheet, 2096, 208, CHANDELIER_WIDTH, CHANDELIER_HEIGHT, this.x  - this.game.camera.x, this.y - this.game.camera.y, CHANDELIER_WIDTH * this.scale, CHANDELIER_HEIGHT * this.scale);
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, 5, 9);
     };
+
+    chandelier() {
+		return new Animator(ASSET_MANAGER.getAsset(DUNGEON), 2096, 208, CHANDELIER_WIDTH, CHANDELIER_HEIGHT, 4, 0.1, false, true);
+	}
 };
 
 const WORKBENCH_WIDTH = 39;
@@ -44,7 +47,7 @@ const WORKBENCH_HEIGHT = 31;
 class DungeonWorkbench {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
-
+        
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5.5;
     };
@@ -151,3 +154,27 @@ class Boxes {
         ctx.drawImage(this.spritesheet, 1200, 1648, BOXES_WIDTH, BOXES_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, BOXES_WIDTH * this.scale, BOXES_HEIGHT * this.scale);
     };
 };
+
+const POTION_WIDTH = 16;
+const POTION_HEIGHT = 16;
+
+class Potion {
+    constructor(game, x, y) {
+        Object.assign(this, {game, x, y});
+
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 4;
+        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
+    };
+
+    update() {
+        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
+
+    };
+//1736 - green, 1712 - red
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 1712, 2216, POTION_WIDTH, POTION_HEIGHT, this.x - this.game.camera.x, this.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
+        this.BB.draw(ctx); 
+    }
+
+}

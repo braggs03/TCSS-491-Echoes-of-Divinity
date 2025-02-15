@@ -16,7 +16,7 @@ class DungeonGround {
     draw(ctx) {
         for (let l = 0; l < this.h; l++) {
             for (let k = 0; k < this.w; k++) {
-                ctx.drawImage(this.spritesheet, 200, 1432, DUNEGON_GROUND_WIDTH, DUNEGON_GROUND_HEIGHT, this.x * DUNEGON_GROUND_WIDTH * this.scale + (k * DUNEGON_GROUND_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
+                ctx.drawImage(this.spritesheet, 200, 1432, DUNEGON_GROUND_WIDTH, DUNEGON_GROUND_HEIGHT, this.x * DUNEGON_GROUND_WIDTH * this.scale + k * DUNEGON_GROUND_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_GROUND_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND_WIDTH * this.scale, DUNEGON_GROUND_HEIGHT * this.scale);
             }
         }
         this.BB.draw(ctx);
@@ -37,7 +37,7 @@ class DungeonWall {
     update() {
         this.BB = new BoundingBox(this.x * DUNEGON_WALL_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.h * this.scale);
     };
-    
+
     draw(ctx) {
         for (let l = 0; l < this.h; l++) {
             ctx.drawImage(this.spritesheet, 232, 1400, DUNEGON_WALL_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x * DUNEGON_WALL_WIDTH * this.scale) - this.game.camera.x, this.y + l * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
@@ -82,7 +82,7 @@ class DungeonDoor {
 
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5.5;
-        this.BB = new BoundingBox(this.x - this.game.camera.x,  this.y - this.game.camera.y, DUNEGON_DOOR_WIDTH * this.scale, DUNEGON_DOOR_HEIGHT * this.scale);
+        this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, DUNEGON_DOOR_WIDTH * 2.2, DUNEGON_DOOR_HEIGHT * 4.3);
         this.fReleased = false;
     };
 
@@ -123,13 +123,13 @@ class DungeonTorch {
     update() {
     };
 
-	draw(ctx) {
-		this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, 4);
-	}
+    draw(ctx) {
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, 4);
+    }
 
     torch() {
-		return new Animator(ASSET_MANAGER.getAsset(TORCH), 0, 0, 21, 27, 4, 0.1, false, true);
-	}
+        return new Animator(ASSET_MANAGER.getAsset(TORCH), 0, 0, 21, 27, 4, 0.1, false, true);
+    }
 };
 
 
@@ -242,3 +242,96 @@ class menuBackground {
         }
     };
 }
+const DUNEGON_GROUND2_WIDTH = 31;
+const DUNEGON_GROUND2_HEIGHT = 8;
+
+class DungeonGround2 {
+    constructor(game, x, y, w, h) {
+        Object.assign(this, { game, x, y, w, h });
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 5;
+        this.BB = new BoundingBox(this.x * DUNEGON_GROUND2_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_GROUND2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND2_WIDTH * w * this.scale, DUNEGON_GROUND2_HEIGHT * h * this.scale);
+    };
+
+    update() {
+        this.BB = new BoundingBox(this.x * DUNEGON_GROUND2_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_GROUND2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND2_WIDTH * this.w * this.scale, DUNEGON_GROUND2_HEIGHT * this.h * this.scale);
+    };
+
+    draw(ctx) {
+        for (let l = 0; l < this.h; l++) {
+            for (let k = 0; k < this.w; k++) {
+                ctx.drawImage(this.spritesheet, 2304, 640, DUNEGON_GROUND2_WIDTH, DUNEGON_GROUND2_HEIGHT, this.x * DUNEGON_GROUND2_WIDTH * this.scale + (k * DUNEGON_GROUND2_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_GROUND2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_GROUND2_WIDTH * this.scale, DUNEGON_GROUND2_HEIGHT * this.scale);
+            }
+        }
+        this.BB.draw(ctx);
+    };
+};
+
+const DUNEGON_WALL2_WIDTH = 8;
+const DUNEGON_WALL2_HEIGHT = 31;
+
+class DungeonWall2 {
+    constructor(game, x, y, h) {
+        Object.assign(this, { game, x, y, h });
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 5;
+        this.BB = new BoundingBox(this.x * DUNEGON_WALL2_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_WALL2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL2_WIDTH * this.scale, DUNEGON_WALL2_HEIGHT * h * this.scale);
+    };
+
+    update() {
+        this.BB = new BoundingBox(this.x * DUNEGON_WALL2_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_WALL2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL2_WIDTH * this.scale, DUNEGON_WALL2_HEIGHT * this.h * this.scale);
+    };
+    
+    draw(ctx) {
+        for (let l = 0; l < this.h; l++) {
+            ctx.drawImage(this.spritesheet, 329, 1400, DUNEGON_WALL2_WIDTH, DUNEGON_WALL2_HEIGHT, (this.x * DUNEGON_WALL2_WIDTH * this.scale) - this.game.camera.x, this.y + l * DUNEGON_WALL2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL2_WIDTH * this.scale, DUNEGON_WALL2_HEIGHT * this.scale);
+        }
+        this.BB.draw(ctx);
+    };
+};
+
+
+
+const DUNEGON_BACKGROUND3_WIDTH = 896;
+const DUNEGON_BACKGROUND3_HEIGHT = 144;
+
+class DungeonBackground3 {
+    constructor(game, x, y, w, h) {
+        Object.assign(this, { game, x, y, w, h});
+
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON_BACKGROUND);
+        this.scale = 5;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        for (let k = 0; k < this.h; k++) {
+            for (let i = 0; i < this.w; i++) {
+                ctx.drawImage(this.spritesheet, 0, 0, DUNEGON_BACKGROUND3_WIDTH, DUNEGON_BACKGROUND3_HEIGHT, (this.x + i * DUNEGON_BACKGROUND3_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_BACKGROUND3_HEIGHT * this.scale - this.game.camera.y, DUNEGON_BACKGROUND3_WIDTH * this.scale, DUNEGON_BACKGROUND3_HEIGHT * this.scale);
+            }
+        }
+    };
+};
+
+const DUNGEON_WATERFALL_WIDTH = 32;
+const DUNGEON_WATERFALL_HEIGHT = 104;
+class DungeonWaterfall {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.animator = this.waterfall();
+        this.scale = 5.5;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, 4);
+    }
+
+    waterfall() {
+        return new Animator(ASSET_MANAGER.getAsset(WATERFALL), 0, 0, 32, 104, 9, 0.1, false, true);
+    }
+};
