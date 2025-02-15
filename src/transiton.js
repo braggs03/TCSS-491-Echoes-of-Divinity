@@ -22,7 +22,6 @@ class TransitionScreen {
     draw(ctx) {   
         this.game.camera.knight.removeFromWorld = true;    
         if(this.dead) {
-            this.game.camera.knight.removeFromWorld = true;
             ctx.fillStyle = "Black";
             ctx.fillRect(0, 0, PARAMS.SCREENWIDTH, PARAMS.SCREENHEIGHT);
             ctx.fillStyle = "Red"
@@ -30,7 +29,6 @@ class TransitionScreen {
             ctx.font = "50px Times";
             ctx.fillText("YOU DIED", PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2);
         } else {
-            this.game.camera.knight.removeFromWorld = true;
             ctx.fillStyle = "Black";
             ctx.fillRect(0, 0, PARAMS.SCREENWIDTH, PARAMS.SCREENHEIGHT);
             ctx.fillStyle = "white"
