@@ -106,7 +106,7 @@ class SceneManager {
         if (this.level.reina) {
             for (let i = 0; i < this.level.reina.length; i++) {
                 let reina = this.level.reina[i];
-                this.game.addEntity(new Reina(this.game, reina.x, reina.y));
+                this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
             }
         }
 
@@ -127,7 +127,7 @@ class SceneManager {
         if (this.level.azucena) {
             for (let i = 0; i < this.level.azucena.length; i++) {
                 let azucena = this.level.azucena[i];
-                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y));
+                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
         }
 
@@ -328,15 +328,13 @@ class SceneManager {
                     this.loadLevel("mainMenu", false, true, false);  // Load the next level
                 }
             }
+
             if (this.level === levels.mainMenu && this.game.keys[' ']) {
                 this.loadLevel("shopkeeper", false, false, false);
             }
-            return;
         }
 
-        if (this.knight.hp <= 0) {
-
-        }
+        testInteractable(this.game);
 
         let middlepointX = PARAMS.SCREENWIDTH / 2 - KNIGHT_HEIGHT * 2;
         //this.x = this.knight.x - middlepointX;

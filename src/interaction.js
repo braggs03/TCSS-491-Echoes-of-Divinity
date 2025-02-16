@@ -54,11 +54,10 @@ class Interaction {
 
 function testInteractable(game) {
     if (!game.camera.interactable) {
-        console.log("Should only be here once!");
         game.entities.forEach((entity) => {
             if (entity.BB && game.camera.knight.BB.collide(entity.BB) && game.keys["f"] && entity.text && !entity.dialogCompleted) {
                 game.camera.showInteractive(entity, entity.text);
             }
         });
-    }  
+    }
 }
