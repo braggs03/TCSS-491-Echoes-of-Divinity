@@ -19,9 +19,9 @@ class Knight {
         this.velocityY = 0;
         this.maxVelocityY = 5;
         this.accelerationY = 0.25; 
-        this.jumpSpeed = 12.5;
+        this.jumpSpeed = 10;
         
-        this.hp = 1000;
+        this.hp = 100;
         this.emberCount = 100;
         this.potionCount = 0;
         this.gKeyPressed = false;
@@ -133,9 +133,26 @@ class Knight {
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
-            }, 1000); // Adjust timing to match the death animation duration
-        
+                this.game.camera.respawnKnight(this);
+            }, 1000); 
+            // Adjust timing to match the death animation duration
         }
+    }
+    usePotion () {
+        if (this.potionCount > 0) {
+            this.potionCount -= 1;
+            this.hp = Math.min(this.hp + 200, 1000); 
+            return true;
+        }
+        return false;
+    }
+    buyPotion () {
+        if (this.emberCount >= this.potionCost) {
+            this.emberCount -= this.potionCost;
+            this.potionCount += 1;
+            return true;
+        }
+        return false;
     }
 
     update() {
@@ -165,7 +182,6 @@ class Knight {
         this.game.entities.forEach((entity) => {
             if (entity.BB && that.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(that.BB);
-        
                 if (entity instanceof DungeonWall) {
                     if (entity.BB.x < that.BB.x) {
                         right++;
@@ -175,7 +191,7 @@ class Knight {
                         that.x -= overlap.x;
                     }
                     that.velocityX = 0; 
-                } else if (entity instanceof DungeonGround) {
+                } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
         
@@ -196,10 +212,13 @@ class Knight {
                         }
                         that.velocityY = 0;
                     }
+                } else if ( entity instanceof Potion) {
+                    if (this.buyPotion()) {
+                        entity.removeFromWorld = true;
+                    }
                 }
             }
         });
-        
 
         if (left > 0) {
             that.colliding.left = true;
@@ -236,6 +255,7 @@ class Knight {
             if (!this.animations[this.currentState].getDone()) {
                 return;
             } else {
+                this.invinsible = false;
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                 this.setState(this.chosenState);
             }
@@ -295,7 +315,15 @@ class Knight {
                 this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
                 this.invinsible = true;
                 this.setState(this.chosenState);
+            } else if (this.game.keys["g"]) {
+                if (!this.gKeyPressed) {  
+                    this.usePotion();
+                    this.gKeyPressed = true;
+                }
+            } else {
+                this.gKeyPressed = false;  
             }
+
         }
 
         if (this.velocityX > 0) {

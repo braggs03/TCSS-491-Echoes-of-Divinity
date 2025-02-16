@@ -14,6 +14,10 @@ class GameEngine {
         this.mouse = null;
         this.wheel = null;
         this.keys = {};
+
+        this.options = options || {
+            debugging: false,
+        };
     };
 
     init(ctx) {
@@ -83,6 +87,10 @@ class GameEngine {
         for (let i = this.entities.length - 1; i >= 0; i--) {
             this.entities[i].draw(this.ctx, this);
         }
+
+        // for (var i = 0; i < this.entities.length; i++) {
+        //     this.entities[i].draw(this.ctx);
+        // }
         this.camera.draw(this.ctx);
     };
 
@@ -96,7 +104,7 @@ class GameEngine {
                 entity.update();
             }
         }
-        this.camera.update(this.ctx);
+        this.camera.update();
         for (let i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
                 this.entities.splice(i, 1);

@@ -1,5 +1,4 @@
-
-class MechaGolem {
+class MechaGolem { 
     constructor(game, x, y) {
         this.game = game;
         this.x = x;
@@ -15,57 +14,40 @@ class MechaGolem {
         this.attackCooldown = 0;
         this.target = null;
         this.range = 350;
+        this.aggroRange = 700;
         this.attackRange = 80;
         this.idleCooldown = 0; 
         this.canAttackAgain = true; 
 
-        
         this.flickerFlag = true;
         this.flickerDuration = 0;
 
-        this.animator = this.idleRight(); 
+        this.idleAnimator = this.idleRight();
+        this.animator = this.idleAnimator;
         this.updateBB();
     }
 
-
     updateBB() {
         this.lastBB = this.BB;
-
-      
+        
         if (this.engaged) {
             this.BB = new BoundingBox(this.x - this.game.camera.x + 96, this.y + 96, 200, 200);
-        } 
-    
-        else if (this.aggro) {
-            this.engaged = true;
-            this.BB = new BoundingBox(this.x - this.game.camera.x + 96, this.y + 96, 200, 200);
-        } 
-   
-        else {
-            this.BB = new BoundingBox(this.x - this.game.camera.x - 128, this.y + 96, 700, 200);
-        }
-
-    
-        if (this.target && Math.abs(this.target.x - this.x) > this.range) {
-            this.resetAggro();
+        } else {
+            this.BB = new BoundingBox(this.x - this.game.camera.x - 128, this.y + 96, this.aggroRange, 200);
         }
     }
 
-   
     resetAggro() {
-        this.target = null;
         this.aggro = false;
         this.engaged = false;
         this.attackInProgress = false;
         this.idleCooldown = 0;
         this.canAttackAgain = true;
-        this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
+        this.idleAnimator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
+        this.animator = this.idleAnimator;
     }
-    
 
-    
     takeDamage(amount) {
-      
         if (!this.engaged && !this.aggro) return;
 
         this.hp -= amount;
@@ -74,7 +56,7 @@ class MechaGolem {
         if (this.hp <= 0) {
             this.die();
         } else {
-            this.flickerDuration = 0.2;
+            this.flickerDuration = 0.4;
         }
     }
 
@@ -87,104 +69,121 @@ class MechaGolem {
             this.removeFromWorld = true;
         }, 1000);
     }
-
+    // slow down golem aarcks whenknight is rolling: 
     update() {
         if (this.dead) return;
-    
-    
+
         if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
         }
-    
 
+ 
         if (this.target && (this.target.dead || this.target.removeFromWorld)) {
             this.resetAggro();
+            this.target = null;
         }
-    
-     
-        if (!this.target) {
-            this.target = this.game.entities.find(entity => entity instanceof Knight && !entity.dead);
+
+        if (!this.target && !this.aggro) {
+            this.target = this.game.entities.find(entity => 
+                entity instanceof Knight && !entity.dead
+            );
+ 
+            if (!this.attackInProgress) {
+                this.animator = this.idleAnimator;
+            }
         }
-    
+
         if (this.target) {
             const dx = this.target.x - this.x;
             const distance = Math.abs(dx);
-    
-     
-            if (!this.engaged && this.BB.collide(this.target.BB)) {
+
+            const newFacing = dx > 0 ? RIGHT : LEFT;
+            if (this.facing !== newFacing) {
+                this.facing = newFacing;
+                this.idleAnimator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
+                if (!this.attackInProgress) {
+                    this.animator = this.idleAnimator;
+                }
+            }
+
+            if (distance > this.range && this.aggro) {
+                this.resetAggro();
+            }
+   
+            else if (!this.engaged && this.BB.collide(this.target.BB)) {
                 this.aggro = true;
                 this.engaged = true;
             }
-            if (this.aggro) {
-
-                this.facing = dx > 0 ? RIGHT : LEFT;
-    
-             
+     
+            else if (this.aggro) {
                 if (!this.attackInProgress) {
                     if (distance > this.attackRange) {
                         this.x += dx > 0 ? this.speed : -this.speed;
-                        this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
-                    } 
-                    
-                    else if (!this.attackInProgress && this.attackCooldown <= 0 && this.idleCooldown <= 0 && this.canAttackAgain) {
+                        this.animator = this.idleAnimator;
+                    } else if (this.attackCooldown <= 0) {
                         this.attack();
                     }
                 }
-    
-              
-                if (!this.BB.collide(this.target.BB)) {
-                    this.canAttackAgain = true;
-                }
             }
+        } else {
+            // No target available, return to idle
+            this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
         }
-    
-      
+
+       
+        if (!this.aggro && !this.attackInProgress) {
+            this.animator = this.idleAnimator;
+        }
+
         if (this.attackCooldown > 0) {
             this.attackCooldown -= this.game.clockTick;
         }
-    
+
         this.updateBB();
     }
+
     attack() {
+        if (!this.target || this.target.dead || this.attackCooldown > 0) return;
+    
         this.attackInProgress = true;
         this.canAttackAgain = false; 
-    
-     
+
         const attackType = Math.random() < 0.5 ? "attack1" : "attack2";
         this.animator = attackType === "attack1"
             ? (this.facing === RIGHT ? this.meleeRight() : this.meleeLeft())
             : (this.facing === RIGHT ? this.rangeAttackRight() : this.rangeAttackLeft());
     
         console.log("Golem attacks knight!");
-    
 
         setTimeout(() => {
-            if (this.BB.collide(this.target.BB) && !this.target.dead) {
+            if (this.target && this.BB.collide(this.target.BB) && !this.target.dead) {
                 console.log("Knight takes damage!");
                 this.target.takeDamage(100);
             }
         }, 350);
-    
-   
+
         setTimeout(() => {
             this.attackInProgress = false;
             this.attackCooldown = 1;
-            
-
-            if (!this.BB.collide(this.target.BB)) {
-                this.canAttackAgain = true; 
+            this.animator = this.idleAnimator; 
+    
+            if (this.target && this.BB.collide(this.target.BB)) {
+                setTimeout(() => {
+                    if (this.BB.collide(this.target.BB)) {
+                        this.attack();
+                    } else {
+                        this.canAttackAgain = true;
+                    }
+                }, 1000);
             } else {
- 
-                this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
+                this.canAttackAgain = true;
             }
         }, 700);
     }
-    
 
-   
     draw(ctx) {
-        if (this.flickerDuration > 0 && !this.flickerFlag) return; // Skip drawing on flicker frames
+        if (this.flickerDuration > 0 && !this.flickerFlag) return;
         this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 4);
 
         if (PARAMS.DEBUG) {

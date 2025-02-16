@@ -31,7 +31,10 @@ ASSET_MANAGER.queueDownload(CELES + "LightCharge.png");
 ASSET_MANAGER.queueDownload(CELES + "Run.png");
 ASSET_MANAGER.queueDownload(CELES + "Walk.png");
 ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND_IMAGE);
-ASSET_MANAGER.queueDownload("../resources/Title.png");
+ASSET_MANAGER.queueDownload("../resources/menuScreen.png");
+ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND);
+ASSET_MANAGER.queueDownload(WATERFALL);
+ASSET_MANAGER.queueDownload("../resources/Title.png")
 ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneWarrior.png"); 
 
 // Werewolf
@@ -60,6 +63,10 @@ ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Protect.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Run.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Run+attack.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Walk.png");
+
+//Music
+ASSET_MANAGER.queueDownload('../resources/background.ogg')
+ASSET_MANAGER.queueDownload('../resources/maintheme.ogg')
 
 
 ASSET_MANAGER.downloadAll(() => {

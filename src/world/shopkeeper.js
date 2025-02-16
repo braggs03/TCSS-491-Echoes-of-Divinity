@@ -176,23 +176,5 @@ class Potion {
         ctx.drawImage(this.spritesheet, 1712, 2216, POTION_WIDTH, POTION_HEIGHT, this.x - this.game.camera.x, this.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
         this.BB.draw(ctx); 
     }
-}
 
-const SHARPENING_WHEEL_WIDTH = 39;
-const SHARPENING_WHEEL_HEIGHT = 15;
-
-class SharpeningWheel {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
-
-        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
-        this.scale = 4;
-    };
-
-    update() {
-    };
-
-    draw(ctx) {
-        ctx.drawImage(this.spritesheet, 1640, 2576, SHARPENING_WHEEL_WIDTH, SHARPENING_WHEEL_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, SHARPENING_WHEEL_WIDTH * this.scale, SHARPENING_WHEEL_HEIGHT * this.scale);
-    };
 }
