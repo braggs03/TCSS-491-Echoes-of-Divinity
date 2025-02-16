@@ -48,6 +48,24 @@ const levels = {
         ]
     },
 
+    tutorial: {
+        width: 800,
+        height: 0,
+        knightPos: {
+            x: 70,
+            y: 400,
+        },
+        reina: [{ x: 900, y: 536 }],
+        azucena: [{ x: 30, y: 500 }],
+        cutscene: [{startX: 150, cutsceneNum: 0}],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
+        skeleton: [{ x: 900, y: 424 }],
+        gorgon: [{x: 1000, y: 424}],
+        dungeonWall: [{ x: 0, y: 0, h: 5 }],
+        dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper" }],
+        dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
+    },
+
     one: {
         width: 30000,
         height: 0,
@@ -107,20 +125,6 @@ const levels = {
         tent: [{ x: 700, y: 478 }],
         bonFire: [{ x: 400, y: 465, level: "shopkeeper" }],
         potion: [{ x: 788, y: 570}, { x: 888, y: 570}, { x: 990, y: 570}],
-    },
-
-    bossroom: {
-        width: 800,
-        height: 0,
-        knightPos: {
-            x: 70,
-            y: 400,
-        },
-        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
-        gorgon: [{ x: 900, y: 424 }],
-        dungeonWall: [{ x: 0, y: 0, h: 5 }],
-        dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper" }],
-        dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 
     two: {

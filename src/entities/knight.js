@@ -10,6 +10,7 @@ class Knight {
         this.y = y;
 
         this.moveable = true;
+        this.inCutscene = false;
         
         this.velocityX = 0;
         this.maxVelocityX = 6;
@@ -101,14 +102,6 @@ class Knight {
         }
     }
 
-    // setState(state) {
-    //     if (this.animations[state]) {
-    //         this.currentState = state;
-    //     } else {
-    //         console.error("State '${state}' not found.");
-    //     }
-    // }
-
     updateBB() {
         this.lastBB = this.BB;
         this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x , this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
@@ -156,6 +149,18 @@ class Knight {
     }
 
     update() {
+        if (this.inCutscene) {
+            if (this.currentState === 'RightRoll') {
+                this.x += 10;
+            } else if (this.currentState === 'LeftRoll') {
+                this.x -= 10;
+            }
+            if (this.animations[this.currentState].getDone()) {
+                this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
+                this.setState(this.chosenState);
+            }
+            return;
+        }
         if (this.dead) return;
 
         if (!this.moveable) {
@@ -163,11 +168,9 @@ class Knight {
             this.velocityX = 0; 
             return;
         }
-
         if (this.y > 1000) {
             this.die();
         }
-    
         if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
@@ -316,12 +319,12 @@ class Knight {
                 this.invinsible = true;
                 this.setState(this.chosenState);
             } else if (this.game.keys["g"]) {
-                if (!this.gKeyPressed) {  
+                if (!this.gKeyPressed) {
                     this.usePotion();
                     this.gKeyPressed = true;
                 }
             } else {
-                this.gKeyPressed = false;  
+                this.gKeyPressed = false;
             }
 
         }
@@ -334,7 +337,6 @@ class Knight {
 
         this.x += this.velocityX;
         this.y += this.velocityY;
-
         this.updateBB();
     }
     

@@ -5,6 +5,8 @@ class SceneManager {
         this.x = 0;
         this.y = 0;
         this.embers = 0;
+        this.inCutscene = false;
+        this.cutsceneCounter = 0;
 
         this.menuSelectIndex = -10;
         this.creditsLineIndex = 0;
@@ -14,7 +16,7 @@ class SceneManager {
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
 
-        this.loadLevel('startScreen', false, true, false);
+        this.loadLevel('tutorial', false, false, false);
     };
 
     clearEntities() {
@@ -91,11 +93,12 @@ class SceneManager {
             }
         }
         if  (this.level.potion) {
-                for (let i = 0; i < this.level.potion.length; i++) {
-                    let potion = this.level.potion[i];
-                    this.game.addEntity(new Potion(this.game, potion.x, potion.y));
-                }
+            for (let i = 0; i < this.level.potion.length; i++) {
+                let potion = this.level.potion[i];
+                this.game.addEntity(new Potion(this.game, potion.x, potion.y));
             }
+        }
+
         if (this.level.tent) {
             for (let i = 0; i < this.level.tent.length; i++) {
                 let tent = this.level.tent[i];
@@ -110,10 +113,17 @@ class SceneManager {
             }
         }
 
+        if (this.level.skeleton) {
+            for (let i = 0; i < this.level.skeleton.length; i++) {
+                let skeleton = this.level.skeleton[i];
+                //this.game.addEntity(new SkeletonWarrior(this.game, skeleton.x, skeleton.y));
+            }
+        }
+
         if (this.level.gorgon) {
             for (let i = 0; i < this.level.gorgon.length; i++) {
                 let gorgon = this.level.gorgon[i];
-                this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
+                //this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
             }
         }
 
@@ -228,12 +238,14 @@ class SceneManager {
                 this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
             }
         }
+
         if (this.level.dungeonGround2) {
-                for (let i = 0; i < this.level.dungeonGround2.length; i++) {
-                    let ground2 = this.level.dungeonGround2[i];
-                    this.game.addEntity(new DungeonGround2(this.game, ground2.x, ground2.y, ground2.w, ground2.h));
-                }
+            for (let i = 0; i < this.level.dungeonGround2.length; i++) {
+                let ground2 = this.level.dungeonGround2[i];
+                this.game.addEntity(new DungeonGround2(this.game, ground2.x, ground2.y, ground2.w, ground2.h));
             }
+        }
+
         if (this.level.dungeonWall2) {
             for (let i = 0; i < this.level.dungeonWall2.length; i++) {
                 let wall2 = this.level.dungeonWall2[i];
@@ -247,23 +259,30 @@ class SceneManager {
                 this.game.addEntity(new DungeonDoor2(this.game, door2.x, door2.y, door2.level));
             }
         }
+
         if (this.level.dungeonWaterfall) {
             for(let i = 0; i < this.level.dungeonWaterfall.length; i++) {
                 let waterfall = this.level.dungeonWaterfall[i];
                 this.game.addEntity(new DungeonWaterfall(this.game, waterfall.x, waterfall.y));
             }
         }
+
         if (this.level.dungeonBackground3) {
             for (let i = 0; i < this.level.dungeonBackground3.length; i++) {
                 let background3 = this.level.dungeonBackground3[i];
                 this.game.addEntity(new DungeonBackground3(this.game, background3.x, background3.y, background3.w, background3.h));
             }
         }
+
+        if (this.level.cutscene) {
+            this.cutsceneManager = new CutsceneManager(this.game);
+            this.cutscene = this.level.cutscene;
+        }
     };
 
     showInteractive(entity, text) {
         this.knight.moveable = false;
-        this.interactable = new Interaction(this.game, this, entity, text);1
+        this.interactable = new Interaction(this.game, this, entity, text);
         let oldEntities = this.game.entities;
         this.game.entities = [];
         this.game.addEntity(this.interactable);
@@ -278,6 +297,15 @@ class SceneManager {
     }
 
     update() {
+        if (this.cutsceneCounter !== this.cutscene.length) {
+            if(!this.inCutscene && this.knight.x > this.cutscene[this.cutsceneCounter].startX) {
+                this.inCutscene = true;
+                this.scene = this.cutsceneManager.cutsceneArray[this.cutscene[this.cutsceneCounter].cutsceneNum];
+                this.cutsceneCounter++;
+                this.scene.run();
+                return;
+            }
+        }
         if (this.title) {
             if (this.level === levels.startScreen && (this.game.keys[' '] || this.game.keys['Enter'])) {
                 if (this.game.keys[' ']) {
@@ -401,6 +429,8 @@ class SceneManager {
     };
 
     draw(ctx) {
-        this.userInterface(ctx);
+        if (!this.inCutscene) {
+            this.userInterface(ctx);
+        }
     };
 }

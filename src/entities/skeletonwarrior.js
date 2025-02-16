@@ -45,7 +45,7 @@ class SkeletonWarrior {
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x, this.y, 128, 128)
+        this.BB = new BoundingBox(this.x + 100 - this.game.camera.x, this.y + 140, 100, 115)
     }
 
 	update() {
@@ -154,6 +154,7 @@ class SkeletonWarrior {
 	};
 
 	draw(ctx) {
-		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
+		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
+        this.BB.draw(ctx);
 	};
 }
