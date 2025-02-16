@@ -5,7 +5,7 @@ ASSET_MANAGER.queueDownload(DUNGEON);
 ASSET_MANAGER.queueDownload(TORCH);
 ASSET_MANAGER.queueDownload(AZUCENA);
 ASSET_MANAGER.queueDownload(REINA);
-ASSET_MANAGER.queueDownload("../resources/Magic/Lightning.png");
+ASSET_MANAGER.queueDownload("./resources/Magic/Lightning.png");
 
 // Gorgon
 ASSET_MANAGER.queueDownload(GORGON + "Attack1.png");
@@ -31,10 +31,10 @@ ASSET_MANAGER.queueDownload(CELES + "LightCharge.png");
 ASSET_MANAGER.queueDownload(CELES + "Run.png");
 ASSET_MANAGER.queueDownload(CELES + "Walk.png");
 ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND_IMAGE);
-ASSET_MANAGER.queueDownload("../resources/menuScreen.png");
+ASSET_MANAGER.queueDownload(MENU_BACKGROUND);
 ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND);
 ASSET_MANAGER.queueDownload(WATERFALL);
-ASSET_MANAGER.queueDownload("../resources/Title.png")
+ASSET_MANAGER.queueDownload("./resources/Title.png")
 ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneWarrior.png"); 
 
 // Werewolf
@@ -65,8 +65,8 @@ ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Run+attack.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Walk.png");
 
 //Music
-ASSET_MANAGER.queueDownload('../resources/background.ogg')
-ASSET_MANAGER.queueDownload('../resources/maintheme.ogg')
+ASSET_MANAGER.queueDownload(BACKGROUND_MUSIC);
+ASSET_MANAGER.queueDownload(MAIN_MUSIC);
 
 
 ASSET_MANAGER.downloadAll(() => {

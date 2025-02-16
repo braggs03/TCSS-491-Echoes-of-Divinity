@@ -285,7 +285,7 @@ class SceneManager {
                 } else if (this.game.keys['Enter']) {
                     this.loadLevel('mainMenu', false, true, false);
                 }
-                this.music = new Audio("../resources/maintheme.ogg");
+                this.music = new Audio(MAIN_MUSIC);
                 this.music.loop = true;
                 this.music.preload = 'auto';
                 this.music.volume = 0.5;

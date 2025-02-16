@@ -17,3 +17,8 @@ const TORCH = './resources/torch.png'
 const DUNGEON_BACKGROUND_IMAGE = './resources/dungeonbackground.png'
 const WATERFALL = './resources/waterfall.png'
 const DUNGEON_BACKGROUND = './resources/dungeonwater2.png'
+
+// Other 
+const MENU_BACKGROUND = './resources/menuScreen.png';
+const BACKGROUND_MUSIC = './resources/background.ogg';
+const MAIN_MUSIC = './resources/maintheme.ogg';

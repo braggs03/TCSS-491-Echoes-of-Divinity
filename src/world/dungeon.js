@@ -165,7 +165,6 @@ class Bonfire {
         this.animator1 = this.bonfireAnimationLit();
         this.animator2 = this.bonfireAnimationUnlit();
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
-        this.otherspritesheet = ASSET_MANAGER.getAsset("../resources/bonfire_unlit.png");
         this.scale = 3;
         this.BB = new BoundingBox(this.x - this.game.camera.x,  this.y - this.game.camera.y, BONFIRE_WIDTH * this.scale, BONFIRE_HEIGHT * this.scale);
         this.fReleased = false;
@@ -227,7 +226,7 @@ class menuBackground {
     constructor(game, x, y, w, h) {
         Object.assign(this, { game, x, y, w, h});
 
-        this.spritesheet = ASSET_MANAGER.getAsset('../resources/menuScreen.png');
+        this.spritesheet = ASSET_MANAGER.getAsset(MENU_BACKGROUND);
         this.scale = 2.24;
     };
 
