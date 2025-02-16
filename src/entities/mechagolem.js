@@ -126,6 +126,9 @@ class MechaGolem {
                     }
                 }
             }
+        } else {
+            // No target available, return to idle
+            this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
         }
 
        

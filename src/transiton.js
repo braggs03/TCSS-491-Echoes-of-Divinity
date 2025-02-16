@@ -13,13 +13,14 @@ class TransitionScreen {
                 this.game.camera.loadLevel(this.level, false, false, false);            
             }
         } else {
-            if (this.elapsed > 0.2) {
+            if (this.elapsed > 0.3) {
                 this.game.camera.loadLevel(this.level, false, false, false);            
             }
         }
     }
 
-    draw(ctx) {       
+    draw(ctx) {   
+        this.game.camera.knight.removeFromWorld = true;    
         if(this.dead) {
             ctx.fillStyle = "Black";
             ctx.fillRect(0, 0, PARAMS.SCREENWIDTH, PARAMS.SCREENHEIGHT);
@@ -32,7 +33,7 @@ class TransitionScreen {
             ctx.fillRect(0, 0, PARAMS.SCREENWIDTH, PARAMS.SCREENHEIGHT);
             ctx.fillStyle = "white"
             ctx.textAlign = "center"
-            ctx.font = "50px Times";
+            ctx.font = "50px Open Sans";
             ctx.fillText("Loading", PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2);
         }
        
@@ -41,6 +42,4 @@ class TransitionScreen {
 
 
     }
-
-
 }

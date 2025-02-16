@@ -25,9 +25,11 @@ class BoundingBox {
         return {x: ox, y: oy};
     };
 
-    draw(ctx, color = "red") {
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        ctx.strokeRect(this.left, this.top, this.width, this.height);
+    draw(ctx) {
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(this.left, this.top, this.width, this.height);
+        }
     }
 }

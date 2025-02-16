@@ -8,6 +8,8 @@ class Knight {
         this.game = game;
         this.x = x;
         this.y = y;
+
+        this.moveable = true;
         
         this.velocityX = 0;
         this.maxVelocityX = 6;
@@ -46,9 +48,9 @@ class Knight {
             RightCrouchAttack : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 240, 48, 100, 4, 0.1, false, false),
             RightCrouchWalk : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 320, 64, 100, 8, 0.1, false, false),
             RightDeath : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 400, 120, 100, 10, 0.1, false, false),
-            RightFall : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 480, 120, 100, 3, 0.1, false, true),
+            RightFall : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 481, 120, 100, 3, 0.1, false, true),
             RightIdle : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 560, 120, 100, 10, 0.1, false, true),
-            RightJump : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 640, 120, 100, 2, 0.1, false, true),
+            RightJump : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 641, 120, 100, 2, 0.1, false, true),
             RightRoll : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 6, 720, 120, 100, 12, 0.04, false, false),
             RightRun : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 800, 120, 100, 10, 0.1, false, true),
             RightTurn : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 880, 120, 100, 3, 0.02, false, true),
@@ -62,9 +64,9 @@ class Knight {
             LeftCrouchAttack : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2400, 240, 120, 80, 4, 0.1, true, false),
             LeftCrouchWalk : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1920, 320, 120, 80, 8, 0.1, true, false),
             LeftDeath : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1680, 400, 120, 80, 10, 0.1, true, false),
-            LeftFall : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2531, 480, 120, 100, 3, 0.1, true, true),
+            LeftFall : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2531, 481, 120, 100, 3, 0.1, true, true),
             LeftIdle : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1691, 560, 120, 100, 10, 0.1, true, true),
-            LeftJump : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2651, 640, 120, 100, 2, 0.1, true, true),
+            LeftJump : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2651, 641, 120, 100, 2, 0.1, true, true),
             LeftRoll : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1440, 720, 120, 100, 12, 0.04, true, false),
             LeftRun : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1691, 800, 120, 100, 10, 0.1, true, true),
             LeftTurn : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2520, 880, 120, 100, 3, 0.1, false, true),
@@ -131,7 +133,7 @@ class Knight {
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
-                this.game.camera.loadLevel("shopkeeper", true, false, true)
+                this.game.camera.respawnKnight(this);
             }, 1000); 
             // Adjust timing to match the death animation duration
         }
@@ -155,6 +157,16 @@ class Knight {
 
     update() {
         if (this.dead) return;
+
+        if (!this.moveable) {
+            this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
+            this.velocityX = 0; 
+            return;
+        }
+
+        if (this.y > 1000) {
+            this.die();
+        }
     
         if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
@@ -179,25 +191,27 @@ class Knight {
                         that.x -= overlap.x;
                     }
                     that.velocityX = 0; 
-                } else if (entity instanceof DungeonGround) {
-                    if (entity.BB.y < that.BB.y) {
-                        down++;
-                        that.y += overlap.y;
-                    } else if (entity.BB.y > that.BB.y) {
-                        up++;
-                        that.y -= overlap.y - 1;
-                    }       
-                    that.velocityY = 0; 
-                }
-                else if (entity instanceof DungeonGround2) {
-                    if (entity.BB.y < that.BB.y) {
-                        down++;
-                        that.y += overlap.y;
-                    } else if (entity.BB.y > that.BB.y) {
-                        up++;
-                        that.y -= overlap.y - 1;
-                    }       
-                    that.velocityY = 0; 
+                } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
+                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
+                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
+        
+                    if (horizontalCollision) {
+                        if (entity.BB.x < that.BB.x) {
+                            that.x += overlap.x;
+                        } else {
+                            that.x -= overlap.x;
+                        }
+                        that.velocityX = 0;
+                    } else if (verticalCollision) {
+                        if (entity.BB.y < that.BB.y) {
+                            down++;
+                            that.y += overlap.y;
+                        } else {
+                            up++;
+                            that.y -= overlap.y - 1;
+                        }
+                        that.velocityY = 0;
+                    }
                 } else if ( entity instanceof Potion) {
                     if (this.buyPotion()) {
                         entity.removeFromWorld = true;
@@ -301,7 +315,7 @@ class Knight {
                 this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
                 this.invinsible = true;
                 this.setState(this.chosenState);
-            } if (this.game.keys["g"]) {
+            } else if (this.game.keys["g"]) {
                 if (!this.gKeyPressed) {  
                     this.usePotion();
                     this.gKeyPressed = true;
