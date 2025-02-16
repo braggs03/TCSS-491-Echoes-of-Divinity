@@ -44,10 +44,10 @@ class SceneManager {
             }
         }
 
-        if (level.reina) {
-            for (let i = 0; i < level.reina.length; i++) {
-                let reina = level.reina[i];
-                this.game.addEntity(new Reina(this.game, reina.x, reina.y));
+        if (this.level.reina) {
+            for (let i = 0; i < this.level.reina.length; i++) {
+                let reina = this.level.reina[i];
+                this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
             }
         }
 
@@ -58,10 +58,10 @@ class SceneManager {
             }
         }
 
-        if (level.azucena) {
-            for (let i = 0; i < level.azucena.length; i++) {
-                let azucena = level.azucena[i];
-                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y));
+        if (this.level.azucena) {
+            for (let i = 0; i < this.level.azucena.length; i++) {
+                let azucena = this.level.azucena[i];
+                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
         }
 
@@ -159,8 +159,9 @@ class SceneManager {
     };
 
     showInteractive(entity, text) {
+        console.log("Got here 4");
         this.knight.moveable = false;
-        this.interactable = new Interaction(this.game, this, entity, text);1
+        this.interactable = new Interaction(this.game, this, entity, text);
         let oldEntities = this.game.entities;
         this.game.entities = [];
         this.game.addEntity(this.interactable);
@@ -175,9 +176,63 @@ class SceneManager {
     }
 
     update() {
-        if (this.knight.hp <= 0) {
+        if (this.title) {
+            if (this.level === levels.startScreen && (this.game.keys[' '] || this.game.keys['Enter'])) {
+                if (this.game.keys[' ']) {
+                    this.loadLevel('storyRecap', false, true, false);
+                } else if (this.game.keys['Enter']) {
+                    this.loadLevel('mainMenu', false, true, false);
+                }
+                this.music = new Audio("../resources/maintheme.ogg");
+                this.music.loop = true;
+                this.music.preload = 'auto';
+                this.music.volume = 0.5;
 
+                // Ensure the audio is fully loaded before allowing playback
+                this.music.addEventListener('canplaythrough', () => {
+                    this.music.play();
+                });
+            }
+            if (this.game.textOverlay) {
+                const currentTime = Date.now();
+
+                // Calculate time since the cutscene started
+                const elapsedTime = currentTime - this.cutsceneStartTime;
+
+                // Duration to fade in each text
+                let fadeDuration = this.level.fadeTime;  // Duration for each text to fade in.
+
+                // Determine which text should be active based on the elapsed time
+                let textIndex = Math.floor(elapsedTime / fadeDuration);  // Which text should be fading in
+
+                // Ensure we don't go beyond the number of text elements
+                textIndex = Math.min(textIndex, this.game.textOverlay.length);
+
+                // Update the opacity for each text
+                for (let i = 0; i < textIndex; i++) {
+                    // Texts that should have fully faded in
+                    this.game.textOverlay[i].opacity = 1;
+                }
+
+                // Fade the current text (only one text is fading at a time)
+                if (textIndex < this.game.textOverlay.length) {
+                    const currentText = this.game.textOverlay[textIndex];
+                    const timeIntoFade = elapsedTime - (textIndex * fadeDuration);
+
+                    // Fade in this text over its duration
+                    currentText.opacity = Math.min(timeIntoFade / fadeDuration, 1);
+                }
+                if (this.level === levels.storyRecap && textIndex === this.game.textOverlay.length && elapsedTime >= (this.game.textOverlay.length * fadeDuration)) {
+                    this.loadLevel("mainMenu", false, true, false);  // Load the next level
+                }
+            }
+            if (this.level === levels.mainMenu && this.game.keys[' ']) {
+                this.loadLevel("shopkeeper", false, false, false);
+            }
+            return;
         }
+
+        testInteractable(this.game);
 
         let middlepointX = PARAMS.SCREENWIDTH / 2 - KNIGHT_HEIGHT * 2;
         //this.x = this.knight.x - middlepointX;
@@ -188,7 +243,30 @@ class SceneManager {
         if (0 < this.knight.y - middlepointY && this.level.height > this.knight.y - middlepointY) this.y = this.knight.y - middlepointY;
     };
 
-    draw(ctx) {
+    userInterface(ctx) {
+        if (this.game.textOverlay) {
+            if (this.level === levels.mainMenu) {
+                ctx.globalAlpha = 1;
+            } else {
+                // Draw the black background
+                ctx.fillStyle = this.level.background;
+                ctx.fillRect(0, 0, this.level.width, this.level.height);
+
+                // Loop through the texts and apply opacity
+                this.game.textOverlay.forEach(text => {
+                    ctx.fillStyle = text.color;
+                    ctx.font = text.font;
+                    ctx.textAlign = "center";
+                    ctx.globalAlpha = text.opacity;  // Apply opacity
+
+                    // Draw the text
+                    ctx.fillText(text.message, text.x, text.y);
+                });
+            }
+            return;
+        }
+
+        ctx.globalAlpha = 1;
         ctx.fillStyle = "White";
         ctx.font = '24px "Open+Sans"';
         const boxX = 200; 

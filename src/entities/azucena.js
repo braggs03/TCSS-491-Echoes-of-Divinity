@@ -4,11 +4,12 @@ const AZUCENA_X_OFFSET = 5;
 const AZUCENA_Y_OFFSET = 30;
 
 class Azucena {
-    constructor(game, x, y) {
+    constructor(game, x, y, text) {
         this.game = game;
         this.animator = this.idleLeft()
         this.x = x;
         this.y = y;
+        this.text = text;
         this.facing = LEFT;
         this.BB = new BoundingBox(this.x + AZUCENA_X_OFFSET - this.game.camera.x, this.y + AZUCENA_Y_OFFSET - this.game.camera.y, AZUCENA_WIDTH, AZUCENA_HEIGHT);
     };
@@ -26,8 +27,6 @@ class Azucena {
                 this.animator = this.idleRight();
             }
         }
-
-        testInteractable(this, text.azucena);
     };
 
     idleLeft() {

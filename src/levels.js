@@ -17,7 +17,7 @@ const levels = {
         width: 1085,
         height: 0,
         knightPos: {
-            x: 300,
+            x: 600,
             y: 400,
         },
         dungeonFire: [{ x: 500, y: 565 }],
@@ -33,8 +33,11 @@ const levels = {
         swordRack: [{ x: 1300, y: 608 }],
         shieldRack: [{ x: 1400, y: 608 }],
         boxes: [{ x: 800, y: 524 }, { x: 950, y: 524 }],
-        reina: [{ x: 1620, y: 537 }],
-        azucena: [{ x: 870, y: 510 }],
+        reina: [{ x: 1620, y: 537, text: "reina_shopkeeper" }],
+        azucena: [{ x: 870, y: 510, text: "azucena_shopkeeper" }],
         tent: [{ x: 700, y: 478 }],
+        bonFire: [{ x: 400, y: 465, level: "shopkeeper" }],
+        potion: [{ x: 788, y: 570}, { x: 888, y: 570}, { x: 990, y: 570}],
+        sharpeningWheel: [{ x: 1850, y: 620 }],
     },
 };

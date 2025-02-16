@@ -4,10 +4,11 @@ const REINA_X_OFFSET = -20;
 const REINA_Y_OFFSET = 30;
 
 class Reina {
-    constructor(game, x, y) {
+    constructor(game, x, y, text) {
         this.game = game;
         this.x = x;
         this.y = y;
+        this.text = text;
         this.facing = LEFT;
         this.animator = this.idleLeft();
         this.scale = 5;
@@ -27,8 +28,6 @@ class Reina {
                 this.animator = this.idleRight();
             }
         }
-
-        testInteractable(this, text.reina);
     };
 
     idleLeft() {
