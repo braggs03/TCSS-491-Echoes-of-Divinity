@@ -12,16 +12,19 @@ class Knight {
         this.moveable = true;
         
         this.velocityX = 0;
-        this.maxVelocityX = 6;
+        this.maxVelocityX = 10;
         this.accelerationX = 0.4; 
         this.decelerationX = 0.2; 
 
         this.velocityY = 0;
-        this.maxVelocityY = 5;
+        this.maxVelocityY = 10;
         this.accelerationY = 0.25; 
         this.jumpSpeed = 10;
-        
-        this.hp = 100;
+
+        this.healthBar = new HealthBar(this);
+        this.maxHp = 1000; 
+        this.hp = 1000;
+        this.height = 110;
         this.emberCount = 100;
         this.potionCount = 0;
         this.gKeyPressed = false;
@@ -302,11 +305,12 @@ class Knight {
                     this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
                     this.setState(this.chosenState);
                     // Check for collision with golem
-                    const golem = this.game.entities.find(entity => entity instanceof MechaGolem && !entity.dead);
-                    if (golem && this.BB.collide(golem.BB)) {
-                        golem.takeDamage(100);
-                        console.log("Knight attacks the MechaGolem!");
-                    }
+                    this.game.entities.forEach(entity => {
+                        if (entity instanceof MechaGolem && !entity.dead && this.BB.collide(entity.BB)) {
+                            entity.takeDamage(100);
+                            console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
+                        }
+                    });
                     setTimeout(() => {
                         this.attackAnimationActive = false; // Reset flag when animation is complete
                     }, 900); // Match the duration of the attack animation
@@ -342,7 +346,7 @@ class Knight {
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return; 
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 3);
-        //this.BB.draw(ctx);
+        this.healthBar.draw(ctx);
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = "red";
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
