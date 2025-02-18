@@ -8,10 +8,9 @@ class HealthBar {
     }
 
     draw(ctx) {
-        if (this.agent.hp < this.agent.maxHp) { // Show only when damaged
+        let alwaysShow = this.agent instanceof Knight; 
+        if (alwaysShow || this.agent.hp < this.agent.maxHp) { // Show only when damaged
             let ratio = this.agent.hp / this.agent.maxHp;
-            let color = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Yellow" : "Green";
-
             let barWidth = 120;
             let barHeight = 20;  
             let barX = this.agent.x + 170 - barWidth / 2 - this.agent.game.camera.x;
