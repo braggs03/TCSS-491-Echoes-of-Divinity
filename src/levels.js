@@ -48,6 +48,24 @@ const levels = {
         ]
     },
 
+    tutorial: {
+        width: 2000,
+        height: 0,
+        knightPos: {
+            x: -90,
+            y: 440,
+        },
+        reina: [{ x: 300, y: 536 }],
+        azucena: [{ x: -165, y: 500 }],
+        cutscene: [{startX: 3000, cutsceneNum: 1}],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }],
+        skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }],
+        gorgon: [{x: 1000, y: 424}],
+        lightning: [{x: -40, y: 40}],
+        tutorialBackground: [{ x:0, y:0, w:50, h: 1}],
+        townBackground: [{ x:0, y:0, w:50, h: 1}],
+    },
+
     one: {
         width: 30000,
         height: 0,
@@ -90,14 +108,15 @@ const levels = {
     shopkeeper: {
         width: 1085,
         height: 0,
-        startPosition: {
-            x: 70,
-            y: 400,
+        knightPos: {
+            x: 500,
+            y: 445,
         },
         checkpoint:{ //bonFire position change both
             x: 400,
             y: 465,
         },
+        cutscene: [{startX: 100, cutsceneNum: 2}],
         dungeonBackground: [{ x: 0, y: 30, w: 25, h: 7 }],
         chandelier: [{ x: 550, y: 40 }, { x: 1650, y: 40 }],
         dungeonGround: [{ x: 0, y: 0, w: 15, h: 1 }, { x: 0, y: 17, w: 15, h: 1 }],

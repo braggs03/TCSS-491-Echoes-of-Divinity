@@ -240,6 +240,53 @@ class menuBackground {
         }
     };
 }
+
+const TUTORIAL_BACKGROUND_WIDTH = 640;
+const TUTORIAL_BACKGROUND_HEIGHT = 320;
+
+class tutorialBackground {
+    constructor(game, x, y, w, h) {
+        Object.assign(this, { game, x, y, w, h});
+
+        this.spritesheet = ASSET_MANAGER.getAsset('../resources/NightSky.png');
+        this.scale = 2.24;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        for (let k = 0; k < this.h; k++) {
+            for (let i = 0; i < this.w; i++) {
+                ctx.drawImage(this.spritesheet, 0, 0, TUTORIAL_BACKGROUND_WIDTH, TUTORIAL_BACKGROUND_HEIGHT, (this.x + i * TUTORIAL_BACKGROUND_WIDTH * this.scale), this.y * TUTORIAL_BACKGROUND_HEIGHT * this.scale, TUTORIAL_BACKGROUND_WIDTH * this.scale, TUTORIAL_BACKGROUND_HEIGHT * this.scale);
+            }
+        }
+    };
+}
+
+const TOWN_BACKGROUND_WIDTH = 640;
+const TOWN_BACKGROUND_HEIGHT = 320;
+
+class townBackground {
+    constructor(game, x, y, w, h) {
+        Object.assign(this, { game, x, y, w, h});
+
+        this.spritesheet = ASSET_MANAGER.getAsset('../resources/town.png');
+        this.scale = 2.24;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        for (let k = 0; k < this.h; k++) {
+            for (let i = 0; i < this.w; i++) {
+                ctx.drawImage(this.spritesheet, 0, 0, TOWN_BACKGROUND_WIDTH, TOWN_BACKGROUND_HEIGHT, (this.x + i * TOWN_BACKGROUND_WIDTH * this.scale), this.y * TOWN_BACKGROUND_HEIGHT * this.scale, TOWN_BACKGROUND_WIDTH * this.scale, TOWN_BACKGROUND_HEIGHT * this.scale);
+            }
+        }
+    };
+}
+
 const DUNEGON_GROUND2_WIDTH = 31;
 const DUNEGON_GROUND2_HEIGHT = 8;
 

@@ -10,6 +10,7 @@ class Knight {
         this.y = y;
 
         this.moveable = true;
+        this.inCutscene = false;
         
         this.velocityX = 0;
         this.maxVelocityX = 5;
@@ -25,6 +26,8 @@ class Knight {
         this.maxHP = 1000; 
         this.hp = 1000;
         this.height = 110;
+        this.stamina = 100;
+        this.currentStamina = 100;
         this.emberCount = 100;
         this.maxPotionCount = 3;
         this.potionCount = this.maxPotionCount;
@@ -106,20 +109,33 @@ class Knight {
         }
     }
 
-    // setState(state) {
-    //     if (this.animations[state]) {
-    //         this.currentState = state;
-    //     } else {
-    //         console.error("State '${state}' not found.");
-    //     }
-    // }
-
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x , this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+        if (this.currentState === 'RightAttack1') {
+            if (this.animations[this.currentState].currentFrame() < 2) { // Wind-up phase
+                this.offsetX = 0; // Small range while pulling back
+            } else if (this.animations[this.currentState].currentFrame() < 4) { // Full swing
+                this.offsetX = 95; // Extend bounding box
+            } else { // Follow-through
+                this.offsetX = 0;
+            }
+            this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x + this.offsetX, this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+        } else if (this.currentState === 'LeftAttack1') {
+            if (this.animations[this.currentState].currentFrame() < 2) { // Wind-up phase
+                this.offsetX = 0; // Small range while pulling back
+            } else if (this.animations[this.currentState].currentFrame() < 4) { // Full swing
+                this.offsetX = 105; // Extend bounding box
+            } else { // Follow-through
+                this.offsetX = 0;
+            }
+            this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x - this.offsetX, this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+        } else {
+            this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x , this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+        }
     }
     takeDamage(amount) {
          if (!this.invinsible) {
+             this.invinsible = true;
              this.hp -= amount;
              console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
              if (this.hp <= 0) {
@@ -139,6 +155,7 @@ class Knight {
 
     die() {
         if (!this.dead) {
+            this.BB = null;
             this.dead = true;
             this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
             console.log("Knight has died!");
@@ -171,15 +188,36 @@ class Knight {
     }
 
     update() {
+        if (this.currentStamina < this.stamina) {
+            this.currentStamina += 1;
+        }
+        if (this.inCutscene) {
+            if (this.currentState === 'RightRun') {
+                this.x += 10;
+            } else if (this.currentState === 'LeftRun') {
+                this.x -= 10;
+            } else if (this.currentState === 'RightRoll') {
+                this.x += 10;
+            } else if (this.currentState === 'LeftRoll') {
+                this.x -= 10;
+            }
+
+            if (this.animations[this.currentState].getDone()) {
+                this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
+                this.setState(this.chosenState);
+            }
+            return;
+        }
         if (this.dead) return;
 
         if (this.y > 1000) {
             this.die();
         }
-    
         if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
+        } else {
+            this.invinsible = false;
         }
     
         let that = this;
@@ -255,9 +293,11 @@ class Knight {
         if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1'
             || this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
             if (this.currentState == 'RightRoll') {
-                this.x += 5;
+                this.invinsible = true;
+                this.x += 10;
             } else if (this.currentState == 'LeftRoll') {
-                this.x -= 5;
+                this.invinsible = true;
+                this.x -= 10;
             }
             this.updateBB();
             if (!this.animations[this.currentState].getDone()) {
@@ -305,10 +345,14 @@ class Knight {
             && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
             if (this.game.keys["e"]) {
                 if (!this.attackAnimationActive) {
+                    if (this.currentStamina < this.stamina) {
+                        return;
+                    }
                     this.velocityX = 0;
                     this.attackAnimationActive = true;
                     this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
                     this.setState(this.chosenState);
+                    this.currentStamina = 0;
                     // Check for collision with golem
                     this.game.entities.forEach(entity => {
                         if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && this.BB.collide(entity.BB)) {
@@ -325,12 +369,12 @@ class Knight {
                 this.invinsible = true;
                 this.setState(this.chosenState);
             } else if (this.game.keys["g"]) {
-                if (!this.gKeyPressed) {  
+                if (!this.gKeyPressed) {
                     this.usePotion();
                     this.gKeyPressed = true;
                 }
             } else {
-                this.gKeyPressed = false;  
+                this.gKeyPressed = false;
             }
 
         }
@@ -349,7 +393,6 @@ class Knight {
 
         this.x += this.velocityX;
         this.y += this.velocityY;
-
         this.updateBB();
     }
     

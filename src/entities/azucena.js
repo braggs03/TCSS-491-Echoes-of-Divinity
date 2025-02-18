@@ -7,6 +7,9 @@ class Azucena {
     constructor(game, x, y, text) {
         this.game = game;
         this.animator = this.idleLeft()
+        this.inCutscene = false;
+        this.goRight = false;
+        this.goLeft = false;
         this.x = x;
         this.y = y;
         this.text = text;
@@ -14,8 +17,20 @@ class Azucena {
         this.BB = new BoundingBox(this.x + AZUCENA_X_OFFSET - this.game.camera.x, this.y + AZUCENA_Y_OFFSET - this.game.camera.y, AZUCENA_WIDTH, AZUCENA_HEIGHT);
     };
 
+    setState(state) {
+        this.animator = state;
+    }
+
     update() {
         this.BB = new BoundingBox(this.x + AZUCENA_X_OFFSET - this.game.camera.x, this.y + AZUCENA_Y_OFFSET - this.game.camera.y, AZUCENA_WIDTH, AZUCENA_HEIGHT);
+        if (this.inCutscene) {
+            if (this.goRight) {
+                this.x += 5;
+            } else if (this.goLeft) {
+                this.x -=5;
+            }
+            return;
+        }
         if (this.game.camera.knight.x + KNIGHT_WIDTH < this.x) {
             if (this.facing != LEFT) {
                 this.facing = LEFT;
