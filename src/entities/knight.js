@@ -288,6 +288,10 @@ class Knight {
             that.colliding.up = false;
         }
 
+        if (!this.game.keys["r"]) {
+            this.releasedR = true;
+        }
+
         if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1'
             || this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
             if (this.currentState == 'RightRoll') {
@@ -319,15 +323,8 @@ class Knight {
         } else {
             this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
         }
-
-        if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
-            if (this.facing === RIGHT) {
-                this.velocityX = 5;
-            } else {
-                this.velocityX = 5;
-            }
-            return;
-        } else if (this.game.keys["ArrowUp"] && that.colliding.up) {
+        
+        if (this.game.keys["ArrowUp"] && that.colliding.up) {
             this.colliding.up = false;
             this.velocityY -= this.jumpSpeed;
         } else if (this.game.keys["ArrowLeft"] && !that.colliding.right) {
