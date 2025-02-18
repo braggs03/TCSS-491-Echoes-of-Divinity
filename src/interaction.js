@@ -53,7 +53,7 @@ class Interaction {
 function testInteractable(game) {
     if (!game.camera.interactable) {
         game.entities.forEach((entity) => {
-            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && entity.text && !entity.dialogCompleted) {
+            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && entity.text && !entity.dialogCompleted && this.game.keys["f"]) {
                 game.camera.showInteractive(entity, entity.text);
             }
         });

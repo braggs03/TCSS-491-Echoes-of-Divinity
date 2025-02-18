@@ -119,6 +119,7 @@ class CutsceneThree {
     async run() {
         this.knight.inCutscene = true;
         this.azucena.inCutscene = true;
+        this.knight.x = 500;
         this.knight.setState("RightIdle");
         this.game.camera.showInteractive(this.azucena, "azucena4");
         await this.delay(3000);
