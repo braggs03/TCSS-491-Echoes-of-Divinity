@@ -24,7 +24,9 @@ class CutsceneOne {
         this.knight.setState('RightIdle');
 
         this.azucena.goRight = true;
-        await this.delay(2000);
+        while (this.azucena.x <= 400) {
+            await this.delay (16);
+        }
         this.azucena.goRight = false;
         this.azucena.setState(this.azucena.idleLeft())
         this.game.camera.showInteractive(this.reina, "reina1");
@@ -82,7 +84,9 @@ class CutsceneTwo {
         this.knight.setState("LeftIdle");
         this.azucena.x = this.knight.x - 1200;
         this.azucena.goRight = true;
-        await this.delay(3500);
+        while (this.azucena.x < this.knight.x - 200) {
+            await this.delay (16);
+        }
         this.azucena.goRight = false;
         this.game.camera.showInteractive(this.azucena, "azucena3");
         await this.delay(2000);
