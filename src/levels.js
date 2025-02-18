@@ -59,11 +59,11 @@ const levels = {
             x: 400,
             y: 465,
         },
-        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 },{ x: 20, y: 11, w: 1, h: 1 }],
-        mechagolem: [{ x: 900, y: 350 }],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 12, w: 2, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 97, y: 12, w: 1, h: 1 }],
+        mechagolem: [{ x: 900, y: 350 },{ x: 7500, y: 100}],
         dungeonWall: [{ x: 0, y: 0, h: 5 }],
-        dungeonDoor: [{ x: 117, y: 465, level: "two" }],
-        bonFire: [{ x: 400, y: 465, level: "one" }],
+        dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper" }, { x: 14500, y: 465, level: "two" }],
+        bonFire: [{ x: 400, y: 465, level: "one" }, { x: 14000, y: 465, level: "one" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 
@@ -79,7 +79,7 @@ const levels = {
        //mechagolem: [{ x: 950, y: 270 }],
         dungeonWall: [{ x: 0, y: 0, h: 4 }],
         dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x:3735, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
-        dungeonDoor: [{ x: 124, y: 360, level: "shopkeeper" }],
+        dungeonDoor: [{ x: 124, y: 360, level: "one" }],
 
     },
 

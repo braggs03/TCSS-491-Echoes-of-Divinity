@@ -21,7 +21,7 @@ class Knight {
         this.accelerationY = 0.25; 
         this.jumpSpeed = 10;
         
-        this.hp = 100;
+        this.hp = 1000;
         this.emberCount = 100;
         this.potionCount = 0;
         this.gKeyPressed = false;
