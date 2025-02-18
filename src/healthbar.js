@@ -14,7 +14,7 @@ class HealthBar {
             let barWidth = 120;
             let barHeight = 20;  
             let barX = this.agent.x + 170 - barWidth / 2 - this.agent.game.camera.x;
-            let barY = this.agent.y + this.agent.height - 20 - this.agent.game.camera.y; 
+            let barY = this.agent.y + this.agent.height - 30 - this.agent.game.camera.y; 
 
             ctx.fillStyle = "Red"; 
             ctx.fillRect(barX, barY, barWidth, barHeight); 
@@ -27,7 +27,9 @@ class HealthBar {
             ctx.fillStyle = "White";  
             ctx.font = '24px "Open+Sans"';
             ctx.textAlign = "center";
-            ctx.fillText(`${this.agent.hp} / ${this.agent.maxHp}`, barX + barWidth / 2, barY + barHeight - 2);
+            ctx.fillStyle = '#000000';
+            ctx.textBaseline = 'top';
+            ctx.fillText(`${this.agent.hp} / ${this.agent.maxHp}`, barX + barWidth / 2, barY - 1);
         }
     }
 }

@@ -37,6 +37,9 @@ class Knight {
         this.invinsible = false;
         this.attackspeed = 0.1
         this.damage = 100;
+        this.attackCooldown = false;
+        this.attackAnimationActive = false;
+        this.attackHitRegistered = false;
         this.removeFromWorld = false;
         this.facing = RIGHT;
         this.flickerFlag = true;
@@ -183,7 +186,6 @@ class Knight {
         }
         return false;
     }
-
     update() {
         this.updateBB();
         if (this.currentStamina < this.stamina) {
@@ -199,7 +201,7 @@ class Knight {
             } else if (this.currentState === 'LeftRoll') {
                 this.x -= 10;
             }
-
+    
             if (this.animations[this.currentState].getDone()) {
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                 this.setState(this.chosenState);
@@ -207,7 +209,7 @@ class Knight {
             return;
         }
         if (this.dead) return;
-
+    
         if (this.y > 1000) {
             this.die();
         }
@@ -256,40 +258,68 @@ class Knight {
                         }
                         that.velocityY = 0;
                     }
-                } else if ( entity instanceof Potion) {
+                } else if (entity instanceof Potion) {
                     if (this.buyPotion()) {
                         entity.removeFromWorld = true;
                     }
                 }
             }
         });
-
+    
         if (left > 0) {
             that.colliding.left = true;
         } else {
             that.colliding.left = false;
         }
-
+    
         if (right > 0) {
             that.colliding.right = true;
         } else {
             that.colliding.right = false;
         }
-
+    
         if (down > 0) {
             that.colliding.down = true;
         } else {
             that.colliding.down = false;
         }
-
+    
         if (up > 0) {
             that.colliding.up = true;
         } else {
             that.colliding.up = false;
         }
-
-        if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1'
-            || this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
+    
+        if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1') {
+            const currentFrame = this.animations[this.currentState].currentFrame();
+            
+            if (currentFrame === 0) {
+                this.hitTargets = [];
+            }
+            
+            if (currentFrame >= 2 && currentFrame < 4) {
+                this.game.entities.forEach(entity => {
+                    if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && 
+                        this.BB.collide(entity.BB) &&
+                        !this.hitTargets.includes(entity)) {
+                        entity.takeDamage(100);
+                        console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
+                        this.hitTargets.push(entity);
+                    }
+                });
+            }
+    
+            if (!this.animations[this.currentState].getDone()) {
+                return;
+            } else {
+                this.invinsible = false;
+                this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
+                this.setState(this.chosenState);
+                
+                this.hitTargets = [];
+            }
+        }
+        if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
             if (this.currentState == 'RightRoll') {
                 this.invinsible = true;
                 this.x += 5;
@@ -306,7 +336,7 @@ class Knight {
                 this.setState(this.chosenState);
             }
         }
-
+    
         if (!that.colliding.up) {
             if (this.velocityY > 0) {
                 this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
@@ -319,7 +349,7 @@ class Knight {
         } else {
             this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
         }
-
+    
         if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
             if (this.facing === RIGHT) {
                 this.velocityX = 5;
@@ -339,7 +369,8 @@ class Knight {
             this.velocityX += this.accelerationX;
             this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
         }
-
+    
+       
         if (this.currentState !== 'RightFall' && this.currentState !== 'LeftFall'
             && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
             if (this.game.keys["e"]) {
@@ -352,16 +383,12 @@ class Knight {
                     this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
                     this.setState(this.chosenState);
                     this.currentStamina = 0;
-                    // Check for collision with golem
-                    this.game.entities.forEach(entity => {
-                        if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && this.BB.collide(entity.BB)) {
-                            entity.takeDamage(300);
-                            console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
-                        }
-                    });
+                    
+                    this.hitTargets = [];
+                    
                     setTimeout(() => {
-                        this.attackAnimationActive = false; // Reset flag when animation is complete
-                    }, 900); // Match the duration of the attack animation
+                        this.attackAnimationActive = false;
+                    }, 900);
                 }
             } else if (this.game.keys["r"]) {
                 this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
@@ -375,26 +402,24 @@ class Knight {
             } else {
                 this.gKeyPressed = false;
             }
-
         }
-
+    
         if (this.velocityX > 0) {
             this.velocityX = Math.max(0, this.velocityX - this.decelerationX);
         } else if (this.velocityX < 0) {
             this.velocityX = Math.min(0, this.velocityX + this.decelerationX);
         }
-
+    
         if (!this.moveable) {
             this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
             this.velocityX = 0; 
             this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
         }
-
+    
         this.x += this.velocityX;
         this.y += this.velocityY;
         this.updateBB();
     }
-    
 
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return; 

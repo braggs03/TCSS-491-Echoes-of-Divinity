@@ -148,7 +148,6 @@ class SceneManager {
         if (this.level.lucan) {
             for (let i = 0; i < this.level.lucan.length; i++) {
                 let lucan = this.level.lucan[i];
-                console.log('works');
                 this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
             }
         }
