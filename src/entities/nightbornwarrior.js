@@ -87,6 +87,7 @@ class NightbornWarrior {
         this.dead = true;
         this.attackInProgress = false;
         this.state = this.facing === RIGHT ? 'DeathRight' : 'DeathLeft';
+        this.target.emberCount += 200;
         setTimeout(() => {
             this.removeFromWorld = true;
         }, 2000);
