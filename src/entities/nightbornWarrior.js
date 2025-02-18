@@ -40,7 +40,6 @@ class NightbornWarrior {
 		} else if (this.State === "runLeft") {
 			this.x -= this.speed*2 * this.game.clockTick; 
 		}
-		
 	};
 
 	draw(ctx) { 
