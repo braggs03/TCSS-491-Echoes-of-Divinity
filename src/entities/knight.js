@@ -130,6 +130,7 @@ class Knight {
             this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x , this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
         }
     }
+
     takeDamage(amount) {
          if (!this.invinsible) {
              this.invinsible = true;
@@ -152,7 +153,6 @@ class Knight {
 
     die() {
         if (!this.dead) {
-            this.BB = null;
             this.dead = true;
             this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
             console.log("Knight has died!");
@@ -185,6 +185,7 @@ class Knight {
     }
 
     update() {
+        this.updateBB();
         if (this.currentStamina < this.stamina) {
             this.currentStamina += 1;
         }
@@ -291,10 +292,10 @@ class Knight {
             || this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
             if (this.currentState == 'RightRoll') {
                 this.invinsible = true;
-                this.x += 10;
+                this.x += 5;
             } else if (this.currentState == 'LeftRoll') {
                 this.invinsible = true;
-                this.x -= 10;
+                this.x -= 5;
             }
             this.updateBB();
             if (!this.animations[this.currentState].getDone()) {
@@ -325,6 +326,7 @@ class Knight {
             } else {
                 this.velocityX = 5;
             }
+            return;
         } else if (this.game.keys["ArrowUp"] && that.colliding.up) {
             this.colliding.up = false;
             this.velocityY -= this.jumpSpeed;

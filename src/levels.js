@@ -57,7 +57,7 @@ const levels = {
         },
         reina: [{ x: 300, y: 536 }],
         azucena: [{ x: -165, y: 500 }],
-        cutscene: [{startX: -100, cutsceneNum: 0}, {startX: 3000, cutsceneNum: 1}],
+        cutscene: [ {startX: 3000, cutsceneNum: 1}],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }],
         skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }],
         gorgon: [{x: 1000, y: 424}],

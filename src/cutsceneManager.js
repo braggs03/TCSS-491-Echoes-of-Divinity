@@ -100,7 +100,8 @@ class CutsceneTwo {
         this.azucena.inCutscene = false;
         this.game.camera.inCutscene = false;
         this.game.interactable = undefined;
-        this.game.camera.loadLevel("shopkeeper", false, false, false, false);
+        this.knight.velocityX = 0;
+        this.game.camera.loadLevel("shopkeeper", true, false, false, false);
     }
 
     delay(ms) {
@@ -118,6 +119,7 @@ class CutsceneThree {
     async run() {
         this.knight.inCutscene = true;
         this.azucena.inCutscene = true;
+        this.knight.setState("RightIdle");
         this.game.camera.showInteractive(this.azucena, "azucena4");
         await this.delay(3000);
         this.game.camera.interactable.currentDialog++;
