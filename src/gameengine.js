@@ -116,7 +116,7 @@ class GameEngine {
         for (let i = 0; i < entitiesCount; i++) {
             let entity = this.entities[i];
 
-            if (entity && !entity.removeFromWorld) {
+            if (!entity.removeFromWorld) {
                 entity.update();
             }
         }
