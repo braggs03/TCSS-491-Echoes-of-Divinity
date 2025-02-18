@@ -129,6 +129,7 @@ class SceneManager {
                 this.game.addEntity(new MechaGolem(this.game, mechagolem.x, mechagolem.y));
             }
         }
+        
 
         if (this.level.azucena) {
             for (let i = 0; i < this.level.azucena.length; i++) {
@@ -388,37 +389,17 @@ class SceneManager {
                     ctx.fillText(text.message, text.x, text.y);
                 });
             }
-        } else {
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = "White";
-            
-            ctx.font = '24px "Open+Sans"';
-            const boxX = 500; 
-            const boxY = 90; 
-            const boxWidth = 300; 
-            const boxHeight = 40;
-            ctx.strokeStyle = "White";
-            ctx.lineWidth = 2;
-            ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
-            ctx.fillText("0", 500, 165);
-            ctx.fillText("1000", 750, 165);
-            const health = this.knight.hp;
-            const fillWidth = boxWidth * health / 1000;
-            ctx.fillStyle = "Green";
-            ctx.fillRect(boxX, boxY, fillWidth, boxHeight);
-            if (fillWidth < boxWidth) {
-                ctx.fillStyle = "Black";
-                ctx.fillRect(boxX + fillWidth, boxY, boxWidth - fillWidth, boxHeight);
-            }
-             ctx.fillStyle = "White";
-             ctx.font = '36px "Open+Sans"';
-            
-            ctx.fillText(this.knight.emberCount, 160, 120);
-            const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
-            ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
-            ctx.fillText(this.knight.potionCount, 280, 120);
-            ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80 );
         }
+        ctx.globalAlpha = 1;
+        
+         ctx.fillStyle = "White";
+         ctx.font = '36px "Open+Sans"';
+        
+        ctx.fillText(this.knight.emberCount, 170, 120);
+        const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
+        ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
+        ctx.fillText(this.knight.potionCount, 285, 120);
+        ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80 );
     };
 
     draw(ctx) {

@@ -20,9 +20,11 @@ class Knight {
         this.maxVelocityY = 6;
         this.accelerationY = 0.15; 
         this.jumpSpeed = 10;
-        
-        this.hp = 400;
-        this.maxHP = 1000;
+
+        this.healthBar = new HealthBar(this);
+        this.maxHP = 1000; 
+        this.hp = 1000;
+        this.height = 110;
         this.emberCount = 100;
         this.maxPotionCount = 3;
         this.potionCount = this.maxPotionCount;
@@ -153,6 +155,7 @@ class Knight {
         if (this.potionCount > 0 && this.hp < this.maxHP) {
             this.potionCount -= 1;
             this.hp = Math.min(this.hp + this.potionHealCount, this.maxHP); 
+            this.game.addEntity(new PotionEffect(this.game, this.x + 100, this.y + KNIGHT_HEIGHT + 1, POTION_BOOST));
             return true;
         }
         return false;
@@ -307,11 +310,12 @@ class Knight {
                     this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
                     this.setState(this.chosenState);
                     // Check for collision with golem
-                    const golem = this.game.entities.find(entity => entity instanceof MechaGolem && !entity.dead);
-                    if (golem && this.BB.collide(golem.BB)) {
-                        golem.takeDamage(100);
-                        console.log("Knight attacks the MechaGolem!");
-                    }
+                    this.game.entities.forEach(entity => {
+                        if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && this.BB.collide(entity.BB)) {
+                            entity.takeDamage(300);
+                            console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
+                        }
+                    });
                     setTimeout(() => {
                         this.attackAnimationActive = false; // Reset flag when animation is complete
                     }, 900); // Match the duration of the attack animation
@@ -353,7 +357,14 @@ class Knight {
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return; 
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 3);
+        this.healthBar.draw(ctx);
+        this.game.entities.forEach(entity => {
+            if (entity instanceof PotionEffect) {
+                entity.draw(ctx);
+            }
+        });
         this.BB.draw(ctx);
     };
 }
+
 

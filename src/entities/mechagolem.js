@@ -4,7 +4,10 @@ class MechaGolem {
         this.x = x;
         this.y = y;
         this.speed = 4;
+        this.healthBar = new HealthBar(this);
+        this.maxHp = 1000; 
         this.hp = 1000;
+        this.height = 90; 
 
         this.facing = RIGHT;
         this.aggro = false;
@@ -65,6 +68,7 @@ class MechaGolem {
         this.animator = this.facing === RIGHT ? this.deathRight() : this.deathLeft();
         console.log("MechaGolem dies!");
         this.target.emberCount += 200;
+        
         setTimeout(() => {
             this.removeFromWorld = true;
         }, 1000);
@@ -223,7 +227,8 @@ class MechaGolem {
 
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return;
-        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 4);
+        this.healthBar.draw(ctx);
         this.BB.draw(ctx);
     }
 
