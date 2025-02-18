@@ -27,12 +27,12 @@ class CutsceneOne {
         await this.delay(2000);
         this.azucena.goRight = false;
         this.azucena.setState(this.azucena.idleLeft())
-        this.game.camera.showInteractive(this.reina, text.reina1);
+        this.game.camera.showInteractive(this.reina, "reina1");
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
         this.game.camera.removeInteractive();
-        this.game.camera.showInteractive(this.azucena, text.azucena1);
+        this.game.camera.showInteractive(this.azucena, "azucena1");
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(5000);
@@ -84,7 +84,7 @@ class CutsceneTwo {
         this.azucena.goRight = true;
         await this.delay(3500);
         this.azucena.goRight = false;
-        this.game.camera.showInteractive(this.azucena, text.azucena3);
+        this.game.camera.showInteractive(this.azucena, "azucena3");
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(3000);
