@@ -56,18 +56,18 @@ const levels = {
             y: 465,
         },
         endPosition: {
-            x: 2970,
+            x: 14470,
             y: 465,
         },
         checkpoint:{ //bonFire position change both
             x: 400,
             y: 465,
         },
-        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
-        mechagolem: [{ x: 900, y: 350 }],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 12, w: 2, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 97, y: 12, w: 1, h: 1 }],
+        mechagolem: [{ x: 900, y: 350 },{ x: 7500, y: 100}],
         dungeonWall: [{ x: 0, y: 0, h: 5 }],
-        dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 3000, y: 465, level: "two", end: false }],
-        bonFire: [{ x: 400, y: 465, level: "one" }],
+        dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
+        bonFire: [{ x: 400, y: 465, level: "one" }, { x: 14000, y: 465, level: "one" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 
