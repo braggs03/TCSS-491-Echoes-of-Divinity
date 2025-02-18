@@ -424,7 +424,9 @@ class Knight {
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return; 
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 3);
-        this.healthBar.draw(ctx);
+        if (!this.inCutscene) {
+            this.healthBar.draw(ctx);
+        }
         this.game.entities.forEach(entity => {
             if (entity instanceof PotionEffect) {
                 entity.draw(ctx);
