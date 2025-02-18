@@ -51,18 +51,22 @@ const levels = {
     one: {
         width: 30000,
         height: 0,
-        knightPos: {
+        startPosition: {
             x: 87,
-            y: 400,
+            y: 465,
+        },
+        endPosition: {
+            x: 2970,
+            y: 465,
         },
         checkpoint:{ //bonFire position change both
             x: 400,
             y: 465,
         },
-        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 },{ x: 20, y: 11, w: 1, h: 1 }],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
         mechagolem: [{ x: 900, y: 350 }],
         dungeonWall: [{ x: 0, y: 0, h: 5 }],
-        dungeonDoor: [{ x: 117, y: 465, level: "two" }],
+        dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 3000, y: 465, level: "two", end: false }],
         bonFire: [{ x: 400, y: 465, level: "one" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
@@ -70,7 +74,7 @@ const levels = {
     two: {
         width: 10000,
         height: 0,
-        knightPos: {
+        startPosition: {
             x: 87,
             y: 320,
         },
@@ -79,15 +83,14 @@ const levels = {
        //mechagolem: [{ x: 950, y: 270 }],
         dungeonWall: [{ x: 0, y: 0, h: 4 }],
         dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x:3735, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
-        dungeonDoor: [{ x: 124, y: 360, level: "shopkeeper" }],
-
+        dungeonDoor: [{ x: 124, y: 360, level: "one", end: true }],
     },
 
     shopkeeper: {
         width: 1085,
         height: 0,
-        knightPos: {
-            x: 300,
+        startPosition: {
+            x: 70,
             y: 400,
         },
         checkpoint:{ //bonFire position change both
@@ -111,12 +114,14 @@ const levels = {
         tent: [{ x: 700, y: 478 }],
         bonFire: [{ x: 400, y: 465, level: "shopkeeper" }],
         potion: [{ x: 788, y: 570}, { x: 888, y: 570}, { x: 990, y: 570}],
+        sharpening_wheel: [{ x: 1850, y: 620 }],
+        knightStatue: [{ x: 1840, y: 210 }],
     },
 
     bossroom: {
         width: 800,
         height: 0,
-        knightPos: {
+        startPosition: {
             x: 70,
             y: 400,
         },
@@ -126,6 +131,4 @@ const levels = {
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
-
-
 };

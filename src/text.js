@@ -6,6 +6,9 @@ const text = {
     ],
 
     azucena_shopkeeper: [
-        ["This is awesome!"],
+        ["Hello Knight!"],
+        ["I am Azucena."],
+        ["I will happily sell", "my items to you,", "for a price of course!"],
+        ["Items will be become availible for you", "as you progress through the levels,", "so always remember to check back here."],
     ] 
 }

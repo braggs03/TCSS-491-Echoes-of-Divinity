@@ -13,6 +13,8 @@ class GameEngine {
         this.click = null;
         this.mouse = null;
         this.wheel = null;
+        this.paused = false;
+        this.focus = true;
         this.keys = {};
 
         this.options = options || {
@@ -71,6 +73,20 @@ class GameEngine {
             this.rightclick = getXandY(e);
         });
 
+        this.ctx.canvas.addEventListener("keydown", event => {
+            if (event.key == "p") {
+                this.paused = !this.paused;
+            }
+        });
+
+        this.ctx.canvas.addEventListener("focusin", () => {
+            this.focus = true;
+        });
+          
+        this.ctx.canvas.addEventListener("focusout", () => {
+            this.focus = false;
+        });
+
         this.ctx.canvas.addEventListener("keydown", event => this.keys[event.key] = true);
         this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
     };
@@ -113,11 +129,11 @@ class GameEngine {
     };
 
     loop() {
-        this.clockTick = this.timer.tick();
-        this.update();
-        this.draw();
+        if (!this.paused && this.focus) {
+            this.clockTick = this.timer.tick();
+            this.update();
+            this.draw();
+        }
     };
 
 };
-
-// KV Le was here :)

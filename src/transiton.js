@@ -1,6 +1,6 @@
 class TransitionScreen {
-    constructor(game, level, dead) {
-        Object.assign(this, { game, level, dead });
+    constructor(game, level, dead, end) {
+        Object.assign(this, { game, level, dead, end });
 
         this.elapsed = 0;
     };
@@ -10,11 +10,11 @@ class TransitionScreen {
 
         if(this.dead){
             if (this.elapsed > 2) {
-                this.game.camera.loadLevel(this.level, false, false, false);            
+                this.game.camera.loadLevel(this.level, false, false, false, false);            
             }
         } else {
             if (this.elapsed > 0.3) {
-                this.game.camera.loadLevel(this.level, false, false, false);            
+                this.game.camera.loadLevel(this.level, false, false, false, this.end);            
             }
         }
     }

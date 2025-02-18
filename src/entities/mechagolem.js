@@ -13,12 +13,12 @@ class MechaGolem {
         this.attackInProgress = false;
         this.attackCooldown = 0;
         this.target = null;
-        this.range = 350;
+        this.range = 1000;
         this.aggroRange = 700;
         this.attackRange = 80;
         this.idleCooldown = 0; 
         this.canAttackAgain = true; 
-
+        this.scale = 4;
         this.flickerFlag = true;
         this.flickerDuration = 0;
 
@@ -76,6 +76,51 @@ class MechaGolem {
         if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
+        }
+
+        let that = this;
+        let left = 0;
+        let right = 0;
+        let up = 0;
+        let down = 0;
+        this.game.entities.forEach((entity) => {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+                const overlap = entity.BB.overlap(that.BB);
+                if (entity instanceof DungeonWall) {
+                    if (entity.BB.x < that.BB.x) {
+                        right++;
+                        that.x += overlap.x;
+                    } else if (entity.BB.x > that.BB.x) {
+                        left++;
+                        that.x -= overlap.x;
+                    }
+                } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
+                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
+                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
+        
+                    if (horizontalCollision) {
+                        if (entity.BB.x < that.BB.x) {
+                            that.x += overlap.x;
+                        } else {
+                            that.x -= overlap.x;
+                        }
+                        that.velocityX = 0;
+                    } else if (verticalCollision) {
+                        if (entity.BB.y < that.BB.y) {
+                            down++;
+                            that.y += overlap.y;
+                        } else {
+                            up++;
+                            that.y -= overlap.y - 1;
+                        }
+                        that.velocityY = 0;
+                    }
+                }
+            }
+        });
+
+        if (left == 0) {
+            this.y += 5;
         }
 
  
@@ -150,9 +195,7 @@ class MechaGolem {
         this.canAttackAgain = false; 
 
         const attackType = Math.random() < 0.5 ? "attack1" : "attack2";
-        this.animator = attackType === "attack1"
-            ? (this.facing === RIGHT ? this.meleeRight() : this.meleeLeft())
-            : (this.facing === RIGHT ? this.rangeAttackRight() : this.rangeAttackLeft());
+        this.animator = this.facing === RIGHT ? this.meleeRight() : this.meleeLeft();
     
         console.log("Golem attacks knight!");
 
@@ -161,7 +204,7 @@ class MechaGolem {
                 console.log("Knight takes damage!");
                 this.target.takeDamage(100);
             }
-        }, 350);
+        }, 650);
 
         setTimeout(() => {
             this.attackInProgress = false;
@@ -169,27 +212,19 @@ class MechaGolem {
             this.animator = this.idleAnimator; 
     
             if (this.target && this.BB.collide(this.target.BB)) {
-                setTimeout(() => {
-                    if (this.BB.collide(this.target.BB)) {
-                        this.attack();
-                    } else {
-                        this.canAttackAgain = true;
-                    }
-                }, 1000);
-            } else {
-                this.canAttackAgain = true;
+                if (this.BB.collide(this.target.BB)) {
+                    this.attack();
+                } else {
+                    this.canAttackAgain = true;
+                }
             }
         }, 700);
     }
 
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return;
-        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 4);
-
-        if (PARAMS.DEBUG) {
-            ctx.strokeStyle = "red";
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
-        }
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
+        this.BB.draw(ctx);
     }
 
 

@@ -12,18 +12,21 @@ class Knight {
         this.moveable = true;
         
         this.velocityX = 0;
-        this.maxVelocityX = 6;
+        this.maxVelocityX = 5;
         this.accelerationX = 0.4; 
         this.decelerationX = 0.2; 
 
         this.velocityY = 0;
-        this.maxVelocityY = 5;
-        this.accelerationY = 0.25; 
+        this.maxVelocityY = 6;
+        this.accelerationY = 0.15; 
         this.jumpSpeed = 10;
         
-        this.hp = 100;
+        this.hp = 400;
+        this.maxHP = 1000;
         this.emberCount = 100;
-        this.potionCount = 0;
+        this.maxPotionCount = 3;
+        this.potionCount = this.maxPotionCount;
+        this.potionHealCount = 200;
         this.gKeyPressed = false;
         this.potionCost = 50;
         this.invinsible = false;
@@ -52,7 +55,7 @@ class Knight {
             RightIdle : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 560, 120, 100, 10, 0.1, false, true),
             RightJump : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 641, 120, 100, 2, 0.1, false, true),
             RightRoll : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 6, 720, 120, 100, 12, 0.04, false, false),
-            RightRun : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 800, 120, 100, 10, 0.1, false, true),
+            RightRun : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 800, 120, 100, 10, 0.05, false, true),
             RightTurn : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 880, 120, 100, 3, 0.02, false, true),
             RightWallClimb : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 960, 120, 100, 7, 0.1, false, true),
             RightWallHang : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 1040, 120, 100, 1, 0.1, false, true),
@@ -68,7 +71,7 @@ class Knight {
             LeftIdle : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1691, 560, 120, 100, 10, 0.1, true, true),
             LeftJump : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2651, 641, 120, 100, 2, 0.1, true, true),
             LeftRoll : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1440, 720, 120, 100, 12, 0.04, true, false),
-            LeftRun : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1691, 800, 120, 100, 10, 0.1, true, true),
+            LeftRun : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1691, 800, 120, 100, 10, 0.05, true, true),
             LeftTurn : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2520, 880, 120, 100, 3, 0.1, false, true),
             LeftWallClimb : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2040, 960, 120, 100, 7, 0.1, false, true),
             LeftWallHang : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2760, 1040, 120, 100, 1, 0.1, false, true),
@@ -124,6 +127,14 @@ class Knight {
              }
          }
     }
+
+    respawn() {
+        this.dead = false;
+        this.hp = this.maxHP;
+        this.potionCount = this.maxPotionCount;
+        this.removeFromWorld = false;
+    }
+
     die() {
         if (!this.dead) {
             this.dead = true;
@@ -139,13 +150,14 @@ class Knight {
         }
     }
     usePotion () {
-        if (this.potionCount > 0) {
+        if (this.potionCount > 0 && this.hp < this.maxHP) {
             this.potionCount -= 1;
-            this.hp = Math.min(this.hp + 200, 1000); 
+            this.hp = Math.min(this.hp + this.potionHealCount, this.maxHP); 
             return true;
         }
         return false;
     }
+
     buyPotion () {
         if (this.emberCount >= this.potionCost) {
             this.emberCount -= this.potionCost;
@@ -158,12 +170,6 @@ class Knight {
     update() {
         if (this.dead) return;
 
-        if (!this.moveable) {
-            this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
-            this.velocityX = 0; 
-            return;
-        }
-
         if (this.y > 1000) {
             this.die();
         }
@@ -174,7 +180,6 @@ class Knight {
         }
     
         let that = this;
-        
         let left = 0;
         let right = 0;
         let up = 0;
@@ -332,6 +337,12 @@ class Knight {
             this.velocityX = Math.min(0, this.velocityX + this.decelerationX);
         }
 
+        if (!this.moveable) {
+            this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
+            this.velocityX = 0; 
+            this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
+        }
+
         this.x += this.velocityX;
         this.y += this.velocityY;
 
@@ -342,11 +353,7 @@ class Knight {
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return; 
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 3);
-        //this.BB.draw(ctx);
-        if (PARAMS.DEBUG) {
-            ctx.strokeStyle = "red";
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
-        }
+        this.BB.draw(ctx);
     };
 }
 

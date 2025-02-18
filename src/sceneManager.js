@@ -11,10 +11,12 @@ class SceneManager {
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
 
+        this.savedState = [];
+
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
 
-        this.loadLevel('startScreen', false, true, false);
+        this.loadLevel('startScreen', false, true, false, false);
     };
 
     clearEntities() {
@@ -24,23 +26,22 @@ class SceneManager {
     };
 
     respawnKnight(knight) {
+        this.knight.respawn();
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
             if (levels[levelIndex]) { 
-                this.loadLevel(levelIndex, true, false, true);
-                knight.x = this.currentCheckpoint.x;
-                knight.y = this.currentCheckpoint.y;
+                this.loadLevel(levelIndex, true, false, true, false);
                 console.log(`Respawn @ checkpoint (${knight.x}, ${knight.y}) @ level ${levelIndex}`);
             } else {
                 console.error(`Checkpoint "${levelIndex}" not found.`);
             }
         } else {
-            this.loadLevel("shopkeeper", true, false, true);
+            this.loadLevel("shopkeeper", true, false, true, false);
             console.log("Respawning @ default shopkeeper level.");
         }
     }
 
-    loadLevel(levelIndex, transition, title, dead) {
+    loadLevel(levelIndex, transition, title, dead, end) {
         this.checkpoint = false;
         this.dead = false;
         this.title = title;        
@@ -50,21 +51,26 @@ class SceneManager {
         this.x = 0;
         this.cutsceneStartTime = Date.now();
 
-
         if (!this.title) {
             if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex) {
-                this.knight = new Knight(this.game, this.currentCheckpoint.x, this.currentCheckpoint.y);
+                this.knight.x = this.currentCheckpoint.x;
+                this.knight.y = this.currentCheckpoint.y;
                 console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);
-            } else {
-                this.knight = new Knight(this.game, this.level.knightPos.x, this.level.knightPos.y);
-                console.log(`Loading level ${levelIndex} @ default spawn (${this.level.knightPos.x}, ${this.level.knightPos.y})`);
+            } else if (end) {
+                this.knight.x = this.level.endPosition.x;
+                this.knight.y = this.level.endPosition.y;
+                console.log(`Loading level ${levelIndex} @ default end spawn (${this.level.endPosition.x}, ${this.level.endPosition.y})`);
+            } else { 
+                this.knight.x = this.level.startPosition.x;
+                this.knight.y = this.level.startPosition.y;
+                console.log(`Loading level ${levelIndex} @ default start spawn (${this.level.startPosition.x}, ${this.level.startPosition.y})`);
             }
             this.game.addEntity(this.knight);
             this.game.ctx.fillRect(50, 50, 100, 100);
         }
 
         if(transition) {
-            this.game.addEntity(new TransitionScreen(this.game, levelIndex, dead))
+            this.game.addEntity(new TransitionScreen(this.game, levelIndex, dead, end))
             return;
         }
 
@@ -173,6 +179,21 @@ class SceneManager {
             }
         }
 
+        if (this.level.sharpening_wheel) {
+            for (let i = 0; i < this.level.sharpening_wheel.length; i++) {
+                let sharpening_wheel = this.level.sharpening_wheel[i];
+                this.game.addEntity(new SharpeningWheel(this.game, sharpening_wheel.x, sharpening_wheel.y));
+            }
+        }
+
+        if (this.level.knightStatue) {
+            for (let i = 0; i < this.level.knightStatue.length; i++) {
+                let knightStatue = this.level.knightStatue[i];
+                this.game.addEntity(new DungeonStatue(this.game, knightStatue.x, knightStatue.y));
+            }
+        }
+
+
         if (this.level.shieldRack) {
             for (let i = 0; i < this.level.shieldRack.length; i++) {
                 let shieldRack = this.level.shieldRack[i];
@@ -197,7 +218,7 @@ class SceneManager {
         if (this.level.dungeonDoor) {
             for (let i = 0; i < this.level.dungeonDoor.length; i++) {
                 let door = this.level.dungeonDoor[i];
-                this.game.addEntity(new DungeonDoor(this.game, door.x, door.y, door.level));
+                this.game.addEntity(new DungeonDoor(this.game, door.x, door.y, door.level, door.end));
             }
         }    
 
@@ -259,6 +280,7 @@ class SceneManager {
                 this.game.addEntity(new DungeonBackground3(this.game, background3.x, background3.y, background3.w, background3.h));
             }
         }
+        this.knight.removeFromWorld = false;
     };
 
     showInteractive(entity, text) {
@@ -281,9 +303,9 @@ class SceneManager {
         if (this.title) {
             if (this.level === levels.startScreen && (this.game.keys[' '] || this.game.keys['Enter'])) {
                 if (this.game.keys[' ']) {
-                    this.loadLevel('storyRecap', false, true, false);
+                    this.loadLevel('storyRecap', false, true, false, false);
                 } else if (this.game.keys['Enter']) {
-                    this.loadLevel('mainMenu', false, true, false);
+                    this.loadLevel('mainMenu', false, true, false, false);
                 }
                 this.music = new Audio(MAIN_MUSIC);
                 this.music.loop = true;
@@ -325,12 +347,12 @@ class SceneManager {
                     currentText.opacity = Math.min(timeIntoFade / fadeDuration, 1);
                 }
                 if (this.level === levels.storyRecap && textIndex === this.game.textOverlay.length && elapsedTime >= (this.game.textOverlay.length * fadeDuration)) {
-                    this.loadLevel("mainMenu", false, true, false);  // Load the next level
+                    this.loadLevel("mainMenu", false, true, false, false);  // Load the next level
                 }
             }
 
             if (this.level === levels.mainMenu && this.game.keys[' ']) {
-                this.loadLevel("shopkeeper", false, false, false);
+                this.loadLevel("shopkeeper", false, false, false, false);
             }
         }
 
@@ -366,37 +388,37 @@ class SceneManager {
                     ctx.fillText(text.message, text.x, text.y);
                 });
             }
-            return;
+        } else {
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = "White";
+            
+            ctx.font = '24px "Open+Sans"';
+            const boxX = 500; 
+            const boxY = 90; 
+            const boxWidth = 300; 
+            const boxHeight = 40;
+            ctx.strokeStyle = "White";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+            ctx.fillText("0", 500, 165);
+            ctx.fillText("1000", 750, 165);
+            const health = this.knight.hp;
+            const fillWidth = boxWidth * health / 1000;
+            ctx.fillStyle = "Green";
+            ctx.fillRect(boxX, boxY, fillWidth, boxHeight);
+            if (fillWidth < boxWidth) {
+                ctx.fillStyle = "Black";
+                ctx.fillRect(boxX + fillWidth, boxY, boxWidth - fillWidth, boxHeight);
+            }
+             ctx.fillStyle = "White";
+             ctx.font = '36px "Open+Sans"';
+            
+            ctx.fillText(this.knight.emberCount, 160, 120);
+            const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
+            ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
+            ctx.fillText(this.knight.potionCount, 280, 120);
+            ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80 );
         }
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = "White";
-        
-        ctx.font = '24px "Open+Sans"';
-        const boxX = 500; 
-        const boxY = 90; 
-        const boxWidth = 300; 
-        const boxHeight = 40;
-        ctx.strokeStyle = "White";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
-        ctx.fillText("0", 500, 165);
-        ctx.fillText("1000", 750, 165);
-        const health = this.knight.hp;
-        const fillWidth = boxWidth * health / 1000;
-        ctx.fillStyle = "Green";
-        ctx.fillRect(boxX, boxY, fillWidth, boxHeight);
-        if (fillWidth < boxWidth) {
-            ctx.fillStyle = "Black";
-            ctx.fillRect(boxX + fillWidth, boxY, boxWidth - fillWidth, boxHeight);
-        }
-         ctx.fillStyle = "White";
-         ctx.font = '36px "Open+Sans"';
-        
-        ctx.fillText(this.knight.emberCount, 160, 120);
-        const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
-        ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
-        ctx.fillText(this.knight.potionCount, 280, 120);
-        ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80 );
     };
 
     draw(ctx) {
