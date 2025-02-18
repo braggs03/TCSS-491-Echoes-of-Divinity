@@ -19,7 +19,7 @@ class SceneManager {
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
 
-        this.loadLevel('bossroom', false, false, false, false);
+        this.loadLevel('startScreen', false, true, false, false);
     };
 
     clearEntities() {
@@ -394,6 +394,11 @@ class SceneManager {
                     this.music.play();
                 });
             }
+            if (this.level === levels.storyRecap) {
+                if (this.game.keys['Enter']) {
+                    this.loadLevel('mainMenu', false, true, false, false);
+                }
+            }
             if (this.game.textOverlay) {
                 const currentTime = Date.now();
 
@@ -465,17 +470,18 @@ class SceneManager {
                     ctx.fillText(text.message, text.x, text.y);
                 });
             }
+        } else {
+            ctx.globalAlpha = 1;
+
+            ctx.fillStyle = "White";
+            ctx.font = '36px "Open+Sans"';
+
+            ctx.fillText(this.knight.emberCount, 170, 120);
+            const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
+            ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
+            ctx.fillText(this.knight.potionCount, 285, 120);
+            ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
         }
-        ctx.globalAlpha = 1;
-        
-         ctx.fillStyle = "White";
-         ctx.font = '36px "Open+Sans"';
-        
-        ctx.fillText(this.knight.emberCount, 170, 120);
-        const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png"); 
-        ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
-        ctx.fillText(this.knight.potionCount, 285, 120);
-        ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80 );
     };
 
     draw(ctx) {
