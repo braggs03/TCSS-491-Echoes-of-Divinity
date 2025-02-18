@@ -185,6 +185,10 @@ class Knight {
     }
 
     update() {
+
+        if (this.game.keys["o"]) {
+            console.dir(this.game.entities);
+        }
         this.updateBB();
         if (this.currentStamina < this.stamina) {
             this.currentStamina += 1;
