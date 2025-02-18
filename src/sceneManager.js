@@ -19,7 +19,7 @@ class SceneManager {
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
 
-        this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('bossroom', false, false, false, false);
     };
 
     clearEntities() {
@@ -144,7 +144,14 @@ class SceneManager {
                 this.game.addEntity(new MechaGolem(this.game, mechagolem.x, mechagolem.y));
             }
         }
-        
+
+        if (this.level.lucan) {
+            for (let i = 0; i < this.level.lucan.length; i++) {
+                let lucan = this.level.lucan[i];
+                console.log('works');
+                this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
+            }
+        }
 
         if (this.level.azucena) {
             for (let i = 0; i < this.level.azucena.length; i++) {

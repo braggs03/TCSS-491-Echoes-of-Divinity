@@ -3,6 +3,7 @@ class NightbornWarrior {
 		this.game = game;
 		this.x = x;
 		this.y = y;
+		this.inCutscene = false;
 		this.speed = 200; //350 for run, 75 for attack and idle, 250 for death and hurt
 		this.spritesheet = ASSET_MANAGER.getAsset("./resources/nightBorneWarrior/NightBorneWarrior.png");
 
@@ -10,12 +11,12 @@ class NightbornWarrior {
 
 			idleLeft: new Animator(this.spritesheet, 1080, 0, 80, 80, 9, .15, true, true),
 			runLeft: new Animator(this.spritesheet, 1320, 80, 80, 80, 6, .1, true, true),
-			AttackLeft: new Animator(this.spritesheet, 840, 160, 80, 80, 12, .1, true, false),
+			AttackLeft: new Animator(this.spritesheet, 840, 160, 80, 80, 12, .08, true, false),
 			HurtLeft: new Animator(this.spritesheet, 1400, 240, 80, 80, 5, .1, true, false),
 			DeathLeft: new Animator(this.spritesheet, 0, 320, 80, 80, 23, .1, true, false), // frame is a litle off
 			idleRight: new Animator(this.spritesheet, 1840, 0, 80, 80, 9, .15, false , true ),
 		  	runRight:  new Animator(this.spritesheet, 1840, 80, 80, 80, 6, .1, false, true ),
-		    AttackRight: new Animator(this.spritesheet, 1840, 160, 80, 80, 12, .1, false, false ),
+		    AttackRight: new Animator(this.spritesheet, 1840, 160, 80, 80, 12, .08, false, false ),
 		  	HurtRight:  new Animator(this.spritesheet, 1840, 240, 80, 80, 5, .1, false, false ),
 		 	DeathRight: new Animator(this.spritesheet, 1840, 320, 80, 80, 23, .1, false, false )
 			
@@ -42,6 +43,6 @@ class NightbornWarrior {
 	};
 
 	draw(ctx) { 
-		this.animators[this.State].drawFrame(this.game.clockTick, ctx, this.x, this.y);
+		this.animators[this.State].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 4 	);
 	};
 }
