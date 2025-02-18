@@ -48,29 +48,54 @@ const levels = {
         ]
     },
 
-    one: {
-        width: 30000,
+    tutorial: {
+        width: 2000,
         height: 0,
-        knightPos: {
+        startPosition: {
+            x: -90,
+            y: 440,
+        },
+        reina: [{ x: 300, y: 536 }],
+        azucena: [{ x: -165, y: 500 }],
+        cutscene: [{startX: -100, cutsceneNum: 0}, {startX: 3000, cutsceneNum: 1}],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }],
+        skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }],
+        gorgon: [{x: 1000, y: 424}],
+        lightning: [{x: -40, y: 40}],
+        tutorialBackground: [{ x:0, y:0, w:50, h: 1}],
+        townBackground: [{ x:0, y:0, w:50, h: 1}],
+    },
+
+    one: {
+        width: 13550,
+        height: 0,
+        startPosition: {
             x: 87,
-            y: 400,
+            y: 465,
+        },
+        endPosition: {
+            x: 14470,
+            y: 465,
         },
         checkpoint:{ //bonFire position change both
             x: 400,
             y: 465,
         },
-        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 },{ x: 20, y: 11, w: 1, h: 1 }],
-        mechagolem: [{ x: 900, y: 350 }],
+        cutscene: [{startX: 13800, cutsceneNum: 3}, {startX: 14000, cutsceneNum: 4}],
+        reina: [{ x: 14200, y: 536 }],
+        azucena: [{ x: 14300, y: 500 }],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 12, w: 2, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 97, y: 12, w: 1, h: 1 }],
+        mechagolem: [{ x: 900, y: 350 },{ x: 7500, y: 100}],
         dungeonWall: [{ x: 0, y: 0, h: 5 }],
-        dungeonDoor: [{ x: 117, y: 465, level: "two" }],
-        bonFire: [{ x: 400, y: 465, level: "one" }],
+        dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
+        bonFire: [{ x: 400, y: 465, level: "one" }, { x: 13700, y: 465, level: "one" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 
     two: {
         width: 10000,
         height: 0,
-        knightPos: {
+        startPosition: {
             x: 87,
             y: 320,
         },
@@ -79,21 +104,22 @@ const levels = {
         mechagolem: [{ x: 950, y: 270 }, {x : 1900, y: 270}],
         dungeonWall: [{ x: 0, y: 0, h: 4 }],
         dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x:3735, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
-        dungeonDoor: [{ x: 124, y: 360, level: "bossroom" }],
+        dungeonDoor: [{ x: 124, y: 360, level: "one", end: true }, { x: 1024, y: 360, level: "bossroom" }],
 
     },
 
     shopkeeper: {
         width: 1085,
         height: 0,
-        knightPos: {
-            x: 300,
-            y: 400,
+        startPosition: {
+            x: 70,
+            y: 445,
         },
         checkpoint:{ //bonFire position change both
             x: 400,
             y: 465,
         },
+        cutscene: [{startX: 70, cutsceneNum: 2}],
         dungeonBackground: [{ x: 0, y: 30, w: 25, h: 7 }],
         chandelier: [{ x: 550, y: 40 }, { x: 1650, y: 40 }],
         dungeonGround: [{ x: 0, y: 0, w: 15, h: 1 }, { x: 0, y: 17, w: 15, h: 1 }],
@@ -111,21 +137,23 @@ const levels = {
         tent: [{ x: 700, y: 478 }],
         bonFire: [{ x: 400, y: 465, level: "shopkeeper" }],
         potion: [{ x: 788, y: 570}, { x: 888, y: 570}, { x: 990, y: 570}],
+        sharpening_wheel: [{ x: 1850, y: 620 }],
+        knightStatue: [{ x: 1840, y: 210 }],
     },
 
     bossroom: {
         width: 800,
         height: 0,
-        knightPos: {
-            x: 70,
-            y: 400,
+        startPosition: {
+            x: -200,
+            y: 440,
         },
+        cutscene: [{startX: -200, cutsceneNum: 5}],
+        reina: [{ x: 200, y: 536 }],
+        azucena: [{ x: 100, y: 500 }],
+        lucan: [{x: 1200, y: 435}],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
         gorgon: [{ x: 900, y: 424 }],
-        dungeonWall: [{ x: 0, y: 0, h: 5 }],
-        dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
-
-
 };

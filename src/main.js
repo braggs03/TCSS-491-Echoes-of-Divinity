@@ -30,8 +30,12 @@ ASSET_MANAGER.queueDownload(CELES + "LightBall.png");
 ASSET_MANAGER.queueDownload(CELES + "LightCharge.png");
 ASSET_MANAGER.queueDownload(CELES + "Run.png");
 ASSET_MANAGER.queueDownload(CELES + "Walk.png");
+
+// Background
 ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND_IMAGE);
 ASSET_MANAGER.queueDownload(MENU_BACKGROUND);
+ASSET_MANAGER.queueDownload("./resources/NightSky.png");
+ASSET_MANAGER.queueDownload("./resources/town.png");
 ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND);
 ASSET_MANAGER.queueDownload(WATERFALL);
 ASSET_MANAGER.queueDownload("./resources/Title.png")
@@ -57,12 +61,17 @@ ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Attack_1.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Attack_2.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Attack_3.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Dead.png");
-ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Hurt.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Idle.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Protect.png");
+ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Hurt.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Run.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Run+attack.png");
 ASSET_MANAGER.queueDownload(SKELETON_WARRIOR + "Walk.png");
+
+// Duma
+ASSET_MANAGER.queueDownload(DUMA + "Attack.png");
+ASSET_MANAGER.queueDownload(DUMA + "Attack2.png");
+ASSET_MANAGER.queueDownload(DUMA + "Idle.png");
 
 //Music
 ASSET_MANAGER.queueDownload(BACKGROUND_MUSIC);

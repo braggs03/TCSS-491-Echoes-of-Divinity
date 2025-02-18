@@ -8,14 +8,11 @@ class Interaction {
     update() {
         if (this.game.keys["f"]) {
             if (this.game.camera.interactable ==  undefined && this.fReleased) {
-                console.dir("Got here 1");
                 this.fReleased = false;
             } else if (this.game.camera.interactable && !this.game.camera.interactable.finished && this.fReleased) {
-                console.dir("Got here 2");
                 this.fReleased = false;
                 this.game.camera.interactable.currentDialog++;
             } else if (this.game.camera.interactable && this.fReleased) {
-                console.dir("Got here 3");
                 this.fReleased = false;
                 this.game.camera.removeInteractive();
             }
@@ -25,6 +22,9 @@ class Interaction {
     }
 
     draw(ctx) {
+        ctx.strokeStyle = '#000000';
+        ctx.fillStyle = '#bbbbbb';
+        ctx.font = '36px "Open+Sans"';
         const padding = 5;
         const dialog = text[this.text][this.currentDialog];
         const maxWidthLine = dialog.reduce(
@@ -34,8 +34,6 @@ class Interaction {
             },
             0
         );
-        ctx.strokeStyle = '#000000';
-        ctx.fillStyle = '#bbbbbb';
         ctx.beginPath();
         ctx.roundRect(this.entity.BB.x - padding - maxWidthLine / 2 + this.entity.BB.width / 2, this.entity.BB.y - padding, maxWidthLine + padding * 2, -dialog.length * 50, 3);
         ctx.fill();
@@ -44,7 +42,7 @@ class Interaction {
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
         dialog.map((line, index) => {
-            ctx.fillText(line, this.entity.BB.x - maxWidthLine / 2 + this.entity.BB.width / 2, (this.entity.BB.y - dialog.length * 50) + 50 * index);
+            ctx.fillText(line, this.entity.BB.x - maxWidthLine / 2 + this.entity.BB.width / 2 + (maxWidthLine - ctx.measureText(line).width) / 2, (this.entity.BB.y - dialog.length * 50) + 50 * index);
         });
         if (this.currentDialog == text[this.text].length - 1) {
             this.finished = true;
@@ -55,7 +53,7 @@ class Interaction {
 function testInteractable(game) {
     if (!game.camera.interactable) {
         game.entities.forEach((entity) => {
-            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && game.keys["f"] && entity.text && !entity.dialogCompleted) {
+            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && entity.text && !entity.dialogCompleted && game.keys["f"]) {
                 game.camera.showInteractive(entity, entity.text);
             }
         });

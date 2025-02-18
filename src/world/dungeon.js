@@ -77,13 +77,14 @@ const DUNEGON_DOOR_WIDTH = 47;
 const DUNEGON_DOOR_HEIGHT = 39;
 
 class DungeonDoor {
-    constructor(game, x, y, level) {
-        Object.assign(this, { game, x, y, level });
+    constructor(game, x, y, level, end) {
+        Object.assign(this, { game, x, y, level, end });
 
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5.5;
         this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, DUNEGON_DOOR_WIDTH * 2.2, DUNEGON_DOOR_HEIGHT * 4.3);
         this.fReleased = false;
+        this.end = end;
     };
 
     update() {
@@ -94,8 +95,7 @@ class DungeonDoor {
         if (this.game.keys["f"]) {
             this.game.entities.forEach((entity) => {
                 if (this.fReleased && entity.BB && that.BB.collide(entity.BB) && entity instanceof Knight) {
-                    console.dir(that.level);
-                    that.game.camera.loadLevel(that.level, true, false, false);
+                    that.game.camera.loadLevel(that.level, true, false, false, this.end);
                 }
             });
         } else {
@@ -179,7 +179,6 @@ class Bonfire {
         if (this.game.keys["f"]) {
             this.game.entities.forEach((entity) => {
                 if (this.fReleased && entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
-                    console.dir(this.level);
                     this.activateCheckpoint();
                     this.fReleased = false;
                 }
@@ -241,6 +240,53 @@ class menuBackground {
         }
     };
 }
+
+const TUTORIAL_BACKGROUND_WIDTH = 640;
+const TUTORIAL_BACKGROUND_HEIGHT = 320;
+
+class tutorialBackground {
+    constructor(game, x, y, w, h) {
+        Object.assign(this, { game, x, y, w, h});
+
+        this.spritesheet = ASSET_MANAGER.getAsset('./resources/NightSky.png');
+        this.scale = 2.24;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        for (let k = 0; k < this.h; k++) {
+            for (let i = 0; i < this.w; i++) {
+                ctx.drawImage(this.spritesheet, 0, 0, TUTORIAL_BACKGROUND_WIDTH, TUTORIAL_BACKGROUND_HEIGHT, (this.x + i * TUTORIAL_BACKGROUND_WIDTH * this.scale), this.y * TUTORIAL_BACKGROUND_HEIGHT * this.scale, TUTORIAL_BACKGROUND_WIDTH * this.scale, TUTORIAL_BACKGROUND_HEIGHT * this.scale);
+            }
+        }
+    };
+}
+
+const TOWN_BACKGROUND_WIDTH = 640;
+const TOWN_BACKGROUND_HEIGHT = 320;
+
+class townBackground {
+    constructor(game, x, y, w, h) {
+        Object.assign(this, { game, x, y, w, h});
+
+        this.spritesheet = ASSET_MANAGER.getAsset('./resources/town.png');
+        this.scale = 2.24;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        for (let k = 0; k < this.h; k++) {
+            for (let i = 0; i < this.w; i++) {
+                ctx.drawImage(this.spritesheet, 0, 0, TOWN_BACKGROUND_WIDTH, TOWN_BACKGROUND_HEIGHT, (this.x + i * TOWN_BACKGROUND_WIDTH * this.scale), this.y * TOWN_BACKGROUND_HEIGHT * this.scale, TOWN_BACKGROUND_WIDTH * this.scale, TOWN_BACKGROUND_HEIGHT * this.scale);
+            }
+        }
+    };
+}
+
 const DUNEGON_GROUND2_WIDTH = 31;
 const DUNEGON_GROUND2_HEIGHT = 8;
 
@@ -332,5 +378,22 @@ class DungeonWaterfall {
 
     waterfall() {
         return new Animator(ASSET_MANAGER.getAsset(WATERFALL), 0, 0, 32, 104, 9, 0.1, false, true);
+    }
+};
+
+const DUNGEON_STATUE_WIDTH = 70;
+const DUNGEON_STATUE_HEIGHT = 70;
+class DungeonStatue {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.scale = 6.8;
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 1328, 1936, DUNGEON_STATUE_WIDTH, DUNGEON_STATUE_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, DUNGEON_STATUE_WIDTH * this.scale, DUNGEON_STATUE_HEIGHT * this.scale);
     }
 };

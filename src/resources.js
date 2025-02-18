@@ -9,10 +9,10 @@ const CELES = './resources/Celes/Celes'
 const WEREWOLF = './resources/werewolf/';
 const REINA = './resources/Reina.png';
 const AZUCENA = "./resources/Azucena.png";
+const DUMA = "./resources/Duma/Duma";
 const POTION_BOOST = './resources/Magic/8.png';
 
 // World
-
 const DUNGEON = './resources/dungeon.png'
 const TORCH = './resources/torch.png'
 const DUNGEON_BACKGROUND_IMAGE = './resources/dungeonbackground.png'

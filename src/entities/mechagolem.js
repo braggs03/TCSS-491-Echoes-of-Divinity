@@ -16,12 +16,12 @@ class MechaGolem {
         this.attackInProgress = false;
         this.attackCooldown = 0;
         this.target = null;
-        this.range = 350;
+        this.range = 1000;
         this.aggroRange = 700;
         this.attackRange = 80;
         this.idleCooldown = 0; 
         this.canAttackAgain = true; 
-
+        this.scale = 4;
         this.flickerFlag = true;
         this.flickerDuration = 0;
 
@@ -73,7 +73,7 @@ class MechaGolem {
             this.removeFromWorld = true;
         }, 1000);
     }
-    // slow down golem aarcks whenknight is rolling: 
+    // slow down golem aarcks when knight is rolling:
     update() {
         if (this.dead) return;
 
@@ -82,7 +82,51 @@ class MechaGolem {
             this.flickerFlag = !this.flickerFlag;
         }
 
- 
+        let that = this;
+        let left = 0;
+        let right = 0;
+        let up = 0;
+        let down = 0;
+        this.game.entities.forEach((entity) => {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+                const overlap = entity.BB.overlap(that.BB);
+                if (entity instanceof DungeonWall) {
+                    if (entity.BB.x < that.BB.x) {
+                        right++;
+                        that.x += overlap.x;
+                    } else if (entity.BB.x > that.BB.x) {
+                        left++;
+                        that.x -= overlap.x;
+                    }
+                } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
+                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
+                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
+        
+                    if (horizontalCollision) {
+                        if (entity.BB.x < that.BB.x) {
+                            that.x += overlap.x;
+                        } else {
+                            that.x -= overlap.x;
+                        }
+                        that.velocityX = 0;
+                    } else if (verticalCollision) {
+                        if (entity.BB.y < that.BB.y) {
+                            down++;
+                            that.y += overlap.y;
+                        } else {
+                            up++;
+                            that.y -= overlap.y - 1;
+                        }
+                        that.velocityY = 0;
+                    }
+                }
+            }
+        });
+
+        if (left == 0) {
+            this.y += 5;
+        }
+
         if (this.target && (this.target.dead || this.target.removeFromWorld)) {
             this.resetAggro();
             this.target = null;
@@ -92,7 +136,7 @@ class MechaGolem {
             this.target = this.game.entities.find(entity => 
                 entity instanceof Knight && !entity.dead
             );
- 
+            
             if (!this.attackInProgress) {
                 this.animator = this.idleAnimator;
             }
@@ -114,30 +158,27 @@ class MechaGolem {
             if (distance > this.range && this.aggro) {
                 this.resetAggro();
             }
-   
+
             else if (!this.engaged && this.BB.collide(this.target.BB)) {
                 this.aggro = true;
                 this.engaged = true;
+                this.updateBB(); 
             }
-     
+  
             else if (this.aggro) {
-                if (!this.attackInProgress) {
-                    if (distance > this.attackRange) {
-                        this.x += dx > 0 ? this.speed : -this.speed;
-                        this.animator = this.idleAnimator;
-                    } else if (this.attackCooldown <= 0) {
+                if (this.BB.collide(this.target.BB)) {
+                    
+                    if (!this.attackInProgress && this.attackCooldown <= 0) {
                         this.attack();
                     }
+                } else if (!this.attackInProgress && distance > this.attackRange) {
+                    
+                    this.x += dx > 0 ? this.speed : -this.speed;
+                    this.animator = this.idleAnimator;
                 }
             }
         } else {
-            // No target available, return to idle
             this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
-        }
-
-       
-        if (!this.aggro && !this.attackInProgress) {
-            this.animator = this.idleAnimator;
         }
 
         if (this.attackCooldown > 0) {
@@ -145,7 +186,8 @@ class MechaGolem {
         }
 
         this.updateBB();
-    }
+    } 
+        
 
     attack() {
         if (!this.target || this.target.dead || this.attackCooldown > 0) return;
@@ -154,9 +196,7 @@ class MechaGolem {
         this.canAttackAgain = false; 
 
         const attackType = Math.random() < 0.5 ? "attack1" : "attack2";
-        this.animator = attackType === "attack1"
-            ? (this.facing === RIGHT ? this.meleeRight() : this.meleeLeft())
-            : (this.facing === RIGHT ? this.rangeAttackRight() : this.rangeAttackLeft());
+        this.animator = this.facing === RIGHT ? this.meleeRight() : this.meleeLeft();
     
         console.log("Golem attacks knight!");
 
@@ -165,7 +205,7 @@ class MechaGolem {
                 console.log("Knight takes damage!");
                 this.target.takeDamage(100);
             }
-        }, 350);
+        }, 650);
 
         setTimeout(() => {
             this.attackInProgress = false;
@@ -173,15 +213,11 @@ class MechaGolem {
             this.animator = this.idleAnimator; 
     
             if (this.target && this.BB.collide(this.target.BB)) {
-                setTimeout(() => {
-                    if (this.BB.collide(this.target.BB)) {
-                        this.attack();
-                    } else {
-                        this.canAttackAgain = true;
-                    }
-                }, 1000);
-            } else {
-                this.canAttackAgain = true;
+                if (this.BB.collide(this.target.BB)) {
+                    this.attack();
+                } else {
+                    this.canAttackAgain = true;
+                }
             }
         }, 700);
     }
@@ -190,10 +226,7 @@ class MechaGolem {
         if (this.flickerDuration > 0 && !this.flickerFlag) return;
         this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 4);
         this.healthBar.draw(ctx);
-        if (PARAMS.DEBUG) {
-            ctx.strokeStyle = "red";
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
-        }
+        this.BB.draw(ctx);
     }
 
 

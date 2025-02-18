@@ -13,6 +13,8 @@ class GameEngine {
         this.click = null;
         this.mouse = null;
         this.wheel = null;
+        this.paused = false;
+        this.focus = true;
         this.keys = {};
 
         this.options = options || {
@@ -71,6 +73,20 @@ class GameEngine {
             this.rightclick = getXandY(e);
         });
 
+        this.ctx.canvas.addEventListener("keydown", event => {
+            if (event.key == "p") {
+                this.paused = !this.paused;
+            }
+        });
+
+        this.ctx.canvas.addEventListener("focusin", () => {
+            this.focus = true;
+        });
+          
+        this.ctx.canvas.addEventListener("focusout", () => {
+            this.focus = false;
+        });
+
         this.ctx.canvas.addEventListener("keydown", event => this.keys[event.key] = true);
         this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
     };
@@ -113,11 +129,21 @@ class GameEngine {
     };
 
     loop() {
-        this.clockTick = this.timer.tick();
-        this.update();
-        this.draw();
+        if (!this.paused && this.focus) {
+            this.clockTick = this.timer.tick();
+            this.update();
+            this.draw();
+        } else {
+            this.ctx.strokeStyle = '#880808';
+            this.ctx.fillStyle = '#880808';
+            this.ctx.font = '300px "Open+Sans"';
+            this.ctx.textBaseline = 'top';
+            this.ctx.textAlign = 'left';
+            const pausedText = "PAUSED";
+            const textDimensions = this.ctx.measureText(pausedText); 
+            const textHeight = textDimensions.fontBoundingBoxAscent + textDimensions.fontBoundingBoxDescent;
+            this.ctx.fillText(pausedText, PARAMS.SCREENWIDTH / 2 - textDimensions.width / 2, PARAMS.SCREENHEIGHT / 2 - textHeight / 2);
+        }
     };
 
 };
-
-// KV Le was here :)
