@@ -23,7 +23,7 @@ class Knight {
         this.jumpSpeed = 10;
 
         this.healthBar = new HealthBar(this);
-        this.maxHP = 1000; 
+        this.maxHp = 1000; 
         this.hp = 1000;
         this.height = 110;
         this.stamina = 100;
@@ -146,7 +146,7 @@ class Knight {
 
     respawn() {
         this.dead = false;
-        this.hp = this.maxHP;
+        this.hp = this.maxHp;
         this.potionCount = this.maxPotionCount;
         this.removeFromWorld = false;
     }
@@ -166,9 +166,9 @@ class Knight {
         }
     }
     usePotion () {
-        if (this.potionCount > 0 && this.hp < this.maxHP) {
+        if (this.potionCount > 0 && this.hp < this.maxHp) {
             this.potionCount -= 1;
-            this.hp = Math.min(this.hp + this.potionHealCount, this.maxHP); 
+            this.hp = Math.min(this.hp + this.potionHealCount, this.maxHp); 
             this.game.addEntity(new PotionEffect(this.game, this.x + 100, this.y + KNIGHT_HEIGHT + 1, POTION_BOOST));
             return true;
         }
