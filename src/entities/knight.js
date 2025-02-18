@@ -12,12 +12,12 @@ class Knight {
         this.moveable = true;
         
         this.velocityX = 0;
-        this.maxVelocityX = 10;
+        this.maxVelocityX = 6;
         this.accelerationX = 0.4; 
         this.decelerationX = 0.2; 
 
         this.velocityY = 0;
-        this.maxVelocityY = 10;
+        this.maxVelocityY = 5;
         this.accelerationY = 0.25; 
         this.jumpSpeed = 10;
 
@@ -144,7 +144,8 @@ class Knight {
     usePotion () {
         if (this.potionCount > 0) {
             this.potionCount -= 1;
-            this.hp = Math.min(this.hp + 200, 1000); 
+            this.hp = Math.min(this.hp + 200, this.maxHp); 
+            this.game.addEntity(new PotionEffect(this.game, this.x + 100, this.y + KNIGHT_HEIGHT + 1, POTION_BOOST));
             return true;
         }
         return false;
@@ -306,8 +307,8 @@ class Knight {
                     this.setState(this.chosenState);
                     // Check for collision with golem
                     this.game.entities.forEach(entity => {
-                        if (entity instanceof MechaGolem && !entity.dead && this.BB.collide(entity.BB)) {
-                            entity.takeDamage(100);
+                        if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && this.BB.collide(entity.BB)) {
+                            entity.takeDamage(300);
                             console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
                         }
                     });
@@ -347,10 +348,16 @@ class Knight {
         if (this.flickerDuration > 0 && !this.flickerFlag) return; 
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 3);
         this.healthBar.draw(ctx);
+        this.game.entities.forEach(entity => {
+            if (entity instanceof PotionEffect) {
+                entity.draw(ctx);
+            }
+        });
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = "red";
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
         }
     };
 }
+
 

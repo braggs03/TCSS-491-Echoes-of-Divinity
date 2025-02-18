@@ -1,7 +1,6 @@
 class NightbornWarrior {
 	constructor(game, x, y) {
 		this.game = game;
-		//this.ctx = ctx;
 		this.x = x;
 		this.y = y;
 		this.speed = 200; //350 for run, 75 for attack and idle, 250 for death and hurt
