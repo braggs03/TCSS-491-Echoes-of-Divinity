@@ -5,9 +5,9 @@ const text = {
     ],
 
     azucena1: [
-        ["Of course he is fine."],
+        ["Of course he's fine."],
         ["The two of us spent ourselves", "fighting the enemy to", "spare him the effort he'll", "need to defeat Duma."],
-        ["I doubt we'll be much help from here on"]
+        ["I've also cast a barrier around the castle that'll slay all who crosses.", "Aside from that, I doubt we'll be of much help from here on."]
     ],
 
     reina2: [
@@ -18,7 +18,18 @@ const text = {
 
     azucena2: [
         ["Finish your praises, the enemy is here."],
-        ["4th wall break here:", "Arrow Keys for Left, Right, and Jump", "E for attack", "R for Roll"],
+        ["4th wall break:", "Arrow Keys for Left, Right, and Jump", "E for Attack", "R for Roll"],
+    ],
+
+    azucena3: [
+        ["Come, I know of a safe place", "within the castle."],
+        ["Don't bother waiting for Reina.", "She's still recuperating."],
+        ["Unlike her however,", "I can fly."],
+    ],
+
+    azucena4: [
+        ["Voilà, here we can keep safe" , "as you make your way to Duma."],
+        ["4th wall break: F to interact with us or items."],
     ],
 
     reina: [

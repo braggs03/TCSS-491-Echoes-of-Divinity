@@ -9,6 +9,7 @@ class Gorgon {
         this.target = null;
         this.facingLeft = true;
         this.attackNumber = Math.floor(Math.random() * 3);
+        this.inCutscene = false;
         this.updateBB();
 
         this.animations = {
@@ -63,6 +64,10 @@ class Gorgon {
     }
 
     update() {
+        this.updateBB();
+        if (this.inCutscene) {
+            return;
+        }
         if (this.dead) {
             this.target.emberCount += 300;
             return;
@@ -92,7 +97,6 @@ class Gorgon {
                     that.target = entity;
                     that.aggro = true;
                     if (that.facingLeft) {
-                        console.log('true')
                         that.setState('LeftRun');
                     } else {
                         that.setState('RightWalk')
@@ -165,7 +169,6 @@ class Gorgon {
         }else if (this.currentState === 'LeftWalk') {
             this.x -= 150 * this.game.clockTick;
         }
-        this.updateBB();
     }
 
     draw(ctx) {

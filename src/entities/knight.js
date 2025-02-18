@@ -13,7 +13,7 @@ class Knight {
         this.inCutscene = false;
         
         this.velocityX = 0;
-        this.maxVelocityX = 6;
+        this.maxVelocityX = 10;
         this.accelerationX = 0.4; 
         this.decelerationX = 0.2; 
 
@@ -22,7 +22,9 @@ class Knight {
         this.accelerationY = 0.25; 
         this.jumpSpeed = 10;
         
-        this.hp = 100;
+        this.hp = 500;
+        this.stamina = 100;
+        this.currentStamina = 100;
         this.emberCount = 100;
         this.potionCount = 0;
         this.gKeyPressed = false;
@@ -104,10 +106,31 @@ class Knight {
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x , this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+        if (this.currentState === 'RightAttack1') {
+            if (this.animations[this.currentState].currentFrame() < 2) { // Wind-up phase
+                this.offsetX = 0; // Small range while pulling back
+            } else if (this.animations[this.currentState].currentFrame() < 4) { // Full swing
+                this.offsetX = 95; // Extend bounding box
+            } else { // Follow-through
+                this.offsetX = 0;
+            }
+            this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x + this.offsetX, this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+        } else if (this.currentState === 'LeftAttack1') {
+            if (this.animations[this.currentState].currentFrame() < 2) { // Wind-up phase
+                this.offsetX = 0; // Small range while pulling back
+            } else if (this.animations[this.currentState].currentFrame() < 4) { // Full swing
+                this.offsetX = 105; // Extend bounding box
+            } else { // Follow-through
+                this.offsetX = 0;
+            }
+            this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x - this.offsetX, this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+        } else {
+            this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x , this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+        }
     }
     takeDamage(amount) {
          if (!this.invinsible) {
+             this.invinsible = true;
              this.hp -= amount;
              console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
              if (this.hp <= 0) {
@@ -119,6 +142,7 @@ class Knight {
     }
     die() {
         if (!this.dead) {
+            this.BB = null;
             this.dead = true;
             this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
             console.log("Knight has died!");
@@ -149,12 +173,20 @@ class Knight {
     }
 
     update() {
+        if (this.currentStamina < this.stamina) {
+            this.currentStamina += 1;
+        }
         if (this.inCutscene) {
-            if (this.currentState === 'RightRoll') {
+            if (this.currentState === 'RightRun') {
+                this.x += 10;
+            } else if (this.currentState === 'LeftRun') {
+                this.x -= 10;
+            } else if (this.currentState === 'RightRoll') {
                 this.x += 10;
             } else if (this.currentState === 'LeftRoll') {
                 this.x -= 10;
             }
+
             if (this.animations[this.currentState].getDone()) {
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                 this.setState(this.chosenState);
@@ -174,6 +206,8 @@ class Knight {
         if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
+        } else {
+            this.invinsible = false;
         }
     
         let that = this;
@@ -250,9 +284,11 @@ class Knight {
         if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1'
             || this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
             if (this.currentState == 'RightRoll') {
-                this.x += 5;
+                this.invinsible = true;
+                this.x += 10;
             } else if (this.currentState == 'LeftRoll') {
-                this.x -= 5;
+                this.invinsible = true;
+                this.x -= 10;
             }
             this.updateBB();
             if (!this.animations[this.currentState].getDone()) {
@@ -300,10 +336,14 @@ class Knight {
             && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
             if (this.game.keys["e"]) {
                 if (!this.attackAnimationActive) {
+                    if (this.currentStamina < this.stamina) {
+                        return;
+                    }
                     this.velocityX = 0;
                     this.attackAnimationActive = true;
                     this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
                     this.setState(this.chosenState);
+                    this.currentStamina = 0;
                     // Check for collision with golem
                     const golem = this.game.entities.find(entity => entity instanceof MechaGolem && !entity.dead);
                     if (golem && this.BB.collide(golem.BB)) {
