@@ -46,8 +46,7 @@ class Knight {
             right: false, // Knight is to the left of the wall.
             up: false, // Knight is below the floor/cieling.
             down: false, // Knight is above the floor/cieling.
-        };
-        this.updateBB();      
+        };   
 
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
@@ -89,8 +88,6 @@ class Knight {
         
         this.dead = false;
         this.updateBB();
-
-
     };
 
     setState(state) {

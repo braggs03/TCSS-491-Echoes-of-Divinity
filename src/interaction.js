@@ -23,7 +23,6 @@ class Interaction {
 
     draw(ctx) {
         const padding = 5;
-        console.dir(this);
         const dialog = text[this.text][this.currentDialog];
         const maxWidthLine = dialog.reduce(
             (largest, element) => {

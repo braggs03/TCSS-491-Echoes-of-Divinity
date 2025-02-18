@@ -108,7 +108,7 @@ const levels = {
     shopkeeper: {
         width: 1085,
         height: 0,
-        knightPos: {
+        startPosition: {
             x: 500,
             y: 445,
         },

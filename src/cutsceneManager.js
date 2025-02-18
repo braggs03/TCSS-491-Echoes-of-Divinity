@@ -39,7 +39,7 @@ class CutsceneOne {
         this.game.camera.interactable.currentDialog++;
         await this.delay(5000);
         this.game.camera.removeInteractive();
-        this.game.camera.showInteractive(this.reina, text.reina2);
+        this.game.camera.showInteractive(this.reina, "reina2");
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
@@ -50,7 +50,7 @@ class CutsceneOne {
         await this.delay(700);
         this.skeleton.setState('LeftIdle')
         this.azucena.setState(this.azucena.idleRight())
-        this.game.camera.showInteractive(this.azucena, text.azucena2);
+        this.game.camera.showInteractive(this.azucena, "azucena2");
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(4000);
@@ -100,7 +100,7 @@ class CutsceneTwo {
         this.azucena.inCutscene = false;
         this.game.camera.inCutscene = false;
         this.game.interactable = undefined;
-        this.game.camera.loadLevel("shopkeeper", false, false, false);
+        this.game.camera.loadLevel("shopkeeper", false, false, false, false);
     }
 
     delay(ms) {
@@ -118,7 +118,7 @@ class CutsceneThree {
     async run() {
         this.knight.inCutscene = true;
         this.azucena.inCutscene = true;
-        this.game.camera.showInteractive(this.azucena, text.azucena4);
+        this.game.camera.showInteractive(this.azucena, "azucena4");
         await this.delay(3000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(3000);
