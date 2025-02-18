@@ -248,7 +248,7 @@ class tutorialBackground {
     constructor(game, x, y, w, h) {
         Object.assign(this, { game, x, y, w, h});
 
-        this.spritesheet = ASSET_MANAGER.getAsset('../resources/NightSky.png');
+        this.spritesheet = ASSET_MANAGER.getAsset('./resources/NightSky.png');
         this.scale = 2.24;
     };
 
@@ -271,7 +271,7 @@ class townBackground {
     constructor(game, x, y, w, h) {
         Object.assign(this, { game, x, y, w, h});
 
-        this.spritesheet = ASSET_MANAGER.getAsset('../resources/town.png');
+        this.spritesheet = ASSET_MANAGER.getAsset('./resources/town.png');
         this.scale = 2.24;
     };
 

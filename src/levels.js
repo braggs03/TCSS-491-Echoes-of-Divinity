@@ -51,7 +51,7 @@ const levels = {
     tutorial: {
         width: 2000,
         height: 0,
-        knightPos: {
+        startPosition: {
             x: -90,
             y: 440,
         },
