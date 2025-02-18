@@ -8,6 +8,7 @@ class NightbornWarrior {
         this.hp = 800;
         this.height = 100;
         this.healthBar = new HealthBar(this);
+		this.inCutscene = false;
 
         this.facing = RIGHT;
         this.aggro = false;
@@ -47,6 +48,22 @@ class NightbornWarrior {
         this.animators.AttackLeft = new Animator(this.spritesheet, 840, 160, 80, 80, 12, .08, true, false);
         this.animators.AttackRight = new Animator(this.spritesheet, 1840, 160, 80, 80, 12, .08, false, false);
     }
+
+	setState(state) {
+		for (let key in this.animators) {
+			if (this.currentState === key) {
+
+			} else if (this.animators.hasOwnProperty(key)) {
+				// Reset each Animator instance
+				this.animators[key].reset();
+			}
+		}
+		if (this.animators[state]) {
+			this.currentState = state;
+		} else {
+			console.error(`State '${state}' not found.`);
+		}
+	}
 
     updateBB() {
         this.lastBB = this.BB;
@@ -94,6 +111,14 @@ class NightbornWarrior {
     }
 
     update() {
+		if (this.inCutscene) {
+			if (this.currentState === "runLeft") {
+				this.x -= 10;
+			} else if (this.currentState === "runRight") {
+				this.x += 10;
+			}
+			return;
+		}
         if (this.dead) return;
         this.updateBB();
 
@@ -184,6 +209,7 @@ class NightbornWarrior {
 
     draw(ctx) {
         // Draw current animation
+		console.log('works');
         this.animators[this.state].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
         
         if (this.healthBar) this.healthBar.draw(ctx);
