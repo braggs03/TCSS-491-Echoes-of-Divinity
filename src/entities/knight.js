@@ -57,13 +57,18 @@ class Knight {
         this.flickerFlag = true;
         this.flickerDuration = 0;
         
+        this.animationLocked = false;
+        
+        this.dead = false;
+
         this.colliding = {
             left: false, // Knight is to the right of the wall.
             right: false, // Knight is to the left of the wall.
             up: false, // Knight is below the floor/cieling.
             down: false, // Knight is above the floor/cieling.
         };
-
+        
+        this.currentState = 'RightIdle';
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
             RightAttack2 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 80, 95, 100, 10, 0.1, false, false),
@@ -97,11 +102,6 @@ class Knight {
             LeftWallHang : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2760, 1040, 120, 100, 1, 0.1, false, true),
             LeftWallSlide : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2520, 1120, 120, 100, 3, 0.1, false, true),
         }
-
-        this.currentState = 'RightIdle';
-        this.animationLocked = false;
-        
-        this.dead = false;
         this.updateBB();
     };
 
@@ -223,7 +223,7 @@ class Knight {
         }
 
         if (this.flickerDuration > 0) {
-            this.flickerDuration -= this.game.clockTick;
+            this.flickerDuration -= clockTick;
             this.flickerFlag = !this.flickerFlag;
         } else {
             this.invinsible = false;
