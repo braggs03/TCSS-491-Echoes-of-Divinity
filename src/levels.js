@@ -119,7 +119,6 @@ const levels = {
             x: 400,
             y: 465,
         },
-        cutscene: [{startX: 70, cutsceneNum: 2}],
         dungeonBackground: [{ x: 0, y: 30, w: 25, h: 7 }],
         chandelier: [{ x: 550, y: 40 }, { x: 1650, y: 40 }],
         dungeonGround: [{ x: 0, y: 0, w: 15, h: 1 }, { x: 0, y: 17, w: 15, h: 1 }],

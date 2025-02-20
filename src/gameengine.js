@@ -131,7 +131,6 @@ class GameEngine {
     loop() {
         if (!this.paused && this.focus) {
             this.clockTick = this.timer.tick();
-            console.log(this.clockTick);
             this.update();
             this.draw();
         } else {

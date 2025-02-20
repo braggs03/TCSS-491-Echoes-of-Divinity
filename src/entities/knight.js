@@ -401,8 +401,9 @@ class Knight {
             this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
         }
 
-        console.log(this.velocityX);
-        console.log(this.velocityY);
+        if (this.velocityY != 0) {
+            console.log(this.velocityY);
+        }
 
         this.x += this.velocityX * clockTick;
         this.y += this.velocityY * clockTick;
