@@ -20,7 +20,10 @@ class CutsceneOne {
         this.reina.inCutscene = true;
         this.skeleton.inCutscene = true;
         this.knight.setState('RightRun');
-        await this.delay(200);
+        while (this.knight.x <= 100) {
+            this.knight.x += 10;
+            await this.delay(1);
+        }
         this.knight.setState('RightIdle');
 
         this.azucena.goRight = true;
