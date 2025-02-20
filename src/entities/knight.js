@@ -23,7 +23,7 @@ class Knight {
         this.jumpSpeed = 10;
 
         this.healthBar = new HealthBar(this);
-        this.maxHp = 1000; 
+        this.maxHp = 10; 
         this.hp = 10;
         this.height = 110;
         this.stamina = 100;
