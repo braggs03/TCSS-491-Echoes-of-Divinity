@@ -21,7 +21,8 @@ class CutsceneOne {
         this.skeleton.inCutscene = true;
         this.knight.setState('RightRun');
         while (this.knight.x <= 100) {
-            await this.delay (16);
+            this.knight.x += 10;
+            await this.delay(1);
         }
         this.knight.setState('RightIdle');
 
