@@ -328,23 +328,23 @@ class Knight {
                 this.setState(this.chosenState);
             }
         }
-    
+        
+        // To this:
         if (!that.colliding.up) {
             if (this.velocityY > 0) {
                 this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
             } else {
                 this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
             }
-            this.velocityY += this.accelerationY;
-        } else if (Math.abs(this.velocityX) > this.accelerationX) {
-            this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
-        } else {
-            this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
+            // Apply gravity acceleration with respect to time
+            this.velocityY += this.accelerationY; // Scaled to 60 FPS reference
         }
-    
+        
+        // And also fix the jumping section
         if (this.game.keys["ArrowUp"] && that.colliding.up) {
             this.colliding.up = false;
-            this.velocityY -= this.jumpSpeed;
+            // Apply initial jump velocity (should be frame-rate independent)
+            this.velocityY = -this.jumpSpeed;
         } else if (this.game.keys["ArrowLeft"] && !that.colliding.right) {
             this.facing = LEFT;
             this.velocityX -= this.accelerationX;
@@ -394,15 +394,11 @@ class Knight {
         } else if (this.velocityX < 0) {
             this.velocityX = Math.min(0, this.velocityX + this.decelerationX);
         }
-    
+
         if (!this.moveable) {
             this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
             this.velocityX = 0; 
             this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
-        }
-
-        if (this.velocityY != 0) {
-            console.log(this.velocityY);
         }
 
         this.x += this.velocityX * clockTick;
