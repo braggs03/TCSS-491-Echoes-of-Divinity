@@ -90,4 +90,6 @@ ASSET_MANAGER.downloadAll(() => {
 	new SceneManager(gameEngine);
 
 	gameEngine.start();
+
+	console.log(gameEngine.clockTick);
 });
