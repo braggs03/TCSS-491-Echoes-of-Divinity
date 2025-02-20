@@ -258,27 +258,27 @@ class Knight {
         });
     
         if (left > 0) {
-            that.colliding.left = true;
+            this.colliding.left = true;
         } else {
-            that.colliding.left = false;
+            this.colliding.left = false;
         }
     
         if (right > 0) {
-            that.colliding.right = true;
+            this.colliding.right = true;
         } else {
-            that.colliding.right = false;
+            this.colliding.right = false;
         }
     
         if (down > 0) {
-            that.colliding.down = true;
+            this.colliding.down = true;
         } else {
-            that.colliding.down = false;
+            this.colliding.down = false;
         }
     
         if (up > 0) {
-            that.colliding.up = true;
+            this.colliding.up = true;
         } else {
-            that.colliding.up = false;
+            this.colliding.up = false;
         }
     
         if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1') {
@@ -334,7 +334,7 @@ class Knight {
             } else {
                 this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
             }
-            this.velocityY += this.accelerationY;
+            this.velocityY += this.accelerationY * clockTick;
         } else if (Math.abs(this.velocityX) > this.accelerationX) {
             this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
         } else {
@@ -343,15 +343,15 @@ class Knight {
     
         if (this.game.keys["ArrowUp"] && that.colliding.up) {
             this.colliding.up = false;
-            this.velocityY -= this.jumpSpeed;
+            this.velocityY -= this.jumpSpeed * clockTick;
         } else if (this.game.keys["ArrowLeft"] && !that.colliding.right) {
             this.facing = LEFT;
-            this.velocityX -= this.accelerationX;
-            this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
+            this.velocityX -= this.accelerationX * clockTick;
+            this.velocityX = Math.max(this.velocityX, -this.maxVelocityX * clockTick);
         } else if (this.game.keys["ArrowRight"] && !that.colliding.left) {
             this.facing = RIGHT;
-            this.velocityX += this.accelerationX;
-            this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
+            this.velocityX += this.accelerationX * clockTick;
+            this.velocityX = Math.min(this.velocityX, this.maxVelocityX * clockTick);
         }
     
        
@@ -389,9 +389,9 @@ class Knight {
         }
     
         if (this.velocityX > 0) {
-            this.velocityX = Math.max(0, this.velocityX - this.decelerationX);
+            this.velocityX = Math.max(0, this.velocityX - this.decelerationX * clockTick);
         } else if (this.velocityX < 0) {
-            this.velocityX = Math.min(0, this.velocityX + this.decelerationX);
+            this.velocityX = Math.min(0, this.velocityX + this.decelerationX * clockTick);
         }
     
         if (!this.moveable) {
@@ -400,8 +400,8 @@ class Knight {
             this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
         }
     
-        this.x += this.velocityX * clockTick;
-        this.y += this.velocityY * clockTick;
+        this.x += this.velocityX;
+        this.y += this.velocityY;
         this.updateBB();
     }
 
