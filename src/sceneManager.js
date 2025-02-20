@@ -19,7 +19,7 @@ class SceneManager {
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
 
-        this.loadLevel('shopkeeper', false, false, false, false);
+        this.loadLevel('startScreen', false, true, false, false);
     };
 
     clearEntities() {

@@ -13,16 +13,15 @@ class Knight {
         this.inCutscene = false;
         
         this.velocityX = 0;
-        this.maxVelocityX = 825;
-        this.accelerationX = 66; 
-        this.decelerationX = 33;
-        
-        this.velocityY = 0;
-        this.maxVelocityY = 990;
-        this.jumpSpeed = 1650;
-        this.accelerationY = 24.75; 
+        this.maxVelocityX = 5;
+        this.accelerationX = 0.4; 
+        this.decelerationX = 0.2; 
 
-        this.rollSpeed = 825;
+        this.velocityY = 0;
+        this.maxVelocityY = 6;
+        this.accelerationY = 0.15; 
+        this.jumpSpeed = 10;
+
         this.healthBar = new HealthBar(this);
         this.maxHp = 1000; 
         this.hp = 1000;
@@ -50,7 +49,7 @@ class Knight {
             right: false, // Knight is to the left of the wall.
             up: false, // Knight is below the floor/cieling.
             down: false, // Knight is above the floor/cieling.
-        };
+        };   
 
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
@@ -84,6 +83,7 @@ class Knight {
             LeftWallClimb : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2040, 960, 120, 100, 7, 0.1, false, true),
             LeftWallHang : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2760, 1040, 120, 100, 1, 0.1, false, true),
             LeftWallSlide : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2520, 1120, 120, 100, 3, 0.1, false, true),
+
         }
 
         this.currentState = 'RightIdle';
@@ -187,12 +187,21 @@ class Knight {
         return false;
     }
     update() {
-        const clockTick = this.game.clockTick;
         this.updateBB();
         if (this.currentStamina < this.stamina) {
             this.currentStamina += 1;
         }
         if (this.inCutscene) {
+            if (this.currentState === 'RightRun') {
+                this.x += 10;
+            } else if (this.currentState === 'LeftRun') {
+                this.x -= 10;
+            } else if (this.currentState === 'RightRoll') {
+                this.x += 10;
+            } else if (this.currentState === 'LeftRoll') {
+                this.x -= 10;
+            }
+    
             if (this.animations[this.currentState].getDone()) {
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                 this.setState(this.chosenState);
@@ -313,10 +322,10 @@ class Knight {
         if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
             if (this.currentState == 'RightRoll') {
                 this.invinsible = true;
-                this.x += this.rollSpeed * clockTick;
+                this.x += 5;
             } else if (this.currentState == 'LeftRoll') {
                 this.invinsible = true;
-                this.x -= this.rollSpeed * clockTick;
+                this.x -= 5;
             }
             this.updateBB();
             if (!this.animations[this.currentState].getDone()) {
@@ -341,7 +350,14 @@ class Knight {
             this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
         }
     
-        if (this.game.keys["ArrowUp"] && that.colliding.up) {
+        if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
+            if (this.facing === RIGHT) {
+                this.velocityX = 5;
+            } else {
+                this.velocityX = 5;
+            }
+            return;
+        } else if (this.game.keys["ArrowUp"] && that.colliding.up) {
             this.colliding.up = false;
             this.velocityY -= this.jumpSpeed;
         } else if (this.game.keys["ArrowLeft"] && !that.colliding.right) {
@@ -400,8 +416,8 @@ class Knight {
             this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
         }
     
-        this.x += this.velocityX * clockTick;
-        this.y += this.velocityY * clockTick;
+        this.x += this.velocityX;
+        this.y += this.velocityY;
         this.updateBB();
     }
 
