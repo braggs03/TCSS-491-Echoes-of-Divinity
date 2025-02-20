@@ -20,7 +20,7 @@ class Knight {
         this.velocityY = 0;
         this.maxVelocityY = 990;
         this.jumpSpeed = 1650;
-        this.accelerationY = 24.75; 
+        this.accelerationY = 4125; 
 
         this.rollSpeed = 825;
         this.healthBar = new HealthBar(this);
@@ -328,24 +328,27 @@ class Knight {
                 this.setState(this.chosenState);
             }
         }
-        
-        // To this:
+    
         if (!that.colliding.up) {
             if (this.velocityY > 0) {
                 this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
             } else {
                 this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
             }
-            // Apply gravity acceleration with respect to time
-            this.velocityY += this.accelerationY; // Scaled to 60 FPS reference
+            this.velocityY += this.accelerationY * clockTick;
+        } else if (Math.abs(this.velocityX) > this.accelerationX) {
+            this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
+        } else {
+            this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
         }
-        
-        // And also fix the jumping section
+
+
+        // Apply jump force when pressing jump key
         if (this.game.keys["ArrowUp"] && that.colliding.up) {
             this.colliding.up = false;
-            // Apply initial jump velocity (should be frame-rate independent)
-            this.velocityY = -this.jumpSpeed;
-        } else if (this.game.keys["ArrowLeft"] && !that.colliding.right) {
+            this.velocityY = -this.jumpSpeed; 
+        }
+        else if (this.game.keys["ArrowLeft"] && !that.colliding.right) {
             this.facing = LEFT;
             this.velocityX -= this.accelerationX;
             this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
