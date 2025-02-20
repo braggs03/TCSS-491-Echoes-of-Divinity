@@ -9,6 +9,8 @@ class Knight {
         this.x = x;
         this.y = y;
 
+        this.height = KNIGHT_HEIGHT;
+
         this.moveable = true;
         this.inCutscene = false;
         
@@ -23,28 +25,38 @@ class Knight {
         this.accelerationY = 4125; 
 
         this.rollSpeed = 825;
+
         this.healthBar = new HealthBar(this);
         this.maxHp = 1000; 
         this.hp = 1000;
-        this.height = 110;
+
         this.stamina = 100;
         this.currentStamina = 100;
+
         this.emberCount = 100;
+        
         this.maxPotionCount = 3;
         this.potionCount = this.maxPotionCount;
         this.potionHealCount = 200;
-        this.gKeyPressed = false;
         this.potionCost = 50;
+
+        this.gKeyPressed = false;
+        
         this.invinsible = false;
+
         this.attackspeed = 0.1
         this.damage = 100;
         this.attackCooldown = false;
         this.attackAnimationActive = false;
         this.attackHitRegistered = false;
+        
         this.removeFromWorld = false;
+        
         this.facing = RIGHT;
+        
         this.flickerFlag = true;
         this.flickerDuration = 0;
+        
         this.colliding = {
             left: false, // Knight is to the right of the wall.
             right: false, // Knight is to the left of the wall.
@@ -168,6 +180,7 @@ class Knight {
             // Adjust timing to match the death animation duration
         }
     }
+
     usePotion () {
         if (this.potionCount > 0 && this.hp < this.maxHp) {
             this.potionCount -= 1;
@@ -179,13 +192,15 @@ class Knight {
     }
 
     buyPotion () {
+        let ableToBuy = false;
         if (this.emberCount >= this.potionCost) {
             this.emberCount -= this.potionCost;
             this.potionCount += 1;
-            return true;
+            ableToBuy = true;
         }
-        return false;
+        return ableToBuy;
     }
+
     update() {
         const clockTick = this.game.clockTick;
 
@@ -256,7 +271,7 @@ class Knight {
                         knight.velocityY = 0;
                     }
                 } else if (entity instanceof Potion) {
-                    if (this.game.keys['g'] && this.buyPotion()) {
+                    if (this.buyPotion()) {
                         entity.removeFromWorld = true;
                     }
                 }
@@ -311,7 +326,7 @@ class Knight {
             }
         }
     
-        if (!knight.colliding.up) {
+        if (!this.colliding.up) {
             if (this.velocityY > 0) {
                 this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
             } else {
@@ -326,15 +341,15 @@ class Knight {
 
 
         // Apply jump force when pressing jump key
-        if (this.game.keys["ArrowUp"] && knight.colliding.up) {
+        if (this.game.keys["ArrowUp"] && this.colliding.up) {
             this.colliding.up = false;
             this.velocityY = -this.jumpSpeed; 
         }
-        else if (this.game.keys["ArrowLeft"] && !knight.colliding.right) {
+        else if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
             this.facing = LEFT;
             this.velocityX -= this.accelerationX;
             this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
-        } else if (this.game.keys["ArrowRight"] && !knight.colliding.left) {
+        } else if (this.game.keys["ArrowRight"] && !this.colliding.left) {
             this.facing = RIGHT;
             this.velocityX += this.accelerationX;
             this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
