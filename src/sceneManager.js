@@ -18,7 +18,7 @@ class SceneManager {
 
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
-        this.deadcheck = false;
+        this.deadcheckpoint = false;
 
         this.loadLevel('shopkeeper', false, false, false, false);
     };
@@ -32,7 +32,7 @@ class SceneManager {
     };
 
     respawnKnight(knight) {
-        this.deadcheck = true;
+        this.deadcheckpoint = true;
         this.knight.respawn();
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
@@ -59,7 +59,7 @@ class SceneManager {
         this.cutsceneStartTime = Date.now();
 
         if (!this.title) {
-            if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheck) {
+            if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint) {
                 this.knight.x = this.currentCheckpoint.x;
                 this.knight.y = this.currentCheckpoint.y;
                 console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);
