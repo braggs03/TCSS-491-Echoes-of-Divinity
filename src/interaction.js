@@ -22,6 +22,9 @@ class Interaction {
     }
 
     draw(ctx) {
+        ctx.strokeStyle = '#000000';
+        ctx.fillStyle = '#bbbbbb';
+        ctx.font = '36px "Open+Sans"';
         const padding = 5;
         const dialog = text[this.text][this.currentDialog];
         const maxWidthLine = dialog.reduce(
@@ -31,9 +34,6 @@ class Interaction {
             },
             0
         );
-        ctx.strokeStyle = '#000000';
-        ctx.fillStyle = '#bbbbbb';
-        ctx.font = '36px "Open+Sans"';
         ctx.beginPath();
         ctx.roundRect(this.entity.BB.x - padding - maxWidthLine / 2 + this.entity.BB.width / 2, this.entity.BB.y - padding, maxWidthLine + padding * 2, -dialog.length * 50, 3);
         ctx.fill();

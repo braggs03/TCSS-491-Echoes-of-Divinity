@@ -32,10 +32,35 @@ const text = {
         ["4th wall break: F to interact with us or items."],
     ],
 
+    azucena5: [
+        ["Careful, I sense a powerful foe ahead."]
+    ],
+
+    reina3: [
+        ["Rest at the Emberlight before you go, Chosen."]
+    ],
+
+    azucena6: [
+        ["Be wary, I can sense it's here."],
+        ["It's coming!!"],
+    ],
+
+    reina4: [
+        ["Mica's Breath!!", "That's Knight Commander Lucan!?!"],
+        ["But.. you fell in Thalador.", "What happened to you?"],
+        ["Commander, have you forget yourself??"],
+        ["Come to your senses!!"],
+    ],
+
+    azucena7: [
+        ["He's gone, Reina.", "Duma has corrupted all that he is."],
+        ["Let us leave,", "you cannot help in this state."],
+    ],
+
     reina_shopkeeper: [
         ["Hello Knight!"],
         ["I am Reina."],
-        ["Feel Free to purchase", "items from me if you", "have the embers to spare."],
+        ["Feel free to purchase", "items from me if you", "have the embers to spare."],
     ],
 
     azucena_shopkeeper: [

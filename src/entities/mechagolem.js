@@ -127,7 +127,6 @@ class MechaGolem {
             this.y += 5;
         }
 
- 
         if (this.target && (this.target.dead || this.target.removeFromWorld)) {
             this.resetAggro();
             this.target = null;
@@ -137,7 +136,7 @@ class MechaGolem {
             this.target = this.game.entities.find(entity => 
                 entity instanceof Knight && !entity.dead
             );
- 
+            
             if (!this.attackInProgress) {
                 this.animator = this.idleAnimator;
             }
@@ -159,30 +158,27 @@ class MechaGolem {
             if (distance > this.range && this.aggro) {
                 this.resetAggro();
             }
-   
+
             else if (!this.engaged && this.BB.collide(this.target.BB)) {
                 this.aggro = true;
                 this.engaged = true;
+                this.updateBB(); 
             }
-     
+  
             else if (this.aggro) {
-                if (!this.attackInProgress) {
-                    if (distance > this.attackRange) {
-                        this.x += dx > 0 ? this.speed : -this.speed;
-                        this.animator = this.idleAnimator;
-                    } else if (this.attackCooldown <= 0) {
+                if (this.BB.collide(this.target.BB)) {
+                    
+                    if (!this.attackInProgress && this.attackCooldown <= 0) {
                         this.attack();
                     }
+                } else if (!this.attackInProgress && distance > this.attackRange) {
+                    
+                    this.x += dx > 0 ? this.speed : -this.speed;
+                    this.animator = this.idleAnimator;
                 }
             }
         } else {
-            // No target available, return to idle
             this.animator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
-        }
-
-       
-        if (!this.aggro && !this.attackInProgress) {
-            this.animator = this.idleAnimator;
         }
 
         if (this.attackCooldown > 0) {
@@ -190,7 +186,8 @@ class MechaGolem {
         }
 
         this.updateBB();
-    }
+    } 
+        
 
     attack() {
         if (!this.target || this.target.dead || this.attackCooldown > 0) return;
