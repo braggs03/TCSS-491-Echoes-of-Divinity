@@ -189,10 +189,12 @@ class Knight {
     update() {
         const clockTick = this.game.clockTick;
 
-        this.updateBB();
+        if (this.dead) return;
+
         if (this.currentStamina < this.stamina) {
             this.currentStamina += 1;
         }
+
         if (this.inCutscene) {
             if (this.animations[this.currentState].getDone()) {
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
@@ -200,11 +202,11 @@ class Knight {
             }
             return;
         }
-        if (this.dead) return;
     
         if (this.y > 1000) {
             this.die();
         }
+
         if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
@@ -212,75 +214,54 @@ class Knight {
             this.invinsible = false;
         }
     
-        let that = this;
-        let left = 0;
-        let right = 0;
-        let up = 0;
-        let down = 0;
+        this.colliding = {
+            right: false,
+            left: false,
+            down: false,
+            up: false,
+        }
+        let knight = this;
+        
         this.game.entities.forEach((entity) => {
-            if (entity.BB && that.BB.collide(entity.BB)) {
-                const overlap = entity.BB.overlap(that.BB);
+            if (entity.BB && knight.BB.collide(entity.BB)) {
+                const overlap = entity.BB.overlap(knight.BB);
                 if (entity instanceof DungeonWall) {
-                    if (entity.BB.x < that.BB.x) {
-                        right++;
-                        that.x += overlap.x;
-                    } else if (entity.BB.x > that.BB.x) {
-                        left++;
-                        that.x -= overlap.x;
+                    if (entity.BB.x < knight.BB.x) {
+                        this.colliding.right = true;
+                        knight.x += overlap.x;
+                    } else if (entity.BB.x > knight.BB.x) {
+                        this.colliding.left = true;
+                        knight.x -= overlap.x;
                     }
-                    that.velocityX = 0; 
+                    knight.velocityX = 0; 
                 } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
         
                     if (horizontalCollision) {
-                        if (entity.BB.x < that.BB.x) {
-                            that.x += overlap.x;
+                        if (entity.BB.x < knight.BB.x) {
+                            knight.x += overlap.x;
                         } else {
-                            that.x -= overlap.x;
+                            knight.x -= overlap.x;
                         }
-                        that.velocityX = 0;
+                        knight.velocityX = 0;
                     } else if (verticalCollision) {
-                        if (entity.BB.y < that.BB.y) {
-                            down++;
-                            that.y += overlap.y;
+                        if (entity.BB.y < knight.BB.y) {
+                            this.colliding.down = true;
+                            knight.y += overlap.y;
                         } else {
-                            up++;
-                            that.y -= overlap.y - 1;
+                            this.colliding.up = true;
+                            knight.y -= overlap.y - 1;
                         }
-                        that.velocityY = 0;
+                        knight.velocityY = 0;
                     }
                 } else if (entity instanceof Potion) {
-                    if (this.buyPotion()) {
+                    if (this.game.keys['g'] && this.buyPotion()) {
                         entity.removeFromWorld = true;
                     }
                 }
             }
         });
-    
-        if (left > 0) {
-            this.colliding.left = true;
-        } else {
-            this.colliding.left = false;
-        }
-    
-        if (right > 0) {
-            this.colliding.right = true;
-        } else {
-            this.colliding.right = false;
-        }
-    
-        if (down > 0) {
-            this.colliding.down = true;
-        } else {
-            this.colliding.down = false;
-        }
-    
-        if (up > 0) {
-            this.colliding.up = true;
-        } else {
-            this.colliding.up = false;
-        }
     
         if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1') {
             const currentFrame = this.animations[this.currentState].currentFrame();
@@ -311,13 +292,14 @@ class Knight {
                 this.hitTargets = [];
             }
         }
+
         if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
             if (this.currentState == 'RightRoll') {
                 this.invinsible = true;
-                this.x += this.rollSpeed;
+                this.x += this.rollSpeed * clockTick;
             } else if (this.currentState == 'LeftRoll') {
                 this.invinsible = true;
-                this.x -= this.rollSpeed;
+                this.x -= this.rollSpeed * clockTick;
             }
             this.updateBB();
             if (!this.animations[this.currentState].getDone()) {
@@ -329,7 +311,7 @@ class Knight {
             }
         }
     
-        if (!that.colliding.up) {
+        if (!knight.colliding.up) {
             if (this.velocityY > 0) {
                 this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
             } else {
@@ -344,15 +326,15 @@ class Knight {
 
 
         // Apply jump force when pressing jump key
-        if (this.game.keys["ArrowUp"] && that.colliding.up) {
+        if (this.game.keys["ArrowUp"] && knight.colliding.up) {
             this.colliding.up = false;
             this.velocityY = -this.jumpSpeed; 
         }
-        else if (this.game.keys["ArrowLeft"] && !that.colliding.right) {
+        else if (this.game.keys["ArrowLeft"] && !knight.colliding.right) {
             this.facing = LEFT;
             this.velocityX -= this.accelerationX;
             this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
-        } else if (this.game.keys["ArrowRight"] && !that.colliding.left) {
+        } else if (this.game.keys["ArrowRight"] && !knight.colliding.left) {
             this.facing = RIGHT;
             this.velocityX += this.accelerationX;
             this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
