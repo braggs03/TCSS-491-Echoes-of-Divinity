@@ -134,7 +134,7 @@ class SceneManager {
         if (this.level.gorgon) {
             for (let i = 0; i < this.level.gorgon.length; i++) {
                 let gorgon = this.level.gorgon[i];
-                //this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
+                this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
             }
         }
 
@@ -471,14 +471,17 @@ class SceneManager {
             }
         } else {
             ctx.globalAlpha = 1;
+            
 
             ctx.fillStyle = "White";
             ctx.font = '36px "Open+Sans"';
+            ctx.textAlign = "center";
+            ctx.textBaseline = 'top';
 
-            ctx.fillText(this.knight.emberCount, 170, 120);
+            ctx.fillText(this.knight.emberCount, 160, 100);
             const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
-            ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
-            ctx.fillText(this.knight.potionCount, 285, 120);
+            ctx.drawImage(emberImage, 1520, 2328, 8, 16, 95, 60, 40, 80);
+            ctx.fillText(this.knight.potionCount, 285, 100);
             ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
         }
     };

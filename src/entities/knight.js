@@ -173,7 +173,12 @@ class Knight {
         if (this.potionCount > 0 && this.hp < this.maxHp) {
             this.potionCount -= 1;
             this.hp = Math.min(this.hp + this.potionHealCount, this.maxHp); 
-            this.game.addEntity(new PotionEffect(this.game, this.x + 100, this.y + KNIGHT_HEIGHT + 1, POTION_BOOST));
+            this.game.addEntity(new PotionEffect(
+                this.game,
+                this.x + KNIGHT_WIDTH + 50,  // Position slightly to the right of player
+                this.y + 50,                 // Position above the player
+                "health"
+            ));
             return true;
         }
         return false;
@@ -260,8 +265,10 @@ class Knight {
                         that.velocityY = 0;
                     }
                 } else if (entity instanceof Potion) {
-                    if (this.buyPotion()) {
-                        entity.removeFromWorld = true;
+                    if (this.game.keys["f"]) {
+                        if (this.buyPotion()) {
+                            entity.removeFromWorld = true;
+                        }
                     }
                 }
             }
