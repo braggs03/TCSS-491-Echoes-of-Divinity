@@ -22,7 +22,7 @@ class Knight {
         this.velocityY = 0;
         this.maxVelocityY = 990;
         this.jumpSpeed = 1650;
-        this.accelerationY = 24.75; 
+        this.accelerationY = 4125; 
 
         this.rollSpeed = 825;
 
@@ -338,13 +338,13 @@ class Knight {
                 this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
             }
     
-    
             // Apply jump force when pressing jump key
             if (this.game.keys["ArrowUp"] && this.colliding.up) {
                 this.colliding.up = false;
-                this.velocityY = -this.jumpSpeed * clockTick; 
+                this.velocityY = -this.jumpSpeed; 
             }
-            else if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
+            
+            if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
                 this.facing = LEFT;
                 this.velocityX -= this.accelerationX;
                 this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
@@ -352,8 +352,14 @@ class Knight {
                 this.facing = RIGHT;
                 this.velocityX += this.accelerationX;
                 this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
+            } else {
+                if (this.velocityX > 0) {
+                    this.velocityX = this.velocityX - this.decelerationX;
+                } else if (this.velocityX < 0) {
+                    this.velocityX = this.velocityX + this.decelerationX;
+                }
             }
-        
+         
            
             if (this.currentState !== 'RightFall' && this.currentState !== 'LeftFall'
                 && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
@@ -388,15 +394,9 @@ class Knight {
                 }
             }
         }
-    
-        if (this.velocityX > 0) {
-            this.velocityX = Math.max(0, this.velocityX - this.decelerationX);
-        } else if (this.velocityX < 0) {
-            this.velocityX = Math.min(0, this.velocityX + this.decelerationX);
-        }
 
         if (!this.colliding.up) {
-            this.velocityY += this.accelerationY;
+            this.velocityY += this.accelerationY * clockTick;
         }
 
         if (!this.moveable) {
