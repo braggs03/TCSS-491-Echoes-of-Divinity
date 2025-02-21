@@ -342,7 +342,7 @@ class Knight {
             // Apply jump force when pressing jump key
             if (this.game.keys["ArrowUp"] && this.colliding.up) {
                 this.colliding.up = false;
-                this.velocityY = -this.jumpSpeed; 
+                this.velocityY = -this.jumpSpeed * clockTick; 
             }
             else if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
                 this.facing = LEFT;
