@@ -21,8 +21,8 @@ class Knight {
         
         this.velocityY = 0;
         this.maxVelocityY = 990;
-        this.jumpSpeed = 1650;
-        this.accelerationY = 4125; 
+        this.jumpSpeed = 50;
+        this.accelerationY = 24.75; 
 
         this.rollSpeed = 825;
 
@@ -332,7 +332,7 @@ class Knight {
                 } else {
                     this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
                 }
-            } else if (Math.abs(this.velocityX) > this.accelerationX) {
+            } else if (Math.abs(this.velocityX) > this.accelerationX * clockTick) {
                 this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
             } else {
                 this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
@@ -346,17 +346,17 @@ class Knight {
             
             if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
                 this.facing = LEFT;
-                this.velocityX -= this.accelerationX;
-                this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
+                this.velocityX -= this.accelerationX * clockTick;
+                this.velocityX = Math.max(this.velocityX, -this.maxVelocityX * clockTick);
             } else if (this.game.keys["ArrowRight"] && !this.colliding.left) {
                 this.facing = RIGHT;
-                this.velocityX += this.accelerationX;
-                this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
+                this.velocityX += this.accelerationX * clockTick;
+                this.velocityX = Math.min(this.velocityX, this.maxVelocityX * clockTick);
             } else {
                 if (this.velocityX > 0) {
-                    this.velocityX = this.velocityX - this.decelerationX;
+                    this.velocityX = this.velocityX - this.decelerationX * clockTick;
                 } else if (this.velocityX < 0) {
-                    this.velocityX = this.velocityX + this.decelerationX;
+                    this.velocityX = this.velocityX + this.decelerationX * clockTick;
                 }
             }
          
@@ -395,6 +395,12 @@ class Knight {
             }
         }
 
+        if (this.velocityX > 0) {
+            this.velocityX = Math.max(0, this.velocityX - this.decelerationX * clockTick);
+        } else if (this.velocityX < 0) {
+            this.velocityX = Math.min(0, this.velocityX + this.decelerationX * clockTick);
+        }
+
         if (!this.colliding.up) {
             this.velocityY += this.accelerationY * clockTick;
         }
@@ -405,8 +411,8 @@ class Knight {
             this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
         }
 
-        this.x += this.velocityX * clockTick;
-        this.y += this.velocityY * clockTick;
+        this.x += this.velocityX;
+        this.y += this.velocityY;
         this.updateBB();
     }
 
