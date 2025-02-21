@@ -21,7 +21,7 @@ class Knight {
         
         this.velocityY = 0;
         this.maxVelocityY = 990;
-        this.jumpSpeed = 50;
+        this.jumpSpeed = 10;
         this.accelerationY = 24.75; 
 
         this.rollSpeed = 825;
