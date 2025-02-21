@@ -22,7 +22,7 @@ class Knight {
         this.velocityY = 0;
         this.maxVelocityY = 990;
         this.jumpSpeed = 1650;
-        this.accelerationY = 4125; 
+        this.accelerationY = 24.75; 
 
         this.rollSpeed = 825;
 
@@ -69,6 +69,7 @@ class Knight {
         };
         
         this.currentState = 'RightIdle';
+        
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
             RightAttack2 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 80, 95, 100, 10, 0.1, false, false),
@@ -204,8 +205,6 @@ class Knight {
     update() {
         const clockTick = this.game.clockTick;
 
-        if (this.dead) return;
-
         if (this.currentStamina < this.stamina) {
             this.currentStamina += 1;
         }
@@ -278,114 +277,115 @@ class Knight {
             }
         });
     
-        if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1') {
-            const currentFrame = this.animations[this.currentState].currentFrame();
-            
-            if (currentFrame === 0) {
-                this.hitTargets = [];
-            }
-            
-            if (currentFrame >= 2 && currentFrame < 4) {
-                this.game.entities.forEach(entity => {
-                    if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && 
-                        this.BB.collide(entity.BB) &&
-                        !this.hitTargets.includes(entity)) {
-                        entity.takeDamage(100);
-                        console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
-                        this.hitTargets.push(entity);
-                    }
-                });
-            }
-    
-            if (!this.animations[this.currentState].getDone()) {
-                return;
-            } else {
-                this.invinsible = false;
-                this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
-                this.setState(this.chosenState);
+        if (!this.dead) { 
+            if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1') {
+                const currentFrame = this.animations[this.currentState].currentFrame();
                 
-                this.hitTargets = [];
-            }
-        }
-
-        if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
-            if (this.currentState == 'RightRoll') {
-                this.invinsible = true;
-                this.x += this.rollSpeed * clockTick;
-            } else if (this.currentState == 'LeftRoll') {
-                this.invinsible = true;
-                this.x -= this.rollSpeed * clockTick;
-            }
-            this.updateBB();
-            if (!this.animations[this.currentState].getDone()) {
-                return;
-            } else {
-                this.invinsible = false;
-                this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
-                this.setState(this.chosenState);
-            }
-        }
-    
-        if (!this.colliding.up) {
-            if (this.velocityY > 0) {
-                this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
-            } else {
-                this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
-            }
-            this.velocityY += this.accelerationY * clockTick;
-        } else if (Math.abs(this.velocityX) > this.accelerationX) {
-            this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
-        } else {
-            this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
-        }
-
-
-        // Apply jump force when pressing jump key
-        if (this.game.keys["ArrowUp"] && this.colliding.up) {
-            this.colliding.up = false;
-            this.velocityY = -this.jumpSpeed; 
-        }
-        else if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
-            this.facing = LEFT;
-            this.velocityX -= this.accelerationX;
-            this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
-        } else if (this.game.keys["ArrowRight"] && !this.colliding.left) {
-            this.facing = RIGHT;
-            this.velocityX += this.accelerationX;
-            this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
-        }
-    
-       
-        if (this.currentState !== 'RightFall' && this.currentState !== 'LeftFall'
-            && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
-            if (this.game.keys["e"]) {
-                if (!this.attackAnimationActive) {
-                    if (this.currentStamina < this.stamina) {
-                        return;
-                    }
-                    this.velocityX = 0;
-                    this.attackAnimationActive = true;
-                    this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
+                if (currentFrame === 0) {
+                    this.hitTargets = [];
+                }
+                
+                if (currentFrame >= 2 && currentFrame < 4) {
+                    this.game.entities.forEach(entity => {
+                        if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && 
+                            this.BB.collide(entity.BB) &&
+                            !this.hitTargets.includes(entity)) {
+                            entity.takeDamage(100);
+                            console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
+                            this.hitTargets.push(entity);
+                        }
+                    });
+                }
+        
+                if (!this.animations[this.currentState].getDone()) {
+                    return;
+                } else {
+                    this.invinsible = false;
+                    this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                     this.setState(this.chosenState);
-                    this.currentStamina = 0;
                     
                     this.hitTargets = [];
-                    
-                    setTimeout(() => {
-                        this.attackAnimationActive = false;
-                    }, 900);
                 }
-            } else if (this.game.keys["r"]) {
-                this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
-                this.invinsible = true;
-                this.setState(this.chosenState);
-            } else if (this.game.keys["g"]) {
-                if (!this.gKeyPressed) {
-                    this.usePotion();
-                    this.gKeyPressed = true;
+            }
+    
+            if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
+                if (this.currentState == 'RightRoll') {
+                    this.invinsible = true;
+                    this.x += this.rollSpeed * clockTick;
+                } else if (this.currentState == 'LeftRoll') {
+                    this.invinsible = true;
+                    this.x -= this.rollSpeed * clockTick;
                 }
+                this.updateBB();
+                if (!this.animations[this.currentState].getDone()) {
+                    return;
+                } else {
+                    this.invinsible = false;
+                    this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
+                    this.setState(this.chosenState);
+                }
+            }
+        
+            if (!this.colliding.up) {
+                if (this.velocityY > 0) {
+                    this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
+                } else {
+                    this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
+                }
+            } else if (Math.abs(this.velocityX) > this.accelerationX) {
+                this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
             } else {
-                this.gKeyPressed = false;
+                this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
+            }
+    
+    
+            // Apply jump force when pressing jump key
+            if (this.game.keys["ArrowUp"] && this.colliding.up) {
+                this.colliding.up = false;
+                this.velocityY = -this.jumpSpeed; 
+            }
+            else if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
+                this.facing = LEFT;
+                this.velocityX -= this.accelerationX;
+                this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
+            } else if (this.game.keys["ArrowRight"] && !this.colliding.left) {
+                this.facing = RIGHT;
+                this.velocityX += this.accelerationX;
+                this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
+            }
+        
+           
+            if (this.currentState !== 'RightFall' && this.currentState !== 'LeftFall'
+                && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
+                if (this.game.keys["e"]) {
+                    if (!this.attackAnimationActive) {
+                        if (this.currentStamina < this.stamina) {
+                            return;
+                        }
+                        this.velocityX = 0;
+                        this.attackAnimationActive = true;
+                        this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
+                        this.setState(this.chosenState);
+                        this.currentStamina = 0;
+                        
+                        this.hitTargets = [];
+                        
+                        setTimeout(() => {
+                            this.attackAnimationActive = false;
+                        }, 900);
+                    }
+                } else if (this.game.keys["r"]) {
+                    this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
+                    this.invinsible = true;
+                    this.setState(this.chosenState);
+                } else if (this.game.keys["g"]) {
+                    if (!this.gKeyPressed) {
+                        this.usePotion();
+                        this.gKeyPressed = true;
+                    }
+                } else {
+                    this.gKeyPressed = false;
+                }
             }
         }
     
@@ -393,6 +393,10 @@ class Knight {
             this.velocityX = Math.max(0, this.velocityX - this.decelerationX);
         } else if (this.velocityX < 0) {
             this.velocityX = Math.min(0, this.velocityX + this.decelerationX);
+        }
+
+        if (!this.colliding.up) {
+            this.velocityY += this.accelerationY;
         }
 
         if (!this.moveable) {

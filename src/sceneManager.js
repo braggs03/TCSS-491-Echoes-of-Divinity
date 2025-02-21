@@ -141,7 +141,9 @@ class SceneManager {
         if (this.level.mechagolem) {
             for (let i = 0; i < this.level.mechagolem.length; i++) {
                 let mechagolem = this.level.mechagolem[i];
-                this.game.addEntity(new MechaGolem(this.game, mechagolem.x, mechagolem.y));
+                if (!mechagolem.dead) {
+                    this.game.addEntity(new MechaGolem(this.game, mechagolem.x, mechagolem.y, mechagolem.dead, mechagolem));
+                }
             }
         }
 
@@ -390,7 +392,7 @@ class SceneManager {
 
                 // Ensure the audio is fully loaded before allowing playback
                 this.music.addEventListener('canplaythrough', () => {
-                    this.music.play();
+                    this.music.stop();
                 });
             }
             if (this.level === levels.storyRecap) {

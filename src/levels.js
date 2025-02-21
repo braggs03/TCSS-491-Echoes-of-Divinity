@@ -85,7 +85,7 @@ const levels = {
         reina: [{ x: 14200, y: 536 }],
         azucena: [{ x: 14300, y: 500 }],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 12, w: 2, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 97, y: 12, w: 1, h: 1 }],
-        mechagolem: [{ x: 900, y: 350 },{ x: 7500, y: 100}],
+        mechagolem: [{ x: 900, y: 350, dead: false, id: "mecha" },{ x: 7500, y: 100}],
         dungeonWall: [{ x: 0, y: 0, h: 5 }],
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
         bonFire: [{ x: 400, y: 465, level: "one" }, { x: 13700, y: 465, level: "one" }],

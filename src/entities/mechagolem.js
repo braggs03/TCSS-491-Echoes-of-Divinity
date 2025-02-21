@@ -1,6 +1,8 @@
 class MechaGolem { 
-    constructor(game, x, y) {
+    constructor(game, x, y, dead, self) {
         this.game = game;
+        this.dead = dead;
+        this.self = self;
         this.x = x;
         this.y = y;
         this.speed = 4;
@@ -65,10 +67,11 @@ class MechaGolem {
 
     die() {
         this.dead = true;
+        this.self.dead = true;
         this.animator = this.facing === RIGHT ? this.deathRight() : this.deathLeft();
         console.log("MechaGolem dies!");
         this.target.emberCount += 200;
-        
+
         setTimeout(() => {
             this.removeFromWorld = true;
         }, 1000);
