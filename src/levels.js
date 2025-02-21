@@ -146,14 +146,13 @@ const levels = {
         height: 0,
         startPosition: {
             x: -200,
-            y: 440,
+            y: 430,
         },
-        cutscene: [{startX: -200, cutsceneNum: 5}],
+        cutscene: [{startX: -300, cutsceneNum: 5}],
         reina: [{ x: 200, y: 536 }],
         azucena: [{ x: 100, y: 500 }],
         lucan: [{x: 1200, y: 435}],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
-        gorgon: [{ x: 900, y: 424 }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 };

@@ -23,3 +23,5 @@ const DUNGEON_BACKGROUND = './resources/dungeonwater2.png'
 const MENU_BACKGROUND = './resources/menuScreen.png';
 const BACKGROUND_MUSIC = './resources/background.ogg';
 const MAIN_MUSIC = './resources/maintheme.ogg';
+const LUCAN_MUSIC = './resources/LucanTheme.ogg';
+const CELES_MUSIC = './resources/CelesTheme.ogg';

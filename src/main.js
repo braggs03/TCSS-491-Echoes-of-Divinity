@@ -76,6 +76,8 @@ ASSET_MANAGER.queueDownload(DUMA + "Idle.png");
 //Music
 ASSET_MANAGER.queueDownload(BACKGROUND_MUSIC);
 ASSET_MANAGER.queueDownload(MAIN_MUSIC);
+ASSET_MANAGER.queueDownload(LUCAN_MUSIC);
+ASSET_MANAGER.queueDownload(CELES_MUSIC);
 
 
 ASSET_MANAGER.downloadAll(() => {

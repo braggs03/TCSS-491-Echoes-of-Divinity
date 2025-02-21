@@ -19,7 +19,7 @@ class SceneManager {
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
 
-        this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('bossroom', false, false, false, false);
     };
 
     clearEntities() {
@@ -34,7 +34,7 @@ class SceneManager {
         this.knight.respawn();
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
-            if (levels[levelIndex]) { 
+            if (levels[levelIndex]) {
                 this.loadLevel(levelIndex, true, false, true, false);
                 console.log(`Respawn @ checkpoint (${knight.x}, ${knight.y}) @ level ${levelIndex}`);
             } else {
@@ -49,7 +49,7 @@ class SceneManager {
     loadLevel(levelIndex, transition, title, dead, end) {
         this.checkpoint = false;
         this.dead = false;
-        this.title = title;        
+        this.title = title;
         this.level = levels[levelIndex];
         this.clearEntities();
         this.game.textOverlay = null;
@@ -66,7 +66,7 @@ class SceneManager {
                 this.knight.x = this.level.endPosition.x;
                 this.knight.y = this.level.endPosition.y;
                 console.log(`Loading level ${levelIndex} @ default end spawn (${this.level.endPosition.x}, ${this.level.endPosition.y})`);
-            } else { 
+            } else {
                 this.knight.x = this.level.startPosition.x;
                 this.knight.y = this.level.startPosition.y;
                 console.log(`Loading level ${levelIndex} @ default start spawn (${this.level.startPosition.x}, ${this.level.startPosition.y})`);
@@ -134,7 +134,7 @@ class SceneManager {
         if (this.level.gorgon) {
             for (let i = 0; i < this.level.gorgon.length; i++) {
                 let gorgon = this.level.gorgon[i];
-                //this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
+                this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
             }
         }
 
@@ -242,7 +242,7 @@ class SceneManager {
                 let door = this.level.dungeonDoor[i];
                 this.game.addEntity(new DungeonDoor(this.game, door.x, door.y, door.level, door.end));
             }
-        }    
+        }
 
         if (this.level.chandelier) {
             for (let i = 0; i < this.level.chandelier.length; i++) {
@@ -261,7 +261,7 @@ class SceneManager {
         if  (this.level.lightning) {
             for (let i = 0; i < this.level.lightning.length; i++) {
                 let lightning = this.level.lightning[i];
-                this.game.addEntity(new Lightning(this.game, lightning.x, lightning.y));
+                this.game.addEntity(new Lightning(this.game, lightning.x, lightning.y, false));
             }
         }
 
@@ -332,7 +332,7 @@ class SceneManager {
             this.cutsceneManager = new CutsceneManager(this.game);
             this.cutscene = this.level.cutscene;
         }
-        
+
         this.knight.removeFromWorld = false;
     };
 
@@ -342,7 +342,7 @@ class SceneManager {
         let oldEntities = this.game.entities;
         this.game.entities = [];
         this.game.addEntity(this.interactable);
-        oldEntities.map((entity) => this.game.addEntity(entity)); 
+        oldEntities.map((entity) => this.game.addEntity(entity));
     }
 
     removeInteractive() {
@@ -433,7 +433,7 @@ class SceneManager {
             }
 
             if (this.level === levels.mainMenu && this.game.keys[' ']) {
-                this.loadLevel("tutorial", false, false, false, false);
+                this.loadLevel("tutorial", true, false, false, false);
             }
         }
 

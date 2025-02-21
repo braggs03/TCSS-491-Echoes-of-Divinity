@@ -210,6 +210,7 @@ class CutsceneSix {
     async run() {
         this.knight.inCutscene = true;
         this.lucan.inCutscene = true;
+        this.lucan.setState('idleLeft')
         this.knight.setState('RightRun');
         while (this.knight.x < 200) {
             await this.delay (16);
@@ -219,13 +220,15 @@ class CutsceneSix {
         this.reina.inCutscene = true;
         this.azucena.inCutscene = true;
         let wall = { x: 0, y: 0, h: 5 };
-        this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
+        this.game.entities.splice(1, 0, new DungeonWall(this.game, wall.x, wall.y, wall.h))
+        //this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
+        this.game.draw()
         this.game.camera.showInteractive(this.azucena, "azucena6");
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
         this.game.camera.removeInteractive();
-        this.lucan.setState('runLeft')
+        this.lucan.setState('runLeft');
         while (this.lucan.x > 650) {
             await this.delay (16);
         }
@@ -242,6 +245,15 @@ class CutsceneSix {
         this.game.camera.showInteractive(this.azucena, "azucena7");
         await this.delay(3000);
         this.game.camera.interactable.currentDialog++;
+        this.music = new Audio(LUCAN_MUSIC);
+        this.music.loop = true;
+        this.music.preload = 'auto';
+        this.music.volume = 0.5;
+
+        // Ensure the audio is fully loaded before allowing playback
+        this.music.addEventListener('canplaythrough', () => {
+            this.music.play();
+        });
         await this.delay(2000);
         this.game.camera.removeInteractive();
         this.knight.setState('RightRun');

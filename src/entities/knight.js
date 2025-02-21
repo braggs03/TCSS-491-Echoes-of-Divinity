@@ -11,19 +11,20 @@ class Knight {
 
         this.moveable = true;
         this.inCutscene = false;
-        
+
         this.velocityX = 0;
-        this.maxVelocityX = 5;
-        this.accelerationX = 0.4; 
-        this.decelerationX = 0.2; 
+        this.maxVelocityX = 825;
+        this.accelerationX = 66;
+        this.decelerationX = 33;
 
         this.velocityY = 0;
-        this.maxVelocityY = 6;
-        this.accelerationY = 0.15; 
-        this.jumpSpeed = 10;
+        this.maxVelocityY = 990;
+        this.jumpSpeed = 1650;
+        this.accelerationY = 4125;
 
+        this.rollSpeed = 825;
         this.healthBar = new HealthBar(this);
-        this.maxHp = 1000; 
+        this.maxHp = 1000;
         this.hp = 1000;
         this.height = 110;
         this.stamina = 100;
@@ -49,7 +50,7 @@ class Knight {
             right: false, // Knight is to the left of the wall.
             up: false, // Knight is below the floor/cieling.
             down: false, // Knight is above the floor/cieling.
-        };   
+        };
 
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
@@ -83,12 +84,11 @@ class Knight {
             LeftWallClimb : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2040, 960, 120, 100, 7, 0.1, false, true),
             LeftWallHang : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2760, 1040, 120, 100, 1, 0.1, false, true),
             LeftWallSlide : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2520, 1120, 120, 100, 3, 0.1, false, true),
-
         }
 
         this.currentState = 'RightIdle';
         this.animationLocked = false;
-        
+
         this.dead = false;
         this.updateBB();
     };
@@ -135,16 +135,16 @@ class Knight {
     }
 
     takeDamage(amount) {
-         if (!this.invinsible) {
-             this.invinsible = true;
-             this.hp -= amount;
-             console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
-             if (this.hp <= 0) {
-                 this.die();
-             } else {
-                 this.flickerDuration = 0.3; // Flicker for 0.5 seconds
-             }
-         }
+        if (!this.invinsible) {
+            this.invinsible = true;
+            this.hp -= amount;
+            console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
+            if (this.hp <= 0) {
+                this.die();
+            } else {
+                this.flickerDuration = 0.3; // Flicker for 0.5 seconds
+            }
+        }
     }
 
     respawn() {
@@ -164,14 +164,14 @@ class Knight {
             setTimeout(() => {
                 this.removeFromWorld = true;
                 this.game.camera.respawnKnight(this);
-            }, 1000); 
+            }, 1000);
             // Adjust timing to match the death animation duration
         }
     }
     usePotion () {
         if (this.potionCount > 0 && this.hp < this.maxHp) {
             this.potionCount -= 1;
-            this.hp = Math.min(this.hp + this.potionHealCount, this.maxHp); 
+            this.hp = Math.min(this.hp + this.potionHealCount, this.maxHp);
             this.game.addEntity(new PotionEffect(this.game, this.x + 100, this.y + KNIGHT_HEIGHT + 1, POTION_BOOST));
             return true;
         }
@@ -187,119 +187,102 @@ class Knight {
         return false;
     }
     update() {
+        const clockTick = this.game.clockTick;
         this.updateBB();
+
+        if (this.dead) return;
+
         if (this.currentStamina < this.stamina) {
             this.currentStamina += 1;
         }
+
         if (this.inCutscene) {
-            if (this.currentState === 'RightRun') {
-                this.x += 10;
-            } else if (this.currentState === 'LeftRun') {
-                this.x -= 10;
-            } else if (this.currentState === 'RightRoll') {
-                this.x += 10;
-            } else if (this.currentState === 'LeftRoll') {
-                this.x -= 10;
+            if (this.currentState === "RightRun") {
+                this.x += this.maxVelocityX * clockTick;
+            } else if (this.currentState === "LeftRun") {
+                this.x -= this.velocityX * clockTick;
+            } else if (this.currentState === "RightRoll") {
+                this.x += this.rollSpeed * clockTick;
+            } else if (this.currentState === "RightRoll") {
+                this.x -= this.rollSpeed * clockTick;
             }
-    
             if (this.animations[this.currentState].getDone()) {
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                 this.setState(this.chosenState);
             }
             return;
         }
-        if (this.dead) return;
-    
+
         if (this.y > 1000) {
             this.die();
         }
+
         if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
         } else {
             this.invinsible = false;
         }
-    
-        let that = this;
-        let left = 0;
-        let right = 0;
-        let up = 0;
-        let down = 0;
+
+        this.colliding = {
+            right: false,
+            left: false,
+            down: false,
+            up: false,
+        }
+        let knight = this;
+
         this.game.entities.forEach((entity) => {
-            if (entity.BB && that.BB.collide(entity.BB)) {
-                const overlap = entity.BB.overlap(that.BB);
+            if (entity.BB && knight.BB.collide(entity.BB)) {
+                const overlap = entity.BB.overlap(knight.BB);
                 if (entity instanceof DungeonWall) {
-                    if (entity.BB.x < that.BB.x) {
-                        right++;
-                        that.x += overlap.x;
-                    } else if (entity.BB.x > that.BB.x) {
-                        left++;
-                        that.x -= overlap.x;
+                    if (entity.BB.x < knight.BB.x) {
+                        this.colliding.right = true;
+                        knight.x += overlap.x;
+                    } else if (entity.BB.x > knight.BB.x) {
+                        this.colliding.left = true;
+                        knight.x -= overlap.x;
                     }
-                    that.velocityX = 0; 
+                    knight.velocityX = 0;
                 } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
-        
+
                     if (horizontalCollision) {
-                        if (entity.BB.x < that.BB.x) {
-                            that.x += overlap.x;
+                        if (entity.BB.x < knight.BB.x) {
+                            knight.x += overlap.x;
                         } else {
-                            that.x -= overlap.x;
+                            knight.x -= overlap.x;
                         }
-                        that.velocityX = 0;
+                        knight.velocityX = 0;
                     } else if (verticalCollision) {
-                        if (entity.BB.y < that.BB.y) {
-                            down++;
-                            that.y += overlap.y;
+                        if (entity.BB.y < knight.BB.y) {
+                            this.colliding.down = true;
+                            knight.y += overlap.y;
                         } else {
-                            up++;
-                            that.y -= overlap.y - 1;
+                            this.colliding.up = true;
+                            knight.y -= overlap.y - 1;
                         }
-                        that.velocityY = 0;
+                        knight.velocityY = 0;
                     }
                 } else if (entity instanceof Potion) {
-                    if (this.buyPotion()) {
+                    if (this.game.keys['g'] && this.buyPotion()) {
                         entity.removeFromWorld = true;
                     }
                 }
             }
         });
-    
-        if (left > 0) {
-            that.colliding.left = true;
-        } else {
-            that.colliding.left = false;
-        }
-    
-        if (right > 0) {
-            that.colliding.right = true;
-        } else {
-            that.colliding.right = false;
-        }
-    
-        if (down > 0) {
-            that.colliding.down = true;
-        } else {
-            that.colliding.down = false;
-        }
-    
-        if (up > 0) {
-            that.colliding.up = true;
-        } else {
-            that.colliding.up = false;
-        }
-    
+
         if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1') {
             const currentFrame = this.animations[this.currentState].currentFrame();
-            
+
             if (currentFrame === 0) {
                 this.hitTargets = [];
             }
-            
+
             if (currentFrame >= 2 && currentFrame < 4) {
                 this.game.entities.forEach(entity => {
-                    if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && 
+                    if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) &&
                         this.BB.collide(entity.BB) &&
                         !this.hitTargets.includes(entity)) {
                         entity.takeDamage(100);
@@ -308,24 +291,25 @@ class Knight {
                     }
                 });
             }
-    
+
             if (!this.animations[this.currentState].getDone()) {
                 return;
             } else {
                 this.invinsible = false;
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                 this.setState(this.chosenState);
-                
+
                 this.hitTargets = [];
             }
         }
+
         if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
             if (this.currentState == 'RightRoll') {
                 this.invinsible = true;
-                this.x += 5;
+                this.x += this.rollSpeed * clockTick;
             } else if (this.currentState == 'LeftRoll') {
                 this.invinsible = true;
-                this.x -= 5;
+                this.x -= this.rollSpeed * clockTick;
             }
             this.updateBB();
             if (!this.animations[this.currentState].getDone()) {
@@ -336,41 +320,37 @@ class Knight {
                 this.setState(this.chosenState);
             }
         }
-    
-        if (!that.colliding.up) {
+
+        if (!knight.colliding.up) {
             if (this.velocityY > 0) {
                 this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
             } else {
                 this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
             }
-            this.velocityY += this.accelerationY;
+            this.velocityY += this.accelerationY * clockTick;
         } else if (Math.abs(this.velocityX) > this.accelerationX) {
             this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
         } else {
             this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
         }
-    
-        if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
-            if (this.facing === RIGHT) {
-                this.velocityX = 5;
-            } else {
-                this.velocityX = 5;
-            }
-            return;
-        } else if (this.game.keys["ArrowUp"] && that.colliding.up) {
+
+
+        // Apply jump force when pressing jump key
+        if (this.game.keys["ArrowUp"] && knight.colliding.up) {
             this.colliding.up = false;
-            this.velocityY -= this.jumpSpeed;
-        } else if (this.game.keys["ArrowLeft"] && !that.colliding.right) {
+            this.velocityY = -this.jumpSpeed;
+        }
+        else if (this.game.keys["ArrowLeft"] && !knight.colliding.right) {
             this.facing = LEFT;
             this.velocityX -= this.accelerationX;
             this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
-        } else if (this.game.keys["ArrowRight"] && !that.colliding.left) {
+        } else if (this.game.keys["ArrowRight"] && !knight.colliding.left) {
             this.facing = RIGHT;
             this.velocityX += this.accelerationX;
             this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
         }
-    
-       
+
+
         if (this.currentState !== 'RightFall' && this.currentState !== 'LeftFall'
             && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
             if (this.game.keys["e"]) {
@@ -383,9 +363,9 @@ class Knight {
                     this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
                     this.setState(this.chosenState);
                     this.currentStamina = 0;
-                    
+
                     this.hitTargets = [];
-                    
+
                     setTimeout(() => {
                         this.attackAnimationActive = false;
                     }, 900);
@@ -403,28 +383,30 @@ class Knight {
                 this.gKeyPressed = false;
             }
         }
-    
+
         if (this.velocityX > 0) {
             this.velocityX = Math.max(0, this.velocityX - this.decelerationX);
         } else if (this.velocityX < 0) {
             this.velocityX = Math.min(0, this.velocityX + this.decelerationX);
         }
-    
+
         if (!this.moveable) {
             this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
-            this.velocityX = 0; 
+            this.velocityX = 0;
             this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
         }
-    
-        this.x += this.velocityX;
-        this.y += this.velocityY;
+
+        this.x += this.velocityX * clockTick;
+        this.y += this.velocityY * clockTick;
         this.updateBB();
     }
 
     draw(ctx) {
-        if (this.flickerDuration > 0 && !this.flickerFlag) return; 
+        if (this.flickerDuration > 0 && !this.flickerFlag) return;
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 3);
-        this.healthBar.draw(ctx);
+        if (!this.inCutscene) {
+            this.healthBar.draw(ctx);
+        }
         this.game.entities.forEach(entity => {
             if (entity instanceof PotionEffect) {
                 entity.draw(ctx);
@@ -433,5 +415,3 @@ class Knight {
         this.BB.draw(ctx);
     };
 }
-
-
