@@ -7,6 +7,7 @@ class SceneManager {
         this.embers = 0;
         this.inCutscene = false;
         this.cutsceneCounter = 0;
+        this.music = null;
 
         this.menuSelectIndex = -10;
         this.creditsLineIndex = 0;
@@ -15,11 +16,14 @@ class SceneManager {
 
         this.tutorialCutsceneDone = false;
         this.shopkeeperCutsceneDone = false;
+        this.oneCutsceneDone = false;
+        this.twoCutsceneDone = false;
+        this.bossoneCutsceneDone = false;
 
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
 
-        this.loadLevel('bossroom', false, false, false, false);
+        this.loadLevel('startScreen', false, true, false, false);
     };
 
     clearEntities() {
@@ -80,6 +84,20 @@ class SceneManager {
             return;
         }
 
+        if (this.level.azucena) {
+            for (let i = 0; i < this.level.azucena.length; i++) {
+                let azucena = this.level.azucena[i];
+                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
+            }
+        }
+
+        if (this.level.reina) {
+            for (let i = 0; i < this.level.reina.length; i++) {
+                let reina = this.level.reina[i];
+                this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
+            }
+        }
+
         if (this.level.text) {
             if (this.level !== levels.mainMenu) {
                 this.level.text.forEach((text) => {
@@ -117,13 +135,6 @@ class SceneManager {
             }
         }
 
-        if (this.level.reina) {
-            for (let i = 0; i < this.level.reina.length; i++) {
-                let reina = this.level.reina[i];
-                this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
-            }
-        }
-
         if (this.level.skeleton) {
             for (let i = 0; i < this.level.skeleton.length; i++) {
                 let skeleton = this.level.skeleton[i];
@@ -149,13 +160,6 @@ class SceneManager {
             for (let i = 0; i < this.level.lucan.length; i++) {
                 let lucan = this.level.lucan[i];
                 this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
-            }
-        }
-
-        if (this.level.azucena) {
-            for (let i = 0; i < this.level.azucena.length; i++) {
-                let azucena = this.level.azucena[i];
-                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
         }
 
@@ -354,9 +358,17 @@ class SceneManager {
 
     update() {
         if (this.cutsceneManager) {
+            if (this.level === levels.tutorial) {
+                this.skeletons = this.game.entities.find(entity => entity instanceof SkeletonWarrior);
+                if (!this.skeletons) {
+                    this.tutorialCutsceneDone = false;
+                    this.game.camera.cutscene.push({startX: -300, cutsceneNum: 1})
+                }
+            }
             if (this.level === levels.tutorial && this.tutorialCutsceneDone
-                || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone) {
-
+                || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
+                || this.level === levels.one && this.oneCutsceneDone
+                || this.level === levels.two && this.twoCutsceneDone) {
             } else {
                 if (this.cutsceneCounter !== this.cutscene.length) {
                     if (!this.inCutscene && this.knight.x >= this.cutscene[this.cutsceneCounter].startX) {
@@ -373,6 +385,12 @@ class SceneManager {
                     if (this.level === levels.shopkeeper) {
                         this.shopkeeperCutsceneDone = true
                     }
+                    if (this.level === levels.one) {
+                        this.oneCutsceneDone = true
+                    }
+                    if (this.level === levels.two) {
+                        this.twoCutsceneDone = true
+                    }
                 }
             }
         }
@@ -383,6 +401,7 @@ class SceneManager {
                 } else if (this.game.keys['Enter']) {
                     this.loadLevel('mainMenu', false, true, false, false);
                 }
+
                 this.music = new Audio(MAIN_MUSIC);
                 this.music.loop = true;
                 this.music.preload = 'auto';
@@ -455,7 +474,8 @@ class SceneManager {
                 ctx.globalAlpha = 1;
             } else {
                 // Draw the black background
-                ctx.fillStyle = this.level.background;
+                ctx.globalAlpha = 1
+                ctx.fillStyle = "blue"//this.level.background; //This does not draw it black
                 ctx.fillRect(0, 0, this.level.width, this.level.height);
 
                 // Loop through the texts and apply opacity

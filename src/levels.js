@@ -34,7 +34,8 @@ const levels = {
             { x: 640, y: 571, message: "Now, the time has come for the final battle.", font: "20px Arial", color: "white" },
             { x: 640, y: 610, message: "With his companions, Azucena and Reina, Mica’s Chosen prepares to march on Thalador to confront Duma one last time.", font: "20px Arial", color: "white" },
             { x: 640, y: 649, message: "It's time for humanity to decide it's fate. Whether it will succumb to... or overcome the...", font: "20px Arial", color: "white" },
-        ]
+        ],
+        reina: [{ x: 30, y: 50 }],
     },
 
     mainMenu: {
@@ -49,7 +50,7 @@ const levels = {
     },
 
     tutorial: {
-        width: 2000,
+        width: 1500,
         height: 0,
         startPosition: {
             x: -90,
@@ -57,10 +58,9 @@ const levels = {
         },
         reina: [{ x: 300, y: 536 }],
         azucena: [{ x: -165, y: 500 }],
-        cutscene: [{startX: -100, cutsceneNum: 0}, {startX: 3000, cutsceneNum: 1}],
+        cutscene: [{startX: -100, cutsceneNum: 0}],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }],
         skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }],
-        gorgon: [{x: 1000, y: 424}],
         lightning: [{x: -40, y: 40}],
         tutorialBackground: [{ x:0, y:0, w:50, h: 1}],
         townBackground: [{ x:0, y:0, w:50, h: 1}],

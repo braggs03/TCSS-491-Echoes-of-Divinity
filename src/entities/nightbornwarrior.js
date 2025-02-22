@@ -4,7 +4,7 @@ class NightbornWarrior {
         this.x = x;
         this.y = y;
         this.maxHp = 1400;
-        this.hp = 1400;
+        this.hp = 200;
         this.height = 100;
         this.healthBar = new HealthBar(this);
 		this.inCutscene = false;
@@ -25,14 +25,15 @@ class NightbornWarrior {
         this.attackRange = 100;
         this.scale = 4;
         this.attackTimer = 0;
-        
+
         this.spritesheet = ASSET_MANAGER.getAsset("./resources/nightBorneWarrior/NightBorneWarrior.png");
+        this.sprite = ASSET_MANAGER.getAsset("./resources/nightBorneWarrior/NightBorneflip.png");
         this.animators = {
             idleLeft: new Animator(this.spritesheet, 1080, 0, 80, 80, 9, .15, true, true),
             runLeft: new Animator(this.spritesheet, 1320, 80, 80, 80, 6, .1, true, true),
             AttackLeft: new Animator(this.spritesheet, 840, 160, 80, 80, 12, .08, true, false),
             HurtLeft: new Animator(this.spritesheet, 1400, 240, 80, 80, 5, .1, true, false),
-            DeathLeft: new Animator(this.spritesheet, 0, 320, 80, 80, 23, .1, true, false),
+            DeathLeft: new Animator(this.sprite, 0, 320, 80, 80, 23, .1, true, false),
             idleRight: new Animator(this.spritesheet, 1840, 0, 80, 80, 9, .15, false, true),
             runRight: new Animator(this.spritesheet, 1840, 80, 80, 80, 6, .1, false, true),
             AttackRight: new Animator(this.spritesheet, 1840, 160, 80, 80, 12, .08, false, false),
@@ -106,6 +107,9 @@ class NightbornWarrior {
         setTimeout(() => {
             this.removeFromWorld = true;
         }, 2000);
+        if (!this.clone) {
+            this.game.camera.cutscene.push({ startX: -200, cutsceneNum: 6})
+        }
     }
 
     update() {

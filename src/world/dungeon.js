@@ -161,6 +161,12 @@ const BONFIRE_HEIGHT = 56;
 class Bonfire {
     constructor(game, x, y, level) {
         Object.assign(this, { game, x, y, level });
+        this.sound = new Audio("./resources/SoundEffects/emberLight.ogg");
+        this.sound.loop = true;
+        this.sound.volume = 0.2;
+        if (this.game.camera.knight) {
+            this.knight = this.game.camera.knight;
+        }
 
         this.animator1 = this.bonfireAnimationLit();
         this.animator2 = this.bonfireAnimationUnlit();
@@ -173,10 +179,16 @@ class Bonfire {
     };
 
     update() {
+        if (!this.sound.paused) {
+            this.sound.volume = Math.max (0, 0.2 - Math.abs(this.x - this.knight.x) / 5000);
+        }
 
         this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, BONFIRE_HEIGHT * 2.2, BONFIRE_HEIGHT * 4.3);
 
         if (this.game.keys["f"]) {
+            if (this.sound.paused) {
+                this.sound.play();
+            }
             this.game.entities.forEach((entity) => {
                 if (this.fReleased && entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
                     this.activateCheckpoint();
@@ -193,6 +205,7 @@ class Bonfire {
     }
 
     bonfireAnimationUnlit() {
+        this.sound.pause();
         return new Animator(ASSET_MANAGER.getAsset(DUNGEON), 2620, 775, 64, 56, 1, 0.1, false, true);
     }
 

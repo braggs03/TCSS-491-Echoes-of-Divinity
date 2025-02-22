@@ -52,6 +52,23 @@ class Knight {
             down: false, // Knight is above the floor/cieling.
         };
 
+        this.runSound = new Audio("./resources/SoundEffects/run.ogg");
+        this.runSound.loop = true;
+        this.runSound.playbackRate = 2;
+        this.runSound.volume = 0.2;
+        this.attackSound = new Audio("./resources/SoundEffects/knightAttack.ogg");
+        this.attackSound.loop = false;
+        this.runSound.playbackRate = 1;
+        this.attackSound.volume = 0.2;
+        this.jumpSound = new Audio("./resources/SoundEffects/jump.ogg");
+        this.jumpSound.loop = false;
+        this.jumpSound.playbackRate = 1;
+        this.jumpSound.volume = 0.2;
+        this.rollSound = new Audio("./resources/SoundEffects/roll.ogg");
+        this.rollSound.loop = false;
+        this.rollSound.playbackRate = 1;
+        this.rollSound.volume = 0.2;
+
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
             RightAttack2 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 80, 95, 100, 10, 0.1, false, false),
@@ -186,6 +203,19 @@ class Knight {
         }
         return false;
     }
+
+    pauseSound() {
+        this.rollSound.pause();
+        this.rollSound.currentTime = 0;
+        this.attackSound.pause();
+        this.attackSound.currentTime = 0;
+        this.jumpSound.pause();
+        this.jumpSound.currentTime = 0;
+        this.runSound.pause();
+        this.runSound.currentTime = 0;
+
+    }
+
     update() {
         const clockTick = this.game.clockTick;
         this.updateBB();
@@ -199,16 +229,23 @@ class Knight {
         if (this.inCutscene) {
             if (this.currentState === "RightRun") {
                 this.x += this.maxVelocityX * clockTick;
+                if (this.runSound.paused) {this.runSound.play();}
             } else if (this.currentState === "LeftRun") {
                 this.x -= this.velocityX * clockTick;
+                if (this.runSound.paused) {this.runSound.play();}
             } else if (this.currentState === "RightRoll") {
                 this.x += this.rollSpeed * clockTick;
-            } else if (this.currentState === "RightRoll") {
+                if (this.rollSound.paused) {this.rollSound.play();}
+            } else if (this.currentState === "LeftRoll") {
                 this.x -= this.rollSpeed * clockTick;
+                if (this.rollSound.paused) {this.rollSound.play();}
+            } else if (this.currentState === "RightIdle" || this.currentState === "LeftIdle") {
+                this.pauseSound();
             }
             if (this.animations[this.currentState].getDone()) {
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                 this.setState(this.chosenState);
+                this.pauseSound();
             }
             return;
         }
@@ -298,7 +335,7 @@ class Knight {
                 this.invinsible = false;
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                 this.setState(this.chosenState);
-
+                this.pauseSound();
                 this.hitTargets = [];
             }
         }
@@ -311,6 +348,9 @@ class Knight {
                 this.invinsible = true;
                 this.x -= this.rollSpeed * clockTick;
             }
+            if (this.rollSound.paused) {
+                this.rollSound.play();
+            }
             this.updateBB();
             if (!this.animations[this.currentState].getDone()) {
                 return;
@@ -318,6 +358,7 @@ class Knight {
                 this.invinsible = false;
                 this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                 this.setState(this.chosenState);
+                this.pauseSound();
             }
         }
 
@@ -326,12 +367,19 @@ class Knight {
                 this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
             } else {
                 this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
+                if(this.jumpSound.paused) {
+                    this.jumpSound.play();
+                }
             }
             this.velocityY += this.accelerationY * clockTick;
         } else if (Math.abs(this.velocityX) > this.accelerationX) {
             this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
+            if (this.runSound.paused) {
+                this.runSound.play();
+            }
         } else {
             this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
+            this.pauseSound();
         }
 
 
@@ -363,6 +411,9 @@ class Knight {
                     this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
                     this.setState(this.chosenState);
                     this.currentStamina = 0;
+                    if (this.attackSound.paused) {
+                        this.attackSound.play();
+                    }
 
                     this.hitTargets = [];
 

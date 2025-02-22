@@ -39,7 +39,10 @@ ASSET_MANAGER.queueDownload("./resources/town.png");
 ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND);
 ASSET_MANAGER.queueDownload(WATERFALL);
 ASSET_MANAGER.queueDownload("./resources/Title.png")
-ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneWarrior.png"); 
+
+// Lucan
+ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneWarrior.png");
+ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneflip.png");
 
 // Werewolf
 ASSET_MANAGER.queueDownload(WEREWOLF +"Attack_1.png");
@@ -78,6 +81,16 @@ ASSET_MANAGER.queueDownload(BACKGROUND_MUSIC);
 ASSET_MANAGER.queueDownload(MAIN_MUSIC);
 ASSET_MANAGER.queueDownload(LUCAN_MUSIC);
 ASSET_MANAGER.queueDownload(CELES_MUSIC);
+
+// Sound Effects
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/emberLight.ogg");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/fireAttack.ogg");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/jump.ogg");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/knightAttack.ogg");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/land.ogg");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/openDoor.ogg");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/run.ogg");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/roll.ogg");
 
 
 ASSET_MANAGER.downloadAll(() => {

@@ -80,6 +80,9 @@ class SkeletonWarrior {
             return;
         }
         if (this.hp < 0) {
+            setTimeout(() => {
+                this.removeFromWorld = true;
+            }, 1000);
             this.target.emberCount += 100;
             this.dead = true;
         }
