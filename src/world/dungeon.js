@@ -176,17 +176,30 @@ class Bonfire {
 
         this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, BONFIRE_HEIGHT * 2.2, BONFIRE_HEIGHT * 4.3);
 
-        if (this.game.keys["f"]) {
+        if (this.game.keys["f"] && !this.keypressed) {
             this.game.entities.forEach((entity) => {
-                if (this.fReleased && entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
+                if (entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
                     this.activateCheckpoint();
-                    this.fReleased = false;
+                    this.keypressed = true;
                 }
             });
         } else {
             this.fReleased = true;
         }
-    };
+
+        if (this.game.keys["t"] && !this.keypressed) {
+            this.game.entities.forEach((entity) => {
+                if (entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
+                    this.game.camera.openCheckpointMenu(this);
+                    this.keypressed = true;
+                }
+            });
+        }
+
+        if (!this.game.keys["f"] && !this.game.keys["t"]) {
+            this.keypressed = false;
+        }
+    }
 
     bonfireAnimationLit() {
         return new Animator(ASSET_MANAGER.getAsset(DUNGEON), 2236, 775, 64, 56, 6, 0.1, false, true);
@@ -200,10 +213,25 @@ class Bonfire {
     activateCheckpoint() {
         this.discovered = true;
         this.isCurrent = true;
-
         this.game.camera.currentCheckpoint = this;
+
+        //This is for the checkpoint to be passed into Scenemanager/loadLevel
+        if (!this.game.camera.discoveredCheckpoints.some(cp => cp === this)) {
+            this.game.camera.discoveredCheckpoints.push(this);
+        }
+
+        //This is for the checkpoint data to be passed into checkpointmenu
+        if (!this.game.camera.discoveredCheckpointsLevel.some(cp => cp.x === this.x && cp.y === this.y && cp.level === this.level)) {
+            this.game.camera.discoveredCheckpointsLevel.push({
+                x: this.x,
+                y: this.y,
+                level: this.level
+            });
+        }
+
+        // console.log("checkpointlevel",this.game.camera.discoveredCheckpointsLevel)
+
         console.log(`Checkpoint activated at (${this.x}, ${this.y}) in level: ${this.level}`)
-        // this.game.camera.loadLevel(this.level, false, false, false);
     }
 
 

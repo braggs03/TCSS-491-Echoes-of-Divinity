@@ -77,8 +77,12 @@ const levels = {
             x: 14470,
             y: 465,
         },
-        checkpoint:{ //bonFire position change both
+        checkpoint1:{ //bonFire position change both
             x: 400,
+            y: 465,
+        },
+        checkpoint2:{ //bonFire position change both
+            x: 13700,
             y: 465,
         },
         cutscene: [{startX: 13800, cutsceneNum: 3}, {startX: 14000, cutsceneNum: 4}],
