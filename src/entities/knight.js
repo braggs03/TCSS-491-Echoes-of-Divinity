@@ -16,7 +16,7 @@ class Knight {
         
         this.velocityX = 0;
         this.maxVelocityX = 825;
-        this.accelerationX = 100; 
+        this.accelerationX = 6000; 
         this.decelerationX = 3000;
         
         this.velocityY = 0;
@@ -347,11 +347,11 @@ class Knight {
         }
         else if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
             this.facing = LEFT;
-            this.velocityX -= this.accelerationX;
+            this.velocityX -= this.accelerationX * clockTick;
             this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
         } else if (this.game.keys["ArrowRight"] && !this.colliding.left) {
             this.facing = RIGHT;
-            this.velocityX += this.accelerationX;
+            this.velocityX += this.accelerationX * clockTick;
             this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
         }
     
