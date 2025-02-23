@@ -339,22 +339,25 @@ class Knight {
             this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
         }
 
-
-        // Apply jump force when pressing jump key
         if (this.game.keys["ArrowUp"] && this.colliding.up) {
             this.colliding.up = false;
             this.velocityY = -this.jumpSpeed; 
         }
-        else if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
+        else if (this.game.keys["ArrowLeft"] && !this.colliding.left) {
             this.facing = LEFT;
             this.velocityX -= this.accelerationX * clockTick;
             this.velocityX = Math.max(this.velocityX, -this.maxVelocityX);
-        } else if (this.game.keys["ArrowRight"] && !this.colliding.left) {
+        } else if (this.game.keys["ArrowRight"] && !this.colliding.right) {
             this.facing = RIGHT;
             this.velocityX += this.accelerationX * clockTick;
             this.velocityX = Math.min(this.velocityX, this.maxVelocityX);
+        } else {
+            if (this.velocityX > 0) {
+                this.velocityX = Math.max(0, this.velocityX - this.decelerationX * clockTick);
+            } else if (this.velocityX < 0) {
+                this.velocityX = Math.min(0, this.velocityX + this.decelerationX * clockTick);
+            }
         }
-    
        
         if (this.currentState !== 'RightFall' && this.currentState !== 'LeftFall'
             && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
@@ -387,12 +390,6 @@ class Knight {
             } else {
                 this.gKeyPressed = false;
             }
-        }
-    
-        if (this.velocityX > 0) {
-            this.velocityX = Math.max(0, this.velocityX - this.decelerationX * clockTick);
-        } else if (this.velocityX < 0) {
-            this.velocityX = Math.min(0, this.velocityX + this.decelerationX * clockTick);
         }
 
         if (!this.moveable) {
