@@ -333,7 +333,7 @@ class Knight {
                 this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
             }
             this.velocityY += this.accelerationY * clockTick;
-        } else if (Math.abs(this.velocityX) > this.accelerationX) {
+        } else if (Math.abs(this.velocityX) > this.accelerationX * clockTick) {
             this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
         } else {
             this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
