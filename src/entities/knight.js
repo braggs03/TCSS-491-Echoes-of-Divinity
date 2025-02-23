@@ -16,8 +16,8 @@ class Knight {
         
         this.velocityX = 0;
         this.maxVelocityX = 825;
-        this.accelerationX = 66; 
-        this.decelerationX = 33;
+        this.accelerationX = 100; 
+        this.decelerationX = 3000;
         
         this.velocityY = 0;
         this.maxVelocityY = 990;
@@ -390,9 +390,9 @@ class Knight {
         }
     
         if (this.velocityX > 0) {
-            this.velocityX = Math.max(0, this.velocityX - this.decelerationX);
+            this.velocityX = Math.max(0, this.velocityX - this.decelerationX * clockTick);
         } else if (this.velocityX < 0) {
-            this.velocityX = Math.min(0, this.velocityX + this.decelerationX);
+            this.velocityX = Math.min(0, this.velocityX + this.decelerationX * clockTick);
         }
 
         if (!this.moveable) {
