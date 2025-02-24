@@ -22,6 +22,9 @@ class SceneManager {
 
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
+        this.deadcheckpoint = false;
+        this.discoveredCheckpoints = [];
+        this.discoveredCheckpointsLevel = [];
 
         this.loadLevel('shopkeeper', false, false, false, false);
     };
@@ -43,6 +46,7 @@ class SceneManager {
     };
 
     respawnKnight(knight) {
+        this.deadcheckpoint = true;
         this.knight.respawn();
         this.music.pause();
         if (this.currentCheckpoint) {
@@ -69,8 +73,7 @@ class SceneManager {
         }
 
         this.checkpoint = false;
-        this.dead = false;
-        this.title = title;
+        this.title = title;        
         this.level = levels[levelIndex];
         this.saveEntities();
         this.clearEntities();
@@ -84,10 +87,10 @@ class SceneManager {
         this.cutsceneStartTime = Date.now();
         
         if (!this.title) {
-            if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex) {
+            if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint) {
                 this.knight.x = this.currentCheckpoint.x;
                 this.knight.y = this.currentCheckpoint.y;
-                console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);
+                console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);     
             } else if (end) {
                 this.knight.x = this.level.endPosition.x;
                 this.knight.y = this.level.endPosition.y;
@@ -431,6 +434,36 @@ class SceneManager {
         levels[levelIndex] = structuredClone(originalLevels[levelIndex]);
     }
 
+    openCheckpointMenu(entity) {
+        this.knight.moveable = false;
+        this.teleportMenu = new CheckpointMenu(this.game, entity);
+        let oldEntities = this.game.entities;
+        this.game.entities = [];
+        this.game.addEntity(this.teleportMenu);
+        oldEntities.map((entity) => this.game.addEntity(entity)); 
+        console.log("opened checkpoint menu");
+    }
+
+    closeCheckpointMenu() {
+        this.knight.moveable = true;
+        this.teleportMenu.removeFromWorld = true;
+        console.log("closed checkpoint menu");
+    }
+
+    teleportToCheckpoint(knight) {
+        this.deadcheckpoint = true;
+        if (this.currentCheckpoint) {
+            const levelIndex = this.currentCheckpoint.level;
+            if (levels[levelIndex]) { 
+                this.loadLevel(levelIndex, true, false, false, false);
+                console.log(`Respawn @ checkpoint (${knight.x}, ${knight.y}) @ level ${levelIndex}`);
+            } else {
+                console.error(`Checkpoint "${levelIndex}" not found.`);
+            }
+        }         
+            
+    }
+
     update() {
         if (this.music) {
             if (PARAMS.MUSICOFF) {
@@ -594,6 +627,7 @@ class SceneManager {
             ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
             ctx.fillText(this.knight.potionCount, 285, 120);
             ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
+            
         }
     };
 

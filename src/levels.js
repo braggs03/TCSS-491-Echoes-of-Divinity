@@ -77,12 +77,20 @@ let levels = {
             x: 14470,
             y: 465,
         },
-        checkpoint:{ //bonFire position change both
+        checkpoint1:{ //bonFire position change both
             x: 400,
             y: 465,
         },
+        checkpoint2:{ //bonFire position change both
+            x: 13700,
+            y: 465,
+        },
+        cutscene: [{startX: 13800, cutsceneNum: 3}, {startX: 14000, cutsceneNum: 4}],
+        reina: [{ x: 14200, y: 536 }],
+        azucena: [{ x: 14300, y: 500 }],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 12, w: 2, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 97, y: 12, w: 1, h: 1 }],
-        mechagolem: [{ x: 900, y: 350, dead: false },{ x: 7500, y: 100, dead: false }],
+        skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }, { x: 9000, y: 424 }, { x: 9200, y: 424 }, { x: 9400, y: 424 }, { x: 9600, y: 424 }],
+        mechagolem: [{ x: 4500, y: 350 },{ x: 7500, y: 100},{ x: 12500, y: 350}],
         dungeonWall: [{ x: 0, y: 0, h: 5 }],
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
         bonFire: [{ x: 13700, y: 465, level: "one" }],

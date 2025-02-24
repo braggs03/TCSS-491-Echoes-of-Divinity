@@ -10,7 +10,8 @@ class TransitionScreen {
 
         if(this.dead){
             if (this.elapsed > 2) {
-                this.game.camera.loadLevel(this.level, false, false, false, false);            
+                this.game.camera.loadLevel(this.level, false, false, false, false); 
+                this.game.camera.deadcheckpoint = false;           
             }
         } else {
             if (this.elapsed > 0.3) {

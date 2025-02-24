@@ -194,7 +194,7 @@ class Knight {
             this.dead = true;
             this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
             console.log("Knight has died!");
-
+        
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
