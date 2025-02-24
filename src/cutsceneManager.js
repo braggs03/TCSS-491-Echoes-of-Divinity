@@ -313,6 +313,7 @@ class CutsceneSeven {
             this.game.camera.music.volume = Math.max ( this.game.camera.music.volume - (0.1 * this.game.clockTick), 0.0);
             await this.delay(16);
         }
+        this.game.camera.music.pause()
         this.knight.setState('RightRun');
         while (this.knight.x < 1300) {
             await this.delay (16);
