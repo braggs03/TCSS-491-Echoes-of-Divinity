@@ -84,11 +84,13 @@ class CutsceneTwo {
     }
 
     async run() {
-        while (this.game.camera.music.volume > 0.0) {
-            this.game.camera.music.volume = Math.max ( this.game.camera.music.volume - (0.1 * this.game.clockTick), 0.0);
-        }
         this.knight.inCutscene = true;
         this.azucena.inCutscene = true;
+        this.knight.setState('LeftIdle');
+        while (this.game.camera.music.volume > 0.0) {
+            this.game.camera.music.volume = Math.max ( this.game.camera.music.volume - (0.1 * this.game.clockTick), 0.0);
+            await this.delay(16);
+        }
         this.knight.setState("RightRun");
         while (this.knight.x < 2500) {
             await this.delay (16);
