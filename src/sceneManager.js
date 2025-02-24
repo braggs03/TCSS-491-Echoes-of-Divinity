@@ -22,6 +22,14 @@ class SceneManager {
         this.loadLevel('shopkeeper', false, false, false, false);
     };
 
+    saveEntities() {
+        this.game.entities.forEach((entity) => {
+            if (typeof entity.save === 'function') {
+                entity.save();
+            }
+        });
+    };
+
     clearEntities() {
         this.game.entities.forEach((entity) => {
             entity.removeFromWorld = true;
@@ -51,12 +59,13 @@ class SceneManager {
         this.dead = false;
         this.title = title;        
         this.level = levels[levelIndex];
+        this.saveEntities();
         this.clearEntities();
         this.game.textOverlay = null;
         this.x = 0;
         this.cutsceneCounter = 0;
         this.cutsceneStartTime = Date.now();
-
+        
         if (!this.title) {
             if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex) {
                 this.knight.x = this.currentCheckpoint.x;
@@ -69,6 +78,7 @@ class SceneManager {
             } else { 
                 this.knight.x = this.level.startPosition.x;
                 this.knight.y = this.level.startPosition.y;
+                this.emberDrop = null;
                 console.log(`Loading level ${levelIndex} @ default start spawn (${this.level.startPosition.x}, ${this.level.startPosition.y})`);
             }
             this.game.addEntity(this.knight);
@@ -142,7 +152,7 @@ class SceneManager {
             for (let i = 0; i < this.level.mechagolem.length; i++) {
                 let mechagolem = this.level.mechagolem[i];
                 if (!mechagolem.dead) {
-                    this.game.addEntity(new MechaGolem(this.game, mechagolem.x, mechagolem.y, mechagolem.dead, mechagolem));
+                    this.game.addEntity(new MechaGolem(this.game, mechagolem));
                 }
             }
         }
@@ -334,9 +344,17 @@ class SceneManager {
             this.cutsceneManager = new CutsceneManager(this.game);
             this.cutscene = this.level.cutscene;
         }
+
+        this.loadEmberDrop();
         
         this.knight.removeFromWorld = false;
     };
+
+    loadEmberDrop() {
+        if (this.emberDrop && this.levelIndex == this.emberDrop.levelIndex) {
+            this.game.entities.splice(0, 0, this.emberDrop);
+        }
+    }
 
     showInteractive(entity, text) {
         this.knight.moveable = false;
@@ -352,6 +370,10 @@ class SceneManager {
         this.interactable.entity.dialogCompleted = true;
         this.interactable.removeFromWorld = true;
         this.interactable = undefined;
+    }
+
+    resetLevel(levelIndex) {
+        levels[levelIndex] = structuredClone(originalLevels[levelIndex]);
     }
 
     update() {

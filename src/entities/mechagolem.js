@@ -1,14 +1,20 @@
+const MECHA_GOLEM_DEFAULTS = {
+    maxHp: 1000, 
+    Hp: 1000,
+    dead: false,
+}
+
 class MechaGolem { 
-    constructor(game, x, y, dead, self) {
+    constructor(game, self) {
         this.game = game;
-        this.dead = dead;
         this.self = self;
-        this.x = x;
-        this.y = y;
+        this.x = this.self.x;
+        this.y = this.self.y;
+        this.dead = this.self.dead ? this.self.dead : MECHA_GOLEM_DEFAULTS.dead;
         this.speed = 4;
         this.healthBar = new HealthBar(this);
-        this.maxHp = 1000; 
-        this.hp = 1000;
+        this.maxHp = MECHA_GOLEM_DEFAULTS.maxHp; 
+        this.hp = this.self.hp ? this.self.hp : MECHA_GOLEM_DEFAULTS.maxHp;
         this.height = 90; 
 
         this.facing = RIGHT;
@@ -30,6 +36,13 @@ class MechaGolem {
         this.idleAnimator = this.idleRight();
         this.animator = this.idleAnimator;
         this.updateBB();
+    }
+
+    save() {
+        this.self.x = this.x;
+        this.self.y = this.y;
+        this.self.hp = this.hp;
+        this.self.dead = this.dead;
     }
 
     updateBB() {

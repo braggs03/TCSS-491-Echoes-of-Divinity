@@ -79,11 +79,11 @@ class GameEngine {
             }
         });
 
-        this.ctx.canvas.addEventListener("focusin", () => {
+        window.addEventListener("focusin", () => {
             this.focus = true;
         });
           
-        this.ctx.canvas.addEventListener("focusout", () => {
+        window.addEventListener("focusout", () => {
             this.focus = false;
         });
 

@@ -397,3 +397,29 @@ class DungeonStatue {
         ctx.drawImage(this.spritesheet, 1328, 1936, DUNGEON_STATUE_WIDTH, DUNGEON_STATUE_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, DUNGEON_STATUE_WIDTH * this.scale, DUNGEON_STATUE_HEIGHT * this.scale);
     }
 };
+
+class DungeonTorch2 {
+    constructor(game, x, y, emberCount, levelIndex) {
+        Object.assign(this, { game, x, y, emberCount, levelIndex });
+        this.animator = this.ember();
+        this.scale = 5.5;
+        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+
+    };
+
+    update() {
+        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+        if (this.game.camera.knight.BB.collide(this.BB) && this.game.keys["f"]) {
+            this.game.camera.knight.emberCount += this.emberCount;
+            this.removeFromWorld = true;
+        }
+    };
+
+    draw(ctx) {
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, 4);
+    }
+
+    ember() {
+        return new Animator(ASSET_MANAGER.getAsset(TORCH), 0, 0, 21, 27, 4, 0.1, false, true);
+    }
+};
