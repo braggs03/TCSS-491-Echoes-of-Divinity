@@ -34,7 +34,7 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('shopkeeper', false, false, false, false);
+        this.loadLevel('startScreen', false, true, false, false);
     };
 
     saveEntities() {
@@ -94,7 +94,7 @@ class SceneManager {
         }
         this.cutsceneStartTime = Date.now();
         
-        if (!this.title) {
+        if (!this.title && !transition) {
             if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint) {
                 this.knight.x = this.currentCheckpoint.x;
                 this.knight.y = this.currentCheckpoint.y;
@@ -102,6 +102,10 @@ class SceneManager {
             } else if (end) {
                 this.knight.x = this.level.endPosition.x;
                 this.knight.y = this.level.endPosition.y;
+                console.log(this.x);
+                this.x = this.level.width;
+                console.log(this.x);
+                console.log(this.level.width);
                 console.log(`Loading level ${levelIndex} @ default end spawn (${this.level.endPosition.x}, ${this.level.endPosition.y})`);
             } else {
                 this.knight.x = this.level.startPosition.x;
@@ -495,9 +499,9 @@ class SceneManager {
                 || this.level === levels.one && this.oneCutsceneDone
                 || this.level === levels.two && this.twoCutsceneDone
                 || this.level === levels.bossroom && this.bossoneCutsceneDone) {
+
             } else {
                 if (this.cutsceneCounter !== this.cutscene.length) {
-                    console.log(this.cutsceneCounter)
                     if (!this.inCutscene && this.knight.x >= this.cutscene[this.cutsceneCounter].startX) {
                         this.inCutscene = true;
                         this.scene = this.cutsceneManager.cutsceneArray[this.cutscene[this.cutsceneCounter].cutsceneNum];
@@ -539,7 +543,7 @@ class SceneManager {
 
                 // Ensure the audio is fully loaded before allowing playback
                 this.music.addEventListener('canplaythrough', () => {
-                    this.music.stop();
+                    this.music.play();
                 });
             }
             if (this.level === levels.storyRecap) {

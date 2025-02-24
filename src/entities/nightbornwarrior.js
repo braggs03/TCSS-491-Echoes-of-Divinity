@@ -223,7 +223,6 @@ class NightbornWarrior {
            if (!this.attackInProgress && distance > this.attackRange) {
                 if (this.clone) {
                     if (this.hp === 500) {
-                        console.log('works')
                     }
                     if ((this.x < this.clone.x && this.x > this.target.x)
                         || (this.x > this.clone.x && this.x < this.target.x)) {
@@ -275,7 +274,6 @@ class NightbornWarrior {
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return;
         // Draw current animation
-		console.log('works');
         this.animators[this.state].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
         
         if (this.healthBar) this.healthBar.draw(ctx);

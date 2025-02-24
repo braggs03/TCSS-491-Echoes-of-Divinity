@@ -334,23 +334,23 @@ class Knight {
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
         
                     if (horizontalCollision) {
-                        if (entity.BB.x < that.BB.x) {
-                            that.x += overlap.x;
+                        if (entity.BB.x < knight.BB.x) {
+                            knight.x += overlap.x;
                         } else {
-                            that.x -= overlap.x;
+                            knight.x -= overlap.x;
                         }
-                        that.velocityX = 0;
+                        knight.velocityX = 0;
                     } else if (verticalCollision) {
-                        if (entity.BB.y < that.BB.y) {
-                            down++;
-                            that.y += overlap.y;
-                            that.takeDamage(50);
+                        if (entity.BB.y < knight.BB.y) {
+                            this.colliding.down = true;
+                            knight.y += overlap.y;
+                            knight.takeDamage(50);
                         } else {
-                            up++;
-                            that.y -= overlap.y - 1;
+                            this.colliding.up = true;
+                            knight.y -= overlap.y - 1;
                             
                         }
-                        that.velocityY = 0;
+                        knight.velocityY = 0;
                     }
                 } else if (entity instanceof Potion) {
                     if (this.game.keys["f"]) {
