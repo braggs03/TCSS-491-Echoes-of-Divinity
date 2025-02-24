@@ -220,6 +220,7 @@ class CutsceneSix {
     }
 
     async run() {
+        this.game.camera.music.pause();
         this.knight.inCutscene = true;
         this.lucan.inCutscene = true;
         this.lucan.setState('idleLeft')
