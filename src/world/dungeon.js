@@ -155,6 +155,45 @@ class DungeonBackground2 {
     };
 };
 
+const DUNGEON_SPIKE_WIDTH = 56;
+const DUNGEON_SPIKE_HEIGHT = 56;
+class DungeonSpike {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 3;
+        this.BB = new BoundingBox(
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y + (DUNGEON_SPIKE_HEIGHT * this.scale * 3/4), // Position at bottom quarter
+            DUNGEON_SPIKE_WIDTH * this.scale,
+            DUNGEON_SPIKE_HEIGHT * this.scale / 4 // Quarter height
+        );
+    };
+
+    update() {
+        this.BB = new BoundingBox(
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y + (DUNGEON_SPIKE_HEIGHT * this.scale * 3/4),
+            DUNGEON_SPIKE_WIDTH * this.scale,
+            DUNGEON_SPIKE_HEIGHT * this.scale / 4
+        );
+    };
+
+    draw(ctx) {
+        ctx.drawImage(
+            this.spritesheet,
+            912, 703,
+            DUNGEON_SPIKE_WIDTH,
+            DUNGEON_SPIKE_HEIGHT,
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y,
+            DUNGEON_SPIKE_WIDTH * this.scale,
+            DUNGEON_SPIKE_HEIGHT * this.scale
+        );
+        this.BB.draw(ctx);
+    };
+};
+
 const BONFIRE_WIDTH = 56;
 const BONFIRE_HEIGHT = 56;
 
@@ -179,19 +218,23 @@ class Bonfire {
     };
 
     update() {
-        if (!this.sound.paused) {
-            this.sound.volume = Math.max (0, 0.2 - Math.abs(this.x - this.knight.x) / 5000);
+        if (this.discovered) {
+            if (!this.game.entities.includes(this)) {
+                this.sound.pause();
+            } else {
+                this.sound.volume = Math.max (0, 0.2 - Math.abs(this.x - this.knight.x) / 5000);
+            }
         }
 
         this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, BONFIRE_HEIGHT * 2.2, BONFIRE_HEIGHT * 4.3);
 
         if (this.game.keys["f"]) {
-            if (this.sound.paused) {
-                this.sound.play();
-            }
             this.game.entities.forEach((entity) => {
                 if (this.fReleased && entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
                     this.activateCheckpoint();
+                    if (this.sound.paused) {
+                        this.sound.play();
+                    }
                     this.fReleased = false;
                 }
             });

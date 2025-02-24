@@ -3,10 +3,10 @@ class MechaGolem {
         this.game = game;
         this.x = x;
         this.y = y;
-        this.speed = 4;
+        this.speed = 300;
         this.healthBar = new HealthBar(this);
-        this.maxHp = 1000; 
-        this.hp = 1000;
+        this.maxHp = 700;
+        this.hp = 700;
         this.height = 90; 
 
         this.facing = RIGHT;
@@ -173,7 +173,7 @@ class MechaGolem {
                     }
                 } else if (!this.attackInProgress && distance > this.attackRange) {
                     
-                    this.x += dx > 0 ? this.speed : -this.speed;
+                    this.x += dx > 0 ? this.game.clockTick * this.speed : this.game.clockTick * -this.speed;
                     this.animator = this.idleAnimator;
                 }
             }

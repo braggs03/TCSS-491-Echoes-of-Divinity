@@ -58,6 +58,7 @@ class Gorgon {
     updateBB() {
         this.lastBB = this.BB;
         if (this.aggro) {
+            /*
             if (this.currentState === 'LeftWalk') {
                 this.BB = new BoundingBox(this.x - this.game.camera.x + 50, this.y - this.game.camera.y + 100, 100, 150);
             } else if (this.currentState === 'LeftAttack1') {
@@ -72,6 +73,9 @@ class Gorgon {
             } else {
                 this.BB = new BoundingBox(this.x - this.game.camera.x + 128, this.y + 128, 100, 128);
             }
+
+             */
+            this.BB = new BoundingBox(this.x - this.game.camera.x + 128, this.y + 128, 100, 128);
         } else {
             this.BB = new BoundingBox(this.x - this.game.camera.x - 128, this.y + 128, 500, 128);
         }

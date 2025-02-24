@@ -53,7 +53,6 @@ class Azucena {
     }
 
     draw(ctx) {
-        ctx.globalAlpha = 1;
         this.BB.draw(ctx);
         this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 3);
     }

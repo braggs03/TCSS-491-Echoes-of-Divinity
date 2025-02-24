@@ -67,8 +67,16 @@
             document.getElementById("debug").checked = false;
         };
 
+        window.onload = () => {
+            document.getElementById("music").checked = false;
+        };
+
         const toggleDebug = (checkBox) => {
             PARAMS.DEBUG = checkBox.checked;
+        }
+
+        const toggleMusic = (checkBox) => {
+            PARAMS.MUSICOFF = checkBox.checked;
         }
     </script>
 </head>
@@ -79,6 +87,8 @@
     <div>
         <input type="checkbox" id="debug" onchange="toggleDebug(this)" />
         <label for="debug" style="color: white;">Debug</label>
+        <input type="checkbox" id="music" onchange="toggleMusic(this)" />
+        <label for="music" style="color: white;">Turn Off Music</label>
     </div>
 </body>
 </html>

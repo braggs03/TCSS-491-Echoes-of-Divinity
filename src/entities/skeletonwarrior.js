@@ -4,6 +4,7 @@ class SkeletonWarrior {
         this.target = null;
         this.x = x
         this.y = y
+        this.healthBar = new HealthBar(this);
         this.hp = 500;
         this.updateBB();
         this.inCutscene = false;
