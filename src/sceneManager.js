@@ -94,7 +94,7 @@ class SceneManager {
         }
         this.cutsceneStartTime = Date.now();
         
-        if (!this.title && !transition) {
+        if (!this.title) {
             if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint) {
                 this.knight.x = this.currentCheckpoint.x;
                 this.knight.y = this.currentCheckpoint.y;
@@ -117,7 +117,7 @@ class SceneManager {
             this.game.ctx.fillRect(50, 50, 100, 100);
         }
 
-        if(transition) {
+        if (transition && this.level !== levels.tutorial) {
             if (this.music) {
                 this.music.pause();
             }
@@ -138,9 +138,7 @@ class SceneManager {
         if (this.music) {
             this.music.preload = 'auto';
             this.music.volume = 0.1;
-            this.music.addEventListener('canplaythrough', () => {
-                this.music.play();
-            });
+            this.music.play();
         }
 
 
