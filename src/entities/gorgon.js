@@ -1,7 +1,6 @@
 class Gorgon {
     constructor(game, x, y) {
         this.game = game;
-        this.hp = 1000;
         this.x = x
         this.y = y;
         this.dead = false;
@@ -10,6 +9,12 @@ class Gorgon {
         this.facingLeft = true;
         this.attackNumber = Math.floor(Math.random() * 3);
         this.inCutscene = false;
+        this.attackRange = 100;
+        this.maxHp = 1000;
+        this.hp = this.maxHp;
+        this.height = 100;
+        this.bheight = 10;
+        this.healthBar = new HealthBar(this);
         this.updateBB();
 
         this.animations = {
@@ -57,7 +62,20 @@ class Gorgon {
     updateBB() {
         this.lastBB = this.BB;
         if (this.aggro) {
-            this.BB = new BoundingBox(this.x - this.game.camera.x + 128, this.y + 128, 100, 128);
+            if (this.currentState === 'LeftWalk') {
+                this.BB = new BoundingBox(this.x - this.game.camera.x + 50, this.y - this.game.camera.y + 100, 100, 150);
+            } else if (this.currentState === 'LeftAttack1') {
+                if (this.animations[this.currentState].currentFrame() < 2) { // Wind-up phase
+                    this.offsetX = 0; // Small range while pulling back
+                } else if (this.animations[this.currentState].currentFrame() < 4) { // Full swing
+                    this.offsetX = 95; // Extend bounding box
+                } else { // Follow-through
+                    this.offsetX = 0;
+                }
+                this.BB = new BoundingBox(this.x + KNIGHT_X_OFFSET - this.game.camera.x + this.offsetX, this.y + KNIGHT_Y_OFFSET - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+            } else {
+                this.BB = new BoundingBox(this.x - this.game.camera.x + 128, this.y + 128, 100, 128);
+            }
         } else {
             this.BB = new BoundingBox(this.x - this.game.camera.x - 128, this.y + 128, 500, 128);
         }
@@ -69,10 +87,10 @@ class Gorgon {
             return;
         }
         if (this.dead) {
-            this.target.emberCount += 300;
             return;
         }
         if (this.hp <= 0) {
+            this.target.emberCount += 300;
             if (this.facingLeft) {
                 this.setState('LeftDead');
             } else {
@@ -83,21 +101,21 @@ class Gorgon {
 
         let that = this;
         this.game.entities.forEach(function (entity) {
-            if (entity instanceof Knight && entity.x - that.x > 1000) {
-                that.aggro = false;
-                that.facingLeft = false;
-                that.setState('RightIdle1')
-            } else if (entity instanceof Knight && that.x - entity.x > 1000) {
-                that.aggro = false;
-                that.facingLeft = true;
-                that.setState('LeftIdle1')
+            if (entity.currentState === 'LeftWalk' || entity.currentState === 'RightWalk') {
+                if (entity instanceof Knight && entity.x - that.x > 300) {
+                    that.facingLeft = false;
+                    that.setState('RightRun')
+                } else if (entity instanceof Knight && that.x - entity.x > 300) {
+                    that.facingLeft = true;
+                    that.setState('LeftRun')
+                }
             }
             if (entity.BB && that.BB.collide(entity.BB)) {
                 if (entity instanceof Knight && !that.aggro) {
                     that.target = entity;
                     that.aggro = true;
                     if (that.facingLeft) {
-                        that.setState('LeftRun');
+                        that.setState('LeftWalk');
                     } else {
                         that.setState('RightWalk')
                     }
@@ -112,36 +130,36 @@ class Gorgon {
                         that.hp -= entity.damage;
                         that.x -= 50;
                         return;
-                    } else if (entity.currentState === 'LeftRoll' || entity.currentState === 'RightRoll') {
-
                     } else {
                         if (that.facingLeft) {
-                            entity.setState('RightDeath');
+                            if (that.attackNumber === 0) {
+                                that.setState('LeftAttack1');
+                            } else if (that.attackNumber === 1) {
+                                that.setState('LeftAttack2');
+                            } else {
+                                that.setState('LeftAttack3');
+                            }
                         } else {
-                            entity.setState('LeftDeath');
+                            if (that.attackNumber === 0) {
+                                that.setState('RightAttack1');
+                            } else if (that.attackNumber === 1) {
+                                that.setState('RightAttack2');
+                            } else {
+                                that.setState('RightAttack3');
+                            }
                         }
-                        entity.dead = true;
-                    }
-                    if (that.facingLeft) {
-                        if (that.attackNumber === 0) {
-                            that.setState('LeftAttack1');
-                        } else if (that.attackNumber === 1) {
-                            that.setState('LeftAttack2');
+                        if (entity.currentState === 'LeftRoll' || entity.currentState === 'RightRoll') {
+
                         } else {
-                            that.setState('LeftAttack3');
-                        }
-                    } else {
-                        if (that.attackNumber === 0) {
-                            that.setState('RightAttack1');
-                        } else if (that.attackNumber === 1) {
-                            that.setState('RightAttack2');
-                        } else {
-                            that.setState('RightAttack3');
+                            if (that.animations[that.currentState].getDone()) {
+                                entity.takeDamage(100)
+                            }
                         }
                     }
                 }
             } else if (entity instanceof Knight) {
-                if (that.animations[that.currentState].getDone()) {
+                if (that.animations[that.currentState].getDone() || that.currentState === 'LeftWalk'
+                    || that.currentState === 'RightWalk') {
                     that.attackNumber = Math.floor(Math.random() * 3);
                     if (entity.x > that.x) {
                         // Knight is to the right
@@ -161,18 +179,19 @@ class Gorgon {
         });
 
         if (this.currentState === 'RightRun') {
-            this.x += 500 * this.game.clockTick;
+            this.x += 700 * this.game.clockTick;
         } else if (this.currentState === 'LeftRun') {
-            this.x -= 500 * this.game.clockTick;
+            this.x -= 700 * this.game.clockTick;
         } else if (this.currentState === 'RightWalk') {
-            this.x += 150 * this.game.clockTick;
+            this.x += 250 * this.game.clockTick;
         }else if (this.currentState === 'LeftWalk') {
-            this.x -= 150 * this.game.clockTick;
+            this.x -= 250 * this.game.clockTick;
         }
     }
 
     draw(ctx) {
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
         this.BB.draw(ctx);
+        if (this.healthBar) this.healthBar.draw(ctx);
     }
 }

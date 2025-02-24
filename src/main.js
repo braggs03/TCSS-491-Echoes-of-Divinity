@@ -41,6 +41,7 @@ ASSET_MANAGER.queueDownload(WATERFALL);
 ASSET_MANAGER.queueDownload("./resources/Title.png")
 ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneWarrior.png"); 
 ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneflip.png");
+ASSET_MANAGER.queueDownload("./resources/maintheme.png");
 
 // Werewolf
 ASSET_MANAGER.queueDownload(WEREWOLF +"Attack_1.png");

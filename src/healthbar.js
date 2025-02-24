@@ -13,7 +13,7 @@ class HealthBar {
             let ratio = this.agent.hp / this.agent.maxHp;
             let barWidth = 120;
             let barHeight = 20;  
-            let barX = this.agent.x + 170 - barWidth / 2 - this.agent.game.camera.x;
+            let barX = this.agent.x + 170 - this.agent.bheight - barWidth / 2 - this.agent.game.camera.x;
             let barY = this.agent.y + this.agent.height - 30 - this.agent.game.camera.y; 
 
             ctx.fillStyle = "Red"; 
@@ -86,6 +86,7 @@ class PotionEffect {
         ctx.restore();
     }
 }
+
     
 
 

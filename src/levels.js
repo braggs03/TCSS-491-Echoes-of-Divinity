@@ -86,7 +86,6 @@ const levels = {
         azucena: [{ x: 14300, y: 500 }],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 12, w: 2, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 97, y: 12, w: 1, h: 1 }],
         mechagolem: [{ x: 900, y: 350 },{ x: 7500, y: 100}],
-        lucan: [{ x: 800 , y: 400 }],
         dungeonWall: [{ x: 0, y: 0, h: 5 }],
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
         bonFire: [{ x: 400, y: 465, level: "one" }, { x: 13700, y: 465, level: "one" }],
@@ -94,18 +93,24 @@ const levels = {
     },
 
     two: {
-        width: 10000,
+        width: 10345,
         height: 0,
         startPosition: {
             x: 87,
             y: 320,
         },
-        dungeonBackground3: [{ x:0, y:0, w:50, h: 1}],
-        dungeonGround2: [{ x: 0, y: 14.5, w: 6, h: 1 }, {x:7, y: 14.5, w: 8, h:1},{ x: 16, y: 14.5, w: 8, h: 1 },{ x:25, y: 14.5, w: 10, h: 1 }, {x: 36, y: 14.5, w: 8, h: 1}, {x: 45, y: 14.5, w: 8, h: 1}, {x: 54, y: 14.5, w: 10, h: 1}, { x: 0, y: 0, w: 100, h: 1 }],
-        gorgon: [{ x: 1000, y: 325 }, {x : 1900, y: 325}],
-        dungeonWall: [{ x: 0, y: 0, h: 4 }],
-        dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x:3735, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
-        dungeonDoor: [{ x: 124, y: 360, level: "one", end: true }, { x: 9550, y: 360, level: "bossroom" }],
+        endPosition: {
+            x: 11220,
+            y: 320,
+        },
+        bonFire: [{ x: 650, y: 365, level: "two" }, { x: 11030, y: 365, level: "two" }],
+        dungeonBackground3: [{ x:0, y:0, w:3, h: 1}],
+        dungeonGround2: [{ x: 0, y: 14.5, w: 6, h: 1 }, {x:7, y: 14.5, w: 8, h:1},{ x: 16, y: 14.5, w: 19, h: 1 }, {x: 36, y: 14.5, w: 8, h: 1}, {x: 45, y: 14.5, w: 8, h: 1}, {x: 54, y: 14.5, w: 10, h: 1}, {x: 64, y: 14.5, w: 11, h:1}, { x: 0, y: 0, w: 75, h: 1 }],
+        gorgon: [{ x: 1500, y: 325 }, {x: 3000, y: 325}, {x: 4900, y: 325}, {x: 5900, y: 325}, {x: 8000, y: 325}],
+        wallspike: [{x: 4450, y: 185}, {x: 4225, y: 185}, {x: 3700, y: 185}, {x: 9000, y: 185}, {x: 8870, y: 185}],
+        dungeonWall: [{ x: 0, y: 0, h: 4 }, { x: 290, y: 0, h: 4}],
+        dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
+        dungeonDoor: [{ x: 124, y: 360, level: "one", end: true }, { x: 11250, y: 360, level: "bossroom", end: false }],
 
     },
 
@@ -127,7 +132,7 @@ const levels = {
         dungeonWorkbench: [{ x: 1500, y: 510 }],
         dungeonAnvil: [{ x: 1730, y: 613 }],
         dungeonDoor: [{ x: 100, y: 465, level: "one" }],
-        lucan: [{ x: 800 , y: 400 }],
+        //lucan: [{ x: 800 , y: 400 }],
         dungeonTorch: [{ x: 103, y: 465 }, { x: 278, y: 465 }],
         dungeonWall: [{ x: 0, y: 0, h: 5 }, { x: 58, y: 0, h: 5 }],
         wallAxe: [{ x: 1726, y: 520 }],

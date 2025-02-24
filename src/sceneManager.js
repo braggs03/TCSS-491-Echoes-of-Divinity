@@ -15,7 +15,15 @@ class SceneManager {
 
         this.tutorialCutsceneDone = false;
         this.shopkeeperCutsceneDone = false;
-
+        this.emberAnimation = new Animator(
+            ASSET_MANAGER.getAsset("./resources/maintheme.png"), 
+            0, 96,        // Starting x, y position in spritesheet
+            16, 16,       // Width and height of each frame
+            5,            // Number of frames
+            0.2,          // Frame duration
+            0,            // Padding
+            true          // Loop
+        );
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
 
@@ -299,7 +307,12 @@ class SceneManager {
                 this.game.addEntity(new DungeonDoor2(this.game, door2.x, door2.y, door2.level));
             }
         }
-
+        if (this.level.wallspike) {
+            for(let i = 0; i < this.level.wallspike.length; i++) {
+                let spike = this.level.wallspike[i];
+                this.game.addEntity(new DungeonSpike(this.game, spike.x, spike.y));
+            }
+        }
         if (this.level.dungeonWaterfall) {
             for(let i = 0; i < this.level.dungeonWaterfall.length; i++) {
                 let waterfall = this.level.dungeonWaterfall[i];
@@ -478,10 +491,20 @@ class SceneManager {
             ctx.textAlign = "center";
             ctx.textBaseline = 'top';
 
+            // Draw ember count
             ctx.fillText(this.knight.emberCount, 160, 100);
-            const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
-            ctx.drawImage(emberImage, 1520, 2328, 8, 16, 95, 60, 40, 80);
+        
+            // Draw animated ember icon
+            this.emberAnimation.drawFrame(
+                this.game.clockTick,
+                ctx,
+                80, 85,     // Moved closer to the number (x was 95, now 120)
+                3.5          // Scale to match your desired size (40x80)
+            );
+
+            // Draw potion count and icon
             ctx.fillText(this.knight.potionCount, 285, 100);
+            const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
             ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
         }
     };

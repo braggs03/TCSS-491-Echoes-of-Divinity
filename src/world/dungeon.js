@@ -366,7 +366,7 @@ class DungeonWaterfall {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.animator = this.waterfall();
-        this.scale = 5.5;
+        this.scale = 3;
     };
 
     update() {
@@ -379,6 +379,44 @@ class DungeonWaterfall {
     waterfall() {
         return new Animator(ASSET_MANAGER.getAsset(WATERFALL), 0, 0, 32, 104, 9, 0.1, false, true);
     }
+};
+const DUNGEON_SPIKE_WIDTH = 56;
+const DUNGEON_SPIKE_HEIGHT = 56;
+class DungeonSpike {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 3;
+        this.BB = new BoundingBox(
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y + (DUNGEON_SPIKE_HEIGHT * this.scale * 3/4), // Position at bottom quarter
+            DUNGEON_SPIKE_WIDTH * this.scale,
+            DUNGEON_SPIKE_HEIGHT * this.scale / 4 // Quarter height
+        );
+    };
+
+    update() {
+        this.BB = new BoundingBox(
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y + (DUNGEON_SPIKE_HEIGHT * this.scale * 3/4),
+            DUNGEON_SPIKE_WIDTH * this.scale,
+            DUNGEON_SPIKE_HEIGHT * this.scale / 4
+        );
+    };
+
+    draw(ctx) {
+        ctx.drawImage(
+            this.spritesheet, 
+            912, 703,  
+            DUNGEON_SPIKE_WIDTH, 
+            DUNGEON_SPIKE_HEIGHT, 
+            this.x - this.game.camera.x, 
+            this.y - this.game.camera.y, 
+            DUNGEON_SPIKE_WIDTH * this.scale, 
+            DUNGEON_SPIKE_HEIGHT * this.scale
+        );
+        this.BB.draw(ctx);
+    };
 };
 
 const DUNGEON_STATUE_WIDTH = 70;

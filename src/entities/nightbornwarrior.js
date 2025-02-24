@@ -7,6 +7,7 @@ class NightbornWarrior {
         this.maxHp = 800;
         this.hp = 800;
         this.height = 100;
+        this.bheight = 0;
         this.healthBar = new HealthBar(this);
 
         this.facing = RIGHT;

@@ -27,6 +27,7 @@ class Knight {
         this.maxHp = 1000; 
         this.hp = 1000;
         this.height = 110;
+        this.bheight = 0;
         this.stamina = 100;
         this.currentStamina = 100;
         this.emberCount = 100;
@@ -261,6 +262,29 @@ class Knight {
                         } else {
                             up++;
                             that.y -= overlap.y - 1;
+                        }
+                        that.velocityY = 0;
+                    }
+                } else if (entity instanceof DungeonSpike) {
+                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
+                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
+        
+                    if (horizontalCollision) {
+                        if (entity.BB.x < that.BB.x) {
+                            that.x += overlap.x;
+                        } else {
+                            that.x -= overlap.x;
+                        }
+                        that.velocityX = 0;
+                    } else if (verticalCollision) {
+                        if (entity.BB.y < that.BB.y) {
+                            down++;
+                            that.y += overlap.y;
+                            that.takeDamage(50);
+                        } else {
+                            up++;
+                            that.y -= overlap.y - 1;
+                            
                         }
                         that.velocityY = 0;
                     }

@@ -7,7 +7,8 @@ class MechaGolem {
         this.healthBar = new HealthBar(this);
         this.maxHp = 1000; 
         this.hp = 1000;
-        this.height = 90; 
+        this.height = 90;
+        this.bheight = 0; 
 
         this.facing = RIGHT;
         this.aggro = false;
