@@ -42,7 +42,7 @@ class GameEngine {
             x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,
             y: e.clientY - this.ctx.canvas.getBoundingClientRect().top
         });
-        
+
         this.ctx.canvas.addEventListener("mousemove", e => {
             if (this.options.debugging) {
                 console.log("MOUSE_MOVE", getXandY(e));
@@ -140,7 +140,7 @@ class GameEngine {
             this.ctx.textBaseline = 'top';
             this.ctx.textAlign = 'left';
             const pausedText = "PAUSED";
-            const textDimensions = this.ctx.measureText(pausedText); 
+            const textDimensions = this.ctx.measureText(pausedText);
             const textHeight = textDimensions.fontBoundingBoxAscent + textDimensions.fontBoundingBoxDescent;
             this.ctx.fillText(pausedText, PARAMS.SCREENWIDTH / 2 - textDimensions.width / 2, PARAMS.SCREENHEIGHT / 2 - textHeight / 2);
             this.ctx.strokeText(pausedText, PARAMS.SCREENWIDTH / 2 - textDimensions.width / 2, PARAMS.SCREENHEIGHT / 2 - textHeight / 2);

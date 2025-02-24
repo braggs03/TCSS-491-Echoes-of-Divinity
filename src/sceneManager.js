@@ -7,6 +7,7 @@ class SceneManager {
         this.embers = 0;
         this.inCutscene = false;
         this.cutsceneCounter = 0;
+        this.music = null;
 
         this.menuSelectIndex = -10;
         this.creditsLineIndex = 0;
@@ -15,6 +16,9 @@ class SceneManager {
 
         this.tutorialCutsceneDone = false;
         this.shopkeeperCutsceneDone = false;
+        this.oneCutsceneDone = false;
+        this.twoCutsceneDone = false;
+        this.bossoneCutsceneDone = false;
 
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
@@ -42,7 +46,7 @@ class SceneManager {
         this.knight.respawn();
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
-            if (levels[levelIndex]) { 
+            if (levels[levelIndex]) {
                 this.loadLevel(levelIndex, true, false, true, false);
                 console.log(`Respawn @ checkpoint (${knight.x}, ${knight.y}) @ level ${levelIndex}`);
             } else {
@@ -57,7 +61,7 @@ class SceneManager {
     loadLevel(levelIndex, transition, title, dead, end) {
         this.checkpoint = false;
         this.dead = false;
-        this.title = title;        
+        this.title = title;
         this.level = levels[levelIndex];
         this.saveEntities();
         this.clearEntities();
@@ -75,7 +79,7 @@ class SceneManager {
                 this.knight.x = this.level.endPosition.x;
                 this.knight.y = this.level.endPosition.y;
                 console.log(`Loading level ${levelIndex} @ default end spawn (${this.level.endPosition.x}, ${this.level.endPosition.y})`);
-            } else { 
+            } else {
                 this.knight.x = this.level.startPosition.x;
                 this.knight.y = this.level.startPosition.y;
                 this.emberDrop = null;
@@ -88,6 +92,20 @@ class SceneManager {
         if(transition) {
             this.game.addEntity(new TransitionScreen(this.game, levelIndex, dead, end))
             return;
+        }
+
+        if (this.level.azucena) {
+            for (let i = 0; i < this.level.azucena.length; i++) {
+                let azucena = this.level.azucena[i];
+                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
+            }
+        }
+
+        if (this.level.reina) {
+            for (let i = 0; i < this.level.reina.length; i++) {
+                let reina = this.level.reina[i];
+                this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
+            }
         }
 
         if (this.level.text) {
@@ -127,13 +145,6 @@ class SceneManager {
             }
         }
 
-        if (this.level.reina) {
-            for (let i = 0; i < this.level.reina.length; i++) {
-                let reina = this.level.reina[i];
-                this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
-            }
-        }
-
         if (this.level.skeleton) {
             for (let i = 0; i < this.level.skeleton.length; i++) {
                 let skeleton = this.level.skeleton[i];
@@ -144,7 +155,7 @@ class SceneManager {
         if (this.level.gorgon) {
             for (let i = 0; i < this.level.gorgon.length; i++) {
                 let gorgon = this.level.gorgon[i];
-                //this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
+                this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
             }
         }
 
@@ -161,13 +172,6 @@ class SceneManager {
             for (let i = 0; i < this.level.lucan.length; i++) {
                 let lucan = this.level.lucan[i];
                 this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
-            }
-        }
-
-        if (this.level.azucena) {
-            for (let i = 0; i < this.level.azucena.length; i++) {
-                let azucena = this.level.azucena[i];
-                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
         }
 
@@ -254,7 +258,7 @@ class SceneManager {
                 let door = this.level.dungeonDoor[i];
                 this.game.addEntity(new DungeonDoor(this.game, door.x, door.y, door.level, door.end));
             }
-        }    
+        }
 
         if (this.level.chandelier) {
             for (let i = 0; i < this.level.chandelier.length; i++) {
@@ -273,7 +277,7 @@ class SceneManager {
         if  (this.level.lightning) {
             for (let i = 0; i < this.level.lightning.length; i++) {
                 let lightning = this.level.lightning[i];
-                this.game.addEntity(new Lightning(this.game, lightning.x, lightning.y));
+                this.game.addEntity(new Lightning(this.game, lightning.x, lightning.y, false));
             }
         }
 
@@ -362,7 +366,7 @@ class SceneManager {
         let oldEntities = this.game.entities;
         this.game.entities = [];
         this.game.addEntity(this.interactable);
-        oldEntities.map((entity) => this.game.addEntity(entity)); 
+        oldEntities.map((entity) => this.game.addEntity(entity));
     }
 
     removeInteractive() {
@@ -378,9 +382,17 @@ class SceneManager {
 
     update() {
         if (this.cutsceneManager) {
+            if (this.level === levels.tutorial) {
+                this.skeletons = this.game.entities.find(entity => entity instanceof SkeletonWarrior);
+                if (!this.skeletons) {
+                    this.tutorialCutsceneDone = false;
+                    this.game.camera.cutscene.push({startX: -300, cutsceneNum: 1})
+                }
+            }
             if (this.level === levels.tutorial && this.tutorialCutsceneDone
-                || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone) {
-
+                || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
+                || this.level === levels.one && this.oneCutsceneDone
+                || this.level === levels.two && this.twoCutsceneDone) {
             } else {
                 if (this.cutsceneCounter !== this.cutscene.length) {
                     if (!this.inCutscene && this.knight.x >= this.cutscene[this.cutsceneCounter].startX) {
@@ -397,6 +409,12 @@ class SceneManager {
                     if (this.level === levels.shopkeeper) {
                         this.shopkeeperCutsceneDone = true
                     }
+                    if (this.level === levels.one) {
+                        this.oneCutsceneDone = true
+                    }
+                    if (this.level === levels.two) {
+                        this.twoCutsceneDone = true
+                    }
                 }
             }
         }
@@ -407,6 +425,7 @@ class SceneManager {
                 } else if (this.game.keys['Enter']) {
                     this.loadLevel('mainMenu', false, true, false, false);
                 }
+
                 this.music = new Audio(MAIN_MUSIC);
                 this.music.loop = true;
                 this.music.preload = 'auto';
@@ -457,7 +476,7 @@ class SceneManager {
             }
 
             if (this.level === levels.mainMenu && this.game.keys[' ']) {
-                this.loadLevel("tutorial", false, false, false, false);
+                this.loadLevel("tutorial", true, false, false, false);
             }
         }
 
@@ -479,7 +498,8 @@ class SceneManager {
                 ctx.globalAlpha = 1;
             } else {
                 // Draw the black background
-                ctx.fillStyle = this.level.background;
+                ctx.globalAlpha = 1
+                ctx.fillStyle = "blue"//this.level.background; //This does not draw it black
                 ctx.fillRect(0, 0, this.level.width, this.level.height);
 
                 // Loop through the texts and apply opacity

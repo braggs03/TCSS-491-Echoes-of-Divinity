@@ -57,6 +57,14 @@ const text = {
         ["Let us leave,", "you cannot help in this state."],
     ],
 
+    azucena_end: [
+        ["Good job, you finished the minimal deliverables."],
+        ["All we're really doing now is making levels."],
+        ["So yeah, unfortunately you will not", "be saving the world today"],
+        ["I'm not gonna bother making credits right now"],
+        ["This is all you're getting, bye"]
+    ],
+
     reina_shopkeeper: [
         ["Hello Knight!"],
         ["I am Reina."],
