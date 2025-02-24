@@ -46,7 +46,7 @@ class CheckpointMenu {
         ctx.fillRect(0, 0, this.game.camera.level.width, this.game.camera.level.height);
         // ctx.roundRect(this.entity.x + this.entity.width / 2, this.entity.y, 50, 3);
         ctx.fillStyle = "white";
-        ctx.font = "20px Open+Sans";
+        ctx.font = '20px "Open+Sans"';
         // console.log(this.entity)
         ctx.fillText("Teleport to: (g to exit)", PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2 - 30);
 

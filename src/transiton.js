@@ -34,7 +34,7 @@ class TransitionScreen {
             ctx.fillRect(0, 0, PARAMS.SCREENWIDTH, PARAMS.SCREENHEIGHT);
             ctx.fillStyle = "white"
             ctx.textAlign = "center"
-            ctx.font = "50px Open Sans";
+            ctx.font = '50px "Open+Sans"';
             ctx.fillText("Loading", PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2);
         }
        
