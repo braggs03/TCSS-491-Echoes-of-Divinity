@@ -48,7 +48,7 @@ const text = {
     reina4: [
         ["Mica's Breath!!", "That's Knight Commander Lucan!?!"],
         ["But.. you fell in Thalador.", "What happened to you?"],
-        ["Commander, Come to your senses!!"],
+        ["Commander, come to your senses!!"],
     ],
 
     azucena7: [

@@ -143,7 +143,7 @@ class CutsceneThree {
         this.game.camera.showInteractive(this.azucena, "azucena4");
         await this.delay(3000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(3000);
+        await this.delay(6000);
         this.game.camera.removeInteractive();
 
         this.knight.inCutscene = false;

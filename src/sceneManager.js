@@ -34,7 +34,7 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('two', false, false, false, false);
     };
 
     saveEntities() {
@@ -72,7 +72,6 @@ class SceneManager {
     }
 
     loadLevel(levelIndex, transition, title, dead, end) {
-
         this.fire = this.game.entities.find(entity => entity instanceof Bonfire);
         if (this.fire) {
             if (!this.fire.sound.paused) {
@@ -93,6 +92,7 @@ class SceneManager {
             this.twoCutsceneDone = false;
         }
         this.cutsceneStartTime = Date.now();
+
         
         if (!this.title) {
             if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint) {
@@ -480,7 +480,7 @@ class SceneManager {
                 }
             } else {
 
-                if (this.level === levels.shopkeeper) {
+                if (this.level === levels.shopkeeper || this.level === levels.startScreen) {
                     this.music.volume = 0;
                 } else if (!this.knight.inCutscene) {
                     this.music.volume = 0.1
@@ -531,16 +531,15 @@ class SceneManager {
         }
         if (this.title) {
             if (this.level === levels.startScreen && (this.game.keys[' '] || this.game.keys['Enter'])) {
+                this.music = new Audio(MAIN_MUSIC);
+                this.music.loop = true;
+                this.music.preload = 'auto';
+                this.music.volume = 0.1;
                 if (this.game.keys[' ']) {
                     this.loadLevel('storyRecap', false, true, false, false);
                 } else if (this.game.keys['Enter']) {
                     this.loadLevel('mainMenu', false, true, false, false);
                 }
-
-                this.music = new Audio(MAIN_MUSIC);
-                this.music.loop = true;
-                this.music.preload = 'auto';
-                this.music.volume = 0.1;
 
                 // Ensure the audio is fully loaded before allowing playback
                 this.music.addEventListener('canplaythrough', () => {
