@@ -250,16 +250,13 @@ class CutsceneSix {
         await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(3000);
-        this.game.camera.interactable.currentDialog++;
-        await this.delay(3000);
         this.game.camera.removeInteractive();
         this.game.camera.showInteractive(this.azucena, "azucena7");
         await this.delay(3000);
         this.game.camera.interactable.currentDialog++;
         this.game.camera.music = new Audio(LUCAN_MUSIC);
         this.game.camera.music.loop = true;
-        this.game.camera.music.preload = 'auto';
-        this.game.camera.music.volume = 0.5;
+        this.game.camera.music.volume = 0.1;
 
         // Ensure the audio is fully loaded before allowing playback
         this.game.camera.music.addEventListener('canplaythrough', () => {
@@ -327,15 +324,15 @@ class CutsceneSeven {
         }
         this.azucena.goRight = false;
         this.game.camera.showInteractive(this.azucena, "azucena_end");
-        await this.delay(2000);
+        await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(2000);
+        await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(2000);
+        await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(2000);
+        await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(2000);
+        await this.delay(4000);
         this.game.camera.removeInteractive();
         this.azucena.inCutscene = false;
         this.knight.moveable = true;

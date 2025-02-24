@@ -29,7 +29,7 @@ const text = {
 
     azucena4: [
         ["Voilà, here we can keep safe" , "as you make your way to Duma."],
-        ["4th wall break: F to interact with us or items."],
+        ["4th wall break: F to interact with us or items.", "Light the Emberlight (Campfire) for a checkpoint"],
     ],
 
     azucena5: [
@@ -41,19 +41,18 @@ const text = {
     ],
 
     azucena6: [
-        ["Be wary, I can sense it's here."],
+        ["I can sense it's here."],
         ["It's coming!!"],
     ],
 
     reina4: [
         ["Mica's Breath!!", "That's Knight Commander Lucan!?!"],
         ["But.. you fell in Thalador.", "What happened to you?"],
-        ["Commander, have you forget yourself??"],
-        ["Come to your senses!!"],
+        ["Commander, Come to your senses!!"],
     ],
 
     azucena7: [
-        ["He's gone, Reina.", "Duma has corrupted all that he is."],
+        ["He's gone, Reina. Duma ", "has corrupted all that he is."],
         ["Let us leave,", "you cannot help in this state."],
     ],
 

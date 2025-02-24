@@ -189,7 +189,7 @@ class MechaGolem {
                     }
                 } else if (!this.attackInProgress && distance > this.attackRange) {
                     
-                    this.x += dx > 0 ? this.speed : -this.speed;
+                    this.x += dx > 0 ? this.game.clockTick * this.speed : this.game.clockTick * -this.speed;
                     this.animator = this.idleAnimator;
                 }
             }

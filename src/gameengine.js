@@ -19,6 +19,7 @@ class GameEngine {
 
         this.options = options || {
             debugging: false,
+            musicOff: false,
         };
     };
 

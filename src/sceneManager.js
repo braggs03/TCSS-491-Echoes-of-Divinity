@@ -44,6 +44,7 @@ class SceneManager {
 
     respawnKnight(knight) {
         this.knight.respawn();
+        this.music.pause();
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
             if (levels[levelIndex]) {
@@ -59,6 +60,14 @@ class SceneManager {
     }
 
     loadLevel(levelIndex, transition, title, dead, end) {
+
+        this.fire = this.game.entities.find(entity => entity instanceof Bonfire);
+        if (this.fire) {
+            if (!this.fire.sound.paused) {
+                this.fire.sound.volume = 0;
+            }
+        }
+
         this.checkpoint = false;
         this.dead = false;
         this.title = title;
@@ -68,6 +77,10 @@ class SceneManager {
         this.game.textOverlay = null;
         this.x = 0;
         this.cutsceneCounter = 0;
+        if (this.level === levels.one && this.oneCutsceneDone && !transition) {
+            this.cutsceneCounter = 1;
+            this.oneCutsceneDone = false;
+        }
         this.cutsceneStartTime = Date.now();
         
         if (!this.title) {
@@ -90,8 +103,29 @@ class SceneManager {
         }
 
         if(transition) {
+            if (this.music) {
+                this.music.pause();
+            }
             this.game.addEntity(new TransitionScreen(this.game, levelIndex, dead, end))
             return;
+        }
+
+        if(this.level === levels.one || this.level === levels.two && this.music !== new Audio(BACKGROUND_MUSIC)) {
+            this.music = new Audio(BACKGROUND_MUSIC);
+            this.music.loop = true;
+        }
+
+        if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+            this.knight.x = this.knight.x + 200;
+            this.music = new Audio(LUCAN_MUSIC);
+            this.music.loop = true;
+        }
+        if (this.music) {
+            this.music.preload = 'auto';
+            this.music.volume = 0.1;
+            this.music.addEventListener('canplaythrough', () => {
+                this.music.play();
+            });
         }
 
         if (this.level.azucena) {
@@ -99,12 +133,20 @@ class SceneManager {
                 let azucena = this.level.azucena[i];
                 this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
+            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+                this.azucena = this.game.entities.find((entities) => entities instanceof Azucena)
+                this.azucena.x = -300;
+            }
         }
 
         if (this.level.reina) {
             for (let i = 0; i < this.level.reina.length; i++) {
                 let reina = this.level.reina[i];
                 this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
+            }
+            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+                this.reina = this.game.entities.find((entities) => entities instanceof Reina)
+                this.reina.x = -300;
             }
         }
 
@@ -115,6 +157,7 @@ class SceneManager {
                 });
             }
             this.game.textOverlay = this.level.text;
+            this.game.textOverlay.background = "transparent"
         }
 
         if(this.level.title) {
@@ -316,6 +359,13 @@ class SceneManager {
             }
         }
 
+        if (this.level.wallspike) {
+            for(let i = 0; i < this.level.wallspike.length; i++) {
+                let spike = this.level.wallspike[i];
+                this.game.addEntity(new DungeonSpike(this.game, spike.x, spike.y));
+            }
+        }
+
         if (this.level.dungeonWaterfall) {
             for(let i = 0; i < this.level.dungeonWaterfall.length; i++) {
                 let waterfall = this.level.dungeonWaterfall[i];
@@ -381,6 +431,17 @@ class SceneManager {
     }
 
     update() {
+        if (this.music) {
+            if (PARAMS.MUSICOFF) {
+                if (this.music) {
+                    this.music.volume = 0;
+                }
+            } else {
+                if (!this.knight.inCutscene) {
+                    this.music.volume = 0.1
+                }
+            }
+        }
         if (this.cutsceneManager) {
             if (this.level === levels.tutorial) {
                 this.skeletons = this.game.entities.find(entity => entity instanceof SkeletonWarrior);
@@ -392,9 +453,11 @@ class SceneManager {
             if (this.level === levels.tutorial && this.tutorialCutsceneDone
                 || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
                 || this.level === levels.one && this.oneCutsceneDone
-                || this.level === levels.two && this.twoCutsceneDone) {
+                || this.level === levels.two && this.twoCutsceneDone
+                || this.level === levels.bossroom && this.bossoneCutsceneDone) {
             } else {
                 if (this.cutsceneCounter !== this.cutscene.length) {
+                    console.log(this.cutsceneCounter)
                     if (!this.inCutscene && this.knight.x >= this.cutscene[this.cutsceneCounter].startX) {
                         this.inCutscene = true;
                         this.scene = this.cutsceneManager.cutsceneArray[this.cutscene[this.cutsceneCounter].cutsceneNum];
@@ -415,6 +478,9 @@ class SceneManager {
                     if (this.level === levels.two) {
                         this.twoCutsceneDone = true
                     }
+                    if (this.level === levels.bossroom) {
+                        this.bossoneCutsceneDone = true
+                    }
                 }
             }
         }
@@ -429,7 +495,7 @@ class SceneManager {
                 this.music = new Audio(MAIN_MUSIC);
                 this.music.loop = true;
                 this.music.preload = 'auto';
-                this.music.volume = 0.5;
+                this.music.volume = 0.1;
 
                 // Ensure the audio is fully loaded before allowing playback
                 this.music.addEventListener('canplaythrough', () => {
@@ -499,7 +565,7 @@ class SceneManager {
             } else {
                 // Draw the black background
                 ctx.globalAlpha = 1
-                ctx.fillStyle = "blue"//this.level.background; //This does not draw it black
+                ctx.fillStyle = this.level.background;
                 ctx.fillRect(0, 0, this.level.width, this.level.height);
 
                 // Loop through the texts and apply opacity
@@ -512,6 +578,9 @@ class SceneManager {
                     // Draw the text
                     ctx.fillText(text.message, text.x, text.y);
                 });
+                /*
+
+                 */
             }
         } else {
             ctx.globalAlpha = 1;

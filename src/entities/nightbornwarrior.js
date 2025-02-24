@@ -26,6 +26,13 @@ class NightbornWarrior {
         this.scale = 4;
         this.attackTimer = 0;
 
+        this.runSound = new Audio("./resources/SoundEffects/run.ogg");
+        this.runSound.loop = true;
+        this.runSound.playbackRate = 10;
+        this.attackSound = new Audio("./resources/SoundEffects/run.ogg");
+        this.attackSound.loop = false;
+        this.attackSound.playbackRate = 1;
+
         this.spritesheet = ASSET_MANAGER.getAsset("./resources/nightBorneWarrior/NightBorneWarrior.png");
         this.sprite = ASSET_MANAGER.getAsset("./resources/nightBorneWarrior/NightBorneflip.png");
         this.animators = {
@@ -108,6 +115,7 @@ class NightbornWarrior {
             this.removeFromWorld = true;
         }, 2000);
         if (!this.clone) {
+            this.game.camera.bossoneCutsceneDone = false;
             this.game.camera.cutscene.push({ startX: -200, cutsceneNum: 6})
         }
     }

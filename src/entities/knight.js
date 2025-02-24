@@ -71,7 +71,7 @@ class Knight {
 
         this.runSound = new Audio("./resources/SoundEffects/run.ogg");
         this.runSound.loop = true;
-        this.runSound.playbackRate = 2;
+        this.runSound.playbackRate = 10;
         this.runSound.volume = 0.2;
         this.attackSound = new Audio("./resources/SoundEffects/knightAttack.ogg");
         this.attackSound.loop = false;
@@ -190,6 +190,7 @@ class Knight {
 
     die() {
         if (!this.dead) {
+
             this.dead = true;
             this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
             console.log("Knight has died!");
