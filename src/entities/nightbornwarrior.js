@@ -4,7 +4,7 @@ class NightbornWarrior {
         this.x = x;
         this.y = y;
         this.maxHp = 1400;
-        this.hp = 200;
+        this.hp = 1400;
         this.height = 100;
         this.healthBar = new HealthBar(this);
 		this.inCutscene = false;

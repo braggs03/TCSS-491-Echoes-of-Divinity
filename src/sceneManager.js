@@ -77,9 +77,9 @@ class SceneManager {
         this.game.textOverlay = null;
         this.x = 0;
         this.cutsceneCounter = 0;
-        if (this.level === levels.one && this.oneCutsceneDone && !transition) {
+        if (this.level === levels.two && this.twoCutsceneDone && !transition) {
             this.cutsceneCounter = 1;
-            this.oneCutsceneDone = false;
+            this.twoCutsceneDone = false;
         }
         this.cutsceneStartTime = Date.now();
         
@@ -128,27 +128,6 @@ class SceneManager {
             });
         }
 
-        if (this.level.azucena) {
-            for (let i = 0; i < this.level.azucena.length; i++) {
-                let azucena = this.level.azucena[i];
-                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
-            }
-            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
-                this.azucena = this.game.entities.find((entities) => entities instanceof Azucena)
-                this.azucena.x = -300;
-            }
-        }
-
-        if (this.level.reina) {
-            for (let i = 0; i < this.level.reina.length; i++) {
-                let reina = this.level.reina[i];
-                this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
-            }
-            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
-                this.reina = this.game.entities.find((entities) => entities instanceof Reina)
-                this.reina.x = -300;
-            }
-        }
 
         if (this.level.text) {
             if (this.level !== levels.mainMenu) {
@@ -185,6 +164,28 @@ class SceneManager {
             for (let i = 0; i < this.level.tent.length; i++) {
                 let tent = this.level.tent[i];
                 this.game.addEntity(new ShopkeeperTent(this.game, tent.x, tent.y));
+            }
+        }
+
+        if (this.level.azucena) {
+            for (let i = 0; i < this.level.azucena.length; i++) {
+                let azucena = this.level.azucena[i];
+                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
+            }
+            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+                this.azucena = this.game.entities.find((entities) => entities instanceof Azucena)
+                this.azucena.x = -300;
+            }
+        }
+
+        if (this.level.reina) {
+            for (let i = 0; i < this.level.reina.length; i++) {
+                let reina = this.level.reina[i];
+                this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
+            }
+            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+                this.reina = this.game.entities.find((entities) => entities instanceof Reina)
+                this.reina.x = -300;
             }
         }
 
