@@ -149,6 +149,7 @@ let levels = {
         potion: [{ x: 788, y: 570}, { x: 888, y: 570}, { x: 990, y: 570}],
         sharpening_wheel: [{ x: 1850, y: 620 }],
         knightStatue: [{ x: 1840, y: 210 }],
+        cutscene: [{startX: 70, cutsceneNum: 2}],
     },
 
     bossroom: {

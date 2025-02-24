@@ -479,7 +479,10 @@ class SceneManager {
                     this.music.volume = 0;
                 }
             } else {
-                if (!this.knight.inCutscene) {
+
+                if (this.level === levels.shopkeeper) {
+                    this.music.volume = 0;
+                } else if (!this.knight.inCutscene) {
                     this.music.volume = 0.1
                 }
             }
