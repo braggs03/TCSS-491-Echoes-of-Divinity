@@ -1,3 +1,4 @@
+
 const KNIGHT_WIDTH = 65;
 const KNIGHT_HEIGHT = 110;
 const KNIGHT_X_OFFSET = 131;
@@ -30,7 +31,8 @@ class Knight {
         this.healthBar = new HealthBar(this);
         this.maxHp = 1000;
         this.hp = 1000;
-
+        this.height = 110;
+        this.bheight = 0;
         this.stamina = 100;
         this.currentStamina = 100;
 
@@ -209,8 +211,13 @@ class Knight {
     usePotion () {
         if (this.potionCount > 0 && this.hp < this.maxHp) {
             this.potionCount -= 1;
-            this.hp = Math.min(this.hp + this.potionHealCount, this.maxHp);
-            this.game.addEntity(new PotionEffect(this.game, this.x + 100, this.y + KNIGHT_HEIGHT + 1, POTION_BOOST));
+            this.hp = Math.min(this.hp + this.potionHealCount, this.maxHp); 
+            this.game.addEntity(new PotionEffect(
+                this.game,
+                this.x + KNIGHT_WIDTH + 50,  // Position slightly to the right of player
+                this.y + 50,                 // Position above the player
+                "health"
+            ));
             return true;
         }
         return false;
@@ -322,9 +329,34 @@ class Knight {
                         }
                         knight.velocityY = 0;
                     }
+                } else if (entity instanceof DungeonSpike) {
+                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
+                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
+        
+                    if (horizontalCollision) {
+                        if (entity.BB.x < that.BB.x) {
+                            that.x += overlap.x;
+                        } else {
+                            that.x -= overlap.x;
+                        }
+                        that.velocityX = 0;
+                    } else if (verticalCollision) {
+                        if (entity.BB.y < that.BB.y) {
+                            down++;
+                            that.y += overlap.y;
+                            that.takeDamage(50);
+                        } else {
+                            up++;
+                            that.y -= overlap.y - 1;
+                            
+                        }
+                        that.velocityY = 0;
+                    }
                 } else if (entity instanceof Potion) {
-                    if (this.game.keys['g'] && this.buyPotion()) {
-                        entity.removeFromWorld = true;
+                    if (this.game.keys["f"]) {
+                        if (this.buyPotion()) {
+                            entity.removeFromWorld = true;
+                        }
                     }
                 }
             }

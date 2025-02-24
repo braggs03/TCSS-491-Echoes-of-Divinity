@@ -1,7 +1,6 @@
 class Gorgon {
     constructor(game, x, y) {
         this.game = game;
-        this.hp = 1000;
         this.x = x
         this.y = y;
         this.dead = false;
@@ -11,6 +10,11 @@ class Gorgon {
         this.attackNumber = Math.floor(Math.random() * 3);
         this.inCutscene = false;
         this.attackRange = 100;
+        this.maxHp = 1000;
+        this.hp = this.maxHp;
+        this.height = 100;
+        this.bheight = 10;
+        this.healthBar = new HealthBar(this);
         this.updateBB();
 
         this.animations = {
@@ -58,7 +62,6 @@ class Gorgon {
     updateBB() {
         this.lastBB = this.BB;
         if (this.aggro) {
-            /*
             if (this.currentState === 'LeftWalk') {
                 this.BB = new BoundingBox(this.x - this.game.camera.x + 50, this.y - this.game.camera.y + 100, 100, 150);
             } else if (this.currentState === 'LeftAttack1') {
@@ -73,9 +76,6 @@ class Gorgon {
             } else {
                 this.BB = new BoundingBox(this.x - this.game.camera.x + 128, this.y + 128, 100, 128);
             }
-
-             */
-            this.BB = new BoundingBox(this.x - this.game.camera.x + 128, this.y + 128, 100, 128);
         } else {
             this.BB = new BoundingBox(this.x - this.game.camera.x - 128, this.y + 128, 500, 128);
         }
@@ -179,18 +179,19 @@ class Gorgon {
         });
 
         if (this.currentState === 'RightRun') {
-            this.x += 500 * this.game.clockTick;
+            this.x += 700 * this.game.clockTick;
         } else if (this.currentState === 'LeftRun') {
-            this.x -= 500 * this.game.clockTick;
+            this.x -= 700 * this.game.clockTick;
         } else if (this.currentState === 'RightWalk') {
-            this.x += 150 * this.game.clockTick;
+            this.x += 250 * this.game.clockTick;
         }else if (this.currentState === 'LeftWalk') {
-            this.x -= 150 * this.game.clockTick;
+            this.x -= 250 * this.game.clockTick;
         }
     }
 
     draw(ctx) {
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
         this.BB.draw(ctx);
+        if (this.healthBar) this.healthBar.draw(ctx);
     }
 }

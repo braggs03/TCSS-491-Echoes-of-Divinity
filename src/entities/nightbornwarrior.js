@@ -6,6 +6,7 @@ class NightbornWarrior {
         this.maxHp = 1400;
         this.hp = 1400;
         this.height = 100;
+        this.bheight = 0;
         this.healthBar = new HealthBar(this);
 		this.inCutscene = false;
         this.invinsible = false;

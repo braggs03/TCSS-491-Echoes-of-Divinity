@@ -16,7 +16,7 @@ class MechaGolem {
         this.maxHp = MECHA_GOLEM_DEFAULTS.maxHp; 
         this.hp = this.self.hp ? this.self.hp : MECHA_GOLEM_DEFAULTS.maxHp;
         this.height = 90; 
-
+        this.bheight = 0; 
         this.facing = RIGHT;
         this.aggro = false;
         this.engaged = false; 
