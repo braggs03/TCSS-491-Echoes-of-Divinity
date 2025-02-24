@@ -250,7 +250,7 @@ class Knight {
         this.updateBB();
 
         if (this.currentStamina < this.stamina) {
-            this.currentStamina += 1;
+            this.currentStamina += 100 * this.game.clockTick;
         }
 
         if (this.inCutscene) {
