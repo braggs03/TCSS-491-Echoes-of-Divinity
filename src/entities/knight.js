@@ -209,14 +209,6 @@ class Knight {
         if (this.currentStamina < this.stamina) {
             this.currentStamina += 1;
         }
-
-        if (this.inCutscene) {
-            if (this.animations[this.currentState].getDone()) {
-                this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
-                this.setState(this.chosenState);
-            }
-            return;
-        }
     
         if (this.y > 1000) {
             this.die();
@@ -277,6 +269,30 @@ class Knight {
                 }
             }
         });
+
+        if (this.inCutscene) {
+            if (this.currentState === "RightRun") {
+                this.x += this.maxVelocityX * clockTick;
+                if (this.runSound.paused) {this.runSound.play();}
+            } else if (this.currentState === "LeftRun") {
+                this.x -= this.velocityX * clockTick;
+                if (this.runSound.paused) {this.runSound.play();}
+            } else if (this.currentState === "RightRoll") {
+                this.x += this.rollSpeed * clockTick;
+                if (this.rollSound.paused) {this.rollSound.play();}
+            } else if (this.currentState === "LeftRoll") {
+                this.x -= this.rollSpeed * clockTick;
+                if (this.rollSound.paused) {this.rollSound.play();}
+            } else if (this.currentState === "RightIdle" || this.currentState === "LeftIdle") {
+                this.pauseSound();
+            }
+            if (this.animations[this.currentState].getDone()) {
+                this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
+                this.setState(this.chosenState);
+                this.pauseSound();
+            }
+            return;
+        }
     
         if (!this.dead) {
             if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1') {
@@ -309,10 +325,10 @@ class Knight {
             }
     
             if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
-                if (this.currentState == 'RightRoll') {
+                if (this.currentState == 'RightRoll' && !this.colliding.left) {
                     this.invinsible = true;
                     this.x += this.rollSpeed * clockTick;
-                } else if (this.currentState == 'LeftRoll') {
+                } else if (this.currentState == 'LeftRoll' && !this.colliding.right) {
                     this.invinsible = true;
                     this.x -= this.rollSpeed * clockTick;
                 }

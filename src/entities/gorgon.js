@@ -1,15 +1,27 @@
+const GORGON_DEFAULTS = {
+    maxHp: 1000, 
+    Hp: 1000,
+    dead: false,
+}
+
 class Gorgon {
-    constructor(game, x, y) {
+    constructor(game, self) {
         this.game = game;
-        this.hp = 1000;
-        this.x = x
-        this.y = y;
-        this.dead = false;
+        this.self = self;
+        this.x = self.x;
+        this.y = self.y;
+        this.dead = this.self.dead ? this.self.dead : GORGON_DEFAULTS.dead;
         this.aggro = false;
         this.target = null;
         this.facingLeft = true;
         this.attackNumber = Math.floor(Math.random() * 3);
         this.inCutscene = false;
+        this.attackRange = 100;
+        this.maxHp = GORGON_DEFAULTS.maxHp; 
+        this.hp = this.self.hp ? this.self.hp : GORGON_DEFAULTS.maxHp;
+        this.height = 100;
+        this.bheight = 10;
+        this.healthBar = new HealthBar(this);
         this.updateBB();
 
         this.animations = {
@@ -37,6 +49,13 @@ class Gorgon {
 
         this.currentState = Math.random() < 0.5 ? 'LeftIdle1' : 'LeftIdle2';
     };
+
+    save() {
+        this.self.x = this.x;
+        this.self.y = this.y;
+        this.self.hp = this.hp;
+        this.self.dead = this.dead;
+    }
 
     setState(state) {
         for (let key in this.animations) {

@@ -144,7 +144,7 @@ class SceneManager {
         if (this.level.gorgon) {
             for (let i = 0; i < this.level.gorgon.length; i++) {
                 let gorgon = this.level.gorgon[i];
-                //this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
+                this.game.addEntity(new Gorgon(this.game, gorgon));
             }
         }
 
