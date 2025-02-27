@@ -11,7 +11,6 @@ class MechaGolem {
         this.x = this.self.x;
         this.y = this.self.y;
         this.dead = this.self.dead ? this.self.dead : MECHA_GOLEM_DEFAULTS.dead;
-        this.speed = 4;
         this.healthBar = new HealthBar(this);
         this.maxHp = MECHA_GOLEM_DEFAULTS.maxHp; 
         this.hp = this.self.hp ? this.self.hp : MECHA_GOLEM_DEFAULTS.maxHp;
@@ -33,6 +32,14 @@ class MechaGolem {
         this.flickerFlag = true;
         this.flickerDuration = 0;
 
+        this.velocityX = 0;
+        this.speed = 600; 
+        
+        this.velocityY = 0;
+        this.maxVelocityY = 990;
+        this.accelerationY = 4125; 
+
+
         this.idleAnimator = this.idleRight();
         this.animator = this.idleAnimator;
         this.updateBB();
@@ -49,16 +56,15 @@ class MechaGolem {
         this.lastBB = this.BB;
         
         if (this.engaged) {
-            this.BB = new BoundingBox(this.x - this.game.camera.x + 96, this.y + 96, 200, 200);
+            this.BB = new BoundingBox(this.x - this.game.camera.x + 96, this.y + 96 - this.game.camera.y, 200, 200);
         } else {
-            this.BB = new BoundingBox(this.x - this.game.camera.x - 128, this.y + 96, this.aggroRange, 200);
+            this.BB = new BoundingBox(this.x - this.game.camera.x - 128, this.y + 96 - this.game.camera.y, this.aggroRange, 200);
         }
     }
 
     resetAggro() {
         this.aggro = false;
         this.engaged = false;
-        this.attackInProgress = false;
         this.idleCooldown = 0;
         this.canAttackAgain = true;
         this.idleAnimator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
@@ -92,56 +98,65 @@ class MechaGolem {
     // slow down golem aarcks when knight is rolling:
     update() {
         if (this.dead) return;
+        const clockTick = this.game.clockTick;
 
         if (this.flickerDuration > 0) {
             this.flickerDuration -= this.game.clockTick;
             this.flickerFlag = !this.flickerFlag;
         }
 
-        let that = this;
-        let left = 0;
-        let right = 0;
-        let up = 0;
-        let down = 0;
+        this.colliding = {
+            right: false,
+            left: false,
+            down: false,
+            up: false,
+        }
+        let mechagolem = this;
+        
         this.game.entities.forEach((entity) => {
-            if (entity.BB && that.BB.collide(entity.BB)) {
-                const overlap = entity.BB.overlap(that.BB);
+            if (entity.BB && mechagolem.BB.collide(entity.BB)) {
+                const overlap = entity.BB.overlap(mechagolem.BB);
                 if (entity instanceof DungeonWall) {
-                    if (entity.BB.x < that.BB.x) {
-                        right++;
-                        that.x += overlap.x;
-                    } else if (entity.BB.x > that.BB.x) {
-                        left++;
-                        that.x -= overlap.x;
+                    if (entity.BB.x < mechagolem.BB.x) {
+                        this.colliding.right = true;
+                        mechagolem.x += overlap.x;
+                    } else if (entity.BB.x > mechagolem.BB.x) {
+                        this.colliding.left = true;
+                        mechagolem.x -= overlap.x;
                     }
+                    mechagolem.velocityX = 0; 
                 } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
-        
+
                     if (horizontalCollision) {
-                        if (entity.BB.x < that.BB.x) {
-                            that.x += overlap.x;
+                        if (entity.BB.x < mechagolem.BB.x) {
+                            mechagolem.x += overlap.x;
                         } else {
-                            that.x -= overlap.x;
+                            mechagolem.x -= overlap.x;
                         }
-                        that.velocityX = 0;
+                        mechagolem.velocityX = 0;
                     } else if (verticalCollision) {
-                        if (entity.BB.y < that.BB.y) {
-                            down++;
-                            that.y += overlap.y;
+                        if (entity.BB.y < mechagolem.BB.y) {
+                            this.colliding.down = true;
+                            mechagolem.y += overlap.y;
                         } else {
-                            up++;
-                            that.y -= overlap.y - 1;
+                            this.colliding.up = true;
+                            mechagolem.y -= overlap.y - 1;
                         }
-                        that.velocityY = 0;
+                        mechagolem.velocityY = 0;
                     }
                 }
             }
         });
 
-        if (left == 0) {
-            this.y += 5;
+        if (!this.colliding.up) {
+            this.velocityY += this.accelerationY * clockTick;
+            this.velocityY = Math.max(this.velocityY, this.maxVelocityY * clockTick);
         }
+
+        this.y += this.velocityY * clockTick;
+
 
         if (this.target && (this.target.dead || this.target.removeFromWorld)) {
             this.resetAggro();
@@ -210,8 +225,7 @@ class MechaGolem {
     
         this.attackInProgress = true;
         this.canAttackAgain = false; 
-
-        const attackType = Math.random() < 0.5 ? "attack1" : "attack2";
+        
         this.animator = this.facing === RIGHT ? this.meleeRight() : this.meleeLeft();
     
         console.log("Golem attacks knight!");
@@ -240,7 +254,7 @@ class MechaGolem {
 
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return;
-        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 4);
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 4);
         this.healthBar.draw(ctx);
         this.BB.draw(ctx);
     }
