@@ -489,17 +489,19 @@ class DungeonStatue {
     }
 };
 
-class DungeonTorch2 {
+const EMBER_DROP_WIDTH = 67;
+const EMBER_DROP_HEIGHT = 67;
+
+class EmberDrop {
     constructor(game, x, y, emberCount, levelIndex) {
         Object.assign(this, { game, x, y, emberCount, levelIndex });
-        this.animator = this.ember();
+        this.animator = this.emberDrop();
         this.scale = 5.5;
-        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
-
+        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, EMBER_DROP_WIDTH, EMBER_DROP_HEIGHT);
     };
 
     update() {
-        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, KNIGHT_WIDTH, KNIGHT_HEIGHT);
+        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, EMBER_DROP_WIDTH, EMBER_DROP_HEIGHT);
         if (this.game.camera.knight.BB.collide(this.BB) && this.game.keys["f"]) {
             this.game.camera.knight.emberCount += this.emberCount;
             this.removeFromWorld = true;
@@ -508,9 +510,18 @@ class DungeonTorch2 {
 
     draw(ctx) {
         this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, 4);
-    }
+        this.BB.draw(ctx);
+    };
 
-    ember() {
-        return new Animator(ASSET_MANAGER.getAsset(TORCH), 0, 0, 21, 27, 4, 0.1, false, true);
-    }
+    emberDrop() {
+        return new Animator(
+            ASSET_MANAGER.getAsset(EMBER), 
+            0, 96,        // Starting x, y position in spritesheet
+            16, 16,       // Width and height of each frame
+            5,            // Number of frames
+            0.2,          // Frame duration
+            0,            // Padding
+            true          // Loop
+        );
+    };
 };
