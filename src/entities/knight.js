@@ -192,7 +192,6 @@ class Knight {
 
     die() {
         if (!this.dead) {
-
             this.dead = true;
             this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
             console.log("Knight has died!");
@@ -203,9 +202,10 @@ class Knight {
                 this.game.camera.respawnKnight(this);
             }, 1000);
             // Adjust timing to match the death animation duration
+
+            this.game.camera.emberDrop = new EmberDrop(this.game, this.x + KNIGHT_X_OFFSET, this.y + KNIGHT_HEIGHT, this.emberCount, this.game.camera.levelIndex);
+            this.emberCount = 0;
         }
-        this.game.camera.emberDrop = new DungeonTorch2(this.game, this.x, this.y, this.emberCount, this.game.camera.levelIndex);
-        this.emberCount = 0;
     }
 
     usePotion () {
@@ -248,7 +248,6 @@ class Knight {
 
     update() {
         const clockTick = this.game.clockTick;
-        this.updateBB();
 
         if (this.currentStamina < this.stamina) {
             this.currentStamina += 100 * this.game.clockTick;
@@ -296,10 +295,12 @@ class Knight {
                             knight.x -= overlap.x;
                         }
                         knight.velocityX = 0;
-                    } else if (verticalCollision) {
+                    }
+                    
+                    if (verticalCollision) {
                         if (entity.BB.y < knight.BB.y) {
                             this.colliding.down = true;
-                            knight.y += overlap.y;
+                            knight.y += overlap.y - 1;
                         } else {
                             this.colliding.up = true;
                             knight.y -= overlap.y - 1;
@@ -317,14 +318,16 @@ class Knight {
                             knight.x -= overlap.x;
                         }
                         knight.velocityX = 0;
-                    } else if (verticalCollision) {
+                    }
+
+                    if (verticalCollision) {
                         if (entity.BB.y < knight.BB.y) {
                             this.colliding.down = true;
                             knight.y += overlap.y;
                             knight.takeDamage(50);
                         } else {
                             this.colliding.up = true;
-                            knight.y -= overlap.y - 1;
+                            knight.y -= overlap.y;
                             
                         }
                         knight.velocityY = 0;
@@ -338,6 +341,7 @@ class Knight {
                 }
             }
         });
+        this.updateBB();
 
         if (this.inCutscene) {
             if (this.currentState === "RightRun") {
@@ -500,6 +504,8 @@ class Knight {
 
         this.x += this.velocityX * clockTick;
         this.y += this.velocityY * clockTick;
+        this.x = Math.round(this.x);
+        this.y = Math.round(this.y);
         this.updateBB();
     }
 
