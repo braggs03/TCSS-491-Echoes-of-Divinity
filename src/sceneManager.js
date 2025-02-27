@@ -98,6 +98,10 @@ class SceneManager {
             if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint) {
                 this.knight.x = this.currentCheckpoint.x;
                 this.knight.y = this.currentCheckpoint.y;
+                if (levelIndex === "two") {
+                    // Force camera to position at the bonfire
+                    this.x = Math.max(0, Math.min(this.level.width, this.knight.x - (PARAMS.SCREENWIDTH / 2)));
+                }
                 console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);     
             } else if (end) {
                 this.knight.x = this.level.endPosition.x;

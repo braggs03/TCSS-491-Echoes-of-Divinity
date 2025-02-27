@@ -105,6 +105,10 @@ let levels = {
             x: 11220,
             y: 320,
         },
+        checkpoint3:{ //bonFire position change both
+            x: 10900,
+            y: 320,
+        },
         bonFire: [ { x: 10900, y: 365, level: "two" }],
         dungeonBackground3: [{ x:0, y:0, w:3, h: 1}],
         dungeonGround2: [{ x: 0, y: 14.5, w: 6, h: 1 }, {x:7, y: 14.5, w: 8, h:1},{ x: 16, y: 14.5, w: 19, h: 1 }, {x: 36, y: 14.5, w: 8, h: 1}, {x: 45, y: 14.5, w: 8, h: 1}, {x: 54, y: 14.5, w: 10, h: 1}, {x: 64, y: 14.5, w: 11, h:1}, { x: 0, y: 0, w: 75, h: 1 }],
