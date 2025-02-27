@@ -63,12 +63,12 @@ class SkeletonWarrior {
         this.lastBB = this.BB;
         if (this.aggro) {
             if (this.currentState === "LeftWalk") {
-                this.BB = new BoundingBox(this.x + 130 - this.game.camera.x, this.y + 140, 75, 115);
+                this.BB = new BoundingBox(this.x + 130 - this.game.camera.x, this.y + 140 - this.game.camera.y, 75, 115);
             } else {
-                this.BB = new BoundingBox(this.x + 75 - this.game.camera.x, this.y + 140, 60, 115);
+                this.BB = new BoundingBox(this.x + 75 - this.game.camera.x, this.y + 140 - this.game.camera.y, 60, 115);
             }
         } else {
-            this.BB = new BoundingBox(this.x - this.game.camera.x - 250, this.y + 128, 700, 128);
+            this.BB = new BoundingBox(this.x - this.game.camera.x - 250, this.y + 128 - this.game.camera.y, 700, 128);
         }
     }
 
@@ -189,7 +189,7 @@ class SkeletonWarrior {
 	};
 
 	draw(ctx) {
-		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
+		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 2);
         this.BB.draw(ctx);
         if (this.healthBar) this.healthBar.draw(ctx);
 	};
