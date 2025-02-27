@@ -439,6 +439,10 @@ class SceneManager {
         this.knight.moveable = true;
         this.interactable.entity.dialogCompleted = true;
         this.interactable.removeFromWorld = true;
+        const interactable = this.interactable;
+        setTimeout(() => {
+            interactable.entity.dialogCompleted = false;
+        }, 3000);
         this.interactable = undefined;
     }
 
