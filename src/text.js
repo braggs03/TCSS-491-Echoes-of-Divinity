@@ -24,12 +24,12 @@ const text = {
     azucena3: [
         ["Come, I know of a safe place", "within the castle."],
         ["Don't bother waiting for Reina.", "She's still recuperating."],
-        ["Unlike her however,", "I can fly."],
+        ["We must make haste."],
     ],
 
     azucena4: [
-        ["Voilà, here we can keep safe" , "as you make your way to Duma."],
-        ["4th wall break: F to interact with us or items.", "Light the Emberlight (Campfire) for a checkpoint"],
+        ["Here we can keep safe" , "as you make your way to Duma."],
+        ["4th wall break: F to interact with us or items.", "G to use healing potion", "Light the Emberlight (Campfire) for a checkpoint"],
     ],
 
     azucena5: [
@@ -48,7 +48,7 @@ const text = {
     reina4: [
         ["Mica's Breath!!", "That's Knight Commander Lucan!?!"],
         ["But.. you fell in Thalador.", "What happened to you?"],
-        ["Commander, Come to your senses!!"],
+        ["Commander, come to your senses!!"],
     ],
 
     azucena7: [

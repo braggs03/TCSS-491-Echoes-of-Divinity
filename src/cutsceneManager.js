@@ -91,6 +91,7 @@ class CutsceneTwo {
             this.game.camera.music.volume = Math.max ( this.game.camera.music.volume - (0.1 * this.game.clockTick), 0.0);
             await this.delay(16);
         }
+        this.game.camera.music.pause();
         this.knight.setState("RightRun");
         while (this.knight.x < 2500) {
             await this.delay (16);
@@ -142,7 +143,7 @@ class CutsceneThree {
         this.game.camera.showInteractive(this.azucena, "azucena4");
         await this.delay(3000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(3000);
+        await this.delay(6000);
         this.game.camera.removeInteractive();
 
         this.knight.inCutscene = false;
@@ -312,6 +313,7 @@ class CutsceneSeven {
             this.game.camera.music.volume = Math.max ( this.game.camera.music.volume - (0.1 * this.game.clockTick), 0.0);
             await this.delay(16);
         }
+        this.game.camera.music.pause()
         this.knight.setState('RightRun');
         while (this.knight.x < 1300) {
             await this.delay (16);
