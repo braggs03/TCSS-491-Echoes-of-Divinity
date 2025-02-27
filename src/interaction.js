@@ -6,7 +6,7 @@ class Interaction {
     }
 
     update() {
-        if (this.game.keys["f"]) {
+        if (this.game.keys["f"] && !this.game.camera.knight.inCutscene) {
             if (this.game.camera.interactable ==  undefined && this.fReleased) {
                 this.fReleased = false;
             } else if (this.game.camera.interactable && !this.game.camera.interactable.finished && this.fReleased) {
@@ -53,7 +53,7 @@ class Interaction {
 function testInteractable(game) {
     if (!game.camera.interactable) {
         game.entities.forEach((entity) => {
-            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && entity.text && !entity.dialogCompleted && game.keys["f"]) {
+            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && !game.camera.knight.inCutscene && entity.text && !entity.dialogCompleted && game.keys["f"]) {
                 game.camera.showInteractive(entity, entity.text);
             }
         });

@@ -10,7 +10,8 @@ class TransitionScreen {
 
         if(this.dead){
             if (this.elapsed > 2) {
-                this.game.camera.loadLevel(this.level, false, false, false, false);            
+                this.game.camera.loadLevel(this.level, false, false, false, false); 
+                this.game.camera.deadcheckpoint = false;           
             }
         } else {
             if (this.elapsed > 0.3) {
@@ -33,7 +34,7 @@ class TransitionScreen {
             ctx.fillRect(0, 0, PARAMS.SCREENWIDTH, PARAMS.SCREENHEIGHT);
             ctx.fillStyle = "white"
             ctx.textAlign = "center"
-            ctx.font = "50px Open Sans";
+            ctx.font = '50px "Open+Sans"';
             ctx.fillText("Loading", PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2);
         }
        

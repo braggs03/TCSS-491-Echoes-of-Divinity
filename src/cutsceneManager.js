@@ -1,7 +1,9 @@
 class CutsceneManager {
     constructor(game) {
         this.game = game;
-        this.cutsceneArray = [new CutsceneOne(this.game), new CutsceneTwo(this.game), new CutsceneThree(this.game), new CutsceneFour(this.game), new CutsceneFive(this.game), new CutsceneSix(this.game)]
+        this.cutsceneArray = [new CutsceneOne(this.game), new CutsceneTwo(this.game),
+            new CutsceneThree(this.game), new CutsceneFour(this.game), new CutsceneFive(this.game),
+            new CutsceneSix(this.game), new CutsceneSeven(this.game)]
     }
 }
 
@@ -25,6 +27,7 @@ class CutsceneOne {
         }
         this.knight.setState('RightIdle');
 
+        this.azucena.setState(this.azucena.idleRight());
         this.azucena.goRight = true;
         while (this.azucena.x <= 400) {
             await this.delay (16);
@@ -83,6 +86,16 @@ class CutsceneTwo {
     async run() {
         this.knight.inCutscene = true;
         this.azucena.inCutscene = true;
+        this.knight.setState('LeftIdle');
+        while (this.game.camera.music.volume > 0.0) {
+            this.game.camera.music.volume = Math.max ( this.game.camera.music.volume - (0.1 * this.game.clockTick), 0.0);
+            await this.delay(16);
+        }
+        this.game.camera.music.pause();
+        this.knight.setState("RightRun");
+        while (this.knight.x < 2500) {
+            await this.delay (16);
+        }
         this.knight.setState("LeftIdle");
         this.azucena.x = this.knight.x - 1200;
         this.azucena.goRight = true;
@@ -130,7 +143,7 @@ class CutsceneThree {
         this.game.camera.showInteractive(this.azucena, "azucena4");
         await this.delay(3000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(3000);
+        await this.delay(6000);
         this.game.camera.removeInteractive();
 
         this.knight.inCutscene = false;
@@ -208,8 +221,10 @@ class CutsceneSix {
     }
 
     async run() {
+        this.game.camera.music.pause();
         this.knight.inCutscene = true;
         this.lucan.inCutscene = true;
+        this.lucan.setState('idleLeft')
         this.knight.setState('RightRun');
         while (this.knight.x < 200) {
             await this.delay (16);
@@ -219,13 +234,15 @@ class CutsceneSix {
         this.reina.inCutscene = true;
         this.azucena.inCutscene = true;
         let wall = { x: 0, y: 0, h: 5 };
-        this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
+        this.game.entities.splice(1, 0, new DungeonWall(this.game, wall.x, wall.y, wall.h))
+        //this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
+        this.game.draw()
         this.game.camera.showInteractive(this.azucena, "azucena6");
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
         this.game.camera.removeInteractive();
-        this.lucan.setState('runLeft')
+        this.lucan.setState('runLeft');
         while (this.lucan.x > 650) {
             await this.delay (16);
         }
@@ -236,12 +253,18 @@ class CutsceneSix {
         await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(3000);
-        this.game.camera.interactable.currentDialog++;
-        await this.delay(3000);
         this.game.camera.removeInteractive();
         this.game.camera.showInteractive(this.azucena, "azucena7");
         await this.delay(3000);
         this.game.camera.interactable.currentDialog++;
+        this.game.camera.music = new Audio(LUCAN_MUSIC);
+        this.game.camera.music.loop = true;
+        this.game.camera.music.volume = 0.1;
+
+        // Ensure the audio is fully loaded before allowing playback
+        this.game.camera.music.addEventListener('canplaythrough', () => {
+            this.game.camera.music.play();
+        });
         await this.delay(2000);
         this.game.camera.removeInteractive();
         this.knight.setState('RightRun');
@@ -270,6 +293,56 @@ class CutsceneSix {
         this.knight.moveable = true;
         this.game.camera.inCutscene = false;
         this.knight.velocityX = 0;
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+class CutsceneSeven {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.azucena = this.game.entities.find(entity=> entity instanceof Azucena);
+    }
+
+    async run() {
+        this.knight.inCutscene = true;
+        while (this.game.camera.music.volume > 0.0) {
+            this.game.camera.music.volume = Math.max ( this.game.camera.music.volume - (0.1 * this.game.clockTick), 0.0);
+            await this.delay(16);
+        }
+        this.game.camera.music.pause()
+        this.knight.setState('RightRun');
+        while (this.knight.x < 1300) {
+            await this.delay (16);
+        }
+        this.knight.setState('LeftIdle');
+        this.knight.velocityX = 0;
+        this.azucena.inCutscene = true;
+        this.azucena.y = 500
+        this.azucena.goRight = true;
+        while (this.azucena.x < this.knight.x - 200) {
+            await this.delay (16);
+        }
+        this.azucena.goRight = false;
+        this.game.camera.showInteractive(this.azucena, "azucena_end");
+        await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(4000);
+        this.game.camera.removeInteractive();
+        this.azucena.inCutscene = false;
+        this.knight.moveable = true;
+        this.game.camera.inCutscene = false;
+        this.knight.velocityX = 0;
+        this.game.camera.loadLevel("startScreen", false, true,false, false)
     }
 
     delay(ms) {

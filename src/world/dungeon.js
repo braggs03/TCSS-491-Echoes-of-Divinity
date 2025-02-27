@@ -140,6 +140,7 @@ class DungeonBackground2 {
     constructor(game, x, y, w, h) {
         Object.assign(this, { game, x, y, w, h});
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON_BACKGROUND_IMAGE);
+        this.animator = this.background();
         this.scale = 5;
     };
 
@@ -149,9 +150,54 @@ class DungeonBackground2 {
     draw(ctx) {
         for (let k = 0; k < this.h; k++) {
             for (let i = 0; i < this.w; i++) {
-                ctx.drawImage(this.spritesheet, 0, 0, DUNEGON_BACKGROUND2_WIDTH, DUNEGON_BACKGROUND2_HEIGHT, (this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_BACKGROUND2_WIDTH * this.scale, DUNEGON_BACKGROUND2_HEIGHT * this.scale);
+                this.animator.drawFrame(this.game.clockTick, ctx, this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y, 5);
+                // ctx.drawImage(this.spritesheet, 0, 0, DUNEGON_BACKGROUND2_WIDTH, DUNEGON_BACKGROUND2_HEIGHT, (this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_BACKGROUND2_WIDTH * this.scale, DUNEGON_BACKGROUND2_HEIGHT * this.scale);
             }
         }
+        // this.animator.drawFrame(this.game.clockTick, ctx, this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y, 5);
+    };
+
+    background() {
+        return new Animator(ASSET_MANAGER.getAsset(DUNGEON_BACKGROUND_IMAGE), 0, 0, 896, 144, 4, 6, false, true);
+    }
+};
+
+const DUNGEON_SPIKE_WIDTH = 56;
+const DUNGEON_SPIKE_HEIGHT = 56;
+class DungeonSpike {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 3;
+        this.BB = new BoundingBox(
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y + (DUNGEON_SPIKE_HEIGHT * this.scale * 3/4), // Position at bottom quarter
+            DUNGEON_SPIKE_WIDTH * this.scale,
+            DUNGEON_SPIKE_HEIGHT * this.scale / 4 // Quarter height
+        );
+    };
+
+    update() {
+        this.BB = new BoundingBox(
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y + (DUNGEON_SPIKE_HEIGHT * this.scale * 3/4),
+            DUNGEON_SPIKE_WIDTH * this.scale,
+            DUNGEON_SPIKE_HEIGHT * this.scale / 4
+        );
+    };
+
+    draw(ctx) {
+        ctx.drawImage(
+            this.spritesheet,
+            912, 703,
+            DUNGEON_SPIKE_WIDTH,
+            DUNGEON_SPIKE_HEIGHT,
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y,
+            DUNGEON_SPIKE_WIDTH * this.scale,
+            DUNGEON_SPIKE_HEIGHT * this.scale
+        );
+        this.BB.draw(ctx);
     };
 };
 
@@ -161,6 +207,12 @@ const BONFIRE_HEIGHT = 56;
 class Bonfire {
     constructor(game, x, y, level) {
         Object.assign(this, { game, x, y, level });
+        this.sound = new Audio("./resources/SoundEffects/emberLight.ogg");
+        this.sound.loop = true;
+        this.sound.volume = 0.2;
+        if (this.game.camera.knight) {
+            this.knight = this.game.camera.knight;
+        }
 
         this.animator1 = this.bonfireAnimationLit();
         this.animator2 = this.bonfireAnimationUnlit();
@@ -173,26 +225,50 @@ class Bonfire {
     };
 
     update() {
+        if (this.discovered) {
+            if (!this.game.entities.includes(this)) {
+                this.sound.pause();
+            } else {
+                this.sound.volume = Math.max (0, 0.2 - Math.abs(this.x - this.knight.x) / 5000);
+            }
+        }
 
         this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, BONFIRE_HEIGHT * 2.2, BONFIRE_HEIGHT * 4.3);
 
-        if (this.game.keys["f"]) {
+        if (this.game.keys["f"] && !this.keypressed) {
             this.game.entities.forEach((entity) => {
-                if (this.fReleased && entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
+                if (entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
                     this.activateCheckpoint();
-                    this.fReleased = false;
+                    if (this.sound.paused) {
+                        this.sound.play();
+                    }
+                    this.keypressed = true;
                 }
             });
         } else {
             this.fReleased = true;
         }
-    };
+
+        if (this.game.keys["t"] && !this.keypressed) {
+            this.game.entities.forEach((entity) => {
+                if (entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
+                    this.game.camera.openCheckpointMenu(this);
+                    this.keypressed = true;
+                }
+            });
+        }
+
+        if (!this.game.keys["f"] && !this.game.keys["t"]) {
+            this.keypressed = false;
+        }
+    }
 
     bonfireAnimationLit() {
         return new Animator(ASSET_MANAGER.getAsset(DUNGEON), 2236, 775, 64, 56, 6, 0.1, false, true);
     }
 
     bonfireAnimationUnlit() {
+        this.sound.pause();
         return new Animator(ASSET_MANAGER.getAsset(DUNGEON), 2620, 775, 64, 56, 1, 0.1, false, true);
     }
 
@@ -200,10 +276,25 @@ class Bonfire {
     activateCheckpoint() {
         this.discovered = true;
         this.isCurrent = true;
-
         this.game.camera.currentCheckpoint = this;
+
+        //This is for the checkpoint to be passed into Scenemanager/loadLevel
+        if (!this.game.camera.discoveredCheckpoints.some(cp => cp === this)) {
+            this.game.camera.discoveredCheckpoints.push(this);
+        }
+
+        //This is for the checkpoint data to be passed into checkpointmenu
+        if (!this.game.camera.discoveredCheckpointsLevel.some(cp => cp.x === this.x && cp.y === this.y && cp.level === this.level)) {
+            this.game.camera.discoveredCheckpointsLevel.push({
+                x: this.x,
+                y: this.y,
+                level: this.level
+            });
+        }
+
+        // console.log("checkpointlevel",this.game.camera.discoveredCheckpointsLevel)
+
         console.log(`Checkpoint activated at (${this.x}, ${this.y}) in level: ${this.level}`)
-        // this.game.camera.loadLevel(this.level, false, false, false);
     }
 
 
@@ -366,7 +457,7 @@ class DungeonWaterfall {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.animator = this.waterfall();
-        this.scale = 5.5;
+        this.scale = 3;
     };
 
     update() {

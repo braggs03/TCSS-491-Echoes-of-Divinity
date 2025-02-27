@@ -4,9 +4,9 @@ class SceneManager {
         this.game.camera = this;
         this.x = 0;
         this.y = 0;
-        this.embers = 0;
         this.inCutscene = false;
         this.cutsceneCounter = 0;
+        this.music = null;
 
         this.menuSelectIndex = -10;
         this.creditsLineIndex = 0;
@@ -15,11 +15,26 @@ class SceneManager {
 
         this.tutorialCutsceneDone = false;
         this.shopkeeperCutsceneDone = false;
-
+        this.oneCutsceneDone = false;
+        this.twoCutsceneDone = false;
+        this.bossoneCutsceneDone = false;        
+        this.emberAnimation = new Animator(
+            ASSET_MANAGER.getAsset("./resources/maintheme.png"), 
+            0, 96,        // Starting x, y position in spritesheet
+            16, 16,       // Width and height of each frame
+            5,            // Number of frames
+            0.2,          // Frame duration
+            0,            // Padding
+            true          // Loop
+        );
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
+        this.deadcheckpoint = false;
+        this.discoveredCheckpoints = [];
+        this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('shopkeeper', false, false, false, false);
+        this.loadLevel('startScreen', false, true, false, false);
+        // this.loadLevel('one', false, false, false, false);
     };
 
     saveEntities() {
@@ -39,10 +54,12 @@ class SceneManager {
     };
 
     respawnKnight(knight) {
+        this.deadcheckpoint = true;
         this.knight.respawn();
+        this.music.pause();
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
-            if (levels[levelIndex]) { 
+            if (levels[levelIndex]) {
                 this.loadLevel(levelIndex, true, false, true, false);
                 console.log(`Respawn @ checkpoint (${knight.x}, ${knight.y}) @ level ${levelIndex}`);
             } else {
@@ -55,8 +72,14 @@ class SceneManager {
     }
 
     loadLevel(levelIndex, transition, title, dead, end) {
+        this.fire = this.game.entities.find(entity => entity instanceof Bonfire);
+        if (this.fire) {
+            if (!this.fire.sound.paused) {
+                this.fire.sound.volume = 0;
+            }
+        }
+
         this.checkpoint = false;
-        this.dead = false;
         this.title = title;        
         this.level = levels[levelIndex];
         this.saveEntities();
@@ -64,18 +87,31 @@ class SceneManager {
         this.game.textOverlay = null;
         this.x = 0;
         this.cutsceneCounter = 0;
+        if (this.level === levels.two && this.twoCutsceneDone && !transition) {
+            this.cutsceneCounter = 1;
+            this.twoCutsceneDone = false;
+        }
         this.cutsceneStartTime = Date.now();
+
         
         if (!this.title) {
-            if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex) {
+            if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint) {
                 this.knight.x = this.currentCheckpoint.x;
                 this.knight.y = this.currentCheckpoint.y;
-                console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);
+                if (levelIndex === "two") {
+                    // Force camera to position at the bonfire
+                    this.x = Math.max(0, Math.min(this.level.width, this.knight.x - (PARAMS.SCREENWIDTH / 2)));
+                }
+                console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);     
             } else if (end) {
                 this.knight.x = this.level.endPosition.x;
                 this.knight.y = this.level.endPosition.y;
+                console.log(this.x);
+                this.x = this.level.width;
+                console.log(this.x);
+                console.log(this.level.width);
                 console.log(`Loading level ${levelIndex} @ default end spawn (${this.level.endPosition.x}, ${this.level.endPosition.y})`);
-            } else { 
+            } else {
                 this.knight.x = this.level.startPosition.x;
                 this.knight.y = this.level.startPosition.y;
                 this.emberDrop = null;
@@ -85,10 +121,30 @@ class SceneManager {
             this.game.ctx.fillRect(50, 50, 100, 100);
         }
 
-        if(transition) {
+        if (transition && this.level !== levels.tutorial) {
+            if (this.music) {
+                this.music.pause();
+            }
             this.game.addEntity(new TransitionScreen(this.game, levelIndex, dead, end))
             return;
         }
+
+        if(this.level === levels.one || this.level === levels.two && this.music !== new Audio(BACKGROUND_MUSIC)) {
+            this.music = new Audio(BACKGROUND_MUSIC);
+            this.music.loop = true;
+        }
+
+        if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+            this.knight.x = this.knight.x + 200;
+            this.music = new Audio(LUCAN_MUSIC);
+            this.music.loop = true;
+        }
+        if (this.music) {
+            this.music.preload = 'auto';
+            this.music.volume = 0.1;
+            this.music.play();
+        }
+
 
         if (this.level.text) {
             if (this.level !== levels.mainMenu) {
@@ -97,6 +153,7 @@ class SceneManager {
                 });
             }
             this.game.textOverlay = this.level.text;
+            this.game.textOverlay.background = "transparent"
         }
 
         if(this.level.title) {
@@ -127,10 +184,25 @@ class SceneManager {
             }
         }
 
+        if (this.level.azucena) {
+            for (let i = 0; i < this.level.azucena.length; i++) {
+                let azucena = this.level.azucena[i];
+                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
+            }
+            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+                this.azucena = this.game.entities.find((entities) => entities instanceof Azucena)
+                this.azucena.x = -300;
+            }
+        }
+
         if (this.level.reina) {
             for (let i = 0; i < this.level.reina.length; i++) {
                 let reina = this.level.reina[i];
                 this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
+            }
+            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+                this.reina = this.game.entities.find((entities) => entities instanceof Reina)
+                this.reina.x = -300;
             }
         }
 
@@ -161,13 +233,6 @@ class SceneManager {
             for (let i = 0; i < this.level.lucan.length; i++) {
                 let lucan = this.level.lucan[i];
                 this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
-            }
-        }
-
-        if (this.level.azucena) {
-            for (let i = 0; i < this.level.azucena.length; i++) {
-                let azucena = this.level.azucena[i];
-                this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
         }
 
@@ -254,7 +319,7 @@ class SceneManager {
                 let door = this.level.dungeonDoor[i];
                 this.game.addEntity(new DungeonDoor(this.game, door.x, door.y, door.level, door.end));
             }
-        }    
+        }
 
         if (this.level.chandelier) {
             for (let i = 0; i < this.level.chandelier.length; i++) {
@@ -273,7 +338,7 @@ class SceneManager {
         if  (this.level.lightning) {
             for (let i = 0; i < this.level.lightning.length; i++) {
                 let lightning = this.level.lightning[i];
-                this.game.addEntity(new Lightning(this.game, lightning.x, lightning.y));
+                this.game.addEntity(new Lightning(this.game, lightning.x, lightning.y, false));
             }
         }
 
@@ -311,7 +376,12 @@ class SceneManager {
                 this.game.addEntity(new DungeonDoor2(this.game, door2.x, door2.y, door2.level));
             }
         }
-
+        if (this.level.wallspike) {
+            for(let i = 0; i < this.level.wallspike.length; i++) {
+                let spike = this.level.wallspike[i];
+                this.game.addEntity(new DungeonSpike(this.game, spike.x, spike.y));
+            }
+        }
         if (this.level.dungeonWaterfall) {
             for(let i = 0; i < this.level.dungeonWaterfall.length; i++) {
                 let waterfall = this.level.dungeonWaterfall[i];
@@ -362,7 +432,7 @@ class SceneManager {
         let oldEntities = this.game.entities;
         this.game.entities = [];
         this.game.addEntity(this.interactable);
-        oldEntities.map((entity) => this.game.addEntity(entity)); 
+        oldEntities.map((entity) => this.game.addEntity(entity));
     }
 
     removeInteractive() {
@@ -376,10 +446,64 @@ class SceneManager {
         levels[levelIndex] = structuredClone(originalLevels[levelIndex]);
     }
 
+    openCheckpointMenu(entity) {
+        this.knight.moveable = false;
+        this.teleportMenu = new CheckpointMenu(this.game, entity);
+        let oldEntities = this.game.entities;
+        this.game.entities = [];
+        this.game.addEntity(this.teleportMenu);
+        oldEntities.map((entity) => this.game.addEntity(entity)); 
+        console.log("opened checkpoint menu");
+    }
+
+    closeCheckpointMenu() {
+        this.knight.moveable = true;
+        this.teleportMenu.removeFromWorld = true;
+        console.log("closed checkpoint menu");
+    }
+
+    teleportToCheckpoint(knight) {
+        this.deadcheckpoint = true;
+        if (this.currentCheckpoint) {
+            const levelIndex = this.currentCheckpoint.level;
+            if (levels[levelIndex]) { 
+                this.loadLevel(levelIndex, true, false, false, false);
+                console.log(`Respawn @ checkpoint (${knight.x}, ${knight.y}) @ level ${levelIndex}`);
+            } else {
+                console.error(`Checkpoint "${levelIndex}" not found.`);
+            }
+        }         
+            
+    }
+
     update() {
+        if (this.music) {
+            if (PARAMS.MUSICOFF) {
+                if (this.music) {
+                    this.music.volume = 0;
+                }
+            } else {
+
+                if (this.level === levels.shopkeeper || this.level === levels.startScreen) {
+                    this.music.volume = 0;
+                } else if (!this.knight.inCutscene) {
+                    this.music.volume = 0.1
+                }
+            }
+        }
         if (this.cutsceneManager) {
+            if (this.level === levels.tutorial) {
+                this.skeletons = this.game.entities.find(entity => entity instanceof SkeletonWarrior);
+                if (!this.skeletons) {
+                    this.tutorialCutsceneDone = false;
+                    this.game.camera.cutscene.push({startX: -300, cutsceneNum: 1})
+                }
+            }
             if (this.level === levels.tutorial && this.tutorialCutsceneDone
-                || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone) {
+                || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
+                || this.level === levels.one && this.oneCutsceneDone
+                || this.level === levels.two && this.twoCutsceneDone
+                || this.level === levels.bossroom && this.bossoneCutsceneDone) {
 
             } else {
                 if (this.cutsceneCounter !== this.cutscene.length) {
@@ -397,24 +521,33 @@ class SceneManager {
                     if (this.level === levels.shopkeeper) {
                         this.shopkeeperCutsceneDone = true
                     }
+                    if (this.level === levels.one) {
+                        this.oneCutsceneDone = true
+                    }
+                    if (this.level === levels.two) {
+                        this.twoCutsceneDone = true
+                    }
+                    if (this.level === levels.bossroom) {
+                        this.bossoneCutsceneDone = true
+                    }
                 }
             }
         }
         if (this.title) {
             if (this.level === levels.startScreen && (this.game.keys[' '] || this.game.keys['Enter'])) {
+                this.music = new Audio(MAIN_MUSIC);
+                this.music.loop = true;
+                this.music.preload = 'auto';
+                this.music.volume = 0.1;
                 if (this.game.keys[' ']) {
                     this.loadLevel('storyRecap', false, true, false, false);
                 } else if (this.game.keys['Enter']) {
                     this.loadLevel('mainMenu', false, true, false, false);
                 }
-                this.music = new Audio(MAIN_MUSIC);
-                this.music.loop = true;
-                this.music.preload = 'auto';
-                this.music.volume = 0.5;
 
                 // Ensure the audio is fully loaded before allowing playback
                 this.music.addEventListener('canplaythrough', () => {
-                    this.music.stop();
+                    this.music.play();
                 });
             }
             if (this.level === levels.storyRecap) {
@@ -457,7 +590,7 @@ class SceneManager {
             }
 
             if (this.level === levels.mainMenu && this.game.keys[' ']) {
-                this.loadLevel("tutorial", false, false, false, false);
+                this.loadLevel("tutorial", true, false, false, false);
             }
         }
 
@@ -479,6 +612,7 @@ class SceneManager {
                 ctx.globalAlpha = 1;
             } else {
                 // Draw the black background
+                ctx.globalAlpha = 1
                 ctx.fillStyle = this.level.background;
                 ctx.fillRect(0, 0, this.level.width, this.level.height);
 
@@ -492,18 +626,35 @@ class SceneManager {
                     // Draw the text
                     ctx.fillText(text.message, text.x, text.y);
                 });
+                /*
+
+                 */
             }
         } else {
             ctx.globalAlpha = 1;
+            
 
             ctx.fillStyle = "White";
             ctx.font = '36px "Open+Sans"';
+            ctx.textAlign = "center";
+            ctx.textBaseline = 'top';
 
-            ctx.fillText(this.knight.emberCount, 170, 120);
+            // Draw ember count
+            ctx.fillText(this.knight.emberCount, 160, 100);
+        
+            // Draw animated ember icon
+            this.emberAnimation.drawFrame(
+                this.game.clockTick,
+                ctx,
+                80, 85,     // Moved closer to the number (x was 95, now 120)
+                3.5          // Scale to match your desired size (40x80)
+            );
+
+            // Draw potion count and icon
+            ctx.fillText(this.knight.potionCount, 285, 100);
             const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
-            ctx.drawImage(emberImage, 1520, 2328, 8, 16, 100, 60, 40, 80);
-            ctx.fillText(this.knight.potionCount, 285, 120);
             ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
+            
         }
     };
 

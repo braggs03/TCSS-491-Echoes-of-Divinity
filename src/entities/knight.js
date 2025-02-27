@@ -1,3 +1,4 @@
+
 const KNIGHT_WIDTH = 65;
 const KNIGHT_HEIGHT = 110;
 const KNIGHT_X_OFFSET = 131;
@@ -13,7 +14,7 @@ class Knight {
 
         this.moveable = true;
         this.inCutscene = false;
-        
+
         this.velocityX = 0;
         this.maxVelocityX = 825;
         this.accelerationX = 6000; 
@@ -26,10 +27,12 @@ class Knight {
 
         this.rollSpeed = 825;
 
+        this.rollSpeed = 825;
         this.healthBar = new HealthBar(this);
-        this.maxHp = 1000; 
+        this.maxHp = 1000;
         this.hp = 1000;
-
+        this.height = 110;
+        this.bheight = 0;
         this.stamina = 100;
         this.currentStamina = 100;
 
@@ -67,8 +70,24 @@ class Knight {
             up: false, // Knight is below the floor/cieling.
             down: false, // Knight is above the floor/cieling.
         };
-        
-        this.currentState = 'RightIdle';
+
+        this.runSound = new Audio("./resources/SoundEffects/run.ogg");
+        this.runSound.loop = true;
+        this.runSound.playbackRate = 10;
+        this.runSound.volume = 0.2;
+        this.attackSound = new Audio("./resources/SoundEffects/knightAttack.ogg");
+        this.attackSound.loop = false;
+        this.runSound.playbackRate = 1;
+        this.attackSound.volume = 0.2;
+        this.jumpSound = new Audio("./resources/SoundEffects/jump.ogg");
+        this.jumpSound.loop = false;
+        this.jumpSound.playbackRate = 1;
+        this.jumpSound.volume = 0.2;
+        this.rollSound = new Audio("./resources/SoundEffects/roll.ogg");
+        this.rollSound.loop = false;
+        this.rollSound.playbackRate = 1;
+        this.rollSound.volume = 0.2;
+
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
             RightAttack2 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 80, 95, 100, 10, 0.1, false, false),
@@ -102,6 +121,11 @@ class Knight {
             LeftWallHang : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2760, 1040, 120, 100, 1, 0.1, false, true),
             LeftWallSlide : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2520, 1120, 120, 100, 3, 0.1, false, true),
         }
+
+        this.currentState = 'RightIdle';
+        this.animationLocked = false;
+
+        this.dead = false;
         this.updateBB();
     };
 
@@ -147,16 +171,16 @@ class Knight {
     }
 
     takeDamage(amount) {
-         if (!this.invinsible) {
-             this.invinsible = true;
-             this.hp -= amount;
-             console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
-             if (this.hp <= 0) {
-                 this.die();
-             } else {
-                 this.flickerDuration = 0.3; // Flicker for 0.5 seconds
-             }
-         }
+        if (!this.invinsible) {
+            this.invinsible = true;
+            this.hp -= amount;
+            console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
+            if (this.hp <= 0) {
+                this.die();
+            } else {
+                this.flickerDuration = 0.3; // Flicker for 0.5 seconds
+            }
+        }
     }
 
     respawn() {
@@ -168,15 +192,16 @@ class Knight {
 
     die() {
         if (!this.dead) {
+
             this.dead = true;
             this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
             console.log("Knight has died!");
-
+        
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
                 this.game.camera.respawnKnight(this);
-            }, 1000); 
+            }, 1000);
             // Adjust timing to match the death animation duration
         }
         this.game.camera.emberDrop = new DungeonTorch2(this.game, this.x, this.y, this.emberCount, this.game.camera.levelIndex);
@@ -187,7 +212,12 @@ class Knight {
         if (this.potionCount > 0 && this.hp < this.maxHp) {
             this.potionCount -= 1;
             this.hp = Math.min(this.hp + this.potionHealCount, this.maxHp); 
-            this.game.addEntity(new PotionEffect(this.game, this.x + 100, this.y + KNIGHT_HEIGHT + 1, POTION_BOOST));
+            this.game.addEntity(new PotionEffect(
+                this.game,
+                this.x + KNIGHT_WIDTH + 50,  // Position slightly to the right of player
+                this.y + 50,                 // Position above the player
+                "health"
+            ));
             return true;
         }
         return false;
@@ -204,11 +234,24 @@ class Knight {
         return ableToBuy;
     }
 
+    pauseSound() {
+        this.rollSound.pause();
+        this.rollSound.currentTime = 0;
+        this.attackSound.pause();
+        this.attackSound.currentTime = 0;
+        this.jumpSound.pause();
+        this.jumpSound.currentTime = 0;
+        this.runSound.pause();
+        this.runSound.currentTime = 0;
+
+    }
+
     update() {
         const clockTick = this.game.clockTick;
+        this.updateBB();
 
         if (this.currentStamina < this.stamina) {
-            this.currentStamina += 1;
+            this.currentStamina += 100 * this.game.clockTick;
         }
     
         if (this.y > 1000) {
@@ -221,7 +264,7 @@ class Knight {
         } else {
             this.invinsible = false;
         }
-    
+        
         this.colliding = {
             right: false,
             left: false,
@@ -245,7 +288,7 @@ class Knight {
                 } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
-        
+
                     if (horizontalCollision) {
                         if (entity.BB.x < knight.BB.x) {
                             knight.x += overlap.x;
@@ -263,9 +306,34 @@ class Knight {
                         }
                         knight.velocityY = 0;
                     }
+                } else if (entity instanceof DungeonSpike) {
+                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
+                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
+        
+                    if (horizontalCollision) {
+                        if (entity.BB.x < knight.BB.x) {
+                            knight.x += overlap.x;
+                        } else {
+                            knight.x -= overlap.x;
+                        }
+                        knight.velocityX = 0;
+                    } else if (verticalCollision) {
+                        if (entity.BB.y < knight.BB.y) {
+                            this.colliding.down = true;
+                            knight.y += overlap.y;
+                            knight.takeDamage(50);
+                        } else {
+                            this.colliding.up = true;
+                            knight.y -= overlap.y - 1;
+                            
+                        }
+                        knight.velocityY = 0;
+                    }
                 } else if (entity instanceof Potion) {
-                    if (this.buyPotion()) {
-                        entity.removeFromWorld = true;
+                    if (this.game.keys["f"]) {
+                        if (this.buyPotion()) {
+                            entity.removeFromWorld = true;
+                        }
                     }
                 }
             }
@@ -320,7 +388,7 @@ class Knight {
                     this.invinsible = false;
                     this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                     this.setState(this.chosenState);
-                    
+                    this.pauseSound();
                     this.hitTargets = [];
                 }
             }
@@ -333,6 +401,9 @@ class Knight {
                     this.invinsible = true;
                     this.x -= this.rollSpeed * clockTick;
                 }
+                if (this.rollSound.paused) {
+                    this.rollSound.play();
+                }
                 this.updateBB();
                 if (!this.animations[this.currentState].getDone()) {
                     return;
@@ -340,6 +411,7 @@ class Knight {
                     this.invinsible = false;
                     this.chosenState = this.facing === RIGHT ? 'RightIdle' : 'LeftIdle';
                     this.setState(this.chosenState);
+                    this.pauseSound();
                 }
             }
         
@@ -348,12 +420,19 @@ class Knight {
                     this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
                 } else {
                     this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
+                    if(this.jumpSound.paused) {
+                        this.jumpSound.play();
+                    }
                 }
                 this.velocityY += this.accelerationY * clockTick;
             } else if (Math.abs(this.velocityX) > this.accelerationX * clockTick) {
                 this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
+                if (this.runSound.paused) {
+                    this.runSound.play();
+                }
             } else {
                 this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
+                this.pauseSound();
             }
     
             if (this.game.keys["ArrowUp"] && this.colliding.up) {
@@ -389,7 +468,9 @@ class Knight {
                         this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
                         this.setState(this.chosenState);
                         this.currentStamina = 0;
-                        
+                        if (this.attackSound.paused) {
+                            this.attackSound.play();
+                        }
                         this.hitTargets = [];
                         
                         setTimeout(() => {
@@ -423,7 +504,7 @@ class Knight {
     }
 
     draw(ctx) {
-        if (this.flickerDuration > 0 && !this.flickerFlag) return; 
+        if (this.flickerDuration > 0 && !this.flickerFlag) return;
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 3);
         if (!this.inCutscene) {
             this.healthBar.draw(ctx);
@@ -436,5 +517,3 @@ class Knight {
         this.BB.draw(ctx);
     };
 }
-
-

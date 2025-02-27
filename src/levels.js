@@ -34,7 +34,8 @@ let levels = {
             { x: 640, y: 571, message: "Now, the time has come for the final battle.", font: "20px Arial", color: "white" },
             { x: 640, y: 610, message: "With his companions, Azucena and Reina, Mica’s Chosen prepares to march on Thalador to confront Duma one last time.", font: "20px Arial", color: "white" },
             { x: 640, y: 649, message: "It's time for humanity to decide it's fate. Whether it will succumb to... or overcome the...", font: "20px Arial", color: "white" },
-        ]
+        ],
+        reina: [{ x: 30, y: 50 }],
     },
 
     mainMenu: {
@@ -49,7 +50,7 @@ let levels = {
     },
 
     tutorial: {
-        width: 2000,
+        width: 1500,
         height: 0,
         startPosition: {
             x: -90,
@@ -57,10 +58,9 @@ let levels = {
         },
         reina: [{ x: 300, y: 536 }],
         azucena: [{ x: -165, y: 500 }],
-        cutscene: [{startX: -100, cutsceneNum: 0}, {startX: 3000, cutsceneNum: 1}],
+        cutscene: [{startX: -100, cutsceneNum: 0}],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }],
         skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }],
-        gorgon: [{x: 1000, y: 424}],
         lightning: [{x: -40, y: 40}],
         tutorialBackground: [{ x:0, y:0, w:50, h: 1}],
         townBackground: [{ x:0, y:0, w:50, h: 1}],
@@ -77,35 +77,49 @@ let levels = {
             x: 14470,
             y: 465,
         },
-        checkpoint:{ //bonFire position change both
+        checkpoint1:{ //bonFire position change both
             x: 400,
             y: 465,
         },
-        cutscene: [{startX: 13800, cutsceneNum: 3}, {startX: 14000, cutsceneNum: 4}],
-        reina: [{ x: 14200, y: 536 }],
-        azucena: [{ x: 14300, y: 500 }],
+        checkpoint2:{ //bonFire position change both
+            x: 13700,
+            y: 465,
+        },
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 12, w: 2, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 97, y: 12, w: 1, h: 1 }],
-        mechagolem: [{ x: 900, y: 350, dead: false },{ x: 7500, y: 100, dead: false }],
+        skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }, { x: 9000, y: 424 }, { x: 9200, y: 424 }, { x: 9400, y: 424 }, { x: 9600, y: 424 }],
+        mechagolem: [{ x: 4500, y: 350 },{ x: 7500, y: 100},{ x: 12500, y: 350}],
         dungeonWall: [{ x: 0, y: 0, h: 5 }],
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
-        bonFire: [{ x: 400, y: 465, level: "one" }, { x: 13700, y: 465, level: "one" }],
+        bonFire: [{ x: 13700, y: 465, level: "one" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 
     two: {
-        width: 10000,
+        width: 10345,
         height: 0,
         startPosition: {
             x: 87,
             y: 320,
         },
-        dungeonBackground3: [{ x:0, y:0, w:50, h: 1}],
-        dungeonGround2: [{ x: 0, y: 14.5, w: 6, h: 1 }, {x:7, y: 14.5, w: 8, h:1},{ x: 16, y: 14.5, w: 8, h: 1 },{ x:25, y: 14.5, w: 10, h: 1 }, {x: 36, y: 14.5, w: 8, h: 1}, {x: 45, y: 14.5, w: 8, h: 1}, {x: 54, y: 14.5, w: 10, h: 1}, { x: 0, y: 0, w: 100, h: 1 }],
-        mechagolem: [{ x: 950, y: 270 }, {x : 1900, y: 270}],
-        dungeonWall: [{ x: 0, y: 0, h: 4 }],
-        dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x:3735, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
-        dungeonDoor: [{ x: 124, y: 360, level: "one", end: true }, { x: 1024, y: 360, level: "bossroom" }],
-
+        endPosition: {
+            x: 11220,
+            y: 320,
+        },
+        checkpoint3:{ //bonFire position change both
+            x: 10900,
+            y: 320,
+        },
+        bonFire: [ { x: 10900, y: 365, level: "two" }],
+        dungeonBackground3: [{ x:0, y:0, w:3, h: 1}],
+        dungeonGround2: [{ x: 0, y: 14.5, w: 6, h: 1 }, {x:7, y: 14.5, w: 8, h:1},{ x: 16, y: 14.5, w: 19, h: 1 }, {x: 36, y: 14.5, w: 8, h: 1}, {x: 45, y: 14.5, w: 8, h: 1}, {x: 54, y: 14.5, w: 10, h: 1}, {x: 64, y: 14.5, w: 11, h:1}, { x: 0, y: 0, w: 75, h: 1 }],
+        gorgon: [{ x: 1500, y: 325 }, {x: 3000, y: 325}, {x: 4900, y: 325}, {x: 5900, y: 325}, {x: 8000, y: 325}],
+        wallspike: [{x: 4450, y: 185}, {x: 4225, y: 185}, {x: 3700, y: 185}, {x: 9000, y: 185}, {x: 8870, y: 185}],
+        dungeonWall: [{ x: 0, y: 0, h: 4 }, { x: 290, y: 0, h: 2}],
+        dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
+        dungeonDoor: [{ x: 124, y: 360, level: "one", end: true }],
+        cutscene: [{startX: 10800, cutsceneNum: 3}, {startX: 11250, cutsceneNum: 4}],
+        reina: [{ x: 11100, y: 439 }],
+        azucena: [{ x: 11200, y: 400 }],
     },
 
     shopkeeper: {
@@ -125,6 +139,7 @@ let levels = {
         dungeonWorkbench: [{ x: 1500, y: 510 }],
         dungeonAnvil: [{ x: 1730, y: 613 }],
         dungeonDoor: [{ x: 100, y: 465, level: "one" }],
+        //lucan: [{ x: 800 , y: 400 }],
         dungeonTorch: [{ x: 103, y: 465 }, { x: 278, y: 465 }],
         dungeonWall: [{ x: 0, y: 0, h: 5 }, { x: 58, y: 0, h: 5 }],
         wallAxe: [{ x: 1726, y: 520 }],
@@ -138,6 +153,7 @@ let levels = {
         potion: [{ x: 788, y: 570}, { x: 888, y: 570}, { x: 990, y: 570}],
         sharpening_wheel: [{ x: 1850, y: 620 }],
         knightStatue: [{ x: 1840, y: 210 }],
+        cutscene: [{startX: 70, cutsceneNum: 2}],
     },
 
     bossroom: {
@@ -145,14 +161,14 @@ let levels = {
         height: 0,
         startPosition: {
             x: -200,
-            y: 440,
+            y: 430,
         },
-        cutscene: [{startX: -200, cutsceneNum: 5}],
+        cutscene: [{startX: -300, cutsceneNum: 5}],
+        dungeonWall: [{ x: 51, y: 0, h: 5 }],
         reina: [{ x: 200, y: 536 }],
         azucena: [{ x: 100, y: 500 }],
         lucan: [{x: 1200, y: 435}],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
-        gorgon: [{ x: 900, y: 424 }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 };

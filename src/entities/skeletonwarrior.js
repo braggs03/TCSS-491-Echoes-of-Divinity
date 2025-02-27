@@ -4,7 +4,11 @@ class SkeletonWarrior {
         this.target = null;
         this.x = x
         this.y = y
+        this.maxHp = 500;
         this.hp = 500;
+        this.height = 100;
+        this.bheight = 0;
+        this.healthBar = new HealthBar(this);
         this.updateBB();
         this.inCutscene = false;
         this.aggro = false;
@@ -79,7 +83,10 @@ class SkeletonWarrior {
             }
             return;
         }
-        if (this.hp < 0) {
+        if (this.hp <= 0) {
+            setTimeout(() => {
+                this.removeFromWorld = true;
+            }, 1000);
             this.target.emberCount += 100;
             this.dead = true;
         }
@@ -184,5 +191,6 @@ class SkeletonWarrior {
 	draw(ctx) {
 		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
         this.BB.draw(ctx);
+        if (this.healthBar) this.healthBar.draw(ctx);
 	};
 }

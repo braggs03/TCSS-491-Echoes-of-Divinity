@@ -61,6 +61,7 @@ const getDistance = (p1, p2) => {
 
 const PARAMS = {
     DEBUG: false,
+    MUSICOFF: false,
     SCREENWIDTH: 1280,
     SCREENHEIGHT: 720,
 }
