@@ -195,7 +195,7 @@ class Knight {
             this.dead = true;
             this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
             console.log("Knight has died!");
-        
+            this.velocityX = 0;
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
@@ -300,7 +300,7 @@ class Knight {
                     if (verticalCollision) {
                         if (entity.BB.y < knight.BB.y) {
                             this.colliding.down = true;
-                            knight.y += overlap.y - 1;
+                            knight.y += overlap.y;
                         } else {
                             this.colliding.up = true;
                             knight.y -= overlap.y - 1;
@@ -327,7 +327,7 @@ class Knight {
                             knight.takeDamage(50);
                         } else {
                             this.colliding.up = true;
-                            knight.y -= overlap.y;
+                            knight.y -= overlap.y - 1;
                             
                         }
                         knight.velocityY = 0;
