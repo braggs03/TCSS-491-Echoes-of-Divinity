@@ -59,18 +59,26 @@ const F_Y_OFFSET = 9;
 function testInteractable(game, ctx) {
     if (!game.camera.interactable) {
         game.entities.forEach((entity) => {
-            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && !game.camera.knight.inCutscene && entity.text && !entity.dialogCompleted) {
-                if (game.keys["f"]) {
-                    game.camera.showInteractive(entity, entity.text);
-                } else {
-                    ctx.drawImage(ASSET_MANAGER.getAsset(DUNGEON), 1536, 984, INTERACTABLE_HINT_WIDTH, 31, entity.x - game.camera.x, entity.y - game.camera.y, INTERACTABLE_HINT_WIDTH * INTERACTABLE_HINT_SCALE, INTERACTABLE_HINT_HEIGHT * INTERACTABLE_HINT_SCALE);
-                    ctx.fillStyle = "Black";
-                    ctx.font = '30px "Open+Sans"';
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = 'top';
-                    ctx.fillText("F", entity.x - game.camera.x + F_X_OFFSET, entity.y - game.camera.y + F_Y_OFFSET);
-                    ctx.strokeText("F", entity.x - game.camera.x + F_X_OFFSET, entity.y - game.camera.y + F_Y_OFFSET);
-
+            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && !game.camera.knight.inCutscene) {
+                if (!entity.dialogCompleted) {
+                    if (entity.text && game.keys["f"]) {
+                        game.camera.showInteractive(entity, entity.text);
+                    } else if (entity.text || (entity instanceof Bonfire && !entity.isCurrent) || entity instanceof DungeonDoor || entity instanceof Potion) {
+                        ctx.fillStyle = "Black";
+                        ctx.strokeStyle = "Black";
+                        ctx.font = '30px "Open+Sans"';
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = 'top';
+                        if (entity.BB.x + entity.BB.width / 2 > game.camera.knight.BB.x) {
+                            ctx.drawImage(ASSET_MANAGER.getAsset(DUNGEON), 1536, 984, INTERACTABLE_HINT_WIDTH, 31, entity.BB.right - INTERACTABLE_HINT_WIDTH, entity.BB.y - INTERACTABLE_HINT_HEIGHT, INTERACTABLE_HINT_WIDTH * INTERACTABLE_HINT_SCALE, INTERACTABLE_HINT_HEIGHT * INTERACTABLE_HINT_SCALE);
+                            ctx.fillText("F", entity.BB.right + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);
+                            ctx.strokeText("F", entity.BB.right + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);   
+                        } else {
+                            ctx.drawImage(ASSET_MANAGER.getAsset(DUNGEON), 1536, 984, INTERACTABLE_HINT_WIDTH, 31, entity.BB.x - INTERACTABLE_HINT_WIDTH, entity.BB.y - INTERACTABLE_HINT_HEIGHT, INTERACTABLE_HINT_WIDTH * INTERACTABLE_HINT_SCALE, INTERACTABLE_HINT_HEIGHT * INTERACTABLE_HINT_SCALE);
+                            ctx.fillText("F", entity.BB.x + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);
+                            ctx.strokeText("F", entity.BB.x + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);    
+                        }
+                    }
                 }
             }
         });
