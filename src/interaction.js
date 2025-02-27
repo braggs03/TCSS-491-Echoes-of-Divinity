@@ -50,11 +50,28 @@ class Interaction {
     }
 }
 
-function testInteractable(game) {
+const INTERACTABLE_HINT_WIDTH = 39;
+const INTERACTABLE_HINT_HEIGHT = 31;
+const INTERACTABLE_HINT_SCALE = 2;
+const F_X_OFFSET = 40;
+const F_Y_OFFSET = 9;
+
+function testInteractable(game, ctx) {
     if (!game.camera.interactable) {
         game.entities.forEach((entity) => {
-            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && !game.camera.knight.inCutscene && entity.text && !entity.dialogCompleted && game.keys["f"]) {
-                game.camera.showInteractive(entity, entity.text);
+            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && !game.camera.knight.inCutscene && entity.text && !entity.dialogCompleted) {
+                if (game.keys["f"]) {
+                    game.camera.showInteractive(entity, entity.text);
+                } else {
+                    ctx.drawImage(ASSET_MANAGER.getAsset(DUNGEON), 1536, 984, INTERACTABLE_HINT_WIDTH, 31, entity.x - game.camera.x, entity.y - game.camera.y, INTERACTABLE_HINT_WIDTH * INTERACTABLE_HINT_SCALE, INTERACTABLE_HINT_HEIGHT * INTERACTABLE_HINT_SCALE);
+                    ctx.fillStyle = "Black";
+                    ctx.font = '30px "Open+Sans"';
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = 'top';
+                    ctx.fillText("F", entity.x - game.camera.x + F_X_OFFSET, entity.y - game.camera.y + F_Y_OFFSET);
+                    ctx.strokeText("F", entity.x - game.camera.x + F_X_OFFSET, entity.y - game.camera.y + F_Y_OFFSET);
+
+                }
             }
         });
     }
