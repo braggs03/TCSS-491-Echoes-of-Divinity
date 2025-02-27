@@ -19,7 +19,7 @@ class SceneManager {
         this.twoCutsceneDone = false;
         this.bossoneCutsceneDone = false;        
         this.emberAnimation = new Animator(
-            ASSET_MANAGER.getAsset("./resources/maintheme.png"), 
+            ASSET_MANAGER.getAsset(EMBER), 
             0, 96,        // Starting x, y position in spritesheet
             16, 16,       // Width and height of each frame
             5,            // Number of frames
@@ -82,6 +82,7 @@ class SceneManager {
         this.checkpoint = false;
         this.title = title;        
         this.level = levels[levelIndex];
+        this.levelIndex = levelIndex;
         this.saveEntities();
         this.clearEntities();
         this.game.textOverlay = null;
@@ -114,7 +115,6 @@ class SceneManager {
             } else {
                 this.knight.x = this.level.startPosition.x;
                 this.knight.y = this.level.startPosition.y;
-                this.emberDrop = null;
                 console.log(`Loading level ${levelIndex} @ default start spawn (${this.level.startPosition.x}, ${this.level.startPosition.y})`);
             }
             this.game.addEntity(this.knight);
@@ -594,15 +594,19 @@ class SceneManager {
             }
         }
 
-        testInteractable(this.game);
-
-        let middlepointX = PARAMS.SCREENWIDTH / 2 - KNIGHT_HEIGHT * 2;
+        let middlepointX = PARAMS.SCREENWIDTH / 2 - KNIGHT_X_OFFSET - KNIGHT_WIDTH / 2;
         //this.x = this.knight.x - middlepointX;
 
-        let middlepointY = PARAMS.SCREENHEIGHT / 2 - 50;
+        let middlepointY = PARAMS.SCREENHEIGHT / 2 - KNIGHT_Y_OFFSET - KNIGHT_HEIGHT / 2;
+            
 
-        if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) this.x = this.knight.x - middlepointX;
-        if (0 < this.knight.y - middlepointY && this.level.height > this.knight.y - middlepointY) this.y = this.knight.y - middlepointY;
+        if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) {
+            this.x = this.knight.x - middlepointX;
+        } 
+
+        if (0 > this.knight.y - middlepointY && this.level.height < this.knight.y - middlepointY) {
+            this.y = this.knight.y - middlepointY;
+        }
 
     };
 
@@ -654,7 +658,6 @@ class SceneManager {
             ctx.fillText(this.knight.potionCount, 285, 100);
             const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
             ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
-            
         }
     };
 
@@ -662,5 +665,6 @@ class SceneManager {
         if (!this.inCutscene) {
             this.userInterface(ctx);
         }
+        testInteractable(this.game, ctx);
     };
 }
