@@ -68,7 +68,7 @@ let levels = {
 
     one: {
         width: 13550,
-        height: 0,
+        height: -2000,
         startPosition: {
             x: 87,
             y: 465,
@@ -147,7 +147,7 @@ let levels = {
         shieldRack: [{ x: 1400, y: 608 }],
         boxes: [{ x: 800, y: 524 }, { x: 950, y: 524 }],
         reina: [{ x: 1620, y: 537, text: "reina_shopkeeper" }],
-        azucena: [{ x: 870, y: 510, text: "azucena_shopkeeper" }],
+        azucena: [{ x: 870, y: 510 }],
         tent: [{ x: 700, y: 478 }],
         bonFire: [{ x: 400, y: 465, level: "shopkeeper" }],
         potion: [{ x: 788, y: 570}, { x: 888, y: 570}, { x: 990, y: 570}],
