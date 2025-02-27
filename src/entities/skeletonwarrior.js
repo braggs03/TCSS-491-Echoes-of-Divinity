@@ -14,6 +14,10 @@ class SkeletonWarrior {
         this.aggro = false;
         this.facingLeft = true;
 
+        this.velocityY = 0;
+        this.maxVelocityY = 990;
+        this.accelerationY = 4125; 
+
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(SKELETON_WARRIOR + "Attack_1.png"), 0, 0, 130, 200, 5, 0.1, false, false),
             RightAttack2 : new Animator(ASSET_MANAGER.getAsset(SKELETON_WARRIOR + "Attack_2.png"), 0, 0, 130, 200, 6, 0.1, false, false),
@@ -73,6 +77,8 @@ class SkeletonWarrior {
     }
 
 	update() {
+        const clockTick = this.game.clockTick;
+
         if (this.dead) {
             if (this.currentState !== "LeftDead" || this.currentState !== "LeftDead") {
                 if (this.facingLeft) {
@@ -83,6 +89,63 @@ class SkeletonWarrior {
             }
             return;
         }
+
+        this.colliding = {
+            right: false,
+            left: false,
+            down: false,
+            up: false,
+        }
+        let skeleton = this;
+        
+        this.game.entities.forEach((entity) => {
+            if (entity.BB && skeleton.BB.collide(entity.BB)) {
+                const overlap = entity.BB.overlap(skeleton.BB);
+                if (entity instanceof DungeonWall) {
+                    if (entity.BB.x < skeleton.BB.x) {
+                        this.colliding.right = true;
+                        skeleton.x += overlap.x;
+                    } else if (entity.BB.x > skeleton.BB.x) {
+                        this.colliding.left = true;
+                        skeleton.x -= overlap.x;
+                    }
+                    skeleton.velocityX = 0; 
+                } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
+                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
+                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
+
+                    if (horizontalCollision) {
+                        if (entity.BB.x < skeleton.BB.x) {
+                            skeleton.x += overlap.x;
+                        } else {
+                            skeleton.x -= overlap.x;
+                        }
+                        skeleton.velocityX = 0;
+                    } else if (verticalCollision) {
+                        if (entity.BB.y < skeleton.BB.y) {
+                            this.colliding.down = true;
+                            skeleton.y += overlap.y;
+                        } else {
+                            this.colliding.up = true;
+                            skeleton.y -= overlap.y - 1;
+                        }
+                        skeleton.velocityY = 0;
+                    }
+                }
+            }
+        });
+
+        if (!this.colliding.up) {
+            this.velocityY += this.accelerationY * clockTick;
+            this.velocityY = Math.max(this.velocityY, this.maxVelocityY * clockTick);
+        }
+
+        this.y += this.velocityY * clockTick;
+
+        if (this.y > VOID_HEIGHT) {
+            this.dead = true;
+        }
+
         if (this.hp <= 0) {
             setTimeout(() => {
                 this.removeFromWorld = true;
