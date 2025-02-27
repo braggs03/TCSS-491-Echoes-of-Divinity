@@ -157,6 +157,9 @@ class MechaGolem {
 
         this.y += this.velocityY * clockTick;
 
+        if (this.y > VOID_HEIGHT) {
+            this.die();
+        }
 
         if (this.target && (this.target.dead || this.target.removeFromWorld)) {
             this.resetAggro();
