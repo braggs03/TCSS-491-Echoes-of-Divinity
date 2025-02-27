@@ -197,6 +197,7 @@ class Knight {
         let ableToBuy = false;
         if (this.emberCount >= this.potionCost) {
             this.emberCount -= this.potionCost;
+            this.maxPotionCount += 1;
             this.potionCount += 1;
             ableToBuy = true;
         }
