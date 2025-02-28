@@ -363,9 +363,9 @@ class Knight {
         });
 
         if (this.game.keys["w"]){
-            // this.game.addEntity(new Swordwave(this.game, this.x, this.y));
-            this.game.addEntity(new Lightning(this.game, this.x, this.y));
-            console.log("projectile");
+            // this.game.addEntity(new Swordwave(this.game, knight.x, knight.y));
+            this.game.addEntity(new Lightning(this.game, 90, 465));
+            console.log(`projectile ("${knight.x}, ${knight.y}")`);
         }
     
         if (!this.dead) {
