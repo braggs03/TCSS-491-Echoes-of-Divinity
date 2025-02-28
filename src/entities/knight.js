@@ -363,8 +363,9 @@ class Knight {
         });
 
         if (this.game.keys["w"]){
-            // this.game.addEntity(new Swordwave(this.game, knight.x, knight.y));
-            this.game.addEntity(new Lightning(this.game, 90, 465));
+
+                this.lightning = new Swordwave(this.game, knight.x, knight.y + 60, true)
+                this.game.entities.splice(1, 0, this.lightning);
             console.log(`projectile ("${knight.x}, ${knight.y}")`);
         }
     

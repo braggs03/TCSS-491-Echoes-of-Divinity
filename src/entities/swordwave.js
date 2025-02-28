@@ -3,7 +3,7 @@ class Swordwave {
         this.game = game;
         this.x = x;
         this.y = y;
-        this.speed = 1000;
+        this.speed = 1500;
         this.removeFromWorld = false;
 
         this.animations = {
@@ -32,7 +32,6 @@ class Swordwave {
 
     update() {
 		this.x += this.speed * this.game.clockTick;
-		if (this.x > 1024) this.removeFromWorld = true;
 	};
 
     draw(ctx) {
