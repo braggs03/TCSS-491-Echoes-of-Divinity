@@ -6,6 +6,10 @@ class Swordwave {
         this.speed = 1500;
         this.removeFromWorld = false;
 
+        if (direction) {
+        this.direction = RIGHT;
+        }
+
         this.animations = {
             right: new Animator(ASSET_MANAGER.getAsset("./resources/knight/swordwave.png"), 0, 0, 128, 100, 4, 0.1, false, true),
             left: new Animator(ASSET_MANAGER.getAsset("./resources/knight/swordwave.png"), 512, 0, 128, 100, 4, 0.1, true, true),
@@ -14,24 +18,15 @@ class Swordwave {
         this.currentState = "right";
     }
 
-    setState(state) {
-        for (let key in this.animations) {
-            if (this.currentState === key) {
-
-            } else if (this.animations.hasOwnProperty(key)) {
-                // Reset each Animator instance
-                this.animations[key].reset();
-            }
-        }
-        if (this.animations[state]) {
-            this.currentState = state;
-        } else {
-            console.error("State '${state}' not found.");
-        }
-    }
-
     update() {
-		this.x += this.speed * this.game.clockTick;
+        if (this.direction === RIGHT) {
+            //right direction
+		    this.x += this.speed * this.game.clockTick;
+        } else {
+            //left direction
+            this.currentState = "left"
+            this.x -= this.speed * this.game.clockTick;
+        }
 	};
 
     draw(ctx) {

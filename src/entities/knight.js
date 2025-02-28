@@ -361,6 +361,12 @@ class Knight {
                 }
             }
         });
+
+        if (this.game.keys["z"]){
+            this.currentState === 'RightAttack2'
+            this.setState(this.currentState);
+            console.log("test animations");
+        }
     
         if (!this.dead) {
             if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1') {
@@ -476,7 +482,7 @@ class Knight {
                             this.attackAnimationActive = false;
                         }, 900);
                     }
-                } else if (this.game.keys["w"])
+                } else if (this.game.keys["w"]) // Swordwave projectile
                     if (!this.attackAnimationActive) {
                         if (this.currentStamina < this.stamina) {
                             return;
@@ -486,8 +492,9 @@ class Knight {
                         this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
                         this.setState(this.chosenState);
                         //todo: set for different attack animation
+                        console.log(this.facing)
                         setTimeout(() => {
-                        this.swordwave = new Swordwave(this.game, this.x + 50, this.y + 80, true);
+                        this.swordwave = new Swordwave(this.game, this.x, this.y + 80, this.facing);
                         this.game.entities.splice(1, 0, this.swordwave);
                         console.log(`projectile @ ("${knight.x}, ${knight.y}")`);
                         }, 300);
