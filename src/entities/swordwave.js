@@ -4,6 +4,7 @@ class Swordwave {
         this.x = x;
         this.y = y;
         this.speed = 1000;
+        this.removeFromWorld = false;
 
         this.animations = {
             right: new Animator(ASSET_MANAGER.getAsset("./resources/knight/swordwave.png"), 0, 0, 128, 100, 4, 0.1, false, true),
@@ -30,14 +31,12 @@ class Swordwave {
     }
 
     update() {
-
 		this.x += this.speed * this.game.clockTick;
 		if (this.x > 1024) this.removeFromWorld = true;
 	};
 
     draw(ctx) {
 		this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 3);
-        console.log("projectile")
 	};
 
 }

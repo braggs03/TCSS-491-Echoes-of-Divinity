@@ -361,6 +361,12 @@ class Knight {
                 }
             }
         });
+
+        if (this.game.keys["w"]){
+            // this.game.addEntity(new Swordwave(this.game, this.x, this.y));
+            this.game.addEntity(new Lightning(this.game, this.x, this.y));
+            console.log("projectile");
+        }
     
         if (!this.dead) {
             if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1') {
@@ -379,9 +385,6 @@ class Knight {
                             this.hitTargets.push(entity);
                         }
                     });
-                    // this.game.addEntity(new Swordwave(this.game, this.x, this.y))
-                    // this.game.addEntity(new Lightning(this.game, this.x, this.y))
-                    // // ////////////////////////////////////////////
                 }
         
                 if (!this.animations[this.currentState].getDone()) {
