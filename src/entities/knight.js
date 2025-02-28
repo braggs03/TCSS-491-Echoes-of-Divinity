@@ -105,7 +105,7 @@ class Knight {
             RightWallHang : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 1040, 120, 100, 1, 0.1, false, true),
             RightWallSlide : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 1120, 120, 100, 3, 0.1, false, true),
 
-            LeftAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2171, 0, 120, 80, 6, 0.1, true, false),
+            LeftAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2171, 0, 120, 80, 6, this.attackspeed, true, false),
             LeftAttack2 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 1680, 80, 120, 80, 10, 0.1, true, false),
             LeftCrouch : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2520, 160, 120, 80, 3, 0.1, true, false),
             LeftCrouchAttack : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 2400, 240, 120, 80, 4, 0.1, true, false),
@@ -361,13 +361,6 @@ class Knight {
                 }
             }
         });
-
-        if (this.game.keys["w"]){
-
-                this.lightning = new Swordwave(this.game, knight.x, knight.y + 60, true)
-                this.game.entities.splice(1, 0, this.lightning);
-            console.log(`projectile ("${knight.x}, ${knight.y}")`);
-        }
     
         if (!this.dead) {
             if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1') {
@@ -483,6 +476,30 @@ class Knight {
                             this.attackAnimationActive = false;
                         }, 900);
                     }
+                } else if (this.game.keys["w"])
+                    if (!this.attackAnimationActive) {
+                        if (this.currentStamina < this.stamina) {
+                            return;
+                        }
+                        this.velocityX = 0;
+                        this.attackAnimationActive = true;
+                        this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
+                        this.setState(this.chosenState);
+                        //todo: set for different attack animation
+                        setTimeout(() => {
+                        this.swordwave = new Swordwave(this.game, this.x + 50, this.y + 80, true);
+                        this.game.entities.splice(1, 0, this.swordwave);
+                        console.log(`projectile @ ("${knight.x}, ${knight.y}")`);
+                        }, 300);
+                        this.currentStamina = 0;
+                        if (this.attackSound.paused) {
+                            this.attackSound.play();
+                        }
+                        this.hitTargets = [];
+
+                        setTimeout(() => {
+                            this.attackAnimationActive = false;
+                        }, 900);
                 } else if (this.game.keys["r"]) {
                     this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
                     this.invinsible = true;
