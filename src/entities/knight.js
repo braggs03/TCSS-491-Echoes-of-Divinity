@@ -379,6 +379,9 @@ class Knight {
                             this.hitTargets.push(entity);
                         }
                     });
+                    // this.game.addEntity(new Swordwave(this.game, this.x, this.y))
+                    // this.game.addEntity(new Lightning(this.game, this.x, this.y))
+                    // // ////////////////////////////////////////////
                 }
         
                 if (!this.animations[this.currentState].getDone()) {
