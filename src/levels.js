@@ -173,10 +173,21 @@ let levels = {
             y: 430,
         },
         celes: [{ x: 400, y: 450 }],
-        //duma: [{ x: 600, y: 275 }],
-        //firebomb: [{ x: 200, y: 275 }],
-        dungeonWall: [{ x: 31, y: 0, h: 5 }],
-        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 7, y: 9, w: 1, h: 1 }],
+        dungeonWall: [{ x: 31, y: 0, h: 5 }, { x: 0, y: 0, h: 3 }],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }],
+        nightBackground: [{ x:0, y:0, w:50, h: 1}],
+    },
+
+    bossThree: {
+        width: 0,
+        height: 0,
+        startPosition: {
+            x: 200,
+            y: 430,
+        },
+        duma: [{ x: 750, y: 275 }],
+        dungeonWall: [{ x: 31, y: 0, h: 5 }, { x: 0, y: 0, h: 3 }],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 7.5, y: 9, w: 1, h: 1 }, { x: -0.25, y: 9, w: 1, h: 1 }],
         nightBackground: [{ x:0, y:0, w:50, h: 1}],
     },
 };

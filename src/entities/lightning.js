@@ -9,12 +9,20 @@ class Lightning {
         this.cinema = this.run === true;
         this.damageDone = false;
         this.target = null;
-        this.BB = new BoundingBox(this.x - this.game.camera.x + 30, this.y + 96, 50, 1000);
         this.animator = new Animator(ASSET_MANAGER.getAsset("./resources/Magic/Lightning.png"), 0, 0, 64, 128, 10, 0.1, false, false);
+        this.updateBB()
     };
 
-    update() {
+    updateBB() {
+        if (this.animator.currentFrame() > 3) {
+            this.BB = new BoundingBox(this.x - this.game.camera.x + 30, this.y + 96, 200, 1000);
+        } else {
+            this.BB = new BoundingBox(this.x - this.game.camera.x + 30, this.y + 96, 200, 1);
+        }
+    }
 
+    update() {
+        this.updateBB();
         if (!this.target) {
             this.target = this.game.entities.find(entity =>
                 entity instanceof Knight && !entity.dead

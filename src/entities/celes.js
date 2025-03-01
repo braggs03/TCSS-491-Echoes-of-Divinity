@@ -3,21 +3,21 @@ class Celes {
         this.game = game;
         this.x = x;
         this.y = y;
-        this.updateBB();
         this.maxHp = 2000;
         this.hp = 2000;
         this.height = 100;
         this.bheight = 0;
         this.healthBar = new HealthBar(this);
-        this.updateBB();
         this.inCutscene = false;
         this.facingLeft = true;
         this.target = null;
+        this.counter = 2000;
+        this.lightningTime = 2500;
 
         this.animations = {
             LeftAttack1: new Animator(ASSET_MANAGER.getAsset(CELES + "Attack1.png"), 1280, 0, 128, 128, 10, 0.1, true, false),
             LeftAttack2: new Animator(ASSET_MANAGER.getAsset(CELES + "Attack2.png"), 512, 0, 128, 128, 4, 0.15, true, false),
-            LeftDead: new Animator(ASSET_MANAGER.getAsset(CELES + "Dead.png"), 640, 0, 128, 128, 5, 0.5, true, false),
+            LeftDead: new Animator(ASSET_MANAGER.getAsset(CELES + "Dead.png"), 640, 0, 128, 128, 5, 0.1, true, false),
             LeftHurt: new Animator(ASSET_MANAGER.getAsset(CELES + "Hurt.png"), 384, 0, 128, 128, 3, 0.15, true, false),
             LeftIdle: new Animator(ASSET_MANAGER.getAsset(CELES + "Idle.png"), 896, 0, 128, 128, 7, 0.15, true, true),
             LeftJump: new Animator(ASSET_MANAGER.getAsset(CELES + "Jump.png"), 1024, 0, 128, 128, 8, 0.15, true, false),
@@ -26,7 +26,7 @@ class Celes {
             LeftWalk: new Animator(ASSET_MANAGER.getAsset(CELES + "Walk.png"), 896, 0, 128, 128, 7, 0.15, true, true),
             RightAttack1: new Animator(ASSET_MANAGER.getAsset(CELES + "Attack1.png"), 0, 0, 128, 128, 10, 0.1, false, false),
             RightAttack2: new Animator(ASSET_MANAGER.getAsset(CELES + "Attack2.png"), 0, 0, 128, 128, 4, 0.15, false, false),
-            RightDead: new Animator(ASSET_MANAGER.getAsset(CELES + "Dead.png"), 0, 0, 128, 128, 5, 0.5, false, false),
+            RightDead: new Animator(ASSET_MANAGER.getAsset(CELES + "Dead.png"), 0, 0, 128, 128, 5, 0.1, false, false),
             RightHurt: new Animator(ASSET_MANAGER.getAsset(CELES + "Hurt.png"), 0, 0, 128, 128, 3, 0.15, false, false),
             RightIdle: new Animator(ASSET_MANAGER.getAsset(CELES + "Idle.png"), 0, 0, 128, 128, 7, 0.15, false, true),
             RightJump: new Animator(ASSET_MANAGER.getAsset(CELES + "Jump.png"), 0, 0, 128, 128, 8, 0.15, false, false),
@@ -34,8 +34,9 @@ class Celes {
             RightRun: new Animator(ASSET_MANAGER.getAsset(CELES + "Run.png"), 0, 0, 128, 128, 8, 0.1, false, true),
             RightWalk: new Animator(ASSET_MANAGER.getAsset(CELES + "Walk.png"), 0, 0, 128, 128, 7, 0.15, false, true)
         }
+        this.updateBB();
 
-        this.currentState = 'LeftLightCharge';
+        this.currentState = 'LeftIdle';
     };
 
     setState(state) {
@@ -82,7 +83,7 @@ class Celes {
 
     update() {
         if (this.dead) {
-            if (this.currentState !== "LeftDead" || this.currentState !== "LeftDead") {
+            if (this.currentState !== 'LeftDead' && this.currentState !== 'RightDead') {
                 if (this.facingLeft) {
                     this.setState('LeftDead');
                 } else {
@@ -108,7 +109,11 @@ class Celes {
         }else if (this.currentState === 'LeftWalk') {
             this.x -= 150 * this.game.clockTick;
         }
-        if (this.hp <= 1900 && !this.inCutscene) {
+        if (this.hp <= 1900 && !this.inCutscene && this.counter >= 2000) {
+            if (this.lightningTime >= 500) {
+                this.lightningTime -= 500
+            }
+            this.counter = 0;
             this.specialAttack();
             this.inCutscene = true;
             this.setState('LeftIdle')
@@ -122,72 +127,69 @@ class Celes {
             );
         }
 
+        if (!this.inCutscene && this.counter < 2000) {
+            this.counter += 100 * this.game.clockTick;
+        }
+
         this.attackNumber = Math.floor(Math.random() * 3);
-        let that = this;
-        this.game.entities.forEach(function (entity) {
-            if (entity instanceof Knight && entity.x - that.x > 500) {
-                that.facingLeft = false;
-                that.setState('RightRun')
-            } else if (entity instanceof Knight && that.x - entity.x > 500) {
-                that.facingLeft = true;
-                that.setState('LeftRun')
-            }
-            if (entity instanceof Knight) {
-                if (that.animations[that.currentState].getDone()) {
-                    if (entity.x > that.x) {
-                        // Knight is to the right
-                        that.facingLeft = false;
-                        that.setState('RightWalk');
-                    } else if (entity.x < that.x) {
-                        // Knight is to the left
-                        that.facingLeft = true;
-                        that.setState('LeftWalk');
-                    }
+        if (this.target && this.target.x - this.x > 500) {
+            this.facingLeft = false;
+            this.setState('RightRun')
+        } else if (this.x - this.target.x > 500) {
+            this.facingLeft = true;
+            this.setState('LeftRun')
+        }
+        if (this.animations[this.currentState].getDone() || this.currentState === 'LeftIdle' || this.currentState === 'RightIdle') {
+            if (this.target.x > this.x) {
+                    // Knight is to the right
+                    this.facingLeft = false;
+                    this.setState('RightWalk');
+                } else if (this.target.x < this.x) {
+                    // Knight is to the left
+                    this.facingLeft = true;
+                    this.setState('LeftWalk');
                 }
             }
-            if (entity.BB && that.BB.collide(entity.BB)) {
-                if (!that.animations[that.currentState].getDone()
-                    && that.currentState !== "LeftWalk" && that.currentState !== "RightWalk"
-                    && that.currentState !== "LeftRun" && that.currentState !== "RightRun") {
-                    return;
-                }
-                if (entity instanceof Knight) {
-                    if (entity.currentState === 'RightAttack1') {
-                        that.setState('LeftHurt')
-                        that.hp -= entity.damage;
-                        that.x += 75;
-                        return;
-                    } else if (entity.currentState === 'LeftAttack1') {
-                        that.setState('RightHurt')
-                        that.hp -= entity.damage;
-                        that.x -= 75;
-                        return;
-                    } else {
-                        if (that.currentState !== 'LeftAttack1' && that.currentState !== 'LeftAttack2'
-                            && that.currentState !== 'RightAttack2' && that.currentState !== 'RightAttack1') {
-                            if (that.facingLeft) {
-                                if (that.attackNumber === 0) {
-                                    that.setState('LeftAttack1');
-                                } else if (that.attackNumber === 1) {
-                                    that.setState('LeftAttack2');
-                                } else {
-                                    that.setState('LeftLightCharge');
-                                }
-                            } else {
-                                if (that.attackNumber === 0) {
-                                    that.setState('RightAttack1');
-                                } else if (that.attackNumber === 1) {
-                                    that.setState('RightAttack2');
-                                } else {
-                                    that.setState('RightLightCharge')
-                                }
-                            }
+        if (this.target.BB && this.BB.collide(this.target.BB)) {
+            if (!this.animations[this.currentState].getDone()
+                && this.currentState !== "LeftWalk" && this.currentState !== "RightWalk"
+                && this.currentState !== "LeftRun" && this.currentState !== "RightRun") {
+                return;
+            }
+            if (this.target.currentState === 'RightAttack1') {
+                this.setState('LeftHurt')
+                this.hp -= this.target.damage;
+                this.x += 75;
+                return;
+            } else if (this.target.currentState === 'LeftAttack1') {
+                this.setState('RightHurt')
+                this.hp -= this.target.damage;
+                this.x -= 75;
+                return;
+            } else {
+                if (this.currentState !== 'LeftAttack1' && this.currentState !== 'LeftAttack2'
+                    && this.currentState !== 'RightAttack2' && this.currentState !== 'RightAttack1') {
+                    if (this.facingLeft) {
+                        if (this.attackNumber === 0) {
+                            this.setState('LeftAttack1');
+                        } else if (this.attackNumber === 1) {
+                            this.setState('LeftAttack2');
+                        } else {
+                            this.setState('LeftLightCharge');
                         }
-                        entity.takeDamage(50);
+                    } else {
+                        if (this.attackNumber === 0) {
+                            this.setState('RightAttack1');
+                        } else if (this.attackNumber === 1) {
+                            this.setState('RightAttack2');
+                        } else {
+                            this.setState('RightLightCharge')
+                        }
                     }
                 }
+                this.target.takeDamage(50);
             }
-        });
+        }
     };
 
 
@@ -198,34 +200,43 @@ class Celes {
             this.isLightning = true;
         }
         this.game.entities.splice(1, 0, this.lightning);
-        this.x = 1000;
-        this.y = -30;
+        setTimeout(() => {
+            this.y = -300;
+        }, 500)
 
 
         setTimeout(() => {
             this.lightning = new Lightning(this.game, this.target.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning);
-        }, 2000);
+        }, this.lightningTime);
 
         setTimeout(() => {
             this.lightning = new Lightning(this.game, this.target.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning);
-        }, 4000);
+        }, this.lightningTime * 2);
 
         setTimeout(() => {
             this.lightning = new Lightning(this.game, this.target.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning);
-        }, 6000);
+        }, this.lightningTime * 3);
 
         setTimeout(() => {
             this.lightning = new Lightning(this.game, this.target.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning);
-        }, 8000);
+        }, this.lightningTime * 4);
 
         setTimeout(() => {
             this.lightning = new Lightning(this.game, this.target.x, 40, true)
-            this.game.entities.splice(1, 0, this.lightning);
-        }, 10000);
+            this.game.entities.splice(1, 0, this.lightning)
+        }, this.lightningTime * 5);
+
+        setTimeout(() => {
+            this.lightning = new Lightning(this.game, this.x, 40, true)
+            this.game.entities.splice(1, 0, this.lightning)
+            this.y = 450;
+            this.inCutscene = false;
+            this.isLightning = false;
+        }, 12000);
     }
 
     draw(ctx) {
