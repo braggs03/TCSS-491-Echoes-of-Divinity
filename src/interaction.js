@@ -69,15 +69,9 @@ function testInteractable(game, ctx) {
                         ctx.font = '30px "Open+Sans"';
                         ctx.textAlign = "center";
                         ctx.textBaseline = 'top';
-                        if (entity.BB.x + entity.BB.width / 2 > game.camera.knight.BB.x) {
-                            ctx.drawImage(ASSET_MANAGER.getAsset(DUNGEON), 1536, 984, INTERACTABLE_HINT_WIDTH, 31, entity.BB.right - INTERACTABLE_HINT_WIDTH, entity.BB.y - INTERACTABLE_HINT_HEIGHT, INTERACTABLE_HINT_WIDTH * INTERACTABLE_HINT_SCALE, INTERACTABLE_HINT_HEIGHT * INTERACTABLE_HINT_SCALE);
-                            ctx.fillText("F", entity.BB.right + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);
-                            ctx.strokeText("F", entity.BB.right + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);   
-                        } else {
-                            ctx.drawImage(ASSET_MANAGER.getAsset(DUNGEON), 1536, 984, INTERACTABLE_HINT_WIDTH, 31, entity.BB.x - INTERACTABLE_HINT_WIDTH, entity.BB.y - INTERACTABLE_HINT_HEIGHT, INTERACTABLE_HINT_WIDTH * INTERACTABLE_HINT_SCALE, INTERACTABLE_HINT_HEIGHT * INTERACTABLE_HINT_SCALE);
-                            ctx.fillText("F", entity.BB.x + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);
-                            ctx.strokeText("F", entity.BB.x + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);    
-                        }
+                        ctx.drawImage(ASSET_MANAGER.getAsset(DUNGEON), 1536, 984, INTERACTABLE_HINT_WIDTH, 31, entity.BB.right - INTERACTABLE_HINT_WIDTH, entity.BB.y - INTERACTABLE_HINT_HEIGHT, INTERACTABLE_HINT_WIDTH * INTERACTABLE_HINT_SCALE, INTERACTABLE_HINT_HEIGHT * INTERACTABLE_HINT_SCALE);
+                        ctx.fillText("F", entity.BB.right + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);
+                        ctx.strokeText("F", entity.BB.right + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);   
                     }
                 }
             }
