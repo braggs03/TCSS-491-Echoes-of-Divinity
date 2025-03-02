@@ -22,7 +22,7 @@ class Knight {
         
         this.velocityY = 0;
         this.maxVelocityY = 990;
-        this.jumpSpeed = 1650;
+        this.jumpSpeed = 1350;
         this.accelerationY = 4125; 
 
         this.rollSpeed = 825;
@@ -62,6 +62,9 @@ class Knight {
         
         this.animationLocked = false;
         
+        this.hasDoubleJump = false;
+        this.hasDoubleJumped = false;
+
         this.dead = false;
 
         this.colliding = {
@@ -306,6 +309,7 @@ class Knight {
                             knight.y -= overlap.y - 1;
                         }
                         knight.velocityY = 0;
+                        this.hasDoubleJumped = false;
                     }
                 } else if (entity instanceof DungeonSpike) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
@@ -364,7 +368,6 @@ class Knight {
                 this.setState(this.chosenState);
                 this.pauseSound();
             }
-            return;
         }
     
         if (!this.dead) {
@@ -398,12 +401,20 @@ class Knight {
             }
     
             if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
-                if (this.currentState == 'RightRoll' && !this.colliding.left) {
-                    this.invinsible = true;
-                    this.x += this.rollSpeed * clockTick;
+                if (this.currentState == 'RightRoll') {
+                    if (!this.colliding.left) {
+                        this.invinsible = true;
+                        this.x += this.rollSpeed * clockTick;
+                    } else {
+                        this.setState('RightIdle');
+                    }
                 } else if (this.currentState == 'LeftRoll' && !this.colliding.right) {
-                    this.invinsible = true;
-                    this.x -= this.rollSpeed * clockTick;
+                    if (!this.colliding.right) {
+                        this.invinsible = true;
+                        this.x -= this.rollSpeed * clockTick;
+                    } else {
+                        this.setState('LeftIdle');
+                    }
                 }
                 if (this.rollSound.paused) {
                     this.rollSound.play();
@@ -439,10 +450,21 @@ class Knight {
                 this.pauseSound();
             }
     
-            if (this.game.keys["ArrowUp"] && this.colliding.up) {
-                this.colliding.up = false;
-                this.velocityY = -this.jumpSpeed; 
-            } 
+            if (this.game.keys["ArrowUp"]) {
+                if (this.colliding.up) {
+                    console.log("Got here d1");
+                    this.colliding.up = false;
+                    this.velocityY = -this.jumpSpeed; 
+                } else if (this.hasDoubleJump && !this.hasDoubleJumped && this.arrowUpReleased) {
+                    console.log("Got here d2");
+                    this.colliding.up = false;
+                    this.velocityY = -this.jumpSpeed; 
+                    this.hasDoubleJumped = true;
+                }
+                this.arrowUpReleased = false;
+            } else {
+                this.arrowUpReleased = true;
+            }
             
             if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
                 this.facing = LEFT;
