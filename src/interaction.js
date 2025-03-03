@@ -50,11 +50,30 @@ class Interaction {
     }
 }
 
-function testInteractable(game) {
+const INTERACTABLE_HINT_WIDTH = 39;
+const INTERACTABLE_HINT_HEIGHT = 31;
+const INTERACTABLE_HINT_SCALE = 2;
+const F_X_OFFSET = 40;
+const F_Y_OFFSET = 9;
+
+function testInteractable(game, ctx) {
     if (!game.camera.interactable) {
         game.entities.forEach((entity) => {
-            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && !game.camera.knight.inCutscene && entity.text && !entity.dialogCompleted && game.keys["f"]) {
-                game.camera.showInteractive(entity, entity.text);
+            if (entity.BB && game.camera.knight.BB.collide(entity.BB) && !game.camera.knight.inCutscene) {
+                if (!entity.dialogCompleted) {
+                    if (entity.text && game.keys["f"]) {
+                        game.camera.showInteractive(entity, entity.text);
+                    } else if (entity.text || (entity instanceof Bonfire && !entity.isCurrent) || entity instanceof DungeonDoor || entity instanceof Potion) {
+                        ctx.fillStyle = "Black";
+                        ctx.strokeStyle = "Black";
+                        ctx.font = '30px "Open+Sans"';
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = 'top';
+                        ctx.drawImage(ASSET_MANAGER.getAsset(DUNGEON), 1536, 984, INTERACTABLE_HINT_WIDTH, 31, entity.BB.right - INTERACTABLE_HINT_WIDTH, entity.BB.y - INTERACTABLE_HINT_HEIGHT, INTERACTABLE_HINT_WIDTH * INTERACTABLE_HINT_SCALE, INTERACTABLE_HINT_HEIGHT * INTERACTABLE_HINT_SCALE);
+                        ctx.fillText("F", entity.BB.right + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);
+                        ctx.strokeText("F", entity.BB.right + F_X_OFFSET - INTERACTABLE_HINT_WIDTH, entity.BB.y + F_Y_OFFSET - INTERACTABLE_HINT_HEIGHT);   
+                    }
+                }
             }
         });
     }
