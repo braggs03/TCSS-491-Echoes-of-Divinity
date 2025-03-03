@@ -253,7 +253,7 @@ class Knight {
         const clockTick = this.game.clockTick;
 
         if (this.currentStamina < this.stamina) {
-            this.currentStamina += 100 * this.game.clockTick;
+            this.currentStamina += 80 * this.game.clockTick;
         }
     
         if (this.y > 1000) {
@@ -368,6 +368,7 @@ class Knight {
                 this.setState(this.chosenState);
                 this.pauseSound();
             }
+            return;
         }
     
         if (!this.dead) {
