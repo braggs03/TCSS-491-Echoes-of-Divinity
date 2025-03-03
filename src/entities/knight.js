@@ -406,6 +406,7 @@ class Knight {
                     if (!this.colliding.left) {
                         this.invinsible = true;
                         this.x += this.rollSpeed * clockTick;
+                        this.x = Math.round(this.x);
                     } else {
                         this.setState('RightIdle');
                     }
@@ -413,6 +414,7 @@ class Knight {
                     if (!this.colliding.right) {
                         this.invinsible = true;
                         this.x -= this.rollSpeed * clockTick;
+                        this.x = Math.round(this.x);
                     } else {
                         this.setState('LeftIdle');
                     }
