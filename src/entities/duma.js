@@ -84,6 +84,14 @@ class Duma {
         }
     }
 
+    takeDamage(amount) {
+        this.hp -= amount;
+        console.log(`MechaGolem takes ${amount} damage, remaining health: ${this.hp}`);
+
+        if (this.hp <= 0) {
+        }
+    }
+
     update() {
         if (this.dead) {
             this.fireBomb = new FireBomb(this.game, this.x, this.y + 50)
@@ -359,12 +367,6 @@ class Duma {
         if ((this.currentState === 'LeftAttack1' || this.currentState === 'RightAttack1')  && this.animations[this.currentState].currentFrame() > 7) {
             if (this.target.BB && this.BB.collide(this.target.BB)) {
                 this.target.takeDamage(50);
-            }
-        }
-
-        if (this.target.currentState === 'LeftAttack1' || this.target.currentState === 'RightAttack1') {
-            if (this.target.BB && this.BB.collide(this.target.BB) || this.bodyBB && this.bodyBB.collide(this.target.BB)) {
-                this.hp -= this.target.damage;
             }
         }
 

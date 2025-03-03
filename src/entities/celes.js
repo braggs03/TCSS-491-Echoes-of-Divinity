@@ -15,7 +15,7 @@ class Celes {
         this.lightningTime = 2500;
 
         this.animations = {
-            LeftAttack1: new Animator(ASSET_MANAGER.getAsset(CELES + "Attack1.png"), 1280, 0, 128, 128, 10, 0.1, true, false),
+            LeftAttack1: new Animator(ASSET_MANAGER.getAsset(CELES + "Attack1.png"), 1280, 0, 128, 128, 10, 0.075, true, false),
             LeftAttack2: new Animator(ASSET_MANAGER.getAsset(CELES + "Attack2.png"), 512, 0, 128, 128, 4, 0.15, true, false),
             LeftDead: new Animator(ASSET_MANAGER.getAsset(CELES + "Dead.png"), 640, 0, 128, 128, 5, 0.1, true, false),
             LeftHurt: new Animator(ASSET_MANAGER.getAsset(CELES + "Hurt.png"), 384, 0, 128, 128, 3, 0.15, true, false),
@@ -24,7 +24,8 @@ class Celes {
             LeftLightCharge: new Animator(ASSET_MANAGER.getAsset(CELES + "LightCharge.png"), 1664, 0, 128, 128, 12, 0.1, true, false),
             LeftRun: new Animator(ASSET_MANAGER.getAsset(CELES + "Run.png"), 1024, 0, 128, 128, 8, 0.1, true, true),
             LeftWalk: new Animator(ASSET_MANAGER.getAsset(CELES + "Walk.png"), 896, 0, 128, 128, 7, 0.15, true, true),
-            RightAttack1: new Animator(ASSET_MANAGER.getAsset(CELES + "Attack1.png"), 0, 0, 128, 128, 10, 0.1, false, false),
+
+            RightAttack1: new Animator(ASSET_MANAGER.getAsset(CELES + "Attack1.png"), 0, 0, 128, 128, 10, 0.075, false, false),
             RightAttack2: new Animator(ASSET_MANAGER.getAsset(CELES + "Attack2.png"), 0, 0, 128, 128, 4, 0.15, false, false),
             RightDead: new Animator(ASSET_MANAGER.getAsset(CELES + "Dead.png"), 0, 0, 128, 128, 5, 0.1, false, false),
             RightHurt: new Animator(ASSET_MANAGER.getAsset(CELES + "Hurt.png"), 0, 0, 128, 128, 3, 0.15, false, false),
@@ -80,6 +81,13 @@ class Celes {
         }
     }
 
+    takeDamage(amount) {
+        this.hp -= amount;
+        console.log(`MechaGolem takes ${amount} damage, remaining health: ${this.hp}`);
+
+        if (this.hp <= 0) {
+        }
+    }
 
     update() {
         if (this.dead) {
@@ -109,7 +117,7 @@ class Celes {
         }else if (this.currentState === 'LeftWalk') {
             this.x -= 150 * this.game.clockTick;
         }
-        if (this.hp <= 1900 && !this.inCutscene && this.counter >= 2000) {
+        if (this.hp <= 1500 && !this.inCutscene && this.counter >= 2000) {
             if (this.lightningTime >= 500) {
                 this.lightningTime -= 500
             }
@@ -132,22 +140,16 @@ class Celes {
         }
 
         this.attackNumber = Math.floor(Math.random() * 3);
-        if (this.target && this.target.x - this.x > 500) {
-            this.facingLeft = false;
-            this.setState('RightRun')
-        } else if (this.x - this.target.x > 500) {
-            this.facingLeft = true;
-            this.setState('LeftRun')
-        }
-        if (this.animations[this.currentState].getDone() || this.currentState === 'LeftIdle' || this.currentState === 'RightIdle') {
+        if (this.animations[this.currentState].getDone() || this.currentState === 'LeftIdle' || this.currentState === 'RightIdle'
+            || this.currentState === 'LeftRun' || this.currentState === 'RightRun') {
             if (this.target.x > this.x) {
                     // Knight is to the right
                     this.facingLeft = false;
-                    this.setState('RightWalk');
+                    this.setState('RightRun');
                 } else if (this.target.x < this.x) {
                     // Knight is to the left
                     this.facingLeft = true;
-                    this.setState('LeftWalk');
+                    this.setState('LeftRun');
                 }
             }
         if (this.target.BB && this.BB.collide(this.target.BB)) {
@@ -158,13 +160,9 @@ class Celes {
             }
             if (this.target.currentState === 'RightAttack1') {
                 this.setState('LeftHurt')
-                this.hp -= this.target.damage;
-                this.x += 75;
                 return;
             } else if (this.target.currentState === 'LeftAttack1') {
                 this.setState('RightHurt')
-                this.hp -= this.target.damage;
-                this.x -= 75;
                 return;
             } else {
                 if (this.currentState !== 'LeftAttack1' && this.currentState !== 'LeftAttack2'
@@ -187,7 +185,7 @@ class Celes {
                         }
                     }
                 }
-                this.target.takeDamage(50);
+                this.target.takeDamage(100);
             }
         }
     };
@@ -233,10 +231,14 @@ class Celes {
         setTimeout(() => {
             this.lightning = new Lightning(this.game, this.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning)
+            this.isLightning = false;
+        }, this.lightningTime * 6);
+
+        setTimeout(() => {
             this.y = 450;
             this.inCutscene = false;
-            this.isLightning = false;
-        }, 12000);
+        }, this.lightningTime * 6.2)
+
     }
 
     draw(ctx) {
