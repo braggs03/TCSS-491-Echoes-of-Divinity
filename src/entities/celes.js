@@ -83,10 +83,7 @@ class Celes {
 
     takeDamage(amount) {
         this.hp -= amount;
-        console.log(`MechaGolem takes ${amount} damage, remaining health: ${this.hp}`);
-
-        if (this.hp <= 0) {
-        }
+        console.log(`Celes takes ${amount} damage, remaining health: ${this.hp}`);
     }
 
     update() {
