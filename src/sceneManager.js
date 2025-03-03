@@ -33,8 +33,8 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('startScreen', false, true, false, false);
-        // this.loadLevel('one', false, false, false, false);
+        // this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('one', false, false, false, false);
     };
 
     saveEntities() {
