@@ -203,7 +203,7 @@ class CutsceneFive {
         this.knight.moveable = true;
         this.game.camera.inCutscene = false;
         this.knight.velocityX = 0;
-        this.game.camera.loadLevel("bossroom", true, false, false, false);
+        this.game.camera.loadLevel("bossOne", true, false, false, false);
     }
 
     delay(ms) {

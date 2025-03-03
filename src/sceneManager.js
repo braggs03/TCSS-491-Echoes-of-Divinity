@@ -134,7 +134,7 @@ class SceneManager {
             this.music.loop = true;
         }
 
-        if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+        if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
             this.knight.x = this.knight.x + 200;
             this.music = new Audio(LUCAN_MUSIC);
             this.music.loop = true;
@@ -189,7 +189,7 @@ class SceneManager {
                 let azucena = this.level.azucena[i];
                 this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
-            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+            if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
                 this.azucena = this.game.entities.find((entities) => entities instanceof Azucena)
                 this.azucena.x = -300;
             }
@@ -200,7 +200,7 @@ class SceneManager {
                 let reina = this.level.reina[i];
                 this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
             }
-            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+            if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
                 this.reina = this.game.entities.find((entities) => entities instanceof Reina)
                 this.reina.x = -300;
             }
@@ -233,6 +233,20 @@ class SceneManager {
             for (let i = 0; i < this.level.lucan.length; i++) {
                 let lucan = this.level.lucan[i];
                 this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
+            }
+        }
+
+        if (this.level.celes) {
+            for (let i = 0; i < this.level.celes.length; i++) {
+                let celes = this.level.celes[i];
+                this.game.addEntity(new Celes(this.game, celes.x, celes.y));
+            }
+        }
+
+        if (this.level.duma) {
+            for (let i = 0; i < this.level.duma.length; i++) {
+                let duma = this.level.duma[i];
+                this.game.addEntity(new Duma(this.game, duma.x, duma.y));
             }
         }
 
@@ -342,6 +356,13 @@ class SceneManager {
             }
         }
 
+        if  (this.level.firebomb) {
+            for (let i = 0; i < this.level.firebomb.length; i++) {
+                let fire = this.level.firebomb[i];
+                this.game.addEntity(new FireBomb(this.game, fire.x, fire.y));
+            }
+        }
+
         if  (this.level.dungeonBackground) {
             for (let i = 0; i < this.level.dungeonBackground.length; i++) {
                 let background = this.level.dungeonBackground[i];
@@ -403,9 +424,9 @@ class SceneManager {
             }
         }
 
-        if (this.level.tutorialBackground) {
-            for (let i = 0; i < this.level.tutorialBackground.length; i++) {
-                let background = this.level.tutorialBackground[i];
+        if (this.level.nightBackground) {
+            for (let i = 0; i < this.level.nightBackground.length; i++) {
+                let background = this.level.nightBackground[i];
                 this.game.addEntity(new tutorialBackground(this.game, background.x, background.y, background.w, background.h));
             }
         }
@@ -507,7 +528,7 @@ class SceneManager {
                 || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
                 || this.level === levels.one && this.oneCutsceneDone
                 || this.level === levels.two && this.twoCutsceneDone
-                || this.level === levels.bossroom && this.bossoneCutsceneDone) {
+                || this.level === levels.bossOne && this.bossoneCutsceneDone) {
 
             } else {
                 if (this.cutsceneCounter !== this.cutscene.length) {
@@ -531,7 +552,7 @@ class SceneManager {
                     if (this.level === levels.two) {
                         this.twoCutsceneDone = true
                     }
-                    if (this.level === levels.bossroom) {
+                    if (this.level === levels.bossOne) {
                         this.bossoneCutsceneDone = true
                     }
                 }
