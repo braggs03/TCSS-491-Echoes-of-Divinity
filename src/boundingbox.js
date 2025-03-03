@@ -6,6 +6,8 @@ class BoundingBox {
         this.top = y;
         this.right = this.left + this.width;
         this.bottom = this.top + this.height;
+        this.width = width;
+        this.height = height;
     };
 
     collide(oth) {

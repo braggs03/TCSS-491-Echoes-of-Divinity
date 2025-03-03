@@ -19,7 +19,7 @@ class SceneManager {
         this.twoCutsceneDone = false;
         this.bossoneCutsceneDone = false;        
         this.emberAnimation = new Animator(
-            ASSET_MANAGER.getAsset("./resources/maintheme.png"), 
+            ASSET_MANAGER.getAsset(EMBER), 
             0, 96,        // Starting x, y position in spritesheet
             16, 16,       // Width and height of each frame
             5,            // Number of frames
@@ -33,7 +33,8 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('bossTwo', false, false, false, false);
+        this.loadLevel('startScreen', false, true, false, false);
+        // this.loadLevel('one', false, false, false, false);
     };
 
     saveEntities() {
@@ -81,6 +82,7 @@ class SceneManager {
         this.checkpoint = false;
         this.title = title;        
         this.level = levels[levelIndex];
+        this.levelIndex = levelIndex;
         this.saveEntities();
         this.clearEntities();
         this.game.textOverlay = null;
@@ -97,6 +99,10 @@ class SceneManager {
             if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint) {
                 this.knight.x = this.currentCheckpoint.x;
                 this.knight.y = this.currentCheckpoint.y;
+                if (levelIndex === "two") {
+                    // Force camera to position at the bonfire
+                    this.x = Math.max(0, Math.min(this.level.width, this.knight.x - (PARAMS.SCREENWIDTH / 2)));
+                }
                 console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);     
             } else if (end) {
                 this.knight.x = this.level.endPosition.x;
@@ -109,7 +115,6 @@ class SceneManager {
             } else {
                 this.knight.x = this.level.startPosition.x;
                 this.knight.y = this.level.startPosition.y;
-                this.emberDrop = null;
                 console.log(`Loading level ${levelIndex} @ default start spawn (${this.level.startPosition.x}, ${this.level.startPosition.y})`);
             }
             this.game.addEntity(this.knight);
@@ -211,7 +216,7 @@ class SceneManager {
         if (this.level.gorgon) {
             for (let i = 0; i < this.level.gorgon.length; i++) {
                 let gorgon = this.level.gorgon[i];
-                this.game.addEntity(new Gorgon(this.game, gorgon.x, gorgon.y));
+                this.game.addEntity(new Gorgon(this.game, gorgon));
             }
         }
 
@@ -455,6 +460,10 @@ class SceneManager {
         this.knight.moveable = true;
         this.interactable.entity.dialogCompleted = true;
         this.interactable.removeFromWorld = true;
+        const interactable = this.interactable;
+        setTimeout(() => {
+            interactable.entity.dialogCompleted = false;
+        }, 3000);
         this.interactable = undefined;
     }
 
@@ -610,15 +619,19 @@ class SceneManager {
             }
         }
 
-        testInteractable(this.game);
-
-        let middlepointX = PARAMS.SCREENWIDTH / 2 - KNIGHT_HEIGHT * 2;
+        let middlepointX = PARAMS.SCREENWIDTH / 2 - KNIGHT_X_OFFSET - KNIGHT_WIDTH / 2;
         //this.x = this.knight.x - middlepointX;
 
-        let middlepointY = PARAMS.SCREENHEIGHT / 2 - 50;
+        let middlepointY = PARAMS.SCREENHEIGHT / 2 - KNIGHT_Y_OFFSET - KNIGHT_HEIGHT / 2;
+            
 
-        if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) this.x = this.knight.x - middlepointX;
-        if (0 < this.knight.y - middlepointY && this.level.height > this.knight.y - middlepointY) this.y = this.knight.y - middlepointY;
+        if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) {
+            this.x = this.knight.x - middlepointX;
+        } 
+
+        if (0 > this.knight.y - middlepointY && this.level.height < this.knight.y - middlepointY) {
+            this.y = this.knight.y - middlepointY;
+        }
 
     };
 
@@ -670,13 +683,30 @@ class SceneManager {
             ctx.fillText(this.knight.potionCount, 285, 100);
             const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
             ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
-            
         }
     };
 
     draw(ctx) {
         if (!this.inCutscene) {
             this.userInterface(ctx);
+        }
+        testInteractable(this.game, ctx);
+        ctx.fillStyle = "White";
+        ctx.strokeStyle = "Black";
+        ctx.font = '40px Arial';
+        ctx.textAlign = "left";
+        ctx.textBaseline = 'top';
+        if (PARAMS.DEBUG) {
+            const padding = 10;
+            const offset = 10;
+            const xPosition = `X: ${this.knight.x}`;
+            const xDimensions = ctx.measureText(xPosition);
+            ctx.fillText(xPosition, offset + padding, PARAMS.SCREENHEIGHT - xDimensions.actualBoundingBoxDescent - padding);
+            ctx.strokeText(xPosition, offset + padding, PARAMS.SCREENHEIGHT - xDimensions.actualBoundingBoxDescent - padding);
+            const yPosition = `Y: ${this.knight.y}`;
+            const yDimensions = ctx.measureText(yPosition);
+            ctx.fillText(yPosition, offset + padding + xDimensions.width + padding, PARAMS.SCREENHEIGHT - yDimensions.actualBoundingBoxDescent - padding);
+            ctx.strokeText(yPosition, offset + padding + xDimensions.width + padding, PARAMS.SCREENHEIGHT - yDimensions.actualBoundingBoxDescent - padding);
         }
     };
 }

@@ -169,11 +169,10 @@ class Potion {
 
     update() {
         this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
-
     };
-//1736 - green, 1712 - red
+
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 1712, 2216, POTION_WIDTH, POTION_HEIGHT, this.x - this.game.camera.x, this.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
+        ctx.drawImage(this.spritesheet, 1712, 2216, POTION_WIDTH, POTION_HEIGHT, this.x - this.game.camera.x, this.y  - this.game.camera.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
         this.BB.draw(ctx); 
     }
 
