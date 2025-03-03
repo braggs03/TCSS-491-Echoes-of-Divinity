@@ -3,7 +3,7 @@ class CutsceneManager {
         this.game = game;
         this.cutsceneArray = [new CutsceneOne(this.game), new CutsceneTwo(this.game),
             new CutsceneThree(this.game), new CutsceneFour(this.game), new CutsceneFive(this.game),
-            new CutsceneSix(this.game), new CutsceneSeven(this.game)]
+            new CutsceneSix(this.game), new CutsceneSeven(this.game), new CutsceneEight(this.game),]
     }
 }
 
@@ -235,7 +235,6 @@ class CutsceneSix {
         this.azucena.inCutscene = true;
         let wall = { x: 0, y: 0, h: 5 };
         this.game.entities.splice(1, 0, new DungeonWall(this.game, wall.x, wall.y, wall.h))
-        //this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
         this.game.draw()
         this.game.camera.showInteractive(this.azucena, "azucena6");
         await this.delay(2000);
@@ -343,6 +342,22 @@ class CutsceneSeven {
         this.game.camera.inCutscene = false;
         this.knight.velocityX = 0;
         this.game.camera.loadLevel("startScreen", false, true,false, false)
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+class CutsceneEight {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.azucena = this.game.entities.find(entity=> entity instanceof Azucena);
+    }
+
+    async run() {
+
     }
 
     delay(ms) {

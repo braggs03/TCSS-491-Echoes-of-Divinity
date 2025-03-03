@@ -34,8 +34,7 @@ let levels = {
             { x: 640, y: 571, message: "Now, the time has come for the final battle.", font: "20px Arial", color: "white" },
             { x: 640, y: 610, message: "With his companions, Azucena and Reina, Mica’s Chosen prepares to march on Thalador to confront Duma one last time.", font: "20px Arial", color: "white" },
             { x: 640, y: 649, message: "It's time for humanity to decide it's fate. Whether it will succumb to... or overcome the...", font: "20px Arial", color: "white" },
-        ],
-        reina: [{ x: 30, y: 50 }],
+        ]
     },
 
     mainMenu: {
@@ -72,10 +71,6 @@ let levels = {
         },
         endPosition: {
             x: 14470,
-            y: 465,
-        },
-        checkpoint1:{ //bonFire position change both
-            x: 400,
             y: 465,
         },
         checkpoint2:{ //bonFire position change both
@@ -132,7 +127,6 @@ let levels = {
         dungeonWorkbench: [{ x: 1500, y: 510 }],
         dungeonAnvil: [{ x: 1730, y: 613 }],
         dungeonDoor: [{ x: 100, y: 465, level: "one" }],
-        //lucan: [{ x: 800 , y: 400 }],
         dungeonTorch: [{ x: 103, y: 465 }, { x: 278, y: 465 }],
         dungeonWall: [{ x: 0, y: 0, h: 5 }, { x: 58, y: 0, h: 5 }],
         wallAxe: [{ x: 1726, y: 520 }],
@@ -190,7 +184,95 @@ let levels = {
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 7.5, y: 9, w: 1, h: 1 }, { x: -0.25, y: 9, w: 1, h: 1 }],
         nightBackground: [{ x:0, y:0, w:50, h: 1}],
     },
+
+    AzucenaAfterStory: {
+        width: 800,
+        height: 600,
+        background: "black",
+        fadeTime: 2500,
+        text: [
+            { x: 640, y: 25, message: "With the war finally over and the shadow of Duma lifted, the long road to restoration began.", font: "20px Arial", color: "white" },
+            { x: 640, y: 64, message: "Thalador lay in ruins, its people weary and uncertain of what the future held.", font: "20px Arial", color: "white" },
+            { x: 640, y: 103, message: "But amidst the devastation, hope remained.", font: "20px Arial", color: "white" },
+            { x: 640, y: 142, message: "Azucena, chosen as the new king’s advisor, advised him through the reconstruction era.", font: "20px Arial", color: "white" },
+            { x: 640, y: 181, message: "Together they worked tirelessly to mend fractured alliances, rebuild lost homes, and ensure that Mica’s dream of a peaceful world endured.", font: "20px Arial", color: "white" },
+            { x: 640, y: 220, message: "Even after the world was restored, she remained by the king’s side, offering her counsel for years to come.", font: "20px Arial", color: "white" },
+            { x: 640, y: 259, message: "With her guidance, stability endured, and the peace they had fought so hard for became more than just a fleeting victory.", font: "20px Arial", color: "white" },
+            { x: 640, y: 298, message: "It became a lasting legacy.", font: "20px Arial", color: "white" },
+        ],
+        azucena: [{ x: 550, y: 500 }],
+    },
+
+    ReinaAfterStory: {
+        width: 800,
+        height: 600,
+        background: "black",
+        fadeTime: 2500,
+        text: [
+            { x: 640, y: 25, message: "With the war at an end, Reina dedicated herself to rebuilding the Knights of the Eternal Flame,", font: "20px Arial", color: "white" },
+            { x: 640, y: 64, message: "restoring the order to its former glory—and beyond.", font: "20px Arial", color: "white" },
+            { x: 640, y: 103, message: "As its commander, she remained ever vigilant, standing by the King’s side as both his shield and his sword,", font: "20px Arial", color: "white" },
+            { x: 640, y: 142, message: "ensuring the peace they had fought so hard to achieve would never be undone.", font: "20px Arial", color: "white" },
+            { x: 640, y: 181, message: "Yet beyond duty and titles, she earned the most important title of all:", font: "20px Arial", color: "white" },
+            { x: 640, y: 220, message: "The King’s Dearest Friend", font: "20px Arial", color: "white" },
+            { x: 640, y: 259, message: "A title not bestowed by rank, but by the bond they shared.", font: "20px Arial", color: "white" },
+            { x: 640, y: 298, message: "One who would stand by his side, unwavering, throughout his long reign.", font: "20px Arial", color: "white" },
+        ],
+        reina: [{ x: 550, y: 500 }],
+    },
+
+    ChosenAfterStory: {
+        width: 800,
+        height: 600,
+        background: "black",
+        fadeTime: 3000,
+        text: [
+            { x: 640, y: 25, message: "In the months following the war, Mica’s Chosen was approached by the leaders of the Rising Flame.", font: "20px Arial", color: "white" },
+            { x: 640, y: 64, message: "They urged him to take the throne as King.", font: "20px Arial", color: "white" },
+            { x: 640, y: 103, message: "Hesitant at first, he ultimately accepted, convinced that only he could ensure a lasting peace.", font: "20px Arial", color: "white" },
+            { x: 640, y: 142, message: "Duma and Mica, despite their opposing views, had been right in their own ways.", font: "20px Arial", color: "white" },
+            { x: 640, y: 181, message: "Humanity was both kind and cruel.", font: "20px Arial", color: "white" },
+            { x: 640, y: 220, message: "As King, he vowed not to make the same mistakes they did.", font: "20px Arial", color: "white" },
+            { x: 640, y: 259, message: "He ruled with a hand both kind and firm, guided by Azucena and Reina.", font: "20px Arial", color: "white" },
+            { x: 640, y: 298, message: "His reign lasted until his death 63 years after Duma's defeat.", font: "20px Arial", color: "white" },
+            { x: 640, y: 337, message: "With his death marked the end of the echoes of divinity.", font: "20px Arial", color: "white" },
+            { x: 640, y: 376, message: "Having lived a long and impactful life, he said his last words.", font: "20px Arial", color: "white" },
+            { x: 640, y: 415, message: "Words that would be etched into history forever:", font: "20px Arial", color: "white" },
+            { x: 640, y: 454, message: "\"In the end, it is not the power we hold, but the hearts we touch that shapes the world.", font: "20px Arial", color: "white" },
+            { x: 640, y: 493, message: "Never stop believing in the good you can do.\"", font: "20px Arial", color: "white" },
+        ],
+        knight: [{ x: 550, y: 500 }],
+    },
+
+    Credits: {
+        width: 800,
+        height: 600,
+        background: "black",
+        fadeTime: 2000,
+        text: [
+            { x: 640, y: 250, message: "Created By:", font: "50px Arial", color: "white" },
+            { x: 640, y: 300, message: "Edward Chung", font: "30px Arial", color: "white" },
+            { x: 640, y: 350, message: "Hamda Jama", font: "30px Arial", color: "white" },
+            { x: 640, y: 400, message: "Thomas Le", font: "30px Arial", color: "white" },
+            { x: 640, y: 450, message: "Brandon Ragghianti", font: "30px Arial", color: "white" },
+        ],
+    },
+
+    LevelDesign: {
+        width: 800,
+        height: 600,
+        background: "black",
+        fadeTime: 2000,
+        text: [
+            { x: 640, y: 250, message: "Level Design:", font: "50px Arial", color: "white" },
+            { x: 640, y: 300, message: "Edward Chung", font: "30px Arial", color: "white" },
+            { x: 640, y: 350, message: "Hamda Jama", font: "30px Arial", color: "white" },
+            { x: 640, y: 450, message: "Brandon Ragghianti", font: "30px Arial", color: "white" },
+        ],
+    },
 };
+
+
 
 let originalLevels = structuredClone(levels);
 
