@@ -691,5 +691,22 @@ class SceneManager {
             this.userInterface(ctx);
         }
         testInteractable(this.game, ctx);
+        ctx.fillStyle = "White";
+        ctx.strokeStyle = "Black";
+        ctx.font = '40px Arial';
+        ctx.textAlign = "left";
+        ctx.textBaseline = 'top';
+        if (PARAMS.DEBUG) {
+            const padding = 10;
+            const offset = 10;
+            const xPosition = `X: ${this.knight.x}`;
+            const xDimensions = ctx.measureText(xPosition);
+            ctx.fillText(xPosition, offset + padding, PARAMS.SCREENHEIGHT - xDimensions.actualBoundingBoxDescent - padding);
+            ctx.strokeText(xPosition, offset + padding, PARAMS.SCREENHEIGHT - xDimensions.actualBoundingBoxDescent - padding);
+            const yPosition = `Y: ${this.knight.y}`;
+            const yDimensions = ctx.measureText(yPosition);
+            ctx.fillText(yPosition, offset + padding + xDimensions.width + padding, PARAMS.SCREENHEIGHT - yDimensions.actualBoundingBoxDescent - padding);
+            ctx.strokeText(yPosition, offset + padding + xDimensions.width + padding, PARAMS.SCREENHEIGHT - yDimensions.actualBoundingBoxDescent - padding);
+        }
     };
 }
