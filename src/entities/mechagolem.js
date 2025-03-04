@@ -219,6 +219,9 @@ class MechaGolem {
             this.attackCooldown -= this.game.clockTick;
         }
 
+        this.x = Math.round(this.x);
+        this.y = Math.round(this.y);
+
         this.updateBB();
     } 
         
