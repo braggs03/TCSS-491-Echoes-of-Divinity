@@ -9,6 +9,13 @@ class Lightning {
         this.cinema = this.run === true;
         this.damageDone = false;
         this.target = null;
+
+        this.sound = new Audio("./resources/SoundEffects/lightning.ogg");
+        this.sound.loop = false;
+        this.sound.playbackRate = 1.0;
+        this.sound.volume = 0.03;
+        this.sound.play();
+
         this.animator = new Animator(ASSET_MANAGER.getAsset("./resources/Magic/Lightning.png"), 0, 0, 64, 128, 10, 0.1, false, false);
         this.updateBB()
     };
@@ -47,6 +54,7 @@ class Lightning {
                 this.run = false;
                 this.removeFromWorld = true;
                 this.done = true;
+                ///this.sound.pause();
             }
         }
     }

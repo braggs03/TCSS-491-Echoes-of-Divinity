@@ -28,6 +28,11 @@ class Duma {
         this.counterTwo = 5000;
         this.dead = false;
 
+        this.fireSound = new Audio("./resources/SoundEffects/fireAttack.ogg");
+        this.fireSound.loop = true;
+        this.fireSound.playbackRate = 1.0;
+        this.fireSound.volume = 0.2;
+
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(DUMA + "Attack.png"), 0, 0, 240, 192, 11, 0.1, true, false),
             RightAttack2 : new Animator(ASSET_MANAGER.getAsset(DUMA + "Attack2.png"), 0, 0, 192, 176, 8, 0.1, true, false),
@@ -90,6 +95,15 @@ class Duma {
     }
 
     update() {
+        if (this.bodyBB) {
+            this.fireSound.play();
+        } else {
+            if (!this.fireSound.paused) {
+                this.fireSound.paused;
+                this.fireSound.currentTime = 0;
+            }
+        }
+
         if (this.dead) {
             this.fireBomb = new FireBomb(this.game, this.x, this.y + 50)
             this.game.entities.splice(1, 0, this.fireBomb);

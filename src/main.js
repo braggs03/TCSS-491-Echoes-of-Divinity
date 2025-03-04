@@ -91,6 +91,7 @@ ASSET_MANAGER.queueDownload("./resources/SoundEffects/land.ogg");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/openDoor.ogg");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/run.ogg");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/roll.ogg");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/lightning.ogg");
 
 
 ASSET_MANAGER.downloadAll(() => {
