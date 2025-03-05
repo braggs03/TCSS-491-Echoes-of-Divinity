@@ -640,11 +640,6 @@ class SceneManager {
         } else if (this.level.height > this.knight.y - middlepointY) {
             this.y = this.level.height;
         }
-
-        if (this.game.keys["n"]) {
-            console.log(this.y);
-        }
-
     };
 
     userInterface(ctx) {
