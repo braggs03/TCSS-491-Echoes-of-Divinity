@@ -1,7 +1,8 @@
 let levels = {
     startScreen: {
         width: 800,
-        height: 600,
+        maxHeight: 600,
+        minHeight: 0,
         background: "black",
         fadeTime: 1500,
         text: [
@@ -13,7 +14,8 @@ let levels = {
 
     storyRecap: {
         width: 800,
-        height: 600,
+        maxHeight: 600,
+        minHeight: 0,
         background: "black",
         fadeTime: 5294,
         text: [
@@ -40,7 +42,8 @@ let levels = {
 
     mainMenu: {
         width: 800,
-        height: 600,
+        maxHeight: 600,
+        minHeight: 0,
         background: "black",
         title: [{ x: 340, y: 70 }],
         menuBackground: [{ x: 0, y: 0, w: 1, h: 1}],
@@ -48,7 +51,8 @@ let levels = {
 
     tutorial: {
         width: 1500,
-        height: 0,
+        maxHeight: 0,
+        minHeight: 0,
         startPosition: {
             x: -90,
             y: 440,
@@ -65,7 +69,8 @@ let levels = {
 
     one: {
         width: 13550,
-        height: -2000,
+        maxHeight: -2000,
+        minHeight: 2000,
         startPosition: {
             x: 87,
             y: 465,

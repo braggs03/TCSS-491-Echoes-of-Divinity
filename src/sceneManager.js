@@ -34,7 +34,6 @@ class SceneManager {
         this.discoveredCheckpointsLevel = [];
 
         this.loadLevel('startScreen', false, true, false, false);
-        // this.loadLevel('one', false, false, false, false);
     };
 
     saveEntities() {
@@ -627,10 +626,18 @@ class SceneManager {
 
         if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) {
             this.x = this.knight.x - middlepointX;
-        } 
-
-        if (0 > this.knight.y - middlepointY && this.level.height < this.knight.y - middlepointY) {
+        } else if (0 > this.knight.x - middlepointX) {
+            this.x = 0;
+        } else if (this.level.width < this.knight.x - middlepointX) {
+            this.x = this.level.width;
+        }
+        
+        if (this.level.minHeight > this.knight.y - middlepointY && this.level.maxHeight < this.knight.y - middlepointY) {
             this.y = this.knight.y - middlepointY;
+        } else if (this.level.minheight > this.knight.y - middlepointY) {
+            this.y = this.level.minheight;
+        } else if (this.level.maxheight > this.knight.y - middlepointY) {
+            this.y = this.level.maxheight;
         }
 
     };
