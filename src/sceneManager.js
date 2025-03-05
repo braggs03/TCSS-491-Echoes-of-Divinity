@@ -33,8 +33,8 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('startScreen', false, true, false, false);
-        // this.loadLevel('one', false, false, false, false);
+        // this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('one', false, false, false, false);
     };
 
     saveEntities() {
@@ -261,6 +261,13 @@ class SceneManager {
             for (let i = 0; i < this.level.dungeonGround.length; i++) {
                 let ground = this.level.dungeonGround[i];
                 this.game.addEntity(new DungeonGround(this.game, ground.x, ground.y, ground.w, ground.h));
+            }
+        }
+
+        if (this.level.movingPlatform) {
+            for (let i = 0; i < this.level.movingPlatform.length; i++) {
+                let ground = this.level.movingPlatform[i];
+                this.game.addEntity(new MovingPlatform(this.game, ground.x, ground.y, ground.w, ground.h));
             }
         }
 

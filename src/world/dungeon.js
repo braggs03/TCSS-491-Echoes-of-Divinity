@@ -527,3 +527,29 @@ class EmberDrop {
         );
     };
 };
+
+const MOVING_PLATFORMS_WIDTH = 31;
+const MOVING_PLATFORMS_HEIGHT = 8;
+
+class MovingPlatform {
+    constructor(game, x, y, w, h) {
+        Object.assign(this, {game, x, y, w, h});
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 5;
+        this.BB = new BoundingBox(this.x * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x,  this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * w * this.scale, MOVING_PLATFORMS_HEIGHT * h * this.scale);
+    };
+
+    update() {
+        this.BB = new BoundingBox(this.x * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x,  this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.w * this.scale, MOVING_PLATFORMS_HEIGHT * this.h * this.scale);
+    };
+
+    draw(ctx) {
+        for (let l = 0; l < this.h; l++) {
+            for (let k = 0; k < this.w; k++) {
+                ctx.drawImage(this.spritesheet, 127, 1216, MOVING_PLATFORMS_WIDTH, MOVING_PLATFORMS_HEIGHT, this.x * MOVING_PLATFORMS_WIDTH * this.scale + k * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x, this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.scale, MOVING_PLATFORMS_HEIGHT * this.scale);
+            }
+        }
+        this.BB.draw(ctx);
+    };
+
+}
