@@ -12,7 +12,7 @@ class SceneManager {
         this.creditsLineIndex = 0;
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
-
+        this.escReleased = true;
         this.tutorialCutsceneDone = false;
         this.shopkeeperCutsceneDone = false;
         this.oneCutsceneDone = false;
@@ -334,6 +334,12 @@ class SceneManager {
                 this.game.addEntity(new DungeonDoor(this.game, door.x, door.y, door.level, door.end));
             }
         }
+        if (this.level.dungeonDoor2) {
+            for (let i = 0; i < this.level.dungeonDoor2.length; i++) {
+                let door2 = this.level.dungeonDoor2[i];
+                this.game.addEntity(new DungeonDoor2(this.game, door2.x, door2.y, door2.level, door2.end));
+            }
+        }
 
         if (this.level.chandelier) {
             for (let i = 0; i < this.level.chandelier.length; i++) {
@@ -416,6 +422,24 @@ class SceneManager {
                 this.game.addEntity(new DungeonBackground3(this.game, background3.x, background3.y, background3.w, background3.h));
             }
         }
+        if (this.level.pillar) {
+            for(let i = 0; i < this.level.pillar.length; i++) {
+                let pillar = this.level.pillar[i];
+                this.game.addEntity(new DungeonPillar(this.game, pillar.x, pillar.y));
+            }
+        }
+        if (this.level.dungeonGround4) {
+            for (let i = 0; i < this.level.dungeonGround4.length; i++) {
+                let ground4 = this.level.dungeonGround4[i];
+                this.game.addEntity(new DungeonGround4(this.game, ground4.x, ground4.y, ground4.w, ground4.h));
+            }
+        }
+        if (this.level.dungeonBackground4) {
+            for (let i = 0; i < this.level.dungeonBackground4.length; i++) {
+                let background4 = this.level.dungeonBackground4[i];
+                this.game.addEntity(new DungeonBackground4(this.game, background4.x, background4.y, background4.w, background4.h));
+            }
+        }
 
         if (this.level.townBackground) {
             for (let i = 0; i < this.level.townBackground.length; i++) {
@@ -440,6 +464,30 @@ class SceneManager {
         
         this.knight.removeFromWorld = false;
     };
+    showShopMenu() {
+        this.knight.moveable = false;
+        this.shopMenu = new ShopMenu(this.game, this);
+        let oldEntities = this.game.entities;
+        this.game.entities = [];
+        this.game.addEntity(this.shopMenu);
+        oldEntities.map((entity) => this.game.addEntity(entity));
+        
+        console.log("Opened shop menu");
+    }
+    closeShopMenu() {
+        if (this.shopMenu) {
+            this.knight.moveable = true;
+            this.shopMenu.removeFromWorld = true;
+            this.shopMenu = null;
+            
+            // Reset key states
+            this.game.keys["Enter"] = false;
+            this.game.keys["Escape"] = false;
+            this.escReleased = true;
+            
+            console.log("Shop menu closed with key states reset");
+        }
+    }
 
     loadEmberDrop() {
         if (this.emberDrop && this.levelIndex == this.emberDrop.levelIndex) {
@@ -500,8 +548,57 @@ class SceneManager {
         }         
             
     }
+    showControlsMenu() {
+        // Don't show if already showing another menu or in cutscene
+        if (this.inCutscene || this.interactable || this.shopMenu || this.teleportMenu || this.controlsMenu) {
+            return;
+        }
+        
+        this.knight.moveable = false;
+        this.controlsMenu = new GameControlsMenu(this.game, this);
+        this.game.keys["Escape"] = false;
+        
+        // Add the controls menu to entities
+        let oldEntities = this.game.entities;
+        this.game.entities = [];
+        this.game.addEntity(this.controlsMenu);
+        oldEntities.map((entity) => this.game.addEntity(entity));
+        
+        console.log("opened controls menu");
+    }
+    closeControlsMenu() {
+        if (this.controlsMenu) {
+            this.knight.moveable = true;
+            this.controlsMenu.removeFromWorld = true;
+            this.controlsMenu = null;
+        }
+    }
+    
 
     update() {
+        if (this.game.keys["Escape"] && this.escReleased) {
+            console.log("Escape pressed - escReleased:", this.escReleased,
+                 "Control menu:", !!this.controlsMenu,
+                "Shop menu:", !!this.shopMenu);
+                
+            this.escReleased = false;
+            
+            // Only open menu with Escape, don't close with it
+            if (!this.controlsMenu && !this.inCutscene && !this.interactable && !this.shopMenu && !this.teleportMenu) {
+                this.showControlsMenu();
+            }
+        } else if (!this.game.keys["Escape"]) {
+            this.escReleased = true;
+        }
+        
+        // if (this.game.keys["Escape"] && !this.inCutscene && !this.interactable && 
+        //     !this.shopMenu && !this.teleportMenu && !this.controlsMenu && this.escReleased) {
+        //     this.escReleased = false;
+        //     this.showControlsMenu();
+        // }
+        // if (!this.game.keys["Escape"]) {
+        //     this.escReleased = true;
+        // }
         if (this.music) {
             if (PARAMS.MUSICOFF) {
                 if (this.music) {

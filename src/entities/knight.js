@@ -61,11 +61,13 @@ class Knight {
         this.flickerDuration = 0;
         
         this.animationLocked = false;
-        
+        this.doubleJump = false;
         this.hasDoubleJump = false;
         this.hasDoubleJumped = false;
-
+        this.hasWaveAttack = false;
+        this.waveDamage = 100;
         this.dead = false;
+        
 
         this.colliding = {
             left: false, // Knight is to the right of the wall.
@@ -210,17 +212,21 @@ class Knight {
             this.emberCount = 0;
         }
     }
-
-    usePotion () {
+    usePotion() {
         if (this.potionCount > 0 && this.hp < this.maxHp) {
             this.potionCount -= 1;
-            this.hp = Math.min(this.hp + this.potionHealCount, this.maxHp); 
+            const healAmount = Math.min(this.potionHealCount, this.maxHp - this.hp);
+            this.hp = Math.min(this.hp + this.potionHealCount, this.maxHp);
+            
             this.game.addEntity(new PotionEffect(
                 this.game,
                 this.x + KNIGHT_WIDTH + 50,  // Position slightly to the right of player
                 this.y + 50,                 // Position above the player
-                "health"
+                "health",
+                healAmount                   
             ));
+            
+            console.log(`Used potion: Healed for ${healAmount} HP. Potions remaining: ${this.potionCount}`);
             return true;
         }
         return false;
@@ -383,7 +389,7 @@ class Knight {
                         if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && 
                             this.BB.collide(entity.BB) &&
                             !this.hitTargets.includes(entity)) {
-                            entity.takeDamage(100);
+                            entity.takeDamage(this.damage);
                             console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
                             this.hitTargets.push(entity);
                         }
@@ -458,6 +464,7 @@ class Knight {
                     console.log("Got here d1");
                     this.colliding.up = false;
                     this.velocityY = -this.jumpSpeed; 
+                    this.hasDoubleJumped = false;
                 } else if (this.hasDoubleJump && !this.hasDoubleJumped && this.arrowUpReleased) {
                     console.log("Got here d2");
                     this.colliding.up = false;
@@ -507,7 +514,7 @@ class Knight {
                         }, 900);
                     }
                 } else if (this.game.keys["w"]) { // Swordwave projectile
-                    if (!this.attackAnimationActive) {
+                    if (!this.attackAnimationActive && this.hasWaveAttack) {
                         if (this.currentStamina < this.stamina) {
                             return;
                         }

@@ -5,7 +5,7 @@ class Swordwave {
         this.y = y;
         this.speed = 1000;
         this.removeFromWorld = false;
-        this.damage = 100;
+        this.damage = game.camera.knight.waveDamage || 100;
         this.expiretime = 2;
 
         if (direction) {

@@ -527,3 +527,131 @@ class EmberDrop {
         );
     };
 };
+const DUNEGON_BACKGROUND4_WIDTH = 896;
+const DUNEGON_BACKGROUND4_HEIGHT = 144;
+
+class DungeonBackground4 {
+    constructor(game, x, y, w, h) {
+        Object.assign(this, { game, x, y, w, h});
+
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON_BACKGROUNDL4);
+        this.scale = 5;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        for (let k = 0; k < this.h; k++) {
+            for (let i = 0; i < this.w; i++) {
+                ctx.drawImage(this.spritesheet, 0, 0, DUNEGON_BACKGROUND4_WIDTH, DUNEGON_BACKGROUND4_HEIGHT, (this.x + i * DUNEGON_BACKGROUND4_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_BACKGROUND4_HEIGHT * this.scale - this.game.camera.y, DUNEGON_BACKGROUND4_WIDTH * this.scale, DUNEGON_BACKGROUND4_HEIGHT * this.scale);
+            }
+        }
+    };
+};
+const DUNEGON_GROUND4_WIDTH = 16;
+const DUNEGON_GROUND4_HEIGHT = 17;
+
+class DungeonGround4 {
+    constructor(game, x, y, w, h) {
+        Object.assign(this, { game, x, y, w, h });
+        this.animator = this.ground();
+        this.scale = 5;
+        this.BB = new BoundingBox(
+            this.x * DUNEGON_GROUND4_WIDTH * this.scale - this.game.camera.x,  
+            this.y * DUNEGON_GROUND4_HEIGHT * this.scale - this.game.camera.y, 
+            DUNEGON_GROUND4_WIDTH * w * this.scale, 
+            DUNEGON_GROUND4_HEIGHT * h * this.scale
+        );
+    };
+
+    update() {
+        this.BB = new BoundingBox(
+            this.x * DUNEGON_GROUND4_WIDTH * this.scale - this.game.camera.x,  
+            this.y * DUNEGON_GROUND4_HEIGHT * this.scale - this.game.camera.y, 
+            DUNEGON_GROUND4_WIDTH * this.w * this.scale, 
+            DUNEGON_GROUND4_HEIGHT * this.h * this.scale
+        );
+    };
+
+    draw(ctx) {
+        for (let l = 0; l < this.h; l++) {
+            for (let k = 0; k < this.w; k++) {
+                this.animator.drawFrame(
+                    this.game.clockTick, 
+                    ctx, 
+                    this.x * DUNEGON_GROUND4_WIDTH * this.scale + (k * DUNEGON_GROUND4_WIDTH * this.scale) - this.game.camera.x, 
+                    this.y * DUNEGON_GROUND4_HEIGHT * this.scale + (l * DUNEGON_GROUND4_HEIGHT * this.scale) - this.game.camera.y, 
+                    this.scale
+                );
+            }
+        }
+        this.BB.draw(ctx);
+    }
+
+    ground() {
+        return new Animator(
+            ASSET_MANAGER.getAsset(DUNGEON), 
+            1839, // X coordinate of lava ground sprite in the spritesheet 
+            1622, // Y coordinate of lava ground sprite in the spritesheet
+            16,   // Width of each frame
+            17,   // Height of each frame
+            16,   // Number of frames
+            0.1,  // Animation speed
+            false, 
+            true
+        );
+    }
+};
+const DUNGEON_PILLAR_WIDTH = 90;
+const DUNGEON_PILLAR_HEIGHT = 75;
+class DungeonPillar {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.scale = 8;
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 1238, 2359, DUNGEON_PILLAR_WIDTH, DUNGEON_PILLAR_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, DUNGEON_PILLAR_WIDTH * this.scale, DUNGEON_PILLAR_HEIGHT * this.scale);
+    }
+};
+const DUNGEON_DOOR2_WIDTH = 44;
+const DUNGEON_DOOR2_HEIGHT = 42;
+
+class DungeonDoor2 {
+    constructor(game, x, y, level, end) {
+        Object.assign(this, { game, x, y, level, end });
+
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 5.5;
+        this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, DUNGEON_DOOR2_WIDTH * 2.2, DUNGEON_DOOR2_HEIGHT * 4.3);
+        this.fReleased = false;
+        this.end = end;
+    };
+
+    update() {
+
+        this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, DUNGEON_DOOR2_WIDTH * 2.2, DUNGEON_DOOR2_HEIGHT * 4.3);
+
+        const that = this;
+        if (this.game.keys["f"]) {
+            this.game.entities.forEach((entity) => {
+                if (this.fReleased && entity.BB && that.BB.collide(entity.BB) && entity instanceof Knight) {
+                    that.game.camera.loadLevel(that.level, true, false, false, this.end);
+                }
+            });
+        } else {
+            this.fReleased = true;
+        }
+    };
+
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 1078, 2310, DUNGEON_DOOR2_WIDTH, DUNGEON_DOOR2_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, DUNGEON_DOOR2_WIDTH * this.scale, DUNGEON_DOOR2_HEIGHT * this.scale);
+        this.BB.draw(ctx);
+    };
+};
