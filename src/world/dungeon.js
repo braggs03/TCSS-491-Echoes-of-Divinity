@@ -207,24 +207,31 @@ const BONFIRE_WIDTH = 56;
 const BONFIRE_HEIGHT = 56;
 
 class Bonfire {
-    constructor(game, x, y, level) {
-        Object.assign(this, { game, x, y, level });
+    constructor(game, self) {
+        Object.assign(this, { game, self });
+        this.x = this.self.x;
+        this.y = this.self.y;
+        this.discovered = this.self.discovered ? this.self.discovered : false;
+        this.isCurrent = this.self.isCurrent ? this.self.isCurrent : false; 
+        this.level = this.self.level;
         this.sound = new Audio("./resources/SoundEffects/emberLight.ogg");
         this.sound.loop = true;
         this.sound.volume = 0.2;
         if (this.game.camera.knight) {
             this.knight = this.game.camera.knight;
         }
-
         this.animator1 = this.bonfireAnimationLit();
         this.animator2 = this.bonfireAnimationUnlit();
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 3;
         this.BB = new BoundingBox(this.x - this.game.camera.x,  this.y - this.game.camera.y, BONFIRE_WIDTH * this.scale, BONFIRE_HEIGHT * this.scale);
         this.fReleased = false;
-        this.discovered = false;
-        this.isCurrent = false;
     };
+
+    save() {
+        this.self.discovered = this.discovered;
+        this.self.isCurrent = this.isCurrent;
+    }
 
     update() {
         if (this.discovered) {
@@ -281,7 +288,7 @@ class Bonfire {
         this.game.camera.currentCheckpoint = this;
 
         //This is for the checkpoint to be passed into Scenemanager/loadLevel
-        if (!this.game.camera.discoveredCheckpoints.some(cp => cp === this)) {
+        if (!this.game.camera.discoveredCheckpoints.some(cp => cp.level === this.level)) {
             this.game.camera.discoveredCheckpoints.push(this);
         }
 
