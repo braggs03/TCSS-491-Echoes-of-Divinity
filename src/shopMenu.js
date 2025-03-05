@@ -8,7 +8,7 @@ class ShopMenu {
             {
                 id: "swordwave",
                 name: "Sword Wave Attack",
-                price: 100,
+                price: 1000,
                 purchased: this.knight.hasWaveAttack || false,
                 description: "Launch a projectile with your sword",
                 oneTimePurchase: true,
@@ -17,8 +17,8 @@ class ShopMenu {
             {
                 id: "damageboost",
                 name: "Damage Boost",
-                basePrice: 100,  
-                price: 100,      
+                basePrice: 1500,  
+                price: 1500,      
                 description: "Increase damage by 10% per purchase",
                 oneTimePurchase: false,
                 quantity: 1,
@@ -27,7 +27,7 @@ class ShopMenu {
             {
                 id: "doublejump",
                 name: "Double Jump",
-                price: 100,
+                price: 2000,
                 purchased: this.knight.doubleJump || false,
                 description: "Increase jump height by 50%",
                 oneTimePurchase: true,
@@ -36,8 +36,8 @@ class ShopMenu {
             {
                 id: "potionboost",
                 name: "Potion Boost",
-                basePrice: 100,  
-                price: 100,      
+                basePrice: 1500,  
+                price: 1500,      
                 description: "Increase potion healing by 10% per purchase",
                 oneTimePurchase: false,
                 quantity: 1,
