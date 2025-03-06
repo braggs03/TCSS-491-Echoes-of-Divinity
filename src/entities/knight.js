@@ -372,12 +372,10 @@ class Knight {
                                 knight.y += overlap.y;
                             } else {
                                 this.colliding.up = true;
-                                knight.y -= overlap.y - 1;  
-                                // knight.velocityX = 0
-                                console.log(entity.midpointX)
-                                this.test = (MOVING_PLATFORMS_WIDTH / 2) * entity.velocityX * MOVING_PLATFORMS_WIDTH / entity.scale - this.game.camera.x; //test
+                                knight.y -= overlap.y - 1;
+                                this.test = (MOVING_PLATFORMS_WIDTH / 2) * entity.velocityX * MOVING_PLATFORMS_WIDTH / 5; //test
                                 knight.x += this.test; 
-                                // console.log(this.test);                         
+                                console.log(this.test);                         
                                 this.hasDoubleJumped = false;
                             }
                         }
