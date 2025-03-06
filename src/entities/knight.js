@@ -375,7 +375,7 @@ class Knight {
                                 knight.y -= overlap.y - 1;
                                 this.test = (MOVING_PLATFORMS_WIDTH / 2) * entity.velocityX * MOVING_PLATFORMS_WIDTH / 5; //test
                                 knight.x += this.test; 
-                                console.log(this.test);                         
+                                // console.log(this.test);                         
                                 this.hasDoubleJumped = false;
                             }
                         }

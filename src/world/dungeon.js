@@ -574,7 +574,6 @@ class MovingPlatform {
             if ((this.direction === 1 && this.x >= this.endX) || (this.direction === -1 && this.x <= this.startX)) {
                 this.direction *= -1;
             }
-            this.midpointX = this.x + (this.x * MOVING_PLATFORMS_WIDTH * this.scale) / 2;
         }
 
         this.BB = new BoundingBox(this.x * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x,  this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.w * this.scale, MOVING_PLATFORMS_HEIGHT * this.h * this.scale);
