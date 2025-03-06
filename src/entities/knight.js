@@ -62,7 +62,7 @@ class Knight {
         
         this.animationLocked = false;
         
-        this.hasDoubleJump = false;
+        this.hasDoubleJump = true;
         this.hasDoubleJumped = false;
 
         this.dead = false;
@@ -310,6 +310,7 @@ class Knight {
                         }
                         knight.velocityY = 0;
                         this.hasDoubleJumped = false;
+                        
                     }
                 } else if (entity instanceof DungeonSpike) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
@@ -341,6 +342,31 @@ class Knight {
                         if (this.buyPotion()) {
                             entity.removeFromWorld = true;
                         }
+                    }
+                } else if (entity instanceof MovingPlatform) { // Moving Platform
+                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
+                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
+
+                    if (horizontalCollision) {
+                        if (entity.BB.x < knight.BB.x) {
+                            knight.x += overlap.x;
+                        } else {
+                            knight.x -= overlap.x;
+                        }
+                        knight.velocityX = 0;
+                    }
+                    
+                    if (verticalCollision) {
+                        if (entity.BB.y < knight.BB.y) {
+                            this.colliding.down = true;
+                            knight.y += overlap.y;
+                        } else {
+                            this.colliding.up = true;
+                            knight.y -= overlap.y - 1;
+                        }
+                        knight.velocityY = 0;
+                        this.hasDoubleJumped = false;
+                        
                     }
                 }
             }
