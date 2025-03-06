@@ -170,6 +170,7 @@ class DungeonSpike {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.damage = 50;
         this.scale = 3;
         this.BB = new BoundingBox(
             this.x - this.game.camera.x,
