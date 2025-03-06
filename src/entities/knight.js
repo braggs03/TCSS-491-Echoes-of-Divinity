@@ -357,20 +357,35 @@ class Knight {
                     }
                     
                     if (verticalCollision) {
-                        if (entity.BB.y < knight.BB.y) {
-                            this.colliding.down = true;
-                            knight.y += overlap.y;
-                        } else {
-                            this.colliding.up = true;
-                            knight.y -= overlap.y - 1;
+                        if (entity.isVertical) { //vertical movements
+                            if (entity.BB.y < knight.BB.y) {
+                                this.colliding.down = true;
+                                knight.y += overlap.y;
+                            } else {
+                                this.colliding.up = true;
+                                knight.y -= overlap.y - 1;                           
+                                this.hasDoubleJumped = false;
+                            }
+                        } else { // horizontal movements
+                            if (entity.BB.y < knight.BB.y) {
+                                this.colliding.down = true;
+                                knight.y += overlap.y;
+                            } else {
+                                this.colliding.up = true;
+                                knight.y -= overlap.y - 1;  
+                                // knight.velocityX = 0
+                                console.log(entity.midpointX)
+                                this.test = (MOVING_PLATFORMS_WIDTH / 2) * entity.velocityX * MOVING_PLATFORMS_WIDTH / entity.scale - this.game.camera.x; //test
+                                knight.x += this.test; 
+                                // console.log(this.test);                         
+                                this.hasDoubleJumped = false;
+                            }
                         }
-                        knight.velocityY = 0;
-                        this.hasDoubleJumped = false;
-                        
                     }
                 }
             }
         });
+
         this.updateBB();
 
         if (this.inCutscene) {
@@ -576,13 +591,14 @@ class Knight {
                 this.velocityX = 0; 
                 this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
             }
-        }  
-     
+        }
 
         this.x += this.velocityX * clockTick;
         this.y += this.velocityY * clockTick;
+        
         this.x = Math.round(this.x);
         this.y = Math.round(this.y);
+        
         this.updateBB();
     }
 
