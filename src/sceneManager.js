@@ -842,7 +842,7 @@ class SceneManager {
             //stamina bar
             let barWidth = 180; 
             let barHeight = 25; 
-            let barX = 350; 
+            let barX = 330; 
             let barY = 100; 
             let ratio = this.knight.currentStamina / this.knight.stamina;
 
