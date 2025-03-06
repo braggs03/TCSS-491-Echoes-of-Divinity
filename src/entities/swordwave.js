@@ -31,7 +31,7 @@ class Swordwave {
             //left direction
             this.currentState = "left"
             this.x -= this.speed * this.game.clockTick;
-            this.BB = new BoundingBox(this.x - this.game.camera.x, this.y + 40 - this.game.camera.y, 300, 115);
+            this.BB = new BoundingBox(this.x + 90 - this.game.camera.x, this.y + 40 - this.game.camera.y, 300, 115);
         }
         if (this.expiretime <= 0) {
             this.removeFromWorld = true;

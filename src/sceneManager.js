@@ -264,6 +264,13 @@ class SceneManager {
             }
         }
 
+        if (this.level.movingPlatform) {
+            for (let i = 0; i < this.level.movingPlatform.length; i++) {
+                let ground = this.level.movingPlatform[i];
+                this.game.addEntity(new MovingPlatform(this.game, ground.x, ground.y, ground.w, ground.h, ground.endX, ground.endX, ground.isVertical));
+            }
+        }
+
         if (this.level.dungeonWall) {
             for (let i = 0; i < this.level.dungeonWall.length; i++) {
                 let wall = this.level.dungeonWall[i];
