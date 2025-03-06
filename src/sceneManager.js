@@ -814,6 +814,7 @@ class SceneManager {
                  */
             }
         } else {
+            //hud
             ctx.globalAlpha = 1;
             
 
@@ -822,21 +823,43 @@ class SceneManager {
             ctx.textAlign = "center";
             ctx.textBaseline = 'top';
 
-            // Draw ember count
+            
             ctx.fillText(this.knight.emberCount, 160, 100);
         
-            // Draw animated ember icon
+            
             this.emberAnimation.drawFrame(
                 this.game.clockTick,
                 ctx,
-                80, 85,     // Moved closer to the number (x was 95, now 120)
-                3.5          // Scale to match your desired size (40x80)
+                80, 85,     
+                3.5          
             );
 
-            // Draw potion count and icon
+            
             ctx.fillText(this.knight.potionCount, 285, 100);
             const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
             ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
+            
+            //stamina bar
+            let barWidth = 180; 
+            let barHeight = 25; 
+            let barX = 350; 
+            let barY = 100; 
+            let ratio = this.knight.currentStamina / this.knight.stamina;
+
+            ctx.fillStyle = "White";
+            ctx.font = '20px "Open+Sans"'; 
+            ctx.textAlign = "center";
+            ctx.fillText("STAMINA", barX + barWidth/2, barY - 25);
+
+            ctx.fillStyle = "#333333";
+            ctx.fillRect(barX, barY, barWidth, barHeight);
+
+            ctx.fillStyle = "#FFFF00"; 
+            ctx.fillRect(barX, barY, barWidth * ratio, barHeight);
+
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(barX, barY, barWidth, barHeight);
         }
     };
 
