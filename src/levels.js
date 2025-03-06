@@ -83,7 +83,7 @@ let levels = {
             y: 465,
         },
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 12, w: 2, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 97, y: 12, w: 1, h: 1 }],
-        movingPlatform: [{x:0.5, y:19, w:1, h:1, endX:0.5, endY:15, isVertical: true}, {x:3, y:15, w:1, h:1, endX:7, endY:15, isVertical: false}],
+        movingPlatform: [{x:0.5, y:19, w:1, h:1, endX:16, endY:0.5, isVertical: true}, {x:3, y:15, w:1, h:1, endX:7, endY:15, isVertical: false}],
         skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }, { x: 9000, y: 424 }, { x: 9200, y: 424 }, { x: 9400, y: 424 }, { x: 9600, y: 424 }],
         mechagolem: [{ x: 4500, y: 350 },{ x: 7500, y: 100},{ x: 12500, y: 350}],
         dungeonWall: [{ x: 0, y: 0, h: 10 }],

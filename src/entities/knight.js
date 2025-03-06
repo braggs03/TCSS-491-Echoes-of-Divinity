@@ -379,7 +379,7 @@ class Knight {
                                 this.hasDoubleJumped = false;
                             }
                         }
-                        knight.velocityY = 0;
+                        // knight.velocityY = 0;
                     }
                 }
             }
