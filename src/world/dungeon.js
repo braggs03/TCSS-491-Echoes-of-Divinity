@@ -251,6 +251,9 @@ class Bonfire {
                     if (this.sound.paused) {
                         this.sound.play();
                     }
+                    if (this.knight) {
+                        this.knight.reset();
+                    }
                     this.keypressed = true;
                 }
             });
