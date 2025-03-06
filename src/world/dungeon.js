@@ -136,7 +136,7 @@ class DungeonTorch {
 
 
 const DUNEGON_BACKGROUND2_WIDTH = 896;
-const DUNEGON_BACKGROUND2_HEIGHT = 144;
+const DUNEGON_BACKGROUND2_HEIGHT = 450;
 
 class DungeonBackground2 {
     constructor(game, x, y, w, h) {
@@ -152,7 +152,7 @@ class DungeonBackground2 {
     draw(ctx) {
         for (let k = 0; k < this.h; k++) {
             for (let i = 0; i < this.w; i++) {
-                this.animator.drawFrame(this.game.clockTick, ctx, this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y, 5);
+                this.animator.drawFrame(this.game.clockTick, ctx, this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y - 1500, 5);
                 // ctx.drawImage(this.spritesheet, 0, 0, DUNEGON_BACKGROUND2_WIDTH, DUNEGON_BACKGROUND2_HEIGHT, (this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_BACKGROUND2_WIDTH * this.scale, DUNEGON_BACKGROUND2_HEIGHT * this.scale);
             }
         }
@@ -160,7 +160,7 @@ class DungeonBackground2 {
     };
 
     background() {
-        return new Animator(ASSET_MANAGER.getAsset(DUNGEON_BACKGROUND_IMAGE), 0, 0, 896, 144, 4, 6, false, true);
+        return new Animator(ASSET_MANAGER.getAsset(DUNGEON_BACKGROUND_IMAGE), 0, 0, 896, 450, 4, 6, false, true);
     }
 };
 
@@ -544,7 +544,7 @@ class MovingPlatform {
 
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 4;
-        this.speed = 1;
+        this.speed = 3;
 
         this.startX = x;
         this.startY = y;
@@ -560,11 +560,9 @@ class MovingPlatform {
 
     update() {
         if (this.isVertical) { //Vertical
-            this.y -= this.speed * this.direction * this.game.clockTick;
+            this.y += this.speed * this.direction * this.game.clockTick;
             this.velocityY = this.speed * this.direction * this.game.clockTick;
-            
-            // Reverse direction when reaching start or end
-            if ((this.direction === 1 && this.y <= this.endY) || (this.direction === -1 && this.y >= this.startY)) {
+            if ((this.direction === 1 && this.y >= this.startY) || (this.direction === -1 && this.y <= this.endY)) {
                 this.direction *= -1;
             }
         } else { //Horizxontal
