@@ -6,6 +6,8 @@ ASSET_MANAGER.queueDownload(TORCH);
 ASSET_MANAGER.queueDownload(AZUCENA);
 ASSET_MANAGER.queueDownload(REINA);
 ASSET_MANAGER.queueDownload("./resources/Magic/Lightning.png");
+ASSET_MANAGER.queueDownload("./resources/knight/swordwave.png");
+ASSET_MANAGER.queueDownload("./resources/Magic/Fire-bomb.png");
 
 // Gorgon
 ASSET_MANAGER.queueDownload(GORGON + "Attack1.png");
@@ -26,7 +28,6 @@ ASSET_MANAGER.queueDownload(CELES + "Charge.png");
 ASSET_MANAGER.queueDownload(CELES + "Dead.png");
 ASSET_MANAGER.queueDownload(CELES + "Hurt.png");
 ASSET_MANAGER.queueDownload(CELES + "Idle.png");
-ASSET_MANAGER.queueDownload(CELES + "LightBall.png");
 ASSET_MANAGER.queueDownload(CELES + "LightCharge.png");
 ASSET_MANAGER.queueDownload(CELES + "Run.png");
 ASSET_MANAGER.queueDownload(CELES + "Walk.png");

@@ -56,7 +56,7 @@ class CheckpointMenu {
             } else {
                 ctx.fillStyle = "white";
             }
-            ctx.fillText(`Level ${element.level}: ${element}`, PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2 + index * 30);
+            ctx.fillText(`${String(element.level).charAt(0).toUpperCase() + String(element.level).slice(1)}`, PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2 + index * 30);
         });
         
     }

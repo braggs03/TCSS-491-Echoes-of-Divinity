@@ -33,8 +33,8 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('startScreen', false, true, false, false);
-        // this.loadLevel('one', false, false, false, false);
+        // this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('one', false, false, false, false);
     };
 
     saveEntities() {
@@ -134,7 +134,7 @@ class SceneManager {
             this.music.loop = true;
         }
 
-        if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+        if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
             this.knight.x = this.knight.x + 200;
             this.music = new Audio(LUCAN_MUSIC);
             this.music.loop = true;
@@ -189,7 +189,7 @@ class SceneManager {
                 let azucena = this.level.azucena[i];
                 this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
-            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+            if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
                 this.azucena = this.game.entities.find((entities) => entities instanceof Azucena)
                 this.azucena.x = -300;
             }
@@ -200,7 +200,7 @@ class SceneManager {
                 let reina = this.level.reina[i];
                 this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
             }
-            if (this.level === levels.bossroom && this.bossoneCutsceneDone) {
+            if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
                 this.reina = this.game.entities.find((entities) => entities instanceof Reina)
                 this.reina.x = -300;
             }
@@ -233,6 +233,20 @@ class SceneManager {
             for (let i = 0; i < this.level.lucan.length; i++) {
                 let lucan = this.level.lucan[i];
                 this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
+            }
+        }
+
+        if (this.level.celes) {
+            for (let i = 0; i < this.level.celes.length; i++) {
+                let celes = this.level.celes[i];
+                this.game.addEntity(new Celes(this.game, celes.x, celes.y));
+            }
+        }
+
+        if (this.level.duma) {
+            for (let i = 0; i < this.level.duma.length; i++) {
+                let duma = this.level.duma[i];
+                this.game.addEntity(new Duma(this.game, duma.x, duma.y));
             }
         }
 
@@ -331,7 +345,7 @@ class SceneManager {
         if  (this.level.bonFire) {
             for (let i = 0; i < this.level.bonFire.length; i++) {
                 let bonfire = this.level.bonFire[i];
-                this.game.addEntity(new Bonfire(this.game, bonfire.x, bonfire.y, bonfire.level));
+                this.game.addEntity(new Bonfire(this.game, bonfire));
             }
         }
 
@@ -339,6 +353,13 @@ class SceneManager {
             for (let i = 0; i < this.level.lightning.length; i++) {
                 let lightning = this.level.lightning[i];
                 this.game.addEntity(new Lightning(this.game, lightning.x, lightning.y, false));
+            }
+        }
+
+        if  (this.level.firebomb) {
+            for (let i = 0; i < this.level.firebomb.length; i++) {
+                let fire = this.level.firebomb[i];
+                this.game.addEntity(new FireBomb(this.game, fire.x, fire.y));
             }
         }
 
@@ -403,9 +424,9 @@ class SceneManager {
             }
         }
 
-        if (this.level.tutorialBackground) {
-            for (let i = 0; i < this.level.tutorialBackground.length; i++) {
-                let background = this.level.tutorialBackground[i];
+        if (this.level.nightBackground) {
+            for (let i = 0; i < this.level.nightBackground.length; i++) {
+                let background = this.level.nightBackground[i];
                 this.game.addEntity(new tutorialBackground(this.game, background.x, background.y, background.w, background.h));
             }
         }
@@ -507,7 +528,7 @@ class SceneManager {
                 || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
                 || this.level === levels.one && this.oneCutsceneDone
                 || this.level === levels.two && this.twoCutsceneDone
-                || this.level === levels.bossroom && this.bossoneCutsceneDone) {
+                || this.level === levels.bossOne && this.bossoneCutsceneDone) {
 
             } else {
                 if (this.cutsceneCounter !== this.cutscene.length) {
@@ -531,7 +552,7 @@ class SceneManager {
                     if (this.level === levels.two) {
                         this.twoCutsceneDone = true
                     }
-                    if (this.level === levels.bossroom) {
+                    if (this.level === levels.bossOne) {
                         this.bossoneCutsceneDone = true
                     }
                 }
@@ -606,10 +627,22 @@ class SceneManager {
 
         if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) {
             this.x = this.knight.x - middlepointX;
-        } 
-
+        } else if (0 > this.knight.x - middlepointX) {
+            this.x = 0;
+        } else if (this.level.width < this.knight.x - middlepointX) {
+            this.x = this.level.width;
+        }
+        
         if (0 > this.knight.y - middlepointY && this.level.height < this.knight.y - middlepointY) {
             this.y = this.knight.y - middlepointY;
+        } else if (0 > this.knight.y - middlepointY) {
+            this.y = 0;
+        } else if (this.level.height > this.knight.y - middlepointY) {
+            this.y = this.level.height;
+        }
+
+        if (this.game.keys["n"]) {
+            console.log(this.y);
         }
 
     };
@@ -670,5 +703,27 @@ class SceneManager {
             this.userInterface(ctx);
         }
         testInteractable(this.game, ctx);
+        if (PARAMS.DEBUG) {
+            ctx.fillStyle = "White";
+            ctx.strokeStyle = "Black";
+            ctx.font = '10px Arial';
+            ctx.textAlign = "left";
+            ctx.textBaseline = 'top';
+            this.game.entities.map((entity) => {
+                ctx.fillText(entity.y, entity.x - this.x, entity.y - this.y);
+                ctx.fillText(entity.x, entity.x - this.x, entity.y - this.y - ctx.measureText(entity.y).actualBoundingBoxDescent);
+            });
+            ctx.font = '40px Arial';
+            const padding = 10;
+            const offset = 10;
+            const xPosition = `X: ${this.knight.x}`;
+            const xDimensions = ctx.measureText(xPosition);
+            ctx.fillText(xPosition, offset + padding, PARAMS.SCREENHEIGHT - xDimensions.actualBoundingBoxDescent - padding);
+            ctx.strokeText(xPosition, offset + padding, PARAMS.SCREENHEIGHT - xDimensions.actualBoundingBoxDescent - padding);
+            const yPosition = `Y: ${this.knight.y}`;
+            const yDimensions = ctx.measureText(yPosition);
+            ctx.fillText(yPosition, offset + padding + xDimensions.width + padding, PARAMS.SCREENHEIGHT - yDimensions.actualBoundingBoxDescent - padding);
+            ctx.strokeText(yPosition, offset + padding + xDimensions.width + padding, PARAMS.SCREENHEIGHT - yDimensions.actualBoundingBoxDescent - padding);
+        }
     };
 }
