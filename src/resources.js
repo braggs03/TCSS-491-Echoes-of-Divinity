@@ -17,8 +17,12 @@ const DUNGEON = './resources/dungeon.png'
 const TORCH = './resources/torch.png'
 const DUNGEON_BACKGROUND_IMAGE = './resources/dungeonbackground.png'
 const WATERFALL = './resources/waterfall.png'
+const LANTERN = './resources/lantern.png'
 const DUNGEON_BACKGROUND = './resources/dungeonwater2.png'
+const DUNGEON_BACKGROUNDL4 = './resources/levelBackground4copy.png'
 const EMBER = './resources/maintheme.png';
+
+
 
 // Other 
 const MENU_BACKGROUND = './resources/menuScreen.png';

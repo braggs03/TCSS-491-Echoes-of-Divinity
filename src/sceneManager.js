@@ -33,7 +33,7 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('four', false, false, false, false);
         // this.loadLevel('one', false, false, false, false);
     };
 
@@ -249,7 +249,12 @@ class SceneManager {
                 this.game.addEntity(new Duma(this.game, duma.x, duma.y));
             }
         }
-
+        if (this.level.werewolf) {
+            for (let i = 0; i < this.level.werewolf.length; i++) {
+                let werewolf = this.level.werewolf[i];
+                this.game.addEntity(new Werewolf(this.game, werewolf.x, werewolf.y));
+            }
+        }
         if (this.level.boxes) {
             for (let i = 0; i < this.level.boxes.length; i++) {
                 let boxes = this.level.boxes[i];
@@ -268,6 +273,12 @@ class SceneManager {
             for (let i = 0; i < this.level.dungeonWall.length; i++) {
                 let wall = this.level.dungeonWall[i];
                 this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
+            }
+        }
+        if (this.level.dungeonWall1) {
+            for (let i = 0; i < this.level.dungeonWall1.length; i++) {
+                let wall1 = this.level.dungeonWall1[i];
+                this.game.addEntity(new DungeonWall1(this.game, wall1.x, wall1.y, wall1.h));
             }
         }
 
@@ -368,6 +379,12 @@ class SceneManager {
                 this.game.addEntity(new FireBomb(this.game, fire.x, fire.y));
             }
         }
+        if  (this.level.firebomb2) {
+            for (let i = 0; i < this.level.firebomb2.length; i++) {
+                let fire2 = this.level.firebomb2[i];
+                this.game.addEntity(new FireBomb2(this.game, fire2.x, fire2.y));
+            }
+        }
 
         if  (this.level.dungeonBackground) {
             for (let i = 0; i < this.level.dungeonBackground.length; i++) {
@@ -422,18 +439,50 @@ class SceneManager {
                 this.game.addEntity(new DungeonBackground3(this.game, background3.x, background3.y, background3.w, background3.h));
             }
         }
+        if (this.level.dungeonLantern) {
+            for (let i = 0; i < this.level.dungeonLantern.length; i++) {
+                let lantern = this.level.dungeonLantern[i];
+                this.game.addEntity(new DungeonLantern(this.game, lantern.x, lantern.y));
+            }
+        }
         if (this.level.pillar) {
             for(let i = 0; i < this.level.pillar.length; i++) {
                 let pillar = this.level.pillar[i];
                 this.game.addEntity(new DungeonPillar(this.game, pillar.x, pillar.y));
             }
         }
+        if (this.level.eagle) {
+            for(let i = 0; i < this.level.eagle.length; i++) {
+                let eagle = this.level.eagle[i];
+                this.game.addEntity(new DungeonEagle(this.game, eagle.x, eagle.y));
+            }
+        }
+        if (this.level.eagle2) {
+            for(let i = 0; i < this.level.eagle2.length; i++) {
+                let eagle2 = this.level.eagle2[i];
+                this.game.addEntity(new DungeonEagle2(this.game, eagle2.x, eagle2.y));
+            }
+        }
+        if (this.level.wizard) {
+            for(let i = 0; i < this.level.wizard.length; i++) {
+                let wizard = this.level.wizard[i];
+                this.game.addEntity(new DungeonWizard(this.game, wizard.x, wizard.y));
+            }
+        }
+        if (this.level.bridge) {
+            for(let i = 0; i < this.level.bridge.length; i++) {
+                let bridge = this.level.bridge[i];
+                this.game.addEntity(new DungeonBridge(this.game, bridge.x, bridge.y));
+            }
+        }
+        
         if (this.level.dungeonGround4) {
             for (let i = 0; i < this.level.dungeonGround4.length; i++) {
                 let ground4 = this.level.dungeonGround4[i];
                 this.game.addEntity(new DungeonGround4(this.game, ground4.x, ground4.y, ground4.w, ground4.h));
             }
         }
+
         if (this.level.dungeonBackground4) {
             for (let i = 0; i < this.level.dungeonBackground4.length; i++) {
                 let background4 = this.level.dungeonBackground4[i];
@@ -724,10 +773,18 @@ class SceneManager {
 
         if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) {
             this.x = this.knight.x - middlepointX;
-        } 
-
-        if (0 > this.knight.y - middlepointY && this.level.height < this.knight.y - middlepointY) {
+        } else if (0 > this.knight.x - middlepointX) {
+            this.x = 0;
+        } else if (this.level.width < this.knight.x - middlepointX) {
+            this.x = this.level.width;
+        }
+        
+        if (this.level.minHeight > this.knight.y - middlepointY && this.level.maxHeight < this.knight.y - middlepointY) {
             this.y = this.knight.y - middlepointY;
+        } else if (this.level.minheight > this.knight.y - middlepointY) {
+            this.y = this.level.minheight;
+        } else if (this.level.maxheight > this.knight.y - middlepointY) {
+            this.y = this.level.maxheight;
         }
 
     };

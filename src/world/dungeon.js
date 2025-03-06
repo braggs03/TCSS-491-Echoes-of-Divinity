@@ -549,13 +549,13 @@ class DungeonBackground4 {
         }
     };
 };
-const DUNEGON_GROUND4_WIDTH = 16;
-const DUNEGON_GROUND4_HEIGHT = 17;
+const DUNEGON_GROUND4_WIDTH = 32;
+const DUNEGON_GROUND4_HEIGHT = 8;
 
 class DungeonGround4 {
     constructor(game, x, y, w, h) {
         Object.assign(this, { game, x, y, w, h });
-        this.animator = this.ground();
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5;
         this.BB = new BoundingBox(
             this.x * DUNEGON_GROUND4_WIDTH * this.scale - this.game.camera.x,  
@@ -577,32 +577,23 @@ class DungeonGround4 {
     draw(ctx) {
         for (let l = 0; l < this.h; l++) {
             for (let k = 0; k < this.w; k++) {
-                this.animator.drawFrame(
-                    this.game.clockTick, 
-                    ctx, 
+                ctx.drawImage(
+                    this.spritesheet, 
+                    104, 1432,  // Sprite coordinates from your earlier description
+                    DUNEGON_GROUND4_WIDTH, 
+                    DUNEGON_GROUND4_HEIGHT, 
                     this.x * DUNEGON_GROUND4_WIDTH * this.scale + (k * DUNEGON_GROUND4_WIDTH * this.scale) - this.game.camera.x, 
-                    this.y * DUNEGON_GROUND4_HEIGHT * this.scale + (l * DUNEGON_GROUND4_HEIGHT * this.scale) - this.game.camera.y, 
-                    this.scale
+                    this.y * DUNEGON_GROUND4_HEIGHT * this.scale - this.game.camera.y, 
+                    DUNEGON_GROUND4_WIDTH * this.scale, 
+                    DUNEGON_GROUND4_HEIGHT * this.scale
                 );
             }
         }
         this.BB.draw(ctx);
-    }
-
-    ground() {
-        return new Animator(
-            ASSET_MANAGER.getAsset(DUNGEON), 
-            1839, // X coordinate of lava ground sprite in the spritesheet 
-            1622, // Y coordinate of lava ground sprite in the spritesheet
-            16,   // Width of each frame
-            17,   // Height of each frame
-            16,   // Number of frames
-            0.1,  // Animation speed
-            false, 
-            true
-        );
-    }
+    };
 };
+
+
 const DUNGEON_PILLAR_WIDTH = 90;
 const DUNGEON_PILLAR_HEIGHT = 75;
 class DungeonPillar {
@@ -617,6 +608,54 @@ class DungeonPillar {
 
     draw(ctx) {
         ctx.drawImage(this.spritesheet, 1238, 2359, DUNGEON_PILLAR_WIDTH, DUNGEON_PILLAR_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, DUNGEON_PILLAR_WIDTH * this.scale, DUNGEON_PILLAR_HEIGHT * this.scale);
+    }
+};
+const DUNGEON_EAGLE_WIDTH = 44;
+const DUNGEON_EAGLE_HEIGHT = 32;
+class DungeonEagle {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.scale = 4.5;
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 998, 2481, DUNGEON_EAGLE_WIDTH, DUNGEON_EAGLE_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, DUNGEON_EAGLE_WIDTH * this.scale, DUNGEON_EAGLE_HEIGHT * this.scale);
+    }
+};
+const DUNGEON_EAGLE2_WIDTH = 44;
+const DUNGEON_EAGLE2_HEIGHT = 32;
+class DungeonEagle2 {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.scale = 5;
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 1056, 2483, DUNGEON_EAGLE2_WIDTH, DUNGEON_EAGLE2_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, DUNGEON_EAGLE2_WIDTH * this.scale, DUNGEON_EAGLE2_HEIGHT * this.scale);
+    }
+};
+const DUNGEON_WIZARD_WIDTH = 28;
+const DUNGEON_WIZARD_HEIGHT = 48;
+class DungeonWizard {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.scale = 5;
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 1135, 2464, DUNGEON_WIZARD_WIDTH, DUNGEON_WIZARD_HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, DUNGEON_WIZARD_WIDTH * this.scale, DUNGEON_WIZARD_HEIGHT * this.scale);
     }
 };
 const DUNGEON_DOOR2_WIDTH = 44;
@@ -655,3 +694,168 @@ class DungeonDoor2 {
         this.BB.draw(ctx);
     };
 };
+
+const DUNEGON_LANTERN_WIDTH = 20;
+const DUNEGON_LANTERN_HEIGHT = 39;
+
+class DungeonLantern {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.animator = this.lantern();
+        this.scale = 5.5;
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, 4);
+    }
+
+    lantern() {
+        return new Animator(ASSET_MANAGER.getAsset(LANTERN), 0, 0, 10, 28, 3, 0.1, false, true);
+    }
+};
+class FireBomb2 {
+    constructor(game, x, y) {
+        this.game = game;
+        this.x = x;
+        this.y = y;
+        this.target = null;
+        this.removeFromWorld = false;
+        this.damageDone = false;
+        this.bombTimer = 0;
+        this.bombInterval = 2; 
+
+        this.BB = new BoundingBox(
+            this.x - this.game.camera.x + 30, 
+            this.y + 50, 
+            270, 
+            200
+        );
+        this.animator = new Animator(
+            ASSET_MANAGER.getAsset("./resources/Magic/Fire-bomb.png"), 
+            0, 0, 64, 64, 14, 0.075, false, false
+        );
+
+
+    }
+
+    update() {
+       
+        this.BB = new BoundingBox(
+            this.x - this.game.camera.x + 30, 
+            this.y + 50, 
+            270, 
+            200
+        );
+
+        this.bombTimer += this.game.clockTick;
+
+        if (this.animator.getDone()) {
+            if (this.bombTimer >= this.bombInterval) {
+                this.animator.reset();
+                this.damageDone = false;
+                this.bombTimer = 0;
+            }
+        }
+
+        if (!this.target) {
+            this.target = this.game.entities.find(entity =>
+                entity instanceof Knight && !entity.dead
+            );
+        }
+
+        
+        if (this.animator.currentFrame() > 8) {
+            if (this.target && this.target.BB) {
+
+                if (this.BB.collide(this.target.BB)) {
+                    if (!this.damageDone) {
+                        
+                        this.target.takeDamage(100);
+                        this.damageDone = true;
+                    }
+                } else {
+                    
+                }
+            }
+        }
+    }
+
+    draw(ctx) {
+        
+        if (!this.animator.getDone() || this.bombTimer < this.bombInterval) {
+            this.animator.drawFrame(
+                this.game.clockTick, 
+                ctx, 
+                this.x - this.game.camera.x, 
+                this.y, 
+                5
+            );
+            this.BB.draw(ctx);
+        }
+    }
+}
+const DUNGEON_BRIDGE_WIDTH = 50;
+const DUNGEON_BRIDGE_HEIGHT = 34;
+class DungeonBridge {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 3;
+        this.BB = new BoundingBox(
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y + (DUNGEON_BRIDGE_HEIGHT * this.scale * 3/4), // Position at bottom quarter
+            DUNGEON_BRIDGE_WIDTH * this.scale,
+            DUNGEON_BRIDGE_HEIGHT * this.scale / 4 // Quarter height
+        );
+    };
+
+    update() {
+        this.BB = new BoundingBox(
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y + (DUNGEON_BRIDGE_HEIGHT * this.scale * 3/4),
+            DUNGEON_BRIDGE_WIDTH * this.scale,
+            DUNGEON_BRIDGE_HEIGHT * this.scale / 4
+        );
+    };
+
+    draw(ctx) {
+        ctx.drawImage(
+            this.spritesheet,
+            655, 1215,
+            DUNGEON_BRIDGE_WIDTH,
+            DUNGEON_BRIDGE_HEIGHT,
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y,
+            DUNGEON_BRIDGE_WIDTH * this.scale,
+            DUNGEON_BRIDGE_HEIGHT * this.scale
+        );
+        this.BB.draw(ctx);
+    };
+};
+
+const DUNEGON_WALL1_WIDTH = 8;
+const DUNEGON_WALL1_HEIGHT = 31;
+
+class DungeonWall1 {
+    constructor(game, x, y, h) {
+        Object.assign(this, { game, x, y, h });
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 5;
+        this.BB = new BoundingBox(this.x * DUNEGON_WALL1_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_WALL1_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL1_WIDTH * this.scale, DUNEGON_WALL1_HEIGHT * h * this.scale);
+    };
+
+    update() {
+        this.BB = new BoundingBox(this.x * DUNEGON_WALL1_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_WALL1_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL1_WIDTH * this.scale, DUNEGON_WALL1_HEIGHT * this.h * this.scale);
+    };
+
+    draw(ctx) {
+        for (let l = 0; l < this.h; l++) {
+            ctx.drawImage(this.spritesheet, 136, 1400, DUNEGON_WALL1_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x * DUNEGON_WALL1_WIDTH * this.scale) - this.game.camera.x, this.y + l * DUNEGON_WALL1_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL1_WIDTH * this.scale, DUNEGON_WALL1_HEIGHT * this.scale);
+        }
+        this.BB.draw(ctx);
+    };
+};
+
