@@ -23,7 +23,7 @@ class Duma {
         this.attackChargeRun = false;
         this.phaseOne = true;
         this.specialAttackAvailable = true;
-        this.counter = 1000;
+        this.counter = 800;
         this.counterOne = 2000;
         this.counterTwo = 5000;
         this.dead = false;
@@ -174,10 +174,18 @@ class Duma {
             if (this.x > this.leftSide) {
                 if (this.currentState === 'LeftAttack1') {
                     if (this.animations[this.currentState].currentFrame() > 4) {
-                        this.x -= 300 * this.game.clockTick;
+                        if (this.attackChargeRun) {
+                            this.x -= 500 * this.game.clockTick;
+                        } else {
+                            this.x -= 300 * this.game.clockTick;
+                        }
                     }
                 } else {
-                    this.x -= 300 * this.game.clockTick;
+                    if (this.attackChargeRun) {
+                        this.x -= 500 * this.game.clockTick;
+                    } else {
+                        this.x -= 300 * this.game.clockTick;
+                    }
                 }
             } else {
                 if (this.currentState === 'LeftIdle') {
@@ -208,10 +216,18 @@ class Duma {
             if (this.x < this.RightSide) {
                 if (this.currentState === 'RightAttack1') {
                     if (this.animations[this.currentState].currentFrame() > 4) {
-                        this.x += 300 * this.game.clockTick;
+                        if (this.attackChargeRun) {
+                            this.x += 500 * this.game.clockTick;
+                        } else {
+                            this.x += 300 * this.game.clockTick;
+                        }
                     }
                 } else {
-                    this.x += 300 * this.game.clockTick;
+                    if (this.attackChargeRun) {
+                        this.x += 500 * this.game.clockTick;
+                    } else {
+                        this.x += 300 * this.game.clockTick;
+                    }
                 }
             } else {
                 if (this.currentState === 'RightIdle') {
@@ -288,7 +304,7 @@ class Duma {
         }
 
         if (this.phaseOne && !this.attackChargeRun && !this.specialAttackRun && !this.specialAttack2Run) {
-            if (this.counter >= 1000) {
+            if (this.counter >= 800) {
                 this.counter = 0;
                 if (this.currentState === 'LeftIdle') {
                     this.goLeft = true;

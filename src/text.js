@@ -18,7 +18,7 @@ const text = {
 
     azucena2: [
         ["Finish your praises, the enemy is here."],
-        ["4th wall break:", "Arrow Keys for Left, Right, and Jump", "E for Attack", "R for Roll"],
+        ["4th wall break:", "Press ESC to see controls"],
     ],
 
     azucena3: [
@@ -54,6 +54,50 @@ const text = {
     azucena7: [
         ["He's gone, Reina. Duma ", "has corrupted all that he is."],
         ["Let us leave,", "you cannot help in this state."],
+    ],
+
+    reina5: [
+        ["..."],
+        ["I'm sure Knight Commander Lucan", "would have enjoyed fighting you."],
+        ["He would want you to have this."],
+        ["..."],
+        ["Thank you for ending his suffering."],
+    ],
+
+    azucena8: [
+        ["Hmmm..."],
+        ["I'm sensing a familiar mana."],
+        ["But she's dead..."],
+    ],
+
+    azucena9: [
+        ["I pray this mana I sense is a trick."],
+    ],
+
+    celes1: [
+        ["Hello, my dear Azucena."],
+    ],
+
+    azucena10: [
+        ["Celes??"],
+        ["But you're...."],
+        ["No, it doesn't matter I suppose."],
+        ["May I ask why you stand before us"],
+    ],
+
+
+    celes2: [
+        ["You know better than anyone why."],
+        ["The two of us were far more", "powerful than our elders."],
+        ["Why must we bow down to experience?"],
+        ["Duma has promised me a world where", "power rules all"],
+        ["So here I stand now."]
+    ],
+
+    azucena11: [
+        ["..."]
+        ["I see..."]
+        ["Don't let her suffer."]
     ],
 
     azucena_end: [

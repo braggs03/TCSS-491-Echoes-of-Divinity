@@ -62,7 +62,7 @@ class Knight {
         
         this.animationLocked = false;
         
-        this.hasDoubleJump = false;
+        this.hasDoubleJump = true;
         this.hasDoubleJumped = false;
 
         this.dead = false;
@@ -380,10 +380,10 @@ class Knight {
                 
                 if (currentFrame >= 2 && currentFrame < 4) {
                     this.game.entities.forEach(entity => {
-                        if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && 
+                        if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior || entity instanceof Duma) &&
                             this.BB.collide(entity.BB) &&
                             !this.hitTargets.includes(entity)) {
-                            entity.takeDamage(100);
+                            entity.takeDamage(500);
                             console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
                             this.hitTargets.push(entity);
                         }
@@ -550,8 +550,7 @@ class Knight {
                 this.velocityX = 0; 
                 this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
             }
-        }  
-     
+        }
 
         this.x += this.velocityX * clockTick;
         this.y += this.velocityY * clockTick;

@@ -98,6 +98,7 @@ class Celes {
             return;
         }
         if (this.hp <= 0) {
+            this.game.camera.celesDead = true;
             setTimeout(() => {
                 this.removeFromWorld = true;
             }, 1000);
