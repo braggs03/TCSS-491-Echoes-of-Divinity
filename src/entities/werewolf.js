@@ -117,7 +117,7 @@ class Werewolf {
         
         setTimeout(() => {
             this.removeFromWorld = true;
-        }, 400); 
+        }, 1000); 
     }
 
     update() {
