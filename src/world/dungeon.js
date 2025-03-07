@@ -852,7 +852,7 @@ class FireBomb2 {
                 this.game.clockTick, 
                 ctx, 
                 this.x - this.game.camera.x, 
-                this.y, 
+                this.y - this.game.camera.y, 
                 5
             );
             this.BB.draw(ctx);
