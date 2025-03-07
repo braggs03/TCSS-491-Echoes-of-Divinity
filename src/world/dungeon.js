@@ -42,7 +42,7 @@ class DungeonWall {
 
     draw(ctx) {
         for (let l = 0; l < this.h; l++) {
-            ctx.drawImage(this.spritesheet, 232, 1400, DUNEGON_WALL_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x * DUNEGON_WALL_WIDTH * this.scale) - this.game.camera.x, this.y + l * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
+            ctx.drawImage(this.spritesheet, 232, 1400, DUNEGON_WALL_WIDTH, DUNEGON_BACKGROUND_HEIGHT, this.x * DUNEGON_WALL_WIDTH * this.scale - this.game.camera.x, this.y + l * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
         }
         this.BB.draw(ctx);
     };
@@ -152,7 +152,7 @@ class DungeonBackground2 {
     draw(ctx) {
         for (let k = 0; k < this.h; k++) {
             for (let i = 0; i < this.w; i++) {
-                this.animator.drawFrame(this.game.clockTick, ctx, this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y - 1500, 5);
+                this.animator.drawFrame(this.game.clockTick, ctx, this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y - 3500 , 5);
                 // ctx.drawImage(this.spritesheet, 0, 0, DUNEGON_BACKGROUND2_WIDTH, DUNEGON_BACKGROUND2_HEIGHT, (this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_BACKGROUND2_WIDTH * this.scale, DUNEGON_BACKGROUND2_HEIGHT * this.scale);
             }
         }
@@ -160,7 +160,7 @@ class DungeonBackground2 {
     };
 
     background() {
-        return new Animator(ASSET_MANAGER.getAsset(DUNGEON_BACKGROUND_IMAGE), 0, 0, 896, 450, 4, 6, false, true);
+        return new Animator(ASSET_MANAGER.getAsset(DUNGEON_BACKGROUND_IMAGE), 0, 0, 896, 840, 4, 6, false, true);
     }
 };
 
@@ -560,6 +560,7 @@ class MovingPlatform {
 
     update() {
         if (this.isVertical) { //Vertical
+            this.speed = 10;
             this.y += this.speed * this.direction * this.game.clockTick;
             this.velocityY = this.speed * this.direction * this.game.clockTick;
             if ((this.direction === 1 && this.y >= this.startY) || (this.direction === -1 && this.y <= this.endY)) {

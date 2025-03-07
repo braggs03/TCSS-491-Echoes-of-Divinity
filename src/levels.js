@@ -65,10 +65,13 @@ let levels = {
 
     one: {
         width: 13550,
-        height: -2000,
+        height: -4000,
         startPosition: {
-            x: 87,
-            y: 465,
+            // x: 87,
+            // y: 465,
+
+            x: 11016,
+            y: -320,
         },
         endPosition: {
             x: 14470,
@@ -82,11 +85,17 @@ let levels = {
             x: 13700,
             y: 465,
         },
-        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 12, w: 2, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 97, y: 12, w: 1, h: 1 }],
-        movingPlatform: [{x:0.5, y:19, w:1, h:1, endX:16, endY:0.5, isVertical: true}, {x:3, y:15, w:1, h:1, endX:7, endY:15, isVertical: false}],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 41.5, y: 12, w: 1, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 60, y: -2, w: 30, h: 1 }, { x: 57, y: 5, w: 2, h: 1 }, { x: 68, y: -8, w: 1, h: 1 },
+            { x:58, y: -32, w: 3, h: 1 }, { x:92, y: -60, w: 3, h: 1 }
+        ],
+        movingPlatform: [{x:68, y:19, w:1, h:1, endX:68, endY:12, isVertical: true}, {x:87, y:-15, w:2, h:1, endX:88, endY:-30, isVertical: true}, 
+            {x:80, y:-30, w:2, h:1, endX:85, endY:-20, isVertical: false}, {x:75, y:-30, w:2, h:1, endX:80, endY:-20, isVertical: false}, 
+            {x:75, y:-50, w:2, h:1, endX:80, endY:-20, isVertical: false}, {x:82, y:-55, w:1, h:1, endX:86, endY:-20, isVertical: false},
+            {x:87, y:-50, w:1, h:1, endX:93, endY:-20, isVertical: false}, {x:95, y:-57, w:1, h:1, endX:100, endY:-20, isVertical: false},
+            {x:95, y:-60, w:1, h:1, endX:93, endY:-80, isVertical: true}, {x:97, y:-80, w:2, h:1, endX:100, endY:-20, isVertical: false}, {x:102, y:-80, w:2, h:1, endX:110, endY:-20, isVertical: false}],
         skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }, { x: 9000, y: 424 }, { x: 9200, y: 424 }, { x: 9400, y: 424 }, { x: 9600, y: 424 }],
-        mechagolem: [{ x: 4500, y: 350 },{ x: 7500, y: 100},{ x: 12500, y: 350}],
-        dungeonWall: [{ x: 0, y: 0, h: 10 }],
+        mechagolem: [{ x: 4500, y: 350 },{ x: 7500, y: 100},{ x: 12500, y: 350}, { x: 11000, y: -400}],
+        dungeonWall: [{ x: 0, y: 0, h: 6}, { x: 370, y: 0, h: 5}],
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
         bonFire: [{ x: 13700, y: 465, level: "one" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
