@@ -1,7 +1,8 @@
 let levels = {
     startScreen: {
         width: 800,
-        height: 600,
+        maxHeight: 600,
+        minHeight: 0,
         background: "black",
         fadeTime: 1500,
         text: [
@@ -13,7 +14,8 @@ let levels = {
 
     storyRecap: {
         width: 800,
-        height: 600,
+        maxHeight: 600,
+        minHeight: 0,
         background: "black",
         fadeTime: 5294,
         text: [
@@ -39,7 +41,8 @@ let levels = {
 
     mainMenu: {
         width: 800,
-        height: 600,
+        maxHeight: 600,
+        minHeight: 0,
         background: "black",
         title: [{ x: 340, y: 70 }],
         menuBackground: [{ x: 0, y: 0, w: 1, h: 1}],
@@ -47,7 +50,8 @@ let levels = {
 
     tutorial: {
         width: 1500,
-        height: 0,
+        maxHeight: 0,
+        minHeight: 0,
         startPosition: {
             x: -90,
             y: 440,
@@ -64,10 +68,14 @@ let levels = {
 
     one: {
         width: 13550,
-        height: -2000,
+        maxHeight: -4000,
+        minHeight: 0,
         startPosition: {
             x: 87,
             y: 465,
+
+            // x: 11016,
+            // y: -320,
         },
         endPosition: {
             x: 14470,
@@ -77,12 +85,19 @@ let levels = {
             x: 13700,
             y: 465,
         },
-        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 12, w: 2, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 97, y: 12, w: 1, h: 1 }],
+        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 41.5, y: 12, w: 1, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 60, y: -2, w: 30, h: 1 }, { x: 57, y: 5, w: 2, h: 1 }, { x: 68, y: -8, w: 1, h: 1 },
+            { x:58, y: -32, w: 3, h: 1 }, { x:92, y: -60, w: 3, h: 1 }
+        ],
+        movingPlatform: [{x:68, y:19, w:1, h:1, endX:68, endY:12, isVertical: true}, {x:87, y:-15, w:2, h:1, endX:88, endY:-30, isVertical: true}, 
+            {x:80, y:-30, w:2, h:1, endX:85, endY:-20, isVertical: false}, {x:75, y:-30, w:2, h:1, endX:80, endY:-20, isVertical: false}, 
+            {x:75, y:-50, w:2, h:1, endX:80, endY:-20, isVertical: false}, {x:82, y:-55, w:1, h:1, endX:86, endY:-20, isVertical: false},
+            {x:87, y:-50, w:1, h:1, endX:93, endY:-20, isVertical: false}, {x:95, y:-57, w:1, h:1, endX:100, endY:-20, isVertical: false},
+            {x:95, y:-60, w:1, h:1, endX:93, endY:-80, isVertical: true}, {x:97, y:-80, w:2, h:1, endX:100, endY:-20, isVertical: false}, {x:102, y:-80, w:2, h:1, endX:110, endY:-20, isVertical: false}],
         skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }, { x: 9000, y: 424 }, { x: 9200, y: 424 }, { x: 9400, y: 424 }, { x: 9600, y: 424 }],
-        mechagolem: [{ x: 4500, y: 350 },{ x: 7500, y: 100},{ x: 12500, y: 350}],
-        dungeonWall: [{ x: 0, y: 0, h: 5 }],
+        mechagolem: [{ x: 4500, y: 350 },{ x: 7500, y: 100},{ x: 12500, y: 350}, { x: 11000, y: -400}],
+        dungeonWall: [{ x: 0, y: 0, h: 6}, { x: 370, y: 0, h: 5}],
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
-        bonFire: [{ x: 13700, y: 465, level: "one" }],
+        bonFire: [{ x: 13700, y: 472, level: "one" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 
@@ -101,22 +116,52 @@ let levels = {
             x: 10900,
             y: 320,
         },
-        bonFire: [ { x: 10900, y: 365, level: "two" }],
+        bonFire: [ { x: 10850, y: 368, level: "two" }],
         dungeonBackground3: [{ x:0, y:0, w:3, h: 1}],
-        dungeonGround2: [{ x: 0, y: 14.5, w: 6, h: 1 }, {x:7, y: 14.5, w: 8, h:1},{ x: 16, y: 14.5, w: 19, h: 1 }, {x: 36, y: 14.5, w: 8, h: 1}, {x: 45, y: 14.5, w: 8, h: 1}, {x: 54, y: 14.5, w: 10, h: 1}, {x: 64, y: 14.5, w: 16, h:1}, { x: 0, y: 0, w: 75, h: 1 }],
+        dungeonGround2: [{ x: 0, y: 14.4, w: 6, h: 1 }, {x:7, y: 14.4, w: 8, h:1},{ x: 16, y: 14.4, w: 19, h: 1 }, {x: 36, y: 14.4, w: 8, h: 1}, {x: 45, y: 14.4, w: 8, h: 1}, {x: 54, y: 14.4, w: 10, h: 1}, {x: 64, y: 14.4, w: 16, h:1}, { x: 0, y: 0, w: 75, h: 1 }],
         gorgon: [{ x: 1500, y: 325 }, {x: 3000, y: 325}, {x: 4900, y: 325}, {x: 5900, y: 325}, {x: 8000, y: 325}],
         wallspike: [{x: 4450, y: 185}, {x: 4225, y: 185}, {x: 3700, y: 185}, {x: 9000, y: 185}, {x: 8870, y: 185}],
         dungeonWall: [{ x: 0, y: 0, h: 4 }, { x: 290, y: 0, h: 2}],
         dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
-        dungeonDoor: [{ x: 124, y: 360, level: "one", end: true }],
+        dungeonDoor: [{ x: 124, y: 361, level: "one", end: true }],
         cutscene: [{startX: 10800, cutsceneNum: 3}, {startX: 11250, cutsceneNum: 4}],
         reina: [{ x: 11100, y: 439 }],
         azucena: [{ x: 11200, y: 400 }],
     },
 
+    four: {
+        width: 13545,
+        maxHeight: -2000,
+        minHeight: 2000,
+        startPosition: {
+            x: 215,
+            y: 465,
+        },
+        endPosition: {
+            x: 14470,
+            y: 465,
+        },
+        dungeonBackground4: [{x: 0, y:0, w:4, h:1},{x: 0, y:1, w:4, h:1}],
+        werewolf: [{x: 1000, y: 165}, {x: 5000, y: 165}, {x: 12000, y: 165}, {x: 13000, y: 165}],
+        skeleton: [{ x: 3000, y: 424 }, { x: 3200, y: 424 }, { x: 3400, y: 424 }, { x: 3600, y: 424 }, { x: 3800, y: 424 }],
+        bonFire: [ { x: 14200, y: 465, level: "four" }],
+        dungeonGround4: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 40, y: 20, w: 3, h: 1 },{ x: 43, y: 25, w: 3, h: 1 },{ x: 48, y: 30, w: 3, h: 1 },{ x: 54, y: 20, w: 3, h: 1 },{x: 59, y: 25, w: 3, h: 1 }, {x: 65, y: 20, w: 3, h: 1 } , {x: 70, y: 17, w: 40, h: 1 }],
+        firebomb2:[{x: 7000, y: 250}, {x: 8200, y: 300}, {x: 10000, y: 250}],
+        bridge: [{x:8200, y:940}, {x:8350, y:940}, {x:10000, y:740}, {x:10150, y:740}],
+        dungeonLantern: [{ x: 700, y: 250 }, { x: 1400, y: 250 },{ x: 2100, y: 250 },{ x: 2800, y: 250 },{ x: 3500, y: 250 },{ x: 4200, y: 250 },{ x: 4900, y: 250 },{ x: 5600, y: 250 },{ x: 6300, y: 250 },{ x: 11900, y: 250 },{ x: 12600, y: 250 },{ x: 13300, y: 250 },{ x: 14000, y: 250 }],
+        pillar: [{ x: 0, y: 100 }, { x: 700, y: 100}, { x: 1400, y: 100}, { x: 2100, y: 100}, { x: 2800, y: 100}, { x: 3500, y: 100}, { x: 4200, y: 100}, { x: 4900, y: 100}, { x: 5600, y: 100}, { x: 11200, y: 100}, { x: 11900, y: 100},{ x: 12600, y: 100}, { x: 13300, y: 100},{ x: 14000, y: 100}],
+        dungeonWall1: [{ x: 0, y: 0, h: 5 }],
+        dungeonDoor2: [{ x: 250, y: 450, level: "shopkeeper"}],
+        eagle: [{ x: 950, y: 538}, { x: 2350, y: 538}, { x: 4450, y: 538}, { x: 11450, y: 538}, { x: 12850, y: 538}],
+        eagle2: [{ x: 1700, y: 535}, { x: 3100, y: 535}, { x: 5200, y: 535},{ x: 12200, y: 535}, { x: 13600, y: 535}],
+        wizard: [{ x: 3800, y: 438 }, { x: 5900, y: 438 }],
+
+    },
+
     shopkeeper: {
         width: 1085,
-        height: 0,
+        minHeight: 0,
+        minHeight: 0,
         startPosition: {
             x: 70,
             y: 445,
@@ -140,7 +185,7 @@ let levels = {
         reina: [{ x: 1620, y: 537, text: "reina_shopkeeper" }],
         azucena: [{ x: 870, y: 510 }],
         tent: [{ x: 700, y: 478 }],
-        bonFire: [{ x: 400, y: 465, level: "shopkeeper" }],
+        bonFire: [{ x: 400, y: 472, level: "shopkeeper" }],
         potion: [{ x: 788, y: 570}, { x: 888, y: 570}, { x: 990, y: 570}],
         sharpening_wheel: [{ x: 1850, y: 620 }],
         knightStatue: [{ x: 1840, y: 210 }],

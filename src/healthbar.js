@@ -34,12 +34,14 @@ class HealthBar {
         }
     }
 }
+
 class PotionEffect {
-    constructor(game, x, y, type) {
+    constructor(game, x, y, type, healAmount) {
         this.game = game;
         this.x = x;
         this.y = y;
         this.type = type; 
+        this.healAmount = healAmount || 200; // Default to 200 if not specified
 
         this.duration = 1.5; 
         this.elapsedTime = 0;
@@ -52,15 +54,17 @@ class PotionEffect {
     update() {
         this.elapsedTime += this.game.clockTick;
         
+        // Float upward effect
         this.y -= this.floatSpeed;
         
+        // Remove when duration is complete
         if (this.elapsedTime >= this.duration) {
             this.removeFromWorld = true;
         }
     }
     
     draw(ctx) {
- 
+        // Calculate opacity for fade-out effect
         let opacity = 1.0;
         if (this.elapsedTime > this.duration * this.fadeStart) {
             opacity = 1.0 - ((this.elapsedTime - (this.duration * this.fadeStart)) / 
@@ -80,15 +84,14 @@ class PotionEffect {
             const drawX = this.x - this.game.camera.x;
             const drawY = this.y - this.game.camera.y;
 
-            ctx.strokeText(`+200 Health`, drawX, drawY);
-            ctx.fillText(`+200 Health`, drawX, drawY);
+            // Display the actual heal amount instead of hardcoded value
+            ctx.strokeText(`+${Math.round(this.healAmount)} Health`, drawX, drawY);
+            ctx.fillText(`+${Math.round(this.healAmount)} Health`, drawX, drawY);
         }
         
         ctx.restore();
     }
-}
-
-    
+}  
 
 
 

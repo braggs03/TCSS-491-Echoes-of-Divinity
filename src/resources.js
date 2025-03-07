@@ -1,6 +1,7 @@
 // Entities
 
-const MECHA_GOLEM = './resources/MechaGolem.png'
+const MECHA_GOLEM = './resources/mechagolem/MechaGolem.png'
+const MECHA_GOLEM_PROJECTILE = './resources/mechagolem/arm_projectile.png'
 const KNIGHT = './resources/knight/'
 const SKELETON_WARRIOR = './resources/skeletonwarrior/'
 const KNIGHT_SPRITE = './resources/knight/knightsprite.png'
@@ -17,8 +18,12 @@ const DUNGEON = './resources/dungeon.png'
 const TORCH = './resources/torch.png'
 const DUNGEON_BACKGROUND_IMAGE = './resources/dungeonbackground.png'
 const WATERFALL = './resources/waterfall.png'
+const LANTERN = './resources/lantern.png'
 const DUNGEON_BACKGROUND = './resources/dungeonwater2.png'
+const DUNGEON_BACKGROUNDL4 = './resources/levelBackground4copy.png'
 const EMBER = './resources/maintheme.png';
+
+
 
 // Other 
 const MENU_BACKGROUND = './resources/menuScreen.png';

@@ -1,18 +1,29 @@
+const SKELETON_DEFAULTS = {
+    maxHp: 500,
+    hp: 500,
+}
+
 class SkeletonWarrior {
-	constructor(game, x, y) {
+	constructor(game, self) {
 		this.game = game;
-        this.target = null;
-        this.x = x
-        this.y = y
-        this.maxHp = 500;
-        this.hp = 500;
+        this.self = self;
+        this.x = this.self.x;
+        this.y = this.self.y;
+        this.maxHp = SKELETON_DEFAULTS.maxHp;
+        this.hp = this.self.hp ? this.self.hp : SKELETON_DEFAULTS.hp;
         this.height = 100;
+        this.emberQuantity = 100;
         this.bheight = 0;
         this.healthBar = new HealthBar(this);
         this.updateBB();
         this.inCutscene = false;
         this.aggro = false;
         this.facingLeft = true;
+        this.damage = 50;
+        this.target = null;
+
+        this.runSpeed = 500;
+        this.walkSpeed = 250;
 
         this.velocityY = 0;
         this.maxVelocityY = 990;
@@ -47,6 +58,12 @@ class SkeletonWarrior {
 
 	};
 
+    save() {
+        this.self.x = this.x;
+        this.self.y = this.y;
+        this.self.hp = this.hp;
+    }
+
     setState(state) {
         for (let key in this.animations) {
             if (this.currentState === key) {
@@ -76,6 +93,10 @@ class SkeletonWarrior {
         }
     }
 
+    takeDamage(damageAmount) {
+        this.hp -= damageAmount;
+    }
+
 	update() {
         const clockTick = this.game.clockTick;
 
@@ -102,15 +123,14 @@ class SkeletonWarrior {
             if (entity.BB && skeleton.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(skeleton.BB);
                 if (entity instanceof DungeonWall) {
-                    if (entity.BB.x < skeleton.BB.x) {
+                    if (entity.BB.x > skeleton.BB.x) {
                         this.colliding.right = true;
                         skeleton.x += overlap.x;
-                    } else if (entity.BB.x > skeleton.BB.x) {
+                    } else if (entity.BB.x < skeleton.BB.x) {
                         this.colliding.left = true;
                         skeleton.x -= overlap.x;
                     }
-                    skeleton.velocityX = 0; 
-                } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
+                } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonGround4) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
 
@@ -120,7 +140,6 @@ class SkeletonWarrior {
                         } else {
                             skeleton.x -= overlap.x;
                         }
-                        skeleton.velocityX = 0;
                     } else if (verticalCollision) {
                         if (entity.BB.y < skeleton.BB.y) {
                             this.colliding.down = true;
@@ -150,101 +169,97 @@ class SkeletonWarrior {
             setTimeout(() => {
                 this.removeFromWorld = true;
             }, 1000);
-            this.target.emberCount += 100;
+            this.game.camera.knight.addEmbers(this.emberQuantity);
             this.dead = true;
         }
         this.updateBB();
+
         if (this.currentState === 'RightRun' || this.currentState === 'RightRunattack') {
-            this.x += 500 * this.game.clockTick;
+            this.x += this.runSpeed * clockTick;
         } else if (this.currentState === 'LeftRun' || this.currentState === 'LeftRunattack') {
-            this.x -= 500 * this.game.clockTick;
+            this.x -= this.runSpeed * clockTick;
         } else if (this.currentState === 'RightWalk') {
-            this.x += 150 * this.game.clockTick;
+            this.x += this.walkSpeed * clockTick;
         }else if (this.currentState === 'LeftWalk') {
-            this.x -= 150 * this.game.clockTick;
+            this.x -= this.walkSpeed * clockTick;
         }
         if (this.inCutscene) {
             return;
         }
+
         this.attackNumber = Math.floor(Math.random() * 3);
-        let that = this;
         this.game.entities.forEach(function (entity) {
-            if (entity instanceof Knight && entity.x - that.x > 500 && that.aggro) {
-                that.facingLeft = false;
-                that.setState('RightRun')
-            } else if (entity instanceof Knight && that.x - entity.x > 500 && that.aggro) {
-                that.facingLeft = true;
-                that.setState('LeftRun')
-            } else if (entity instanceof Knight && that.aggro) {
-                if (that.currentState === 'RightRun' &&  entity.x - that.x < 400) {
-                    that.setState("RightRunattack");
-                } else if (that.currentState === 'LeftRun' && that.x - entity.x < 400) {
-                    that.setState("LeftRunattack");
+            if (entity instanceof Knight && entity.x - skeleton.x > 500 && skeleton.aggro) {
+                skeleton.facingLeft = false;
+                skeleton.setState('RightRun')
+            } else if (entity instanceof Knight && skeleton.x - entity.x > 500 && skeleton.aggro) {
+                skeleton.facingLeft = true;
+                skeleton.setState('LeftRun')
+            } else if (entity instanceof Knight && skeleton.aggro) {
+                if (skeleton.currentState === 'RightRun' &&  entity.x - skeleton.x < 400) {
+                    skeleton.setState("RightRunattack");
+                } else if (skeleton.currentState === 'LeftRun' && skeleton.x - entity.x < 400) {
+                    skeleton.setState("LeftRunattack");
                 }
             }
             if (entity instanceof Knight) {
-                if (that.animations[that.currentState].getDone() || that.currentState === "LeftWalk"
-                    || that.currentState === "RightWalk") {
-                    if (entity.x > that.x) {
+                if (skeleton.animations[skeleton.currentState].getDone() || skeleton.currentState === "LeftWalk"
+                    || skeleton.currentState === "RightWalk") {
+                    if (entity.x > skeleton.x) {
                         // Knight is to the right
-                        if (that.aggro) {
-                            that.facingLeft = false;
-                            that.setState('RightWalk');
+                        if (skeleton.aggro) {
+                            skeleton.facingLeft = false;
+                            skeleton.setState('RightWalk');
                         }
-                    } else if (entity.x < that.x) {
+                    } else if (entity.x < skeleton.x) {
                         // Knight is to the left
-                        if (that.aggro) {
-                            that.facingLeft = true;
-                            that.setState('LeftWalk');
+                        if (skeleton.aggro) {
+                            skeleton.facingLeft = true;
+                            skeleton.setState('LeftWalk');
                         }
                     }
                 }
             }
-            if (entity.BB && that.BB.collide(entity.BB)) {
-                if (entity instanceof Knight && !that.aggro) {
-                    that.target = entity;
-                    that.aggro = true;
-                    if (that.facingLeft) {
-                        that.setState('LeftWalk');
+            if (entity.BB && skeleton.BB.collide(entity.BB)) {
+                if (entity instanceof Knight && !skeleton.aggro) {
+                    skeleton.target = entity;
+                    skeleton.aggro = true;
+                    if (skeleton.facingLeft) {
+                        skeleton.setState('LeftWalk');
                     } else {
-                        that.setState('RightWalk')
+                        skeleton.setState('RightWalk')
                     }
-                } else if (entity instanceof Knight && that.aggro) {
+                } else if (entity instanceof Knight && skeleton.aggro) {
                     if (entity.currentState === 'RightAttack1') {
-                        that.setState('LeftHurt')
-                        that.hp -= entity.damage;
-                        that.x += 75;
+                        skeleton.setState('LeftHurt')
                         return;
                     } else if (entity.currentState === 'LeftAttack1') {
-                        that.setState('RightHurt')
-                        that.hp -= entity.damage;
-                        that.x -= 75;
+                        skeleton.setState('RightHurt')
                         return;
                     } else {
-                        if (that.currentState !== 'LeftAttack1' && that.currentState !== 'LeftAttack2'
-                            && that.currentState !== 'LeftAttack3' && that.currentState !== 'RightAttack1'
-                            && that.currentState !== 'RightAttack2' && that.currentState !== 'RightAttack3'
-                            && that.currentState !== 'RightRunattack' && that.currentState !== 'LeftRunattack') {
-                            if (that.facingLeft) {
-                                if (that.attackNumber === 0) {
-                                    that.setState('LeftAttack1');
-                                } else if (that.attackNumber === 1) {
-                                    that.setState('LeftAttack2');
+                        if (skeleton.currentState !== 'LeftAttack1' && skeleton.currentState !== 'LeftAttack2'
+                            && skeleton.currentState !== 'LeftAttack3' && skeleton.currentState !== 'RightAttack1'
+                            && skeleton.currentState !== 'RightAttack2' && skeleton.currentState !== 'RightAttack3'
+                            && skeleton.currentState !== 'RightRunattack' && skeleton.currentState !== 'LeftRunattack') {
+                            if (skeleton.facingLeft) {
+                                if (skeleton.attackNumber === 0) {
+                                    skeleton.setState('LeftAttack1');
+                                } else if (skeleton.attackNumber === 1) {
+                                    skeleton.setState('LeftAttack2');
                                 } else {
-                                    that.setState('LeftAttack3');
+                                    skeleton.setState('LeftAttack3');
                                 }
                             } else {
-                                if (that.attackNumber === 0) {
-                                    that.setState('RightAttack1');
-                                } else if (that.attackNumber === 1) {
-                                    that.setState('RightAttack2');
+                                if (skeleton.attackNumber === 0) {
+                                    skeleton.setState('RightAttack1');
+                                } else if (skeleton.attackNumber === 1) {
+                                    skeleton.setState('RightAttack2');
                                 } else {
-                                    that.setState('RightAttack3');
+                                    skeleton.setState('RightAttack3');
                                 }
                             }
                         }
-                        entity.takeDamage(50);
-
+                        entity.takeDamage(skeleton.damage);
                     }
                 }
             }

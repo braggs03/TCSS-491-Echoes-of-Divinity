@@ -7,6 +7,7 @@ class Swordwave {
         this.removeFromWorld = false;
         this.damage = 100;
         this.expiretime = 2;
+        this.hitTargets = [];
 
         if (direction) {
         this.direction = RIGHT;
@@ -31,11 +32,20 @@ class Swordwave {
             //left direction
             this.currentState = "left"
             this.x -= this.speed * this.game.clockTick;
-            this.BB = new BoundingBox(this.x - this.game.camera.x, this.y + 40 - this.game.camera.y, 300, 115);
+            this.BB = new BoundingBox(this.x + 90 - this.game.camera.x, this.y + 40 - this.game.camera.y, 300, 115);
         }
         if (this.expiretime <= 0) {
             this.removeFromWorld = true;
         }
+        this.game.entities.forEach(entity => {
+            if ((typeof entity.takeDamage === 'function' && !(entity instanceof Knight)) &&
+                this.BB.collide(entity.BB) &&
+                !this.hitTargets.includes(entity)) {
+                entity.takeDamage(this.damage);
+                console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
+                this.hitTargets.push(entity);
+            }
+        });
 	};
 
     draw(ctx) {

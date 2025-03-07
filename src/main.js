@@ -1,6 +1,5 @@
 const ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload(MECHA_GOLEM);
 ASSET_MANAGER.queueDownload(DUNGEON);
 ASSET_MANAGER.queueDownload(TORCH);
 ASSET_MANAGER.queueDownload(AZUCENA);
@@ -8,6 +7,10 @@ ASSET_MANAGER.queueDownload(REINA);
 ASSET_MANAGER.queueDownload("./resources/Magic/Lightning.png");
 ASSET_MANAGER.queueDownload("./resources/knight/swordwave.png");
 ASSET_MANAGER.queueDownload("./resources/Magic/Fire-bomb.png");
+
+// MechaGolem
+ASSET_MANAGER.queueDownload(MECHA_GOLEM);
+ASSET_MANAGER.queueDownload(MECHA_GOLEM_PROJECTILE);
 
 // Gorgon
 ASSET_MANAGER.queueDownload(GORGON + "Attack1.png");
@@ -39,21 +42,23 @@ ASSET_MANAGER.queueDownload("./resources/NightSky.png");
 ASSET_MANAGER.queueDownload("./resources/town.png");
 ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUND);
 ASSET_MANAGER.queueDownload(WATERFALL);
+ASSET_MANAGER.queueDownload(DUNGEON_BACKGROUNDL4);
+ASSET_MANAGER.queueDownload(LANTERN);
 ASSET_MANAGER.queueDownload("./resources/Title.png")
 ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneWarrior.png"); 
 ASSET_MANAGER.queueDownload("./resources/nightBorneWarrior/NightBorneflip.png");
 ASSET_MANAGER.queueDownload("./resources/maintheme.png");
 
 // Werewolf
-ASSET_MANAGER.queueDownload(WEREWOLF +"Attack_1.png");
-ASSET_MANAGER.queueDownload(WEREWOLF +"Attack_2.png");
+ASSET_MANAGER.queueDownload(WEREWOLF + "Attack_1.png");
+ASSET_MANAGER.queueDownload(WEREWOLF + "Attack_2.png");
 ASSET_MANAGER.queueDownload(WEREWOLF + "Attack_3.png");
 ASSET_MANAGER.queueDownload(WEREWOLF + "Dead.png");
 ASSET_MANAGER.queueDownload(WEREWOLF + "Hurt.png");
-ASSET_MANAGER.queueDownload(WEREWOLF + "Idle.png"); 
-ASSET_MANAGER.queueDownload(WEREWOLF + "Jump.png"); 
-ASSET_MANAGER.queueDownload(WEREWOLF + "Run.png"); 
-ASSET_MANAGER.queueDownload(WEREWOLF + "Run+Attack.png"); 
+ASSET_MANAGER.queueDownload(WEREWOLF + "Idle.png");
+ASSET_MANAGER.queueDownload(WEREWOLF + "Jump.png");
+ASSET_MANAGER.queueDownload(WEREWOLF + "Run.png");
+ASSET_MANAGER.queueDownload(WEREWOLF + "Run+Attack.png");
 ASSET_MANAGER.queueDownload(WEREWOLF + "walk.png");
 
 // Knight
