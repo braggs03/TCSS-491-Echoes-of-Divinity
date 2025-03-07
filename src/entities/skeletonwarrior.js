@@ -123,10 +123,10 @@ class SkeletonWarrior {
             if (entity.BB && skeleton.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(skeleton.BB);
                 if (entity instanceof DungeonWall) {
-                    if (entity.BB.x < skeleton.BB.x) {
+                    if (entity.BB.x > skeleton.BB.x) {
                         this.colliding.right = true;
                         skeleton.x += overlap.x;
-                    } else if (entity.BB.x > skeleton.BB.x) {
+                    } else if (entity.BB.x < skeleton.BB.x) {
                         this.colliding.left = true;
                         skeleton.x -= overlap.x;
                     }
