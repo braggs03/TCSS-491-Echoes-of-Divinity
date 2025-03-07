@@ -172,7 +172,7 @@ let levels = {
         },
         cutscene: [{startX: -300, cutsceneNum: 9}],
         celes: [{ x: 800, y: -300 }],
-        azucena: [{ x: 150, y: 500 }],
+        azucena: [{ x: 175, y: 500 }],
         dungeonWall: [{ x: 31, y: 0, h: 3 }, { x: 0, y: 0, h: 3 }],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }],
         nightBackground: [{ x:0, y:0, w:50, h: 1}],

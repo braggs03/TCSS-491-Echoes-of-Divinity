@@ -59,9 +59,9 @@ const text = {
     reina5: [
         ["..."],
         ["I'm sure Knight Commander Lucan", "would have enjoyed fighting you."],
-        ["He would want you to have this."],
-        ["..."],
-        ["Thank you for ending his suffering."],
+        ["Lucan's armor was once", "blessed by Mica."],
+        ["Granting him the ability", "to leap in air"],
+        ["I pray you find good use of it."],
     ],
 
     azucena8: [
@@ -79,10 +79,10 @@ const text = {
     ],
 
     azucena10: [
-        ["Celes??"],
-        ["But you're...."],
-        ["No, it doesn't matter I suppose."],
-        ["May I ask why you stand before us"],
+        ["Celes, so it was you."],
+        ["..."],
+        ["I don't suppose it matters", "why you're alive."],
+        ["More importantly, why do", "you stand against us?"],
     ],
 
 
@@ -90,14 +90,24 @@ const text = {
         ["You know better than anyone why."],
         ["The two of us were far more", "powerful than our elders."],
         ["Why must we bow down to experience?"],
-        ["Duma has promised me a world where", "power rules all"],
-        ["So here I stand now."]
+        ["Duma has promised me a world", "where power rules all."],
+        ["So, here I stand now."],
     ],
 
     azucena11: [
-        ["..."]
-        ["I see..."]
-        ["Don't let her suffer."]
+        ["..."],
+        ["I see..."],
+        ["Do what you must.", "Don't let her suffer."],
+    ],
+
+    celes3: [
+        ["Do not fret, I promise the same."]
+    ],
+
+    azucena12: [
+        ["..."],
+        ["She was always so talented."],
+        ["I pity what she became."],
     ],
 
     azucena_end: [

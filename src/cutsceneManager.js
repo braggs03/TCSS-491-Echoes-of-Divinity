@@ -463,16 +463,60 @@ class CutsceneTen {
         this.game.entities.splice(1, 0, this.lightning)
         await this.delay(500)
         this.celes.y = 450;
+        await this.delay (1000)
         this.game.camera.showInteractive(this.celes, "celes1");
         await this.delay(2000);
         this.game.camera.removeInteractive();
         this.game.camera.showInteractive(this.azucena, "azucena10");
+        await this.delay(2500);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2500);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2500);
+        this.game.camera.removeInteractive();
+        this.game.camera.showInteractive(this.celes, "celes2");
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.removeInteractive();
+        this.game.camera.showInteractive(this.azucena, "azucena11");
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
-        this.game.camera.interactable.currentDialog++;
+        this.game.camera.removeInteractive();
+        this.azucena.setState(this.azucena.idleLeft())
+        this.azucena.goLeft = true;
+        while (this.azucena.x > -200) {
+            await this.delay (16);
+        }
+        this.azucena.goLeft = false;
+        let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 3);
+        walls.forEach(wall => wall.h = 5);
+        this.game.camera.showInteractive(this.celes, "celes3");
+        this.game.camera.music = new Audio(CELES_MUSIC);
+        this.game.camera.music.loop = true;
+        this.game.camera.music.volume = 0.1;
+
+        // Ensure the audio is fully loaded before allowing playback
+        this.game.camera.music.addEventListener('canplaythrough', () => {
+            this.game.camera.music.play();
+        });
+        await this.delay(3000);
+        this.game.camera.removeInteractive();
+        this.knight.inCutscene = false;
+        this.knight.moveable = true;
+        this.celes.inCutscene = false;
+        this.game.camera.inCutscene = false;
     }
 
     delay(ms) {

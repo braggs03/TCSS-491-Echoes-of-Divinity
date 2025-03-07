@@ -98,6 +98,8 @@ class Celes {
             return;
         }
         if (this.hp <= 0) {
+            let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 5);
+            walls.forEach(wall => wall.h = 3);
             this.game.camera.celesDead = true;
             setTimeout(() => {
                 this.removeFromWorld = true;
