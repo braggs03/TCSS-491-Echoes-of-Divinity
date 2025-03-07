@@ -5,33 +5,26 @@ class ShopMenu {
         this.knight = this.scene.knight;
         
         this.options = [
-            {
-                id: "swordwave",
-                name: "Sword Wave Attack",
-                price: 1000,
-                purchased: this.knight.hasWaveAttack || false,
-                description: "Launch a projectile with your sword",
-                oneTimePurchase: true,
-                quantity: 1
-            },
+            
             {
                 id: "damageboost",
                 name: "Damage Boost",
-                basePrice: 1500,  
-                price: 1500,      
+                basePrice: 2000,  
+                price: 2000,      
                 description: "Increase damage by 10% per purchase",
                 oneTimePurchase: false,
                 quantity: 1,
                 maxQuantity: 5
             },
             {
-                id: "doublejump",
-                name: "Double Jump",
-                price: 2000,
-                purchased: this.knight.doubleJump || false,
-                description: "Increase jump height by 50%",
-                oneTimePurchase: true,
-                quantity: 1
+                id: "staminaboost",
+                name: "Stamina Boost",
+                basePrice: 2500,
+                price: 2500,
+                description: "Decrease attack stamina cost by 10%",
+                oneTimePurchase: false,
+                quantity: 1,
+                maxQuantity: 5
             },
             {
                 id: "potionboost",
@@ -184,18 +177,15 @@ class ShopMenu {
         this.knight.emberCount -= option.price;
     
         switch (option.id) {
-            case "swordwave":
-                this.unlockSwordWave();
-                break;
                 
             case "damageboost":
                 this.applyDamageBoost(option.quantity);
                 break;
-                
-            case "doublejump":
-                this.unlockDoubleJump();
+
+            case "staminaboost":
+                this.applyStaminaBoost(option.quantity);
                 break;
-                
+
             case "potionboost":
                 this.applyPotionBoost(option.quantity);
                 break;
@@ -206,35 +196,25 @@ class ShopMenu {
         }
         this.confirmationVisible = false;
     }
-    
-    unlockSwordWave() {
-        this.knight.hasWaveAttack = true;
-        this.options[0].purchased = true;
-
-        this.knight.waveDamage = Math.round(this.knight.damage * 1.2);
-        
-        console.log(`Sword Wave Attack unlocked! Base damage: ${this.knight.waveDamage}`);
-    }
-    
+ 
     applyDamageBoost(quantity) {
         const boostMultiplier = Math.pow(1.1, quantity);
         const oldDamage = this.knight.damage;
         const oldDamagewave = this.knight.waveDamage; 
         this.knight.damage = Math.round(oldDamage * boostMultiplier);
-        if (this.knight.hasWaveAttack) {
-            this.knight.waveDamage = Math.round(oldDamagewave * boostMultiplier);
-        }
+        
         const percentIncrease = Math.round((boostMultiplier - 1) * 100);
         console.log(`Damage increased from ${oldDamage} to ${this.knight.damage} (+${percentIncrease}%)`);
-        console.log(`Damage increased from ${oldDamagewave} to ${this.knight.waveDamage} (+${percentIncrease}%)`);
     }
-    
-    unlockDoubleJump() {
-        this.knight.doubleJump = true;
-        this.knight.hasDoubleJump = true;
-        this.options[2].purchased = true;
-        
-        console.log("Double Jump ability unlocked!");
+    applyStaminaBoost(quantity) {
+        const boostMultiplier = Math.pow(0.9, quantity);
+        const oldStamina = this.knight.stamina;
+        const oldCurrentStamina = this.knight.currentStamina;
+
+        this.knight.stamina = Math.round(oldStamina * boostMultiplier );
+        this.knight.currentStamina = Math.round(oldCurrentStamina * boostMultiplier );
+       
+        console.log(`Attack stamina cost decreased from ${oldStamina} to ${this.knight.stamina}`);
     }
     
     applyPotionBoost(quantity) {
