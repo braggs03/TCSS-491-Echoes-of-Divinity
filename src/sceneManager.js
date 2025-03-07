@@ -633,6 +633,15 @@ class SceneManager {
     
 
     update() {
+        if (!this.game.keys["f"]) {
+            this.fReleased = true; 
+        }
+
+        if (this.fReleased && !this.shopMenu && this.level === levels["shopkeeper"] && this.game.entities.find((entity) => entity instanceof Reina).BB.collide(this.knight.BB) && this.game.keys["f"]) {
+            this.fReleased = false;
+            this.game.camera.showShopMenu();
+        }
+
         if (this.game.keys["Escape"] && this.escReleased) {
             console.log("Escape pressed - escReleased:", this.escReleased,
                  "Control menu:", !!this.controlsMenu,

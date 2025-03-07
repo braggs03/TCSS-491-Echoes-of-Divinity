@@ -107,11 +107,4 @@ const text = {
         ["I'm not gonna bother making credits right now"],
         ["This is all you're getting, bye"]
     ],
-
-    reina_shopkeeper: [
-        ["Hello Knight!"],
-        ["I am Reina."],
-        ["Feel free to purchase", "items from me if you", "have the embers to spare."],
-        ["Would you like to see", "what I have for sale?", "Press F to open shop."],
-    ],
 }
