@@ -3,10 +3,14 @@ class CutsceneManager {
         this.game = game;
         this.cutsceneArray = [new CutsceneOne(this.game), new CutsceneTwo(this.game),
             new CutsceneThree(this.game), new CutsceneFour(this.game), new CutsceneFive(this.game),
-            new CutsceneSix(this.game), new CutsceneSeven(this.game)]
+            new CutsceneSix(this.game), new CutsceneSeven(this.game), new CutsceneEight(this.game),
+            new CutsceneNine(this.game), new CutsceneTen(this.game),]
     }
 }
 
+/*
+    Intro Cutscene
+ */
 class CutsceneOne {
     constructor(game) {
         this.game = game;
@@ -76,6 +80,9 @@ class CutsceneOne {
     }
 }
 
+/*
+    Tutorial complete cutscene.
+ */
 class CutsceneTwo {
     constructor(game) {
         this.game = game;
@@ -128,6 +135,9 @@ class CutsceneTwo {
     }
 }
 
+/*
+    Shopkeeper Introduction
+ */
 class CutsceneThree {
     constructor(game) {
         this.game = game;
@@ -157,6 +167,9 @@ class CutsceneThree {
     }
 }
 
+/*
+    Upcoming Boss Warning 1
+ */
 class CutsceneFour {
     constructor(game) {
         this.game = game;
@@ -189,6 +202,9 @@ class CutsceneFour {
     }
 }
 
+/*
+    Enter Boss Room 1.
+ */
 class CutsceneFive {
     constructor(game) {
         this.game = game;
@@ -211,6 +227,9 @@ class CutsceneFive {
     }
 }
 
+/*
+    Boss 1 Intro Cutscene.
+ */
 class CutsceneSix {
     constructor(game) {
         this.game = game;
@@ -233,9 +252,8 @@ class CutsceneSix {
         this.knight.velocityX = 0;
         this.reina.inCutscene = true;
         this.azucena.inCutscene = true;
-        let wall = { x: 0, y: 0, h: 5 };
-        this.game.entities.splice(1, 0, new DungeonWall(this.game, wall.x, wall.y, wall.h))
-        //this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
+        let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 3);
+        walls.forEach(wall => wall.h = 5);
         this.game.draw()
         this.game.camera.showInteractive(this.azucena, "azucena6");
         await this.delay(2000);
@@ -300,34 +318,68 @@ class CutsceneSix {
     }
 }
 
+/*
+    Enter Boss Room Cutscene.
+ */
 class CutsceneSeven {
     constructor(game) {
         this.game = game;
         this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.lucan = this.game.entities.find(entity=> entity instanceof NightbornWarrior);
         this.azucena = this.game.entities.find(entity=> entity instanceof Azucena);
+        this.reina = this.game.entities.find(entity=> entity instanceof Reina);
+        this.celes = this.game.entities.find(entity => entity instanceof Celes)
     }
 
     async run() {
+        this.azucena.y = -300;
+        this.reina.y = -300;
         this.knight.inCutscene = true;
-        while (this.game.camera.music.volume > 0.0) {
-            this.game.camera.music.volume = Math.max ( this.game.camera.music.volume - (0.1 * this.game.clockTick), 0.0);
-            await this.delay(16);
+        if (!this.game.camera.lucanDead) {
+            this.lucan.inCutscene = true;
+            this.lucan.setState('idleLeft')
         }
-        this.game.camera.music.pause()
+        if (!this.game.camera.celesDead) {
+            this.celes.inCutscene = true;
+            this.celes.setState('idleLeft')
+        }
         this.knight.setState('RightRun');
-        while (this.knight.x < 1300) {
+        while (this.knight.x < 200) {
             await this.delay (16);
         }
         this.knight.setState('LeftIdle');
-        this.knight.velocityX = 0;
-        this.azucena.inCutscene = true;
-        this.azucena.y = 500
-        this.azucena.goRight = true;
-        while (this.azucena.x < this.knight.x - 200) {
-            await this.delay (16);
+        let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 3);
+        if (!this.game.camera.lucanDead) {
+            walls.forEach(wall => wall.h = 5);
         }
-        this.azucena.goRight = false;
-        this.game.camera.showInteractive(this.azucena, "azucena_end");
+        this.knight.velocityX = 0;
+        this.knight.inCutscene = false;
+        this.game.camera.inCutscene = false;
+        if (this.lucan) {
+            this.lucan.inCutscene = false;
+        }
+        if (this.celes) {
+            this.celes.inCutscene = false;
+        }
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+/*
+    Boss 1 Complete Cutscene.
+ */
+class CutsceneEight {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.reina = this.game.entities.find(entity=> entity instanceof Reina);
+    }
+
+    async run() {
+        this.game.camera.showInteractive(this.reina, "reina5");
         await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(4000);
@@ -338,11 +390,89 @@ class CutsceneSeven {
         this.game.camera.interactable.currentDialog++;
         await this.delay(4000);
         this.game.camera.removeInteractive();
-        this.azucena.inCutscene = false;
-        this.knight.moveable = true;
-        this.game.camera.inCutscene = false;
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+/*
+    Upcoming Boss 2 Warning.
+ */
+class CutsceneNine {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.azucena = this.game.entities.find(entity=> entity instanceof Azucena);
+    }
+
+    async run() {
+        this.knight.inCutscene = true;
+        this.azucena.inCutscene = true;
+        this.knight.setState('RightIdle');
         this.knight.velocityX = 0;
-        this.game.camera.loadLevel("startScreen", false, true,false, false)
+        this.game.camera.showInteractive(this.azucena, "azucena8");
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.removeInteractive();
+
+
+        this.knight.inCutscene = false;
+        this.knight.moveable = true;
+        this.azucena.inCutscene = false;
+        this.game.camera.inCutscene = false;
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+/*
+    Boss 2 Introduction.
+ */
+class CutsceneTen {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.azucena = this.game.entities.find(entity=> entity instanceof Azucena);
+        this.celes = this.game.entities.find(entity=> entity instanceof Celes);
+    }
+
+    async run() {
+        //this.game.camera.music.pause();
+        this.knight.inCutscene = true;
+        this.celes.inCutscene = true;
+        this.celes.setState('LeftIdle')
+        this.knight.setState('RightRun');
+        while (this.knight.x < 200) {
+            await this.delay (16);
+        }
+        this.knight.setState('RightIdle');
+        this.azucena.inCutscene = true;
+        this.game.camera.showInteractive(this.azucena, "azucena9");
+        await this.delay(2000);
+        this.game.camera.removeInteractive();
+        await this.delay(1000);
+        console.log(true)
+        this.lightning = new Lightning(this.game, this.celes.x - 10, 40, true)
+        this.game.entities.splice(1, 0, this.lightning)
+        await this.delay(500)
+        this.celes.y = 450;
+        this.game.camera.showInteractive(this.celes, "celes1");
+        await this.delay(2000);
+        this.game.camera.removeInteractive();
+        this.game.camera.showInteractive(this.azucena, "azucena10");
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
     }
 
     delay(ms) {

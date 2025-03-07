@@ -23,10 +23,15 @@ class Duma {
         this.attackChargeRun = false;
         this.phaseOne = true;
         this.specialAttackAvailable = true;
-        this.counter = 1000;
+        this.counter = 800;
         this.counterOne = 2000;
         this.counterTwo = 5000;
         this.dead = false;
+
+        this.fireSound = new Audio("./resources/SoundEffects/fireAttack.ogg");
+        this.fireSound.loop = true;
+        this.fireSound.playbackRate = 1.0;
+        this.fireSound.volume = 0.2;
 
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(DUMA + "Attack.png"), 0, 0, 240, 192, 11, 0.1, true, false),
@@ -84,7 +89,21 @@ class Duma {
         }
     }
 
+    takeDamage(amount) {
+        this.hp -= amount;
+        console.log(`Duma takes ${amount} damage, remaining health: ${this.hp}`);
+    }
+
     update() {
+        if (this.bodyBB) {
+            this.fireSound.play();
+        } else {
+            if (!this.fireSound.paused) {
+                this.fireSound.paused;
+                this.fireSound.currentTime = 0;
+            }
+        }
+
         if (this.dead) {
             this.fireBomb = new FireBomb(this.game, this.x, this.y + 50)
             this.game.entities.splice(1, 0, this.fireBomb);
@@ -155,10 +174,18 @@ class Duma {
             if (this.x > this.leftSide) {
                 if (this.currentState === 'LeftAttack1') {
                     if (this.animations[this.currentState].currentFrame() > 4) {
-                        this.x -= 300 * this.game.clockTick;
+                        if (this.attackChargeRun) {
+                            this.x -= 500 * this.game.clockTick;
+                        } else {
+                            this.x -= 300 * this.game.clockTick;
+                        }
                     }
                 } else {
-                    this.x -= 300 * this.game.clockTick;
+                    if (this.attackChargeRun) {
+                        this.x -= 500 * this.game.clockTick;
+                    } else {
+                        this.x -= 300 * this.game.clockTick;
+                    }
                 }
             } else {
                 if (this.currentState === 'LeftIdle') {
@@ -189,10 +216,18 @@ class Duma {
             if (this.x < this.RightSide) {
                 if (this.currentState === 'RightAttack1') {
                     if (this.animations[this.currentState].currentFrame() > 4) {
-                        this.x += 300 * this.game.clockTick;
+                        if (this.attackChargeRun) {
+                            this.x += 500 * this.game.clockTick;
+                        } else {
+                            this.x += 300 * this.game.clockTick;
+                        }
                     }
                 } else {
-                    this.x += 300 * this.game.clockTick;
+                    if (this.attackChargeRun) {
+                        this.x += 500 * this.game.clockTick;
+                    } else {
+                        this.x += 300 * this.game.clockTick;
+                    }
                 }
             } else {
                 if (this.currentState === 'RightIdle') {
@@ -269,7 +304,7 @@ class Duma {
         }
 
         if (this.phaseOne && !this.attackChargeRun && !this.specialAttackRun && !this.specialAttack2Run) {
-            if (this.counter >= 1000) {
+            if (this.counter >= 800) {
                 this.counter = 0;
                 if (this.currentState === 'LeftIdle') {
                     this.goLeft = true;
@@ -359,12 +394,6 @@ class Duma {
         if ((this.currentState === 'LeftAttack1' || this.currentState === 'RightAttack1')  && this.animations[this.currentState].currentFrame() > 7) {
             if (this.target.BB && this.BB.collide(this.target.BB)) {
                 this.target.takeDamage(50);
-            }
-        }
-
-        if (this.target.currentState === 'LeftAttack1' || this.target.currentState === 'RightAttack1') {
-            if (this.target.BB && this.BB.collide(this.target.BB) || this.bodyBB && this.bodyBB.collide(this.target.BB)) {
-                this.hp -= this.target.damage;
             }
         }
 

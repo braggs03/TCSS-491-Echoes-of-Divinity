@@ -116,8 +116,10 @@ class NightbornWarrior {
             this.removeFromWorld = true;
         }, 2000);
         if (!this.clone) {
+            this.game.camera.lucanDead = true;
             this.game.camera.bossoneCutsceneDone = false;
-            this.game.camera.cutscene.push({ startX: -200, cutsceneNum: 6})
+            let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 5);
+            walls.forEach(wall => wall.h = 3);
         }
     }
 
