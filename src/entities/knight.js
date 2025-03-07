@@ -45,7 +45,7 @@ class Knight {
 
         this.gKeyPressed = false;
         
-        this.invinsible = false;
+        this.invincible = false;
 
         this.attackspeed = 0.1
         this.damage = 100;
@@ -174,8 +174,8 @@ class Knight {
     }
 
     takeDamage(amount) {
-        if (!this.invinsible) {
-            this.invinsible = true;
+        if (!this.invincible) {
+            this.invincible = true;
             this.hp -= amount;
             console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
             if (this.hp <= 0) {
@@ -186,7 +186,7 @@ class Knight {
         }
     }
 
-    respawn() {
+    reset() {
         this.dead = false;
         this.hp = this.maxHp;
         this.potionCount = this.maxPotionCount;
@@ -226,6 +226,14 @@ class Knight {
         return false;
     }
 
+    addEmbers(numberOfEmbers) {
+        if (numberOfEmbers > 0) {
+            this.emberCount += numberOfEmbers;
+        } else {
+            console.error("Negative embers passed to: addEmbers()");
+        }
+    }
+
     buyPotion () {
         let ableToBuy = false;
         if (this.emberCount >= this.potionCost) {
@@ -252,11 +260,11 @@ class Knight {
     update() {
         const clockTick = this.game.clockTick;
 
-        if (this.currentStamina < this.stamina) {
-            this.currentStamina += 80 * this.game.clockTick;
+        if (this.currentStamina < this.stamina && this.currentState !== "RightRoll" && !this.currentState !== "LeftRoll") {
+            this.currentStamina = Math.min(this.currentStamina + 80 * this.game.clockTick, this.stamina);
         }
     
-        if (this.y > 1000) {
+        if (this.y > VOID_HEIGHT) {
             this.die();
         }
 
@@ -264,7 +272,7 @@ class Knight {
             this.flickerDuration -= clockTick;
             this.flickerFlag = !this.flickerFlag;
         } else {
-            this.invinsible = false;
+            this.invincible = false;
         }
         
         this.colliding = {
@@ -360,11 +368,10 @@ class Knight {
                 
                 if (currentFrame >= 2 && currentFrame < 4) {
                     this.game.entities.forEach(entity => {
-                        if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && 
+                        if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior || entity instanceof SkeletonWarrior) && 
                             this.BB.collide(entity.BB) &&
                             !this.hitTargets.includes(entity)) {
                             entity.takeDamage(100);
-                            console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
                             this.hitTargets.push(entity);
                         }
                     });
@@ -373,7 +380,7 @@ class Knight {
                 if (!this.animations[this.currentState].getDone()) {
                     return;
                 } else {
-                    this.invinsible = false;
+                    this.invincible = false;
                     this.chosenState = this.facing === RIGHT ? this.currentState = 'RightIdle' : this.currentState = 'LeftIdle';
                     this.setState(this.chosenState);
                     this.pauseSound();
@@ -384,7 +391,7 @@ class Knight {
             if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
                 if (this.currentState == 'RightRoll') {
                     if (!this.colliding.left) {
-                        this.invinsible = true;
+                        this.invincible = true;
                         this.x += this.rollSpeed * clockTick;
                         this.x = Math.round(this.x);
                     } else {
@@ -392,7 +399,7 @@ class Knight {
                     }
                 } else if (this.currentState == 'LeftRoll' && !this.colliding.right) {
                     if (!this.colliding.right) {
-                        this.invinsible = true;
+                        this.invincible = true;
                         this.x -= this.rollSpeed * clockTick;
                         this.x = Math.round(this.x);
                     } else {
@@ -406,7 +413,7 @@ class Knight {
                 if (!this.animations[this.currentState].getDone()) {
                     return;
                 } else {
-                    this.invinsible = false;
+                    this.invincible = false;
                     this.chosenState = this.facing === RIGHT ? 'RightIdle' : 'LeftIdle';
                     this.setState(this.chosenState);
                     this.pauseSound();
@@ -435,11 +442,9 @@ class Knight {
     
             if (this.game.keys["ArrowUp"]) {
                 if (this.colliding.up) {
-                    console.log("Got here d1");
                     this.colliding.up = false;
                     this.velocityY = -this.jumpSpeed; 
                 } else if (this.hasDoubleJump && !this.hasDoubleJumped && this.arrowUpReleased) {
-                    console.log("Got here d2");
                     this.colliding.up = false;
                     this.velocityY = -this.jumpSpeed; 
                     this.hasDoubleJumped = true;
@@ -469,22 +474,21 @@ class Knight {
                 && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
                 if (this.game.keys["e"]) {
                     if (!this.attackAnimationActive) {
-                        if (this.currentStamina < this.stamina) {
-                            return;
+                        if (this.currentStamina === this.stamina) {
+                            this.velocityX = 0;
+                            this.attackAnimationActive = true;
+                            this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
+                            this.setState(this.chosenState);
+                            this.currentStamina = 0;
+                            if (this.attackSound.paused) {
+                                this.attackSound.play();
+                            }
+                            this.hitTargets = [];
+                            
+                            setTimeout(() => {
+                                this.attackAnimationActive = false;
+                            }, 900);
                         }
-                        this.velocityX = 0;
-                        this.attackAnimationActive = true;
-                        this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
-                        this.setState(this.chosenState);
-                        this.currentStamina = 0;
-                        if (this.attackSound.paused) {
-                            this.attackSound.play();
-                        }
-                        this.hitTargets = [];
-                        
-                        setTimeout(() => {
-                            this.attackAnimationActive = false;
-                        }, 900);
                     }
                 } else if (this.game.keys["w"]) { // Swordwave projectile
                     if (!this.attackAnimationActive) {
@@ -513,7 +517,7 @@ class Knight {
                     }                  
                 } else if (this.game.keys["r"]) {
                     this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
-                    this.invinsible = true;
+                    this.invincible = true;
                     this.setState(this.chosenState);
                 } else if (this.game.keys["g"]) {
                     if (!this.gKeyPressed) {

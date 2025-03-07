@@ -1,4 +1,4 @@
-const VOID_HEIGHT = 1000;
+const VOID_HEIGHT = 5000;
 
 const DUNEGON_GROUND_WIDTH = 31;
 const DUNEGON_GROUND_HEIGHT = 8;
@@ -251,6 +251,9 @@ class Bonfire {
                     this.activateCheckpoint();
                     if (this.sound.paused) {
                         this.sound.play();
+                    }
+                    if (this.knight) {
+                        this.knight.reset();
                     }
                     this.keypressed = true;
                 }

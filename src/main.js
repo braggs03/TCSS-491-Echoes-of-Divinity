@@ -1,6 +1,5 @@
 const ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload(MECHA_GOLEM);
 ASSET_MANAGER.queueDownload(DUNGEON);
 ASSET_MANAGER.queueDownload(TORCH);
 ASSET_MANAGER.queueDownload(AZUCENA);
@@ -8,6 +7,10 @@ ASSET_MANAGER.queueDownload(REINA);
 ASSET_MANAGER.queueDownload("./resources/Magic/Lightning.png");
 ASSET_MANAGER.queueDownload("./resources/knight/swordwave.png");
 ASSET_MANAGER.queueDownload("./resources/Magic/Fire-bomb.png");
+
+// MechaGolem
+ASSET_MANAGER.queueDownload(MECHA_GOLEM);
+ASSET_MANAGER.queueDownload(MECHA_GOLEM_PROJECTILE);
 
 // Gorgon
 ASSET_MANAGER.queueDownload(GORGON + "Attack1.png");
