@@ -24,6 +24,8 @@ class MechaGolem {
         this.attackCooldown = 0;
         this.target = null;
         this.range = 1000;
+        this.attackRange = 500;
+        this.minAttackRange = 350;
         this.aggroRange = 700;
         this.attackRange = 80;
         this.idleCooldown = 0; 
@@ -31,9 +33,10 @@ class MechaGolem {
         this.scale = 4;
         this.flickerFlag = true;
         this.flickerDuration = 0;
+        this.attackCooldownFactor = 1.7;
 
         this.velocityX = 0;
-        this.speed = 600; 
+        this.speed = 400; 
         
         this.velocityY = 0;
         this.maxVelocityY = 990;
@@ -70,12 +73,11 @@ class MechaGolem {
         this.idleAnimator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
         this.animator = this.idleAnimator;
     }
-
+    
     takeDamage(amount) {
         if (!this.engaged && !this.aggro) return;
 
         this.hp -= amount;
-        console.log(`MechaGolem takes ${amount} damage, remaining health: ${this.hp}`);
 
         if (this.hp <= 0) {
             this.die();
@@ -88,7 +90,6 @@ class MechaGolem {
         this.dead = true;
         this.self.dead = true;
         this.animator = this.facing === RIGHT ? this.deathRight() : this.deathLeft();
-        console.log("MechaGolem dies!");
         this.target.emberCount += 200;
 
         setTimeout(() => {
@@ -177,10 +178,19 @@ class MechaGolem {
         }
 
         if (this.target) {
-            const dx = this.target.x - this.x;
+            const knightLeft = Math.abs(this.target.BB.right - this.BB.x);
+            const knightRight = Math.abs(this.target.BB.x - this.BB.right);
+            let dx;
+            let newFacing;
+            if (knightLeft < knightRight) {
+                dx = knightLeft;
+                newFacing = LEFT;
+            } else {
+                dx = knightRight;
+                newFacing = RIGHT;
+            } 
             const distance = Math.abs(dx);
 
-            const newFacing = dx > 0 ? RIGHT : LEFT;
             if (this.facing !== newFacing) {
                 this.facing = newFacing;
                 this.idleAnimator = this.facing === RIGHT ? this.idleRight() : this.idleLeft();
@@ -201,13 +211,13 @@ class MechaGolem {
   
             else if (this.aggro) {
                 if (this.BB.collide(this.target.BB)) {
-                    
                     if (!this.attackInProgress && this.attackCooldown <= 0) {
                         this.attack();
                     }
-                } else if (!this.attackInProgress && distance > this.attackRange) {
-                    
-                    this.x += dx > 0 ? this.game.clockTick * this.speed : this.game.clockTick * -this.speed;
+                } else if (distance > this.attackRange && this.aggro && !this.attackInProgress && this.attackCooldown <= 0) {
+                    this.rangeAttack();
+                } else if (!this.attackInProgress) {
+                    this.x += knightLeft > knightRight ? this.game.clockTick * this.speed : this.game.clockTick * -this.speed;
                     this.animator = this.idleAnimator;
                 }
             }
@@ -216,7 +226,7 @@ class MechaGolem {
         }
 
         if (this.attackCooldown > 0) {
-            this.attackCooldown -= this.game.clockTick;
+            this.attackCooldown -= this.attackCooldownFactor * this.game.clockTick;
         }
 
         this.x = Math.round(this.x);
@@ -233,15 +243,12 @@ class MechaGolem {
         this.canAttackAgain = false; 
         
         this.animator = this.facing === RIGHT ? this.meleeRight() : this.meleeLeft();
-    
-        console.log("Golem attacks knight!");
 
         setTimeout(() => {
             if (this.target && this.BB.collide(this.target.BB) && !this.target.dead) {
-                console.log("Knight takes damage!");
                 this.target.takeDamage(100);
             }
-        }, 650);
+        }, 550);
 
         setTimeout(() => {
             this.attackInProgress = false;
@@ -255,7 +262,32 @@ class MechaGolem {
                     this.canAttackAgain = true;
                 }
             }
-        }, 700);
+        }, 400);
+    }
+
+    rangeAttack() {
+        if (this.attackCooldown > 0) return;
+        this.attackInProgress = true;
+        this.canAttackAgain = false; 
+        this.animator = this.facing === RIGHT ? this.rangeAttackRight() : this.rangeAttackLeft();
+
+        setTimeout(() => {
+            const dx = Math.min(this.target.BB.x - this.BB.right, this.target.BB.right - this.BB.x);
+            const distance = Math.abs(dx);
+            if (distance > this.minAttackRange) {
+                if (this.facing === LEFT) {
+                    const projectile = new MechaProjectile(this.game, this.x + 100, this.y + 200, this.target.x + KNIGHT_X_OFFSET + KNIGHT_WIDTH / 2, this.target.y + KNIGHT_Y_OFFSET + KNIGHT_HEIGHT / 2, this.facing);
+                    this.game.entities.splice(0, 0, projectile);
+                } else {
+                    const projectile = new MechaProjectile(this.game, this.x + 200, this.y + 200, this.target.x + KNIGHT_X_OFFSET + KNIGHT_WIDTH / 2, this.target.y + KNIGHT_Y_OFFSET + KNIGHT_HEIGHT / 2, this.facing);
+                    this.game.entities.splice(0, 0, projectile);
+                }
+            }
+            this.attackInProgress = false;
+            this.attackCooldown = 1;
+            this.animator = this.idleAnimator; 
+            this.canAttackAgain = true;
+        }, 800);
     }
 
     draw(ctx) {
@@ -283,7 +315,7 @@ class MechaGolem {
     }
 
     meleeRight() {
-        return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 400, 100, 100, 7, 0.1, false, false);
+        return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 0, 400, 100, 100, 7, 0.05, false, false);
     }
 
     laserRight() {
@@ -311,7 +343,7 @@ class MechaGolem {
     }
 
     meleeLeft() {
-        return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 2100, 400, 100, 100, 7, 0.1, true, false);
+        return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 2100, 400, 100, 100, 7, 0.05, true, false);
     }
 
     laserLeft() {
@@ -320,5 +352,76 @@ class MechaGolem {
 
     deathLeft() {
         return new Animator(ASSET_MANAGER.getAsset(MECHA_GOLEM), 1400, 700, 100, 100, 14, 0.1, true, false);
+    }
+}
+
+const MECHA_GOLEM_PROJECTILE_WIDTH = 34;
+const MECHA_GOLEM_PROJECTILE_HEIGHT = 13;
+
+class MechaProjectile {
+    constructor(game, x, y, targetX, targetY, direction) {
+        this.game = game;
+        this.x = x;
+        this.y = y;
+        this.direction = direction;
+        this.speed = 1000;
+        this.removeFromWorld = false;
+        this.damage = 50;
+        this.expireTime = 1;
+        this.scale = 4;
+
+        let dx = targetX - x;
+        let dy = targetY - y;
+        this.angle = Math.atan2(dy, dx);
+
+        this.velocityX = Math.cos(this.angle) * this.speed;
+        this.velocityY = Math.sin(this.angle) * this.speed;
+
+        this.spritesheet = ASSET_MANAGER.getAsset(MECHA_GOLEM_PROJECTILE);
+    }
+
+     updateBB() {
+        let tipX = this.x + Math.cos(this.angle) * (MECHA_GOLEM_PROJECTILE_WIDTH * this.scale);
+        let tipY = this.y + Math.sin(this.angle) * (MECHA_GOLEM_PROJECTILE_HEIGHT * this.scale) - MECHA_GOLEM_PROJECTILE_HEIGHT * this.scale;
+        this.BB = new BoundingBox(tipX - this.game.camera.x, tipY - this.game.camera.y, MECHA_GOLEM_PROJECTILE_WIDTH * this.scale, MECHA_GOLEM_PROJECTILE_HEIGHT * this.scale);
+    }
+
+    update() {
+        this.expireTime -= this.game.clockTick;
+
+        if (this.expireTime <= 0) {
+            this.removeFromWorld = true;
+            return;
+        }
+
+        this.x += this.velocityX * this.game.clockTick;
+        this.y += this.velocityY * this.game.clockTick;  
+
+        this.updateBB();
+
+        const projectile = this;
+        this.game.entities.forEach((entity) => {
+            if (entity.BB && projectile.BB.collide(entity.BB) && !(entity instanceof MechaGolem) && !(entity instanceof MechaProjectile) && !entity.invincible) {
+                if (entity instanceof Knight) {
+                    entity.takeDamage(100);
+                }
+                projectile.removeFromWorld = true;
+            }
+        });
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x - this.game.camera.x, this.y - this.game.camera.y);
+        if (this.direction === RIGHT) {
+            ctx.rotate(this.angle + Math.PI);
+            ctx.drawImage(this.spritesheet, 35, 0, MECHA_GOLEM_PROJECTILE_WIDTH, MECHA_GOLEM_PROJECTILE_HEIGHT, -280, 10, MECHA_GOLEM_PROJECTILE_WIDTH * this.scale, MECHA_GOLEM_PROJECTILE_HEIGHT * this.scale);
+        } else {
+            ctx.rotate(this.angle);
+            ctx.drawImage(this.spritesheet, 0, 0, MECHA_GOLEM_PROJECTILE_WIDTH, MECHA_GOLEM_PROJECTILE_HEIGHT, 0, 0, MECHA_GOLEM_PROJECTILE_WIDTH * this.scale, MECHA_GOLEM_PROJECTILE_HEIGHT * this.scale);
+        }
+        
+        ctx.restore();
+        this.BB.draw(ctx);
     }
 }

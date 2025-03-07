@@ -1,6 +1,7 @@
 // Entities
 
-const MECHA_GOLEM = './resources/MechaGolem.png'
+const MECHA_GOLEM = './resources/mechagolem/MechaGolem.png'
+const MECHA_GOLEM_PROJECTILE = './resources/mechagolem/arm_projectile.png'
 const KNIGHT = './resources/knight/'
 const SKELETON_WARRIOR = './resources/skeletonwarrior/'
 const KNIGHT_SPRITE = './resources/knight/knightsprite.png'

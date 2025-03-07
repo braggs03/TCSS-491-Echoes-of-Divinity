@@ -54,7 +54,7 @@ class SceneManager {
 
     respawnKnight(knight) {
         this.deadcheckpoint = true;
-        this.knight.respawn();
+        this.knight.reset();
         this.music.pause();
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
@@ -208,7 +208,7 @@ class SceneManager {
         if (this.level.skeleton) {
             for (let i = 0; i < this.level.skeleton.length; i++) {
                 let skeleton = this.level.skeleton[i];
-                this.game.addEntity(new SkeletonWarrior(this.game, skeleton.x, skeleton.y));
+                this.game.addEntity(new SkeletonWarrior(this.game, skeleton));
             }
         }
 

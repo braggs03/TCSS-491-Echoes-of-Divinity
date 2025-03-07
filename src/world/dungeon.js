@@ -1,4 +1,4 @@
-const VOID_HEIGHT = 1000;
+const VOID_HEIGHT = 5000;
 
 const DUNEGON_GROUND_WIDTH = 31;
 const DUNEGON_GROUND_HEIGHT = 8;
@@ -170,6 +170,7 @@ class DungeonSpike {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.damage = 50;
         this.scale = 3;
         this.BB = new BoundingBox(
             this.x - this.game.camera.x,
@@ -250,6 +251,9 @@ class Bonfire {
                     this.activateCheckpoint();
                     if (this.sound.paused) {
                         this.sound.play();
+                    }
+                    if (this.knight) {
+                        this.knight.reset();
                     }
                     this.keypressed = true;
                 }

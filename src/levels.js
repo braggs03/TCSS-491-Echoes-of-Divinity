@@ -97,7 +97,7 @@ let levels = {
         mechagolem: [{ x: 4500, y: 350 },{ x: 7500, y: 100},{ x: 12500, y: 350}, { x: 11000, y: -400}],
         dungeonWall: [{ x: 0, y: 0, h: 6}, { x: 370, y: 0, h: 5}],
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
-        bonFire: [{ x: 13700, y: 465, level: "one" }],
+        bonFire: [{ x: 13700, y: 472, level: "one" }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 
