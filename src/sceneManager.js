@@ -55,7 +55,9 @@ class SceneManager {
     respawnKnight(knight) {
         this.deadcheckpoint = true;
         this.knight.reset();
-        this.music.pause();
+        if (this.music) {
+            this.music.pause();
+        }
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
             if (levels[levelIndex]) {
