@@ -303,13 +303,14 @@ class Knight {
                             this.colliding.up = true;
                             knight.y -= overlap.y - 1;
                             this.hasDoubleJumped = false;
-                            if (entity instanceof MovingPlatform && !entity.isVertical) {
-                                this.colliding.up = true;
-                                knight.y -= overlap.y - 1;
-                                this.test = (MOVING_PLATFORMS_WIDTH / 2) * entity.velocityX * MOVING_PLATFORMS_WIDTH / 5; //test
-                                knight.x += this.test; 
-                                // console.log(this.test);                         
-                                this.hasDoubleJumped = false;
+                            if (entity instanceof MovingPlatform) {
+                                if (entity.isVertical) {
+                                } else {
+                                    this.colliding.up = true;
+                                    knight.y -= overlap.y - 1;
+                                    this.test = (MOVING_PLATFORMS_WIDTH / 2) * entity.velocityX * MOVING_PLATFORMS_WIDTH / 5;
+                                    knight.x += this.test;                       
+                                }
                             }
                         }
                         knight.velocityY = 0;                        
@@ -319,44 +320,6 @@ class Knight {
                         if (this.buyPotion()) {
                             entity.removeFromWorld = true;
                         }
-                    }
-                } else if (entity instanceof MovingPlatform) { // Moving Platform
-                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
-                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
-
-                    if (horizontalCollision) {
-                        if (entity.BB.x < knight.BB.x) {
-                            knight.x += overlap.x;
-                        } else {
-                            knight.x -= overlap.x;
-                        }
-                        knight.velocityX = 0;
-                    }
-                    
-                    if (verticalCollision) {
-                        if (entity.isVertical) { //vertical movements
-                            if (entity.BB.y < knight.BB.y) {
-                                this.colliding.down = true;
-                                knight.y += overlap.y;
-                            } else {
-                                this.colliding.up = true;
-                                knight.y -= overlap.y - 1;                           
-                                this.hasDoubleJumped = false;
-                            }
-                        } else { // horizontal movements
-                            if (entity.BB.y < knight.BB.y) {
-                                this.colliding.down = true;
-                                knight.y += overlap.y;
-                            } else {
-                                this.colliding.up = true;
-                                knight.y -= overlap.y - 1;
-                                this.test = (MOVING_PLATFORMS_WIDTH / 2) * entity.velocityX * MOVING_PLATFORMS_WIDTH / 5; //test
-                                knight.x += this.test; 
-                                // console.log(this.test);                         
-                                this.hasDoubleJumped = false;
-                            }
-                        }
-                        knight.velocityY = 0;
                     }
                 }
             }
@@ -572,8 +535,8 @@ class Knight {
         this.x += this.velocityX * clockTick;
         this.y += this.velocityY * clockTick;
         
-        this.x = Math.round(this.x);
-        this.y = Math.round(this.y);
+        this.x = Math.round(this.x * 100) / 100;
+        this.y = Math.round(this.y * 100) / 100;
         
         this.updateBB();
     }
