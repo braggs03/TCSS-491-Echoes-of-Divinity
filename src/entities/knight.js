@@ -345,6 +345,8 @@ class Knight {
                 } else if (entity instanceof Potion) {
                     if (this.game.keys["f"]) {
                         if (this.buyPotion()) {
+                            entity.bought = true;
+                            entity.save();
                             entity.removeFromWorld = true;
                         }
                     }

@@ -174,7 +174,9 @@ class SceneManager {
         if  (this.level.potion) {
             for (let i = 0; i < this.level.potion.length; i++) {
                 let potion = this.level.potion[i];
-                this.game.addEntity(new Potion(this.game, potion.x, potion.y));
+                if (!potion.bought) {
+                    this.game.addEntity(new Potion(this.game, potion));
+                }
             }
         }
 
