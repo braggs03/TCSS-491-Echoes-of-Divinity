@@ -12,17 +12,12 @@ class SceneManager {
         this.creditsLineIndex = 0;
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
-
+        this.escReleased = true;
         this.tutorialCutsceneDone = false;
         this.shopkeeperCutsceneDone = false;
         this.oneCutsceneDone = false;
         this.twoCutsceneDone = false;
-        this.bossoneCutsceneDone = false;
-        this.bosstwoCutsceneDone = false;
-
-        this.lucanDead = false;
-        this.celesDead = false;
-
+        this.bossoneCutsceneDone = false;        
         this.emberAnimation = new Animator(
             ASSET_MANAGER.getAsset(EMBER), 
             0, 96,        // Starting x, y position in spritesheet
@@ -38,8 +33,7 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('bossTwo', false, false, false, false);
-        // this.loadLevel('one', false, false, false, false);
+        this.loadLevel('startScreen', false, true, false, false);
     };
 
     saveEntities() {
@@ -60,8 +54,10 @@ class SceneManager {
 
     respawnKnight(knight) {
         this.deadcheckpoint = true;
-        this.knight.respawn();
-        this.music.pause();
+        this.knight.reset();
+        if (this.music) {
+            this.music.pause();
+        }
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
             if (levels[levelIndex]) {
@@ -92,7 +88,6 @@ class SceneManager {
         this.clearEntities();
         this.game.textOverlay = null;
         this.x = 0;
-        this.knight.velocityX = 0;
         this.cutsceneCounter = 0;
         if (this.level === levels.two && this.twoCutsceneDone && !transition) {
             this.cutsceneCounter = 1;
@@ -140,6 +135,11 @@ class SceneManager {
             this.music.loop = true;
         }
 
+        if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
+            this.knight.x = this.knight.x + 200;
+            this.music = new Audio(LUCAN_MUSIC);
+            this.music.loop = true;
+        }
         if (this.music) {
             this.music.preload = 'auto';
             this.music.volume = 0.1;
@@ -190,6 +190,10 @@ class SceneManager {
                 let azucena = this.level.azucena[i];
                 this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
+            if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
+                this.azucena = this.game.entities.find((entities) => entities instanceof Azucena)
+                this.azucena.x = -300;
+            }
         }
 
         if (this.level.reina) {
@@ -197,12 +201,16 @@ class SceneManager {
                 let reina = this.level.reina[i];
                 this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
             }
+            if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
+                this.reina = this.game.entities.find((entities) => entities instanceof Reina)
+                this.reina.x = -300;
+            }
         }
 
         if (this.level.skeleton) {
             for (let i = 0; i < this.level.skeleton.length; i++) {
                 let skeleton = this.level.skeleton[i];
-                this.game.addEntity(new SkeletonWarrior(this.game, skeleton.x, skeleton.y));
+                this.game.addEntity(new SkeletonWarrior(this.game, skeleton));
             }
         }
 
@@ -223,20 +231,16 @@ class SceneManager {
         }
 
         if (this.level.lucan) {
-            if (!this.lucanDead) {
-                for (let i = 0; i < this.level.lucan.length; i++) {
-                    let lucan = this.level.lucan[i];
-                    this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
-                }
+            for (let i = 0; i < this.level.lucan.length; i++) {
+                let lucan = this.level.lucan[i];
+                this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
             }
         }
 
         if (this.level.celes) {
-            if (!this.celesDead) {
-                for (let i = 0; i < this.level.celes.length; i++) {
-                    let celes = this.level.celes[i];
-                    this.game.addEntity(new Celes(this.game, celes.x, celes.y));
-                }
+            for (let i = 0; i < this.level.celes.length; i++) {
+                let celes = this.level.celes[i];
+                this.game.addEntity(new Celes(this.game, celes.x, celes.y));
             }
         }
 
@@ -246,7 +250,12 @@ class SceneManager {
                 this.game.addEntity(new Duma(this.game, duma.x, duma.y));
             }
         }
-
+        if (this.level.werewolf) {
+            for (let i = 0; i < this.level.werewolf.length; i++) {
+                let werewolf = this.level.werewolf[i];
+                this.game.addEntity(new Werewolf(this.game, werewolf.x, werewolf.y));
+            }
+        }
         if (this.level.boxes) {
             for (let i = 0; i < this.level.boxes.length; i++) {
                 let boxes = this.level.boxes[i];
@@ -261,10 +270,23 @@ class SceneManager {
             }
         }
 
+        if (this.level.movingPlatform) {
+            for (let i = 0; i < this.level.movingPlatform.length; i++) {
+                let ground = this.level.movingPlatform[i];
+                this.game.addEntity(new MovingPlatform(this.game, ground.x, ground.y, ground.w, ground.h, ground.endX, ground.endY, ground.isVertical));
+            }
+        }
+
         if (this.level.dungeonWall) {
             for (let i = 0; i < this.level.dungeonWall.length; i++) {
                 let wall = this.level.dungeonWall[i];
                 this.game.addEntity(new DungeonWall(this.game, wall.x, wall.y, wall.h));
+            }
+        }
+        if (this.level.dungeonWall1) {
+            for (let i = 0; i < this.level.dungeonWall1.length; i++) {
+                let wall1 = this.level.dungeonWall1[i];
+                this.game.addEntity(new DungeonWall1(this.game, wall1.x, wall1.y, wall1.h));
             }
         }
 
@@ -331,6 +353,12 @@ class SceneManager {
                 this.game.addEntity(new DungeonDoor(this.game, door.x, door.y, door.level, door.end));
             }
         }
+        if (this.level.dungeonDoor2) {
+            for (let i = 0; i < this.level.dungeonDoor2.length; i++) {
+                let door2 = this.level.dungeonDoor2[i];
+                this.game.addEntity(new DungeonDoor2(this.game, door2.x, door2.y, door2.level, door2.end));
+            }
+        }
 
         if (this.level.chandelier) {
             for (let i = 0; i < this.level.chandelier.length; i++) {
@@ -342,7 +370,7 @@ class SceneManager {
         if  (this.level.bonFire) {
             for (let i = 0; i < this.level.bonFire.length; i++) {
                 let bonfire = this.level.bonFire[i];
-                this.game.addEntity(new Bonfire(this.game, bonfire.x, bonfire.y, bonfire.level));
+                this.game.addEntity(new Bonfire(this.game, bonfire));
             }
         }
 
@@ -357,6 +385,12 @@ class SceneManager {
             for (let i = 0; i < this.level.firebomb.length; i++) {
                 let fire = this.level.firebomb[i];
                 this.game.addEntity(new FireBomb(this.game, fire.x, fire.y));
+            }
+        }
+        if  (this.level.firebomb2) {
+            for (let i = 0; i < this.level.firebomb2.length; i++) {
+                let fire2 = this.level.firebomb2[i];
+                this.game.addEntity(new FireBomb2(this.game, fire2.x, fire2.y));
             }
         }
 
@@ -413,6 +447,56 @@ class SceneManager {
                 this.game.addEntity(new DungeonBackground3(this.game, background3.x, background3.y, background3.w, background3.h));
             }
         }
+        if (this.level.dungeonLantern) {
+            for (let i = 0; i < this.level.dungeonLantern.length; i++) {
+                let lantern = this.level.dungeonLantern[i];
+                this.game.addEntity(new DungeonLantern(this.game, lantern.x, lantern.y));
+            }
+        }
+        if (this.level.pillar) {
+            for(let i = 0; i < this.level.pillar.length; i++) {
+                let pillar = this.level.pillar[i];
+                this.game.addEntity(new DungeonPillar(this.game, pillar.x, pillar.y));
+            }
+        }
+        if (this.level.eagle) {
+            for(let i = 0; i < this.level.eagle.length; i++) {
+                let eagle = this.level.eagle[i];
+                this.game.addEntity(new DungeonEagle(this.game, eagle.x, eagle.y));
+            }
+        }
+        if (this.level.eagle2) {
+            for(let i = 0; i < this.level.eagle2.length; i++) {
+                let eagle2 = this.level.eagle2[i];
+                this.game.addEntity(new DungeonEagle2(this.game, eagle2.x, eagle2.y));
+            }
+        }
+        if (this.level.wizard) {
+            for(let i = 0; i < this.level.wizard.length; i++) {
+                let wizard = this.level.wizard[i];
+                this.game.addEntity(new DungeonWizard(this.game, wizard.x, wizard.y));
+            }
+        }
+        if (this.level.bridge) {
+            for(let i = 0; i < this.level.bridge.length; i++) {
+                let bridge = this.level.bridge[i];
+                this.game.addEntity(new DungeonBridge(this.game, bridge.x, bridge.y));
+            }
+        }
+        
+        if (this.level.dungeonGround4) {
+            for (let i = 0; i < this.level.dungeonGround4.length; i++) {
+                let ground4 = this.level.dungeonGround4[i];
+                this.game.addEntity(new DungeonGround4(this.game, ground4.x, ground4.y, ground4.w, ground4.h));
+            }
+        }
+
+        if (this.level.dungeonBackground4) {
+            for (let i = 0; i < this.level.dungeonBackground4.length; i++) {
+                let background4 = this.level.dungeonBackground4[i];
+                this.game.addEntity(new DungeonBackground4(this.game, background4.x, background4.y, background4.w, background4.h));
+            }
+        }
 
         if (this.level.townBackground) {
             for (let i = 0; i < this.level.townBackground.length; i++) {
@@ -433,30 +517,34 @@ class SceneManager {
             this.cutscene = this.level.cutscene;
         }
 
-        if (this.level === levels.bossOne && this.bossoneCutsceneDone && !this.lucanDead) {
-            this.bossoneCutsceneDone = false;
-            this.cutsceneCounter = 1;
-            this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
-            this.music.pause();
-            this.music = new Audio(LUCAN_MUSIC);
-            this.music.loop = true;
-            this.music.play()
-        }
-
-        if (this.level === levels.bossTwo && this.bosstwoCutsceneDone && !this.celesDead) {
-            this.bosstwoCutsceneDone = false;
-            this.cutsceneCounter = 1;
-            //this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
-            //this.music.pause();
-            this.music = new Audio(CELES_MUSIC);
-            this.music.loop = true;
-            this.music.play()
-        }
-
         this.loadEmberDrop();
         
         this.knight.removeFromWorld = false;
     };
+    showShopMenu() {
+        this.knight.moveable = false;
+        this.shopMenu = new ShopMenu(this.game, this);
+        let oldEntities = this.game.entities;
+        this.game.entities = [];
+        this.game.addEntity(this.shopMenu);
+        oldEntities.map((entity) => this.game.addEntity(entity));
+        
+        console.log("Opened shop menu");
+    }
+    closeShopMenu() {
+        if (this.shopMenu) {
+            this.knight.moveable = true;
+            this.shopMenu.removeFromWorld = true;
+            this.shopMenu = null;
+            
+            // Reset key states
+            this.game.keys["Enter"] = false;
+            this.game.keys["Escape"] = false;
+            this.escReleased = true;
+            
+            console.log("Shop menu closed with key states reset");
+        }
+    }
 
     loadEmberDrop() {
         if (this.emberDrop && this.levelIndex == this.emberDrop.levelIndex) {
@@ -517,8 +605,66 @@ class SceneManager {
         }         
             
     }
+    showControlsMenu() {
+        // Don't show if already showing another menu or in cutscene
+        if (this.inCutscene || this.interactable || this.shopMenu || this.teleportMenu || this.controlsMenu) {
+            return;
+        }
+        
+        this.knight.moveable = false;
+        this.controlsMenu = new GameControlsMenu(this.game, this);
+        this.game.keys["Escape"] = false;
+        
+        // Add the controls menu to entities
+        let oldEntities = this.game.entities;
+        this.game.entities = [];
+        this.game.addEntity(this.controlsMenu);
+        oldEntities.map((entity) => this.game.addEntity(entity));
+        
+        console.log("opened controls menu");
+    }
+    closeControlsMenu() {
+        if (this.controlsMenu) {
+            this.knight.moveable = true;
+            this.controlsMenu.removeFromWorld = true;
+            this.controlsMenu = null;
+        }
+    }
+    
 
     update() {
+        if (!this.game.keys["f"]) {
+            this.fReleased = true; 
+        }
+
+        if (this.fReleased && !this.shopMenu && this.level === levels["shopkeeper"] && this.game.entities.find((entity) => entity instanceof Reina).BB.collide(this.knight.BB) && this.game.keys["f"]) {
+            this.fReleased = false;
+            this.game.camera.showShopMenu();
+        }
+
+        if (this.game.keys["Escape"] && this.escReleased) {
+            console.log("Escape pressed - escReleased:", this.escReleased,
+                 "Control menu:", !!this.controlsMenu,
+                "Shop menu:", !!this.shopMenu);
+                
+            this.escReleased = false;
+            
+            // Only open menu with Escape, don't close with it
+            if (!this.controlsMenu && !this.inCutscene && !this.interactable && !this.shopMenu && !this.teleportMenu) {
+                this.showControlsMenu();
+            }
+        } else if (!this.game.keys["Escape"]) {
+            this.escReleased = true;
+        }
+        
+        // if (this.game.keys["Escape"] && !this.inCutscene && !this.interactable && 
+        //     !this.shopMenu && !this.teleportMenu && !this.controlsMenu && this.escReleased) {
+        //     this.escReleased = false;
+        //     this.showControlsMenu();
+        // }
+        // if (!this.game.keys["Escape"]) {
+        //     this.escReleased = true;
+        // }
         if (this.music) {
             if (PARAMS.MUSICOFF) {
                 if (this.music) {
@@ -644,23 +790,18 @@ class SceneManager {
 
         if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) {
             this.x = this.knight.x - middlepointX;
-        } 
-
-        if (0 > this.knight.y - middlepointY && this.level.height < this.knight.y - middlepointY) {
+        } else if (0 > this.knight.x - middlepointX) {
+            this.x = 0;
+        } else if (this.level.width < this.knight.x - middlepointX) {
+            this.x = this.level.width;
+        }
+        
+        if (this.level.minHeight > this.knight.y - middlepointY && this.level.maxHeight < this.knight.y - middlepointY) {
             this.y = this.knight.y - middlepointY;
-        }
-
-        if (this.knight.x < -230 && this.level === levels.bossOne && !this.knight.inCutscene) {
-            this.loadLevel('two', true, false, false, true)
-        }
-        if (this.knight.x > 2000 && this.level === levels.bossOne && !this.knight.inCutscene) {
-            this.loadLevel('two', true, false, false, true)
-        }
-        if (this.knight.x < -230 && this.level === levels.bossTwo && !this.knight.inCutscene) {
-            this.loadLevel('two', true, false, false, true)
-        }
-        if (this.knight.x > 1200 && this.level === levels.bossTwo && !this.knight.inCutscene) {
-            this.loadLevel('two', true, false, false, true)
+        } else if (this.level.minheight > this.knight.y - middlepointY) {
+            this.y = this.level.minheight;
+        } else if (this.level.maxheight > this.knight.y - middlepointY) {
+            this.y = this.level.maxheight;
         }
 
     };
@@ -690,6 +831,7 @@ class SceneManager {
                  */
             }
         } else {
+            //hud
             ctx.globalAlpha = 1;
             
 
@@ -698,21 +840,43 @@ class SceneManager {
             ctx.textAlign = "center";
             ctx.textBaseline = 'top';
 
-            // Draw ember count
+            
             ctx.fillText(this.knight.emberCount, 160, 100);
         
-            // Draw animated ember icon
+            
             this.emberAnimation.drawFrame(
                 this.game.clockTick,
                 ctx,
-                80, 85,     // Moved closer to the number (x was 95, now 120)
-                3.5          // Scale to match your desired size (40x80)
+                80, 85,     
+                3.5          
             );
 
-            // Draw potion count and icon
+            
             ctx.fillText(this.knight.potionCount, 285, 100);
             const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
             ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
+            
+            //stamina bar
+            let barWidth = 180; 
+            let barHeight = 25; 
+            let barX = 330; 
+            let barY = 100; 
+            let ratio = this.knight.currentStamina / this.knight.stamina;
+
+            ctx.fillStyle = "White";
+            ctx.font = '20px "Open+Sans"'; 
+            ctx.textAlign = "center";
+            ctx.fillText("STAMINA", barX + barWidth/2, barY - 25);
+
+            ctx.fillStyle = "#333333";
+            ctx.fillRect(barX, barY, barWidth, barHeight);
+
+            ctx.fillStyle = "#FFFF00"; 
+            ctx.fillRect(barX, barY, barWidth * ratio, barHeight);
+
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(barX, barY, barWidth, barHeight);
         }
     };
 
@@ -721,12 +885,17 @@ class SceneManager {
             this.userInterface(ctx);
         }
         testInteractable(this.game, ctx);
-        ctx.fillStyle = "White";
-        ctx.strokeStyle = "Black";
-        ctx.font = '40px Arial';
-        ctx.textAlign = "left";
-        ctx.textBaseline = 'top';
         if (PARAMS.DEBUG) {
+            ctx.fillStyle = "White";
+            ctx.strokeStyle = "Black";
+            ctx.font = '10px Arial';
+            ctx.textAlign = "left";
+            ctx.textBaseline = 'top';
+            this.game.entities.map((entity) => {
+                ctx.fillText(entity.y, entity.x - this.x, entity.y - this.y);
+                ctx.fillText(entity.x, entity.x - this.x, entity.y - this.y - ctx.measureText(entity.y).actualBoundingBoxDescent);
+            });
+            ctx.font = '40px Arial';
             const padding = 10;
             const offset = 10;
             const xPosition = `X: ${this.knight.x}`;
