@@ -286,16 +286,7 @@ class Knight {
         this.game.entities.forEach((entity) => {
             if (entity.BB && knight.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(knight.BB);
-                if (entity instanceof DungeonWall) {
-                    if (entity.BB.x < knight.BB.x) {
-                        this.colliding.right = true;
-                        knight.x += overlap.x;
-                    } else if (entity.BB.x > knight.BB.x) {
-                        this.colliding.left = true;
-                        knight.x -= overlap.x;
-                    }
-                    knight.velocityX = 0; 
-                } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
+                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonSpike || entity instanceof MovingPlatform) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
 
@@ -312,17 +303,35 @@ class Knight {
                         if (entity.BB.y < knight.BB.y) {
                             this.colliding.down = true;
                             knight.y += overlap.y;
+                            
+                            if (entity instanceof DungeonSpike) {
+                                this.takeDamage(entity.damage);
+                            }
                         } else {
                             this.colliding.up = true;
                             knight.y -= overlap.y - 1;
+                            this.hasDoubleJumped = false;
+                            if (entity instanceof MovingPlatform && !entity.isVertical) {
+                                this.colliding.up = true;
+                                knight.y -= overlap.y - 1;
+                                this.test = (MOVING_PLATFORMS_WIDTH / 2) * entity.velocityX * MOVING_PLATFORMS_WIDTH / 5; //test
+                                knight.x += this.test; 
+                                // console.log(this.test);                         
+                                this.hasDoubleJumped = false;
+                            }
                         }
-                        knight.velocityY = 0;
-                        this.hasDoubleJumped = false;
+                        knight.velocityY = 0;                        
                     }
-                } else if (entity instanceof DungeonSpike) {
+                } else if (entity instanceof Potion) {
+                    if (this.game.keys["f"]) {
+                        if (this.buyPotion()) {
+                            entity.removeFromWorld = true;
+                        }
+                    }
+                } else if (entity instanceof MovingPlatform) { // Moving Platform
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
-        
+
                     if (horizontalCollision) {
                         if (entity.BB.x < knight.BB.x) {
                             knight.x += overlap.x;
@@ -331,28 +340,36 @@ class Knight {
                         }
                         knight.velocityX = 0;
                     }
-
+                    
                     if (verticalCollision) {
-                        if (entity.BB.y < knight.BB.y) {
-                            this.colliding.down = true;
-                            knight.y += overlap.y;
-                            knight.takeDamage(50);
-                        } else {
-                            this.colliding.up = true;
-                            knight.y -= overlap.y - 1;
-                            
+                        if (entity.isVertical) { //vertical movements
+                            if (entity.BB.y < knight.BB.y) {
+                                this.colliding.down = true;
+                                knight.y += overlap.y;
+                            } else {
+                                this.colliding.up = true;
+                                knight.y -= overlap.y - 1;                           
+                                this.hasDoubleJumped = false;
+                            }
+                        } else { // horizontal movements
+                            if (entity.BB.y < knight.BB.y) {
+                                this.colliding.down = true;
+                                knight.y += overlap.y;
+                            } else {
+                                this.colliding.up = true;
+                                knight.y -= overlap.y - 1;
+                                this.test = (MOVING_PLATFORMS_WIDTH / 2) * entity.velocityX * MOVING_PLATFORMS_WIDTH / 5; //test
+                                knight.x += this.test; 
+                                // console.log(this.test);                         
+                                this.hasDoubleJumped = false;
+                            }
                         }
                         knight.velocityY = 0;
-                    }
-                } else if (entity instanceof Potion) {
-                    if (this.game.keys["f"]) {
-                        if (this.buyPotion()) {
-                            entity.removeFromWorld = true;
-                        }
                     }
                 }
             }
         });
+
         this.updateBB();
 
         if (this.inCutscene) {
@@ -554,13 +571,14 @@ class Knight {
                 this.velocityX = 0; 
                 this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
             }
-        }  
-     
+        }
 
         this.x += this.velocityX * clockTick;
         this.y += this.velocityY * clockTick;
+        
         this.x = Math.round(this.x);
         this.y = Math.round(this.y);
+        
         this.updateBB();
     }
 

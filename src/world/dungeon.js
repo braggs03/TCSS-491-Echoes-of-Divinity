@@ -170,6 +170,7 @@ class DungeonSpike {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.damage = 50;
         this.scale = 3;
         this.BB = new BoundingBox(
             this.x - this.game.camera.x,
@@ -537,3 +538,58 @@ class EmberDrop {
         );
     };
 };
+
+const MOVING_PLATFORMS_WIDTH = 31;
+const MOVING_PLATFORMS_HEIGHT = 8;
+
+class MovingPlatform {
+    constructor(game, x, y, w, h, endX, endY, isVertical) {
+        Object.assign(this, { game, x, y, w, h, endX, endY, isVertical});
+
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 4;
+        this.speed = 1;
+
+        this.startX = x;
+        this.startY = y;
+        this.endX = endX;
+        this.endY = endY;
+        this.direction = 1; // 1 for forward, -1 for reverse
+
+        this.velocityX; // Initialize horizontal velocity
+        this.velocityY; // Initialize vertical velocity
+        
+        this.BB = new BoundingBox(this.x * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x,  this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * w * this.scale, MOVING_PLATFORMS_HEIGHT * h * this.scale);
+    };
+
+    update() {
+        if (this.isVertical) { //Vertical
+            this.y -= this.speed * this.direction * this.game.clockTick;
+            this.velocityY = this.speed * this.direction * this.game.clockTick;
+            
+            // Reverse direction when reaching start or end
+            if ((this.direction === 1 && this.y <= this.endY) || (this.direction === -1 && this.y >= this.startY)) {
+                this.direction *= -1;
+            }
+        } else { //Horizxontal
+            this.x += this.speed * this.direction * this.game.clockTick;
+            this.velocityX = this.speed * this.direction * this.game.clockTick;
+
+            if ((this.direction === 1 && this.x >= this.endX) || (this.direction === -1 && this.x <= this.startX)) {
+                this.direction *= -1;
+            }
+        }
+
+        this.BB = new BoundingBox(this.x * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x,  this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.w * this.scale, MOVING_PLATFORMS_HEIGHT * this.h * this.scale);
+    };
+
+    draw(ctx) {
+        for (let l = 0; l < this.h; l++) {
+            for (let k = 0; k < this.w; k++) {
+                ctx.drawImage(this.spritesheet, 127, 1216, MOVING_PLATFORMS_WIDTH, MOVING_PLATFORMS_HEIGHT, this.x * MOVING_PLATFORMS_WIDTH * this.scale + k * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x, this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.scale, MOVING_PLATFORMS_HEIGHT * this.scale);
+            }
+        }
+        this.BB.draw(ctx);
+    };
+
+}
