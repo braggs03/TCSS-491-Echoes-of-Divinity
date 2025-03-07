@@ -169,7 +169,7 @@ class SkeletonWarrior {
             setTimeout(() => {
                 this.removeFromWorld = true;
             }, 1000);
-            this.target.addEmbers(this.emberQuantity);
+            this.game.camera.knight.addEmbers(this.emberQuantity);
             this.dead = true;
         }
         this.updateBB();
