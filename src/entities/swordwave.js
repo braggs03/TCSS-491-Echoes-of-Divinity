@@ -7,6 +7,7 @@ class Swordwave {
         this.removeFromWorld = false;
         this.damage = 100;
         this.expiretime = 2;
+        this.hitTargets = [];
 
         if (direction) {
         this.direction = RIGHT;
@@ -36,6 +37,15 @@ class Swordwave {
         if (this.expiretime <= 0) {
             this.removeFromWorld = true;
         }
+        this.game.entities.forEach(entity => {
+            if ((typeof entity.takeDamage === 'function' && !(entity instanceof Knight)) &&
+                this.BB.collide(entity.BB) &&
+                !this.hitTargets.includes(entity)) {
+                entity.takeDamage(this.damage);
+                console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
+                this.hitTargets.push(entity);
+            }
+        });
 	};
 
     draw(ctx) {
