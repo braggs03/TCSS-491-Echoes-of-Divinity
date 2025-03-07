@@ -388,11 +388,10 @@ class Knight {
                 
                 if (currentFrame >= 2 && currentFrame < 4) {
                     this.game.entities.forEach(entity => {
-                        if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior) && 
+                        if ((entity instanceof MechaGolem || entity instanceof NightbornWarrior || entity instanceof SkeletonWarrior) && 
                             this.BB.collide(entity.BB) &&
                             !this.hitTargets.includes(entity)) {
                             entity.takeDamage(100);
-                            console.log(`Knight attacks MechaGolem at (${entity.x}, ${entity.y})`);
                             this.hitTargets.push(entity);
                         }
                     });
