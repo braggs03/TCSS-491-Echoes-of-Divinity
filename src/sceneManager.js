@@ -17,7 +17,12 @@ class SceneManager {
         this.shopkeeperCutsceneDone = false;
         this.oneCutsceneDone = false;
         this.twoCutsceneDone = false;
-        this.bossoneCutsceneDone = false;        
+        this.bossoneCutsceneDone = false;
+        this.bosstwoCutsceneDone = false;
+
+        this.lucanDead = false;
+        this.celesDead = false;
+
         this.emberAnimation = new Animator(
             ASSET_MANAGER.getAsset(EMBER), 
             0, 96,        // Starting x, y position in spritesheet
@@ -33,7 +38,7 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('bossTwo', false, false, false, false);
         // this.loadLevel('one', false, false, false, false);
     };
 
@@ -87,6 +92,7 @@ class SceneManager {
         this.clearEntities();
         this.game.textOverlay = null;
         this.x = 0;
+        this.knight.velocityX = 0;
         this.cutsceneCounter = 0;
         if (this.level === levels.two && this.twoCutsceneDone && !transition) {
             this.cutsceneCounter = 1;
@@ -134,11 +140,6 @@ class SceneManager {
             this.music.loop = true;
         }
 
-        if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
-            this.knight.x = this.knight.x + 200;
-            this.music = new Audio(LUCAN_MUSIC);
-            this.music.loop = true;
-        }
         if (this.music) {
             this.music.preload = 'auto';
             this.music.volume = 0.1;
@@ -189,20 +190,12 @@ class SceneManager {
                 let azucena = this.level.azucena[i];
                 this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
-            if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
-                this.azucena = this.game.entities.find((entities) => entities instanceof Azucena)
-                this.azucena.x = -300;
-            }
         }
 
         if (this.level.reina) {
             for (let i = 0; i < this.level.reina.length; i++) {
                 let reina = this.level.reina[i];
                 this.game.addEntity(new Reina(this.game, reina.x, reina.y, reina.text));
-            }
-            if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
-                this.reina = this.game.entities.find((entities) => entities instanceof Reina)
-                this.reina.x = -300;
             }
         }
 
@@ -230,16 +223,20 @@ class SceneManager {
         }
 
         if (this.level.lucan) {
-            for (let i = 0; i < this.level.lucan.length; i++) {
-                let lucan = this.level.lucan[i];
-                this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
+            if (!this.lucanDead) {
+                for (let i = 0; i < this.level.lucan.length; i++) {
+                    let lucan = this.level.lucan[i];
+                    this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
+                }
             }
         }
 
         if (this.level.celes) {
-            for (let i = 0; i < this.level.celes.length; i++) {
-                let celes = this.level.celes[i];
-                this.game.addEntity(new Celes(this.game, celes.x, celes.y));
+            if (!this.celesDead) {
+                for (let i = 0; i < this.level.celes.length; i++) {
+                    let celes = this.level.celes[i];
+                    this.game.addEntity(new Celes(this.game, celes.x, celes.y));
+                }
             }
         }
 
@@ -434,6 +431,26 @@ class SceneManager {
         if (this.level.cutscene) {
             this.cutsceneManager = new CutsceneManager(this.game);
             this.cutscene = this.level.cutscene;
+        }
+
+        if (this.level === levels.bossOne && this.bossoneCutsceneDone && !this.lucanDead) {
+            this.bossoneCutsceneDone = false;
+            this.cutsceneCounter = 1;
+            this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
+            this.music.pause();
+            this.music = new Audio(LUCAN_MUSIC);
+            this.music.loop = true;
+            this.music.play()
+        }
+
+        if (this.level === levels.bossTwo && this.bosstwoCutsceneDone && !this.celesDead) {
+            this.bosstwoCutsceneDone = false;
+            this.cutsceneCounter = 1;
+            //this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
+            //this.music.pause();
+            this.music = new Audio(CELES_MUSIC);
+            this.music.loop = true;
+            this.music.play()
         }
 
         this.loadEmberDrop();
@@ -631,6 +648,19 @@ class SceneManager {
 
         if (0 > this.knight.y - middlepointY && this.level.height < this.knight.y - middlepointY) {
             this.y = this.knight.y - middlepointY;
+        }
+
+        if (this.knight.x < -230 && this.level === levels.bossOne && !this.knight.inCutscene) {
+            this.loadLevel('two', true, false, false, true)
+        }
+        if (this.knight.x > 2000 && this.level === levels.bossOne && !this.knight.inCutscene) {
+            this.loadLevel('two', true, false, false, true)
+        }
+        if (this.knight.x < -230 && this.level === levels.bossTwo && !this.knight.inCutscene) {
+            this.loadLevel('two', true, false, false, true)
+        }
+        if (this.knight.x > 1200 && this.level === levels.bossTwo && !this.knight.inCutscene) {
+            this.loadLevel('two', true, false, false, true)
         }
 
     };
