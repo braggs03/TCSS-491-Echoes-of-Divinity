@@ -110,7 +110,7 @@ class SkeletonWarrior {
                         skeleton.x -= overlap.x;
                     }
                     skeleton.velocityX = 0; 
-                } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2) {
+                } else if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonGround4) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
 

@@ -112,5 +112,6 @@ const text = {
         ["Hello Knight!"],
         ["I am Reina."],
         ["Feel free to purchase", "items from me if you", "have the embers to spare."],
+        ["Would you like to see", "what I have for sale?", "Press F to open shop."],
     ],
 }

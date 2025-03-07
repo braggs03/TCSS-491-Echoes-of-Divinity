@@ -15,6 +15,9 @@ class Interaction {
             } else if (this.game.camera.interactable && this.fReleased) {
                 this.fReleased = false;
                 this.game.camera.removeInteractive();
+                if (this.entity instanceof Reina && this.entity.text === "reina_shopkeeper") {
+                    this.game.camera.showShopMenu();
+                }
             }
         } else {
             this.fReleased = true;
