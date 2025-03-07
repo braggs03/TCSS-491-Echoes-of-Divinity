@@ -425,7 +425,7 @@ class Knight {
                 
                 if (currentFrame >= 2 && currentFrame < 4) {
                     this.game.entities.forEach(entity => {
-                        if ((typeof entity.takeDamage === 'function') &&
+                        if ((typeof entity.takeDamage === 'function' && !(entity instanceof Knight)) &&
                             this.BB.collide(entity.BB) &&
                             !this.hitTargets.includes(entity)) {
                             entity.takeDamage(this.damage);

@@ -160,7 +160,8 @@ let levels = {
 
     shopkeeper: {
         width: 1085,
-        height: 0,
+        minHeight: 0,
+        minHeight: 0,
         startPosition: {
             x: 70,
             y: 445,
