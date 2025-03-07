@@ -95,9 +95,9 @@ const text = {
     ],
 
     azucena11: [
-        ["..."]
-        ["I see..."]
-        ["Don't let her suffer."]
+        ["..."],
+        ["I see..."],
+        ["Don't let her suffer."],
     ],
 
     azucena_end: [
