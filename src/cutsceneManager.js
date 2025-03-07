@@ -240,7 +240,9 @@ class CutsceneSix {
     }
 
     async run() {
-        this.game.camera.music.pause();
+        if (this.game.camera.music) {
+            this.game.camera.music.pause();
+        }
         this.knight.inCutscene = true;
         this.lucan.inCutscene = true;
         this.lucan.setState('idleLeft')
@@ -444,7 +446,9 @@ class CutsceneTen {
     }
 
     async run() {
-        //this.game.camera.music.pause();
+        if (this.game.camera.music) {
+            this.game.camera.music.pause();
+        }
         this.knight.inCutscene = true;
         this.celes.inCutscene = true;
         this.celes.setState('LeftIdle')
