@@ -268,6 +268,13 @@ class SceneManager {
             }
         }
 
+        if (this.level.movingPlatform) {
+            for (let i = 0; i < this.level.movingPlatform.length; i++) {
+                let ground = this.level.movingPlatform[i];
+                this.game.addEntity(new MovingPlatform(this.game, ground.x, ground.y, ground.w, ground.h, ground.endX, ground.endY, ground.isVertical));
+            }
+        }
+
         if (this.level.dungeonWall) {
             for (let i = 0; i < this.level.dungeonWall.length; i++) {
                 let wall = this.level.dungeonWall[i];
@@ -361,7 +368,7 @@ class SceneManager {
         if  (this.level.bonFire) {
             for (let i = 0; i < this.level.bonFire.length; i++) {
                 let bonfire = this.level.bonFire[i];
-                this.game.addEntity(new Bonfire(this.game, bonfire.x, bonfire.y, bonfire.level));
+                this.game.addEntity(new Bonfire(this.game, bonfire));
             }
         }
 
@@ -867,12 +874,17 @@ class SceneManager {
             this.userInterface(ctx);
         }
         testInteractable(this.game, ctx);
-        ctx.fillStyle = "White";
-        ctx.strokeStyle = "Black";
-        ctx.font = '40px Arial';
-        ctx.textAlign = "left";
-        ctx.textBaseline = 'top';
         if (PARAMS.DEBUG) {
+            ctx.fillStyle = "White";
+            ctx.strokeStyle = "Black";
+            ctx.font = '10px Arial';
+            ctx.textAlign = "left";
+            ctx.textBaseline = 'top';
+            this.game.entities.map((entity) => {
+                ctx.fillText(entity.y, entity.x - this.x, entity.y - this.y);
+                ctx.fillText(entity.x, entity.x - this.x, entity.y - this.y - ctx.measureText(entity.y).actualBoundingBoxDescent);
+            });
+            ctx.font = '40px Arial';
             const padding = 10;
             const offset = 10;
             const xPosition = `X: ${this.knight.x}`;

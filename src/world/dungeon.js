@@ -42,7 +42,7 @@ class DungeonWall {
 
     draw(ctx) {
         for (let l = 0; l < this.h; l++) {
-            ctx.drawImage(this.spritesheet, 232, 1400, DUNEGON_WALL_WIDTH, DUNEGON_BACKGROUND_HEIGHT, (this.x * DUNEGON_WALL_WIDTH * this.scale) - this.game.camera.x, this.y + l * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
+            ctx.drawImage(this.spritesheet, 232, 1400, DUNEGON_WALL_WIDTH, DUNEGON_BACKGROUND_HEIGHT, this.x * DUNEGON_WALL_WIDTH * this.scale - this.game.camera.x, this.y + l * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.scale);
         }
         this.BB.draw(ctx);
     };
@@ -136,7 +136,7 @@ class DungeonTorch {
 
 
 const DUNEGON_BACKGROUND2_WIDTH = 896;
-const DUNEGON_BACKGROUND2_HEIGHT = 144;
+const DUNEGON_BACKGROUND2_HEIGHT = 450;
 
 class DungeonBackground2 {
     constructor(game, x, y, w, h) {
@@ -152,7 +152,7 @@ class DungeonBackground2 {
     draw(ctx) {
         for (let k = 0; k < this.h; k++) {
             for (let i = 0; i < this.w; i++) {
-                this.animator.drawFrame(this.game.clockTick, ctx, this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y, 5);
+                this.animator.drawFrame(this.game.clockTick, ctx, this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y - 3500 , 5);
                 // ctx.drawImage(this.spritesheet, 0, 0, DUNEGON_BACKGROUND2_WIDTH, DUNEGON_BACKGROUND2_HEIGHT, (this.x + i * DUNEGON_BACKGROUND2_WIDTH * this.scale) - this.game.camera.x, this.y * DUNEGON_BACKGROUND2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_BACKGROUND2_WIDTH * this.scale, DUNEGON_BACKGROUND2_HEIGHT * this.scale);
             }
         }
@@ -160,7 +160,7 @@ class DungeonBackground2 {
     };
 
     background() {
-        return new Animator(ASSET_MANAGER.getAsset(DUNGEON_BACKGROUND_IMAGE), 0, 0, 896, 144, 4, 6, false, true);
+        return new Animator(ASSET_MANAGER.getAsset(DUNGEON_BACKGROUND_IMAGE), 0, 0, 896, 840, 4, 6, false, true);
     }
 };
 
@@ -207,24 +207,31 @@ const BONFIRE_WIDTH = 56;
 const BONFIRE_HEIGHT = 56;
 
 class Bonfire {
-    constructor(game, x, y, level) {
-        Object.assign(this, { game, x, y, level });
+    constructor(game, self) {
+        Object.assign(this, { game, self });
+        this.x = this.self.x;
+        this.y = this.self.y;
+        this.discovered = this.self.discovered ? this.self.discovered : false;
+        this.isCurrent = this.self.isCurrent ? this.self.isCurrent : false; 
+        this.level = this.self.level;
         this.sound = new Audio("./resources/SoundEffects/emberLight.ogg");
         this.sound.loop = true;
         this.sound.volume = 0.2;
         if (this.game.camera.knight) {
             this.knight = this.game.camera.knight;
         }
-
         this.animator1 = this.bonfireAnimationLit();
         this.animator2 = this.bonfireAnimationUnlit();
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 3;
         this.BB = new BoundingBox(this.x - this.game.camera.x,  this.y - this.game.camera.y, BONFIRE_WIDTH * this.scale, BONFIRE_HEIGHT * this.scale);
         this.fReleased = false;
-        this.discovered = false;
-        this.isCurrent = false;
     };
+
+    save() {
+        this.self.discovered = this.discovered;
+        this.self.isCurrent = this.isCurrent;
+    }
 
     update() {
         if (this.discovered) {
@@ -281,7 +288,7 @@ class Bonfire {
         this.game.camera.currentCheckpoint = this;
 
         //This is for the checkpoint to be passed into Scenemanager/loadLevel
-        if (!this.game.camera.discoveredCheckpoints.some(cp => cp === this)) {
+        if (!this.game.camera.discoveredCheckpoints.some(cp => cp.level === this.level)) {
             this.game.camera.discoveredCheckpoints.push(this);
         }
 
@@ -527,6 +534,61 @@ class EmberDrop {
         );
     };
 };
+
+const MOVING_PLATFORMS_WIDTH = 31;
+const MOVING_PLATFORMS_HEIGHT = 8;
+
+class MovingPlatform {
+    constructor(game, x, y, w, h, endX, endY, isVertical) {
+        Object.assign(this, { game, x, y, w, h, endX, endY, isVertical});
+
+        this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
+        this.scale = 4;
+        this.speed = 3;
+
+        this.startX = x;
+        this.startY = y;
+        this.endX = endX;
+        this.endY = endY;
+        this.direction = 1; // 1 for forward, -1 for reverse
+
+        this.velocityX; // Initialize horizontal velocity
+        this.velocityY; // Initialize vertical velocity
+        
+        this.BB = new BoundingBox(this.x * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x,  this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * w * this.scale, MOVING_PLATFORMS_HEIGHT * h * this.scale);
+    };
+
+    update() {
+        if (this.isVertical) { //Vertical
+            this.speed = 10;
+            this.y += this.speed * this.direction * this.game.clockTick;
+            this.velocityY = this.speed * this.direction * this.game.clockTick;
+            if ((this.direction === 1 && this.y >= this.startY) || (this.direction === -1 && this.y <= this.endY)) {
+                this.direction *= -1;
+            }
+        } else { //Horizxontal
+            this.x += this.speed * this.direction * this.game.clockTick;
+            this.velocityX = this.speed * this.direction * this.game.clockTick;
+
+            if ((this.direction === 1 && this.x >= this.endX) || (this.direction === -1 && this.x <= this.startX)) {
+                this.direction *= -1;
+            }
+        }
+
+        this.BB = new BoundingBox(this.x * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x,  this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.w * this.scale, MOVING_PLATFORMS_HEIGHT * this.h * this.scale);
+    };
+
+    draw(ctx) {
+        for (let l = 0; l < this.h; l++) {
+            for (let k = 0; k < this.w; k++) {
+                ctx.drawImage(this.spritesheet, 127, 1216, MOVING_PLATFORMS_WIDTH, MOVING_PLATFORMS_HEIGHT, this.x * MOVING_PLATFORMS_WIDTH * this.scale + k * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x, this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.scale, MOVING_PLATFORMS_HEIGHT * this.scale);
+            }
+        }
+        this.BB.draw(ctx);
+    };
+
+}
+
 const DUNEGON_BACKGROUND4_WIDTH = 896;
 const DUNEGON_BACKGROUND4_HEIGHT = 144;
 
@@ -549,6 +611,7 @@ class DungeonBackground4 {
         }
     };
 };
+
 const DUNEGON_GROUND4_WIDTH = 32;
 const DUNEGON_GROUND4_HEIGHT = 8;
 
@@ -592,7 +655,6 @@ class DungeonGround4 {
         this.BB.draw(ctx);
     };
 };
-
 
 const DUNGEON_PILLAR_WIDTH = 90;
 const DUNGEON_PILLAR_HEIGHT = 75;
