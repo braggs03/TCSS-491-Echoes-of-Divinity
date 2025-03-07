@@ -637,8 +637,10 @@ class SceneManager {
             this.fReleased = true; 
         }
 
-        if (this.fReleased && !this.shopMenu && this.level === levels["shopkeeper"] && this.game.entities.find((entity) => entity instanceof Reina).BB.collide(this.knight.BB) && this.game.keys["f"]) {
+        const reina = this.game.entities.find((entity) => entity instanceof Reina);
+        if (this.fReleased && !this.shopMenu && this.level === levels["shopkeeper"] && reina && reina.BB.collide(this.knight.BB) && this.game.keys["f"]) {
             this.fReleased = false;
+            this.game.keys["f"] = false;
             this.game.camera.showShopMenu();
         }
 
