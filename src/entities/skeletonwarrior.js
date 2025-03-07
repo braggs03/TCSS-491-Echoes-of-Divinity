@@ -1,11 +1,16 @@
+const SKELETON_DEFAULTS = {
+    maxHp: 500,
+    hp: 500,
+}
+
 class SkeletonWarrior {
-	constructor(game, x, y) {
+	constructor(game, self) {
 		this.game = game;
-        this.target = null;
-        this.x = x
-        this.y = y
-        this.maxHp = 500;
-        this.hp = 500;
+        this.self = self;
+        this.x = this.self.x;
+        this.y = this.self.y;
+        this.maxHp = SKELETON_DEFAULTS.maxHp;
+        this.hp = this.self.hp ? this.self.hp : SKELETON_DEFAULTS.hp;
         this.height = 100;
         this.emberQuantity = 100;
         this.bheight = 0;
@@ -15,6 +20,10 @@ class SkeletonWarrior {
         this.aggro = false;
         this.facingLeft = true;
         this.damage = 50;
+        this.target = null;
+
+        this.runSpeed = 500;
+        this.walkSpeed = 250;
 
         this.velocityY = 0;
         this.maxVelocityY = 990;
@@ -48,6 +57,12 @@ class SkeletonWarrior {
         this.currentState = 'LeftIdle'
 
 	};
+
+    save() {
+        this.self.x = this.x;
+        this.self.y = this.y;
+        this.self.hp = this.hp;
+    }
 
     setState(state) {
         for (let key in this.animations) {
@@ -160,13 +175,13 @@ class SkeletonWarrior {
         this.updateBB();
 
         if (this.currentState === 'RightRun' || this.currentState === 'RightRunattack') {
-            this.x += 500 * clockTick;
+            this.x += this.runSpeed * clockTick;
         } else if (this.currentState === 'LeftRun' || this.currentState === 'LeftRunattack') {
-            this.x -= 500 * clockTick;
+            this.x -= this.runSpeed * clockTick;
         } else if (this.currentState === 'RightWalk') {
-            this.x += 150 * clockTick;
+            this.x += this.walkSpeed * clockTick;
         }else if (this.currentState === 'LeftWalk') {
-            this.x -= 150 * clockTick;
+            this.x -= this.walkSpeed * clockTick;
         }
         if (this.inCutscene) {
             return;
@@ -217,11 +232,9 @@ class SkeletonWarrior {
                 } else if (entity instanceof Knight && skeleton.aggro) {
                     if (entity.currentState === 'RightAttack1') {
                         skeleton.setState('LeftHurt')
-                        skeleton.hp -= entity.damage;
                         return;
                     } else if (entity.currentState === 'LeftAttack1') {
                         skeleton.setState('RightHurt')
-                        skeleton.hp -= entity.damage;
                         return;
                     } else {
                         if (skeleton.currentState !== 'LeftAttack1' && skeleton.currentState !== 'LeftAttack2'
