@@ -5,8 +5,8 @@ class Swordwave {
         this.y = y;
         this.speed = 1000;
         this.removeFromWorld = false;
-        this.damage = 100;
-        this.expiretime = 2;
+        this.damage = 400;
+        this.expiretime = 1;
         this.hitTargets = [];
 
         if (direction) {

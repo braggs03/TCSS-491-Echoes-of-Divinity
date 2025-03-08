@@ -64,7 +64,7 @@ class Knight {
         
         this.hasDoubleJump = true;
         this.hasDoubleJumped = false;
-        this.hasWaveAttack = true;
+        this.hasWaveAttack = false;
         this.dead = false;
         
 

@@ -33,7 +33,8 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('startScreen', false, true, false, false);
+        // this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('one', false, false, false, false);
     };
 
     saveEntities() {
@@ -277,6 +278,13 @@ class SceneManager {
             }
         }
 
+        if (this.level.lostSword) {
+            for (let i = 0; i < this.level.lostSword.length; i++) {
+                let sword = this.level.lostSword[i];
+                this.game.addEntity(new LostSword(this.game, sword.x, sword.y));
+            }
+        }
+
         if (this.level.dungeonWall) {
             for (let i = 0; i < this.level.dungeonWall.length; i++) {
                 let wall = this.level.dungeonWall[i];
@@ -406,7 +414,7 @@ class SceneManager {
                 let background2 = this.level.dungeonBackground2[i];
                 this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
             }
-        }
+        }        
 
         if (this.level.dungeonGround2) {
             for (let i = 0; i < this.level.dungeonGround2.length; i++) {
@@ -511,6 +519,7 @@ class SceneManager {
                 this.game.addEntity(new tutorialBackground(this.game, background.x, background.y, background.w, background.h));
             }
         }
+
 
         if (this.level.cutscene) {
             this.cutsceneManager = new CutsceneManager(this.game);

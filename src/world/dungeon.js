@@ -925,3 +925,39 @@ class DungeonWall1 {
     };
 };
 
+const LOSTSWORD_WIDTH = 32;
+const LOSTSWORD_HEIGHT = 32;
+
+class LostSword {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y});
+        this.animator = this.lostsword();
+        this.scale = 2;
+        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, LOSTSWORD_WIDTH, LOSTSWORD_HEIGHT);
+    };
+
+    update() {
+        this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, LOSTSWORD_WIDTH * this.scale, LOSTSWORD_HEIGHT * this.scale);
+        if (this.game.camera.knight.BB.collide(this.BB) && this.game.keys["f"]) {
+            this.game.camera.knight.hasWaveAttack = true;
+            this.removeFromWorld = true;
+        }
+    };
+
+    draw(ctx) {
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y - this.game.camera.y, this.scale);
+        this.BB.draw(ctx);
+    };
+
+    lostsword() {
+        return new Animator(
+            ASSET_MANAGER.getAsset("./resources/knight/lostsword.png"), 
+            0, 0,        // Starting x, y position in spritesheet
+            32, 32,       // Width and height of each frame
+            8,            // Number of frames
+            0.2,          // Frame duration
+            0,            // Padding
+            true          // Loop
+        );
+    }
+}
