@@ -97,6 +97,7 @@ class DungeonDoor {
         if (this.game.keys["f"]) {
             this.game.entities.forEach((entity) => {
                 if (this.fReleased && entity.BB && that.BB.collide(entity.BB) && entity instanceof Knight) {
+                    this.game.camera.doormove = true;
                     that.game.camera.loadLevel(that.level, true, false, false, this.end);
                 }
             });

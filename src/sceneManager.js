@@ -30,6 +30,7 @@ class SceneManager {
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
         this.deadcheckpoint = false;
+        this.doormove = false;
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
@@ -98,7 +99,7 @@ class SceneManager {
 
         
         if (!this.title) {
-            if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint) {
+            if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint && !this.doormove) {
                 this.knight.x = this.currentCheckpoint.x;
                 this.knight.y = this.currentCheckpoint.y;
                 if (levelIndex === "two") {
@@ -130,6 +131,7 @@ class SceneManager {
             this.game.addEntity(new TransitionScreen(this.game, levelIndex, dead, end))
             return;
         }
+        this.doormove = false;
 
         if(this.level === levels.one || this.level === levels.two && this.music !== new Audio(BACKGROUND_MUSIC)) {
             this.music = new Audio(BACKGROUND_MUSIC);
