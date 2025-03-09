@@ -77,7 +77,7 @@ class Knight {
 
         this.runSound = new Audio("./resources/SoundEffects/run.ogg");
         this.runSound.loop = true;
-        this.runSound.playbackRate = 10;
+        this.runSound.playbackRate = 5;
         this.runSound.volume = 0.2;
         this.attackSound = new Audio("./resources/SoundEffects/knightAttack.ogg");
         this.attackSound.loop = false;
@@ -91,10 +91,10 @@ class Knight {
         this.rollSound.loop = false;
         this.rollSound.playbackRate = 1;
         this.rollSound.volume = 0.2;
-        this.swordwaveSound = new Audio("./resources/SoundEffects/swordwave.ogg");
-        this.swordwaveSound.loop = false;
-        this.swordwaveSound.playbackRate = 2;
-        this.swordwaveSound.volume = 0.2;
+        // this.swordwaveSound = new Audio("./resources/SoundEffects/swordwave.ogg");
+        // this.swordwaveSound.loop = false;
+        // this.swordwaveSound.playbackRate = 2;
+        // this.swordwaveSound.volume = 0.2;
         
 
 
@@ -574,10 +574,11 @@ class Knight {
                         console.log(`projectile @ ("${knight.x}, ${knight.y}")`);
                         }, 700);
                         this.currentStamina = 0;
-                        if (this.swordwaveSound.paused) {
-                            this.runSound.pause();
-                            this.swordwaveSound.play();
-                        }
+                        // if (this.swordwaveSound.paused) {
+                        //     this.runSound.pause();
+                        //     this.swordwaveSound.play();
+                        // }
+                        this.runSound.pause();
                         this.hitTargets = [];
 
                         setTimeout(() => {

@@ -74,8 +74,8 @@ let levels = {
             x: 87,
             y: 465,
 
-            // x: 14319,
-            // y: -2640,
+            x: 14000,
+            y: -2640,
 
             // x: 13970,
             // y: 440,
@@ -92,7 +92,7 @@ let levels = {
             y: 465,
         },
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 41.5, y: 12, w: 1, h: 1 }, { x: 44, y: 10, w: 10, h: 1 }, { x: 55, y: 17, w: 42, h: 1 }, { x: 60, y: -2, w: 30, h: 1 }, { x: 57, y: 5, w: 2, h: 1 }, { x: 68, y: -8, w: 1, h: 1 },
-            { x:55, y: -32, w: 3, h: 1 }, { x:92, y: -60, w: 3, h: 1 }
+            { x:55, y: -32, w: 3, h: 1 }, { x:91, y: -60, w: 4, h: 1 }
         ],
         movingPlatform: [{x:68, y:19, w:1, h:1, endX:68, endY:12, isVertical: true}, {x:87, y:-15, w:2, h:1, endX:88, endY:-30, isVertical: true}, 
             {x:80, y:-30, w:2, h:1, endX:85, endY:-20, isVertical: false}, {x:73, y:-30, w:2, h:1, endX:77, endY:-20, isVertical: false}, 
@@ -107,6 +107,7 @@ let levels = {
         bonFire: [{ x: 13700, y: 472, level: "one" }],
         lostSword:[{ x:14450, y:-2470 }],
         knightStatue: [{ x: 14350, y: -2885}],
+        cutscene: [{startX: 14100, cutsceneNum: 10}],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 

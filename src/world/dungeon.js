@@ -939,7 +939,7 @@ class LostSword {
 
     update() {
         this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, LOSTSWORD_WIDTH * this.scale, LOSTSWORD_HEIGHT * this.scale);
-        if (this.game.camera.knight.BB.collide(this.BB) && this.game.keys["f"]) {
+        if (this.game.camera.knight.BB.collide(this.BB)) {
             this.game.camera.knight.hasWaveAttack = true;
             this.removeFromWorld = true;
         }
