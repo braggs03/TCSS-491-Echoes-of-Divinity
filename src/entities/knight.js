@@ -203,6 +203,7 @@ class Knight {
     reset() {
         this.dead = false;
         this.hp = this.maxHp;
+        this.shield = this.maxShield;
         this.potionCount = this.maxPotionCount;
         this.removeFromWorld = false;
     }
