@@ -31,12 +31,15 @@ class Knight {
         this.healthBar = new HealthBar(this);
         this.maxHp = 1000;
         this.hp = 1000;
+        this.shieldBar = new ShieldBar(this);
+        this.maxShield = 200;
+        this.shield = 200;
         this.height = 110;
         this.bheight = 0;
         this.stamina = 100;
         this.currentStamina = 100;
 
-        this.emberCount = 100;
+        this.emberCount = 7000;
         
         this.maxPotionCount = 3;
         this.potionCount = this.maxPotionCount;
@@ -66,6 +69,9 @@ class Knight {
         this.hasDoubleJumped = false;
         this.hasWaveAttack = true;
         this.dead = false;
+
+        this.hasShield = true;
+        this.isShielded = true;
         
 
         this.colliding = {
@@ -177,12 +183,19 @@ class Knight {
     takeDamage(amount) {
         if (!this.invincible) {
             this.invincible = true;
-            this.hp -= amount;
+            if (!this.isShielded) {
+                this.hp -= amount;
+            } else {
+                this.shield -= amount;
+            }
             console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
             if (this.hp <= 0) {
                 this.die();
             } else {
                 this.flickerDuration = 0.3; // Flicker for 0.5 seconds
+            }
+            if (this.shield <= 0) {
+                this.isShielded = false;
             }
         }
     }
@@ -606,9 +619,20 @@ class Knight {
 
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return;
+        if (this.hasShield && this.isShielded) {
+            // Set glow effect
+            ctx.save(); // Save canvas state
+            ctx.shadowColor = "rgba(0, 255, 255, 0.8)"; // Cyan glow
+            ctx.shadowBlur = 20; // Increase for a stronger glow
+        }
+
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 3);
+        ctx.restore(); // Restore canvas state to avoid affecting other drawings
         if (!this.inCutscene) {
             this.healthBar.draw(ctx);
+            if (this.hasShield && this.isShielded) {
+                this.shieldBar.draw(ctx);
+            }
         }
         this.game.entities.forEach(entity => {
             if (entity instanceof PotionEffect) {

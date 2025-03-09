@@ -29,7 +29,7 @@ const text = {
 
     azucena4: [
         ["Here we can keep safe" , "as you make your way to Duma."],
-        ["4th wall break: F to interact with us or items.", "G to use healing potion", "Light the Emberlight (Campfire) for a checkpoint"],
+        ["4th wall break: Light the Emberlight (Campfire) for a checkpoint"],
     ],
 
     azucena5: [
@@ -62,6 +62,10 @@ const text = {
         ["Lucan's armor was once", "blessed by Mica."],
         ["Granting him the ability", "to leap in air"],
         ["I pray you find good use of it."],
+    ],
+
+    obtainDoubleJump: [
+        ["OBTAINED DOUBLE JUMP"]
     ],
 
     azucena8: [
@@ -107,7 +111,44 @@ const text = {
     azucena12: [
         ["..."],
         ["She was always so talented."],
-        ["I pity what she became."],
+        ["If only she had the", "patience to go with it."],
+        ["..."],
+        ["Sorry, I won't let this", "hold me back."],
+        ["Her barrier magic should", "prove useful to you."],
+        ["Let's end this before", "more lives are lost."],
+    ],
+
+    obtainBarrier: [
+        ["OBTAINED MAGIC BARRIER"]
+    ],
+
+    azucena13: [
+        ["This is it, Duma awaits"],
+        ["I doubt his forces will sit", "idly as you fight."],
+        ["Reina and I shall hold the line."],
+        ["I have no doubt", "you will succeed."],
+        ["Show no fear."],
+    ],
+
+    reina6: [
+        ["So, this is it."],
+        ["The end of our long journey."],
+        ["..."],
+        ["I can't lie as", "well as Azucena."],
+        ["I'm terrified of", "what's to come."],
+        ["Whatever happens..."],
+        ["Walk tall, my dearest friend."],
+    ],
+
+    duma1: [
+        ["Mica's Chosen..."],
+        ["To think my dear sister still", "scorns me even after death."],
+        ["Mankind has shown", "it's true nature."],
+        ["Mica was wrong."],
+        ["You cannot rule yourselves."],
+        ["You can't even save yourselves."],
+        ["You will submit to my power,"],
+        [""],
     ],
 
     azucena_end: [

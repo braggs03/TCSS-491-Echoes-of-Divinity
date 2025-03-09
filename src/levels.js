@@ -152,10 +152,25 @@ let levels = {
         pillar: [{ x: 0, y: 100 }, { x: 700, y: 100}, { x: 1400, y: 100}, { x: 2100, y: 100}, { x: 2800, y: 100}, { x: 3500, y: 100}, { x: 4200, y: 100}, { x: 4900, y: 100}, { x: 5600, y: 100}, { x: 11200, y: 100}, { x: 11900, y: 100},{ x: 12600, y: 100}, { x: 13300, y: 100},{ x: 14000, y: 100}],
         dungeonWall1: [{ x: 0, y: 0, h: 5 }],
         dungeonDoor2: [{ x: 250, y: 450, level: "shopkeeper"}],
+        cutscene: [{startX: 11250, cutsceneNum: 10}],
         eagle: [{ x: 950, y: 538}, { x: 2350, y: 538}, { x: 4450, y: 538}, { x: 11450, y: 538}, { x: 12850, y: 538}],
         eagle2: [{ x: 1700, y: 535}, { x: 3100, y: 535}, { x: 5200, y: 535},{ x: 12200, y: 535}, { x: 13600, y: 535}],
         wizard: [{ x: 3800, y: 438 }, { x: 5900, y: 438 }],
 
+    },
+
+    five: {
+        width: 800,
+        height: 0,
+        startPosition: {
+            x: -200,
+            y: 430,
+        },
+        dungeonWall: [{ x: 0, y: 0, h: 5 }, { x: 51, y: 0, h: 3 }],
+        reina: [{ x: 200, y: 536 }],
+        azucena: [{ x: 100, y: 500 }],
+        dungeonGround: [{ x: -2, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
+        dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 
     shopkeeper: {
@@ -219,7 +234,7 @@ let levels = {
         celes: [{ x: 800, y: -300 }],
         azucena: [{ x: 175, y: 500 }],
         dungeonWall: [{ x: 31, y: 0, h: 3 }, { x: 0, y: 0, h: 3 }],
-        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }],
+        dungeonGround: [{ x: -2, y: 17, w: 40, h: 1 }],
         nightBackground: [{ x:0, y:0, w:50, h: 1}],
     },
 

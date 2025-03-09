@@ -4,10 +4,14 @@ class Celes {
         this.x = x;
         this.y = y;
         this.maxHp = 2000;
-        this.hp = 1600;
+        this.hp = 100;
         this.height = 100;
         this.bheight = 0;
         this.healthBar = new HealthBar(this);
+        this.shieldBar = new ShieldBar(this);
+        this.maxShield = 500;
+        this.shield = 500;
+        this.isShielded = false;
         this.inCutscene = false;
         this.facingLeft = true;
         this.target = null;
@@ -82,12 +86,23 @@ class Celes {
     }
 
     takeDamage(amount) {
-        this.hp -= amount;
+        if (this.isShielded) {
+            this.shield -= amount;
+        } else {
+            this.hp -= amount;
+        }
         console.log(`Celes takes ${amount} damage, remaining health: ${this.hp}`);
+        if (this.shield <= 0) {
+            this.isShielded = false;
+        }
     }
 
     update() {
         if (this.dead) {
+            while (this.game.camera.music.volume > 0.0) {
+                this.game.camera.music.volume = Math.max ( this.game.camera.music.volume - (0.1 * this.game.clockTick), 0.0);
+                this.game.camera.music.pause();
+            }
             if (this.currentState !== 'LeftDead' && this.currentState !== 'RightDead') {
                 if (this.facingLeft) {
                     this.setState('LeftDead');
@@ -101,10 +116,7 @@ class Celes {
             let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 5);
             walls.forEach(wall => wall.h = 3);
             this.game.camera.celesDead = true;
-            setTimeout(() => {
-                this.removeFromWorld = true;
-            }, 1000);
-            this.target.emberCount += 1500;
+            this.target.emberCount += 3000;
             this.dead = true;
         }
         this.updateBB();
@@ -118,7 +130,7 @@ class Celes {
             this.x -= 150 * this.game.clockTick;
         }
         if (this.hp <= 1500 && !this.inCutscene && this.counter >= 2000) {
-            if (this.lightningTime >= 500) {
+            if (this.lightningTime > 500) {
                 this.lightningTime -= 500
             }
             this.counter = 0;
@@ -237,13 +249,25 @@ class Celes {
         setTimeout(() => {
             this.y = 450;
             this.inCutscene = false;
+            this.shield = this.maxShield;
+            this.isShielded = true;
         }, this.lightningTime * 6.2)
 
     }
 
     draw(ctx) {
+        if (this.isShielded) {
+            // Set glow effect
+            ctx.save(); // Save canvas state
+            ctx.shadowColor = "rgba(255, 165, 0, 0.8)"; // Orange glow
+            ctx.shadowBlur = 20; // Increase for a stronger glow
+        }
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 1.8);
+        ctx.restore(); // Restore canvas state to avoid affecting other drawings
         this.BB.draw(ctx);
         if (this.healthBar) this.healthBar.draw(ctx);
+        if (this.isShielded) {
+            this.shieldBar.draw(ctx);
+        }
     }
 }

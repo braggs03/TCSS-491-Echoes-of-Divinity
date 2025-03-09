@@ -239,6 +239,9 @@ class Bonfire {
             if (!this.game.entities.includes(this)) {
                 this.sound.pause();
             } else {
+                if (this.sound.paused) {
+                    this.sound.play();
+                }
                 this.sound.volume = Math.max (0, 0.2 - Math.abs(this.x - this.knight.x) / 5000);
             }
         }
