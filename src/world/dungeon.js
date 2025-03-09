@@ -795,7 +795,7 @@ class FireBomb2 {
 
         this.BB = new BoundingBox(
             this.x - this.game.camera.x + 30, 
-            this.y + 50, 
+            this.y - this.game.camera.y + 50, 
             270, 
             200
         );
@@ -811,7 +811,7 @@ class FireBomb2 {
        
         this.BB = new BoundingBox(
             this.x - this.game.camera.x + 30, 
-            this.y + 50, 
+            this.y - this.game.camera.y + 50, 
             270, 
             200
         );

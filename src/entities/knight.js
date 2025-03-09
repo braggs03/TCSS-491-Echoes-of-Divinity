@@ -291,7 +291,7 @@ class Knight {
         this.game.entities.forEach((entity) => {
             if (entity.BB && knight.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(knight.BB);
-                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonSpike || entity instanceof DungeonWall || entity instanceof DungeonGround4) {
+                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonWall1 || entity instanceof DungeonSpike || entity instanceof DungeonWall || entity instanceof DungeonGround4) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
 
