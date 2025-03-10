@@ -30,7 +30,7 @@ class SceneManager {
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
         this.deadcheckpoint = false;
-        this.discoveredCheckpoints = [];
+        this.discoveredCheckpoints = ["Rest"];
         this.discoveredCheckpointsLevel = [];
 
         this.loadLevel('startScreen', false, true, false, false);
@@ -580,6 +580,7 @@ class SceneManager {
 
     openCheckpointMenu(entity) {
         this.knight.moveable = false;
+        this.game.keys["f"] = false;
         this.teleportMenu = new CheckpointMenu(this.game, entity);
         let oldEntities = this.game.entities;
         this.game.entities = [];
@@ -591,6 +592,7 @@ class SceneManager {
     closeCheckpointMenu() {
         this.knight.moveable = true;
         this.teleportMenu.removeFromWorld = true;
+        this.teleportMenu = undefined;
         console.log("closed checkpoint menu");
     }
 
