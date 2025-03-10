@@ -205,6 +205,20 @@ let levels = {
         wizard: [{ x: 3800, y: 438 }, { x: 5900, y: 438 }],
     },
 
+    five: {
+        width: 800,
+        height: 0,
+        startPosition: {
+            x: -200,
+            y: 430,
+        },
+        dungeonWall: [{ x: 0, y: 0, h: 5 }, { x: 51, y: 0, h: 3 }],
+        reina: [{ x: 200, y: 536 }],
+        azucena: [{ x: 100, y: 500 }],
+        dungeonGround: [{ x: -2, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
+        dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
+    },
+
     shopkeeper: {
         width: 1085,
         minHeight: 0,
