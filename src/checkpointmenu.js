@@ -16,13 +16,18 @@ class CheckpointMenu {
             this.keypressed = true;
         } else if (this.game.keys["Enter"] && !this.keypressed) {
             this.selectedCheckpoint = this.game.camera.discoveredCheckpoints[this.selectedIndex];
-            this.game.camera.currentCheckpoint = this.selectedCheckpoint;
-            this.game.camera.teleportToCheckpoint(this.selectedCheckpoint);
+            if (this.selectedCheckpoint === "Rest") {
+                this.game.camera.knight.reset();
+            } else {
+                this.game.camera.currentCheckpoint = this.selectedCheckpoint;
+                this.game.camera.teleportToCheckpoint(this.selectedCheckpoint);
+            }
             this.visible = false;
             this.keypressed = true;
-        } else if (this.game.keys["g"] && !this.keypressed) {
+        } else if (this.game.keys["Escape"] && !this.keypressed) {
             this.visible = false;
             this.keypressed = true;
+            this.game.keys["Escape"] = false;
         } 
         
         // Reset `keypressed` when all keys are released
@@ -34,7 +39,7 @@ class CheckpointMenu {
         }
 
         //close teleport menu
-        if (!this.visible) {
+        if (this.game.camera.teleportMenu && !this.visible) {
             this.game.camera.closeCheckpointMenu();
             this.removeFromWorld = true;
         }
@@ -48,7 +53,7 @@ class CheckpointMenu {
         ctx.fillStyle = "white";
         ctx.font = '20px "Open+Sans"';
         // console.log(this.entity)
-        ctx.fillText("Teleport to: (g to exit)", PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2 - 30);
+        ctx.fillText("Rest or Teleport to: (esc to exit)", PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2 - 30);
 
         this.game.camera.discoveredCheckpoints.forEach((element, index) => {
             if (index === this.selectedIndex) {
@@ -56,7 +61,13 @@ class CheckpointMenu {
             } else {
                 ctx.fillStyle = "white";
             }
-            ctx.fillText(`${String(element.level).charAt(0).toUpperCase() + String(element.level).slice(1)}`, PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2 + index * 30);
+
+            if (element.level) {
+                ctx.fillText(`${String(element.level).charAt(0).toUpperCase() + String(element.level).slice(1)}`, PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2 + index * 30);
+
+            } else {
+                ctx.fillText(`${String(element).charAt(0).toUpperCase() + String(element).slice(1)}`, PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2 + index * 30);
+            }
         });
         
     }
