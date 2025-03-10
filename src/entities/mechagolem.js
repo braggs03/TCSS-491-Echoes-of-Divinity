@@ -80,7 +80,7 @@ class MechaGolem {
     takeDamage(amount) {
         this.hp -= amount;
         this.golemHit.play();
-        this.golemHit.volume = 0.2
+        this.golemHit.volume = 0.5;
 
         if (this.hp <= 0) {
             this.golemDeath.play();
