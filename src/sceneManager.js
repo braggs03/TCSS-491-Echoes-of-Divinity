@@ -742,7 +742,7 @@ class SceneManager {
                 || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
                 || this.level === levels.one && this.oneCutsceneDone
                 || this.level === levels.two && this.twoCutsceneDone
-                //|| this.level === levels.three && this.threeCutsceneDone
+                || this.level === levels.three && this.threeCutsceneDone
                 || this.level === levels.four && this.fourCutsceneDone
                 || this.level === levels.five && this.fiveCutsceneDone
                 || this.level === levels.bossOne && this.bossoneCutsceneDone
@@ -765,16 +765,16 @@ class SceneManager {
                         this.shopkeeperCutsceneDone = true
                     }
                     if (this.level === levels.one) {
-                        this.oneCutsceneDone = false
+                        this.oneCutsceneDone = true;
                     }
                     if (this.level === levels.two) {
-                        this.twoCutsceneDone = false
+                        this.twoCutsceneDone = true
                     }
                     if (this.level === levels.three) {
-                        this.threeCutsceneDone = false
+                        this.threeCutsceneDone = true
                     }
                     if (this.level === levels.four) {
-                        this.fourCutsceneDone = false
+                        this.fourCutsceneDone = true
                     }
                     if (this.level === levels.five) {
                         this.fiveCutsceneDone = true
