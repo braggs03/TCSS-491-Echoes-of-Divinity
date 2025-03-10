@@ -4,7 +4,8 @@ class CutsceneManager {
         this.cutsceneArray = [new CutsceneOne(this.game), new CutsceneTwo(this.game),
             new CutsceneThree(this.game), new CutsceneFour(this.game), new CutsceneFive(this.game),
             new CutsceneSix(this.game), new CutsceneSeven(this.game), new CutsceneEight(this.game),
-            new CutsceneNine(this.game), new CutsceneTen(this.game), new CutsceneEleven(this.game),]
+            new CutsceneNine(this.game), new CutsceneTen(this.game), new CutsceneEleven(this.game), 
+            new CutsceneTwelve(this.game),]
     }
 }
 
@@ -564,6 +565,48 @@ class CutsceneEleven {
         this.knight.inCutscene = false;
         this.azucena.inCutscene = false;
     }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+class CutsceneTwelve {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+    }
+
+    async run() { 
+        if(this.knight.y < -2600) {   
+        this.knight.moveable = false;
+        await this.delay(700);   
+        this.knight.inCutscene = true;
+        this.knight.moveable = true;
+        this.knight.setState('RightRun');
+        while (this.knight.x < 100) {
+            await this.delay (0.5);
+        }
+        this.knight.moveable = false;
+        await this.delay(300);
+        this.knight.setState('LeftIdle');
+        await this.delay(1000);
+        this.knight.setState('LeftAttack2');     
+        this.knight.facing = LEFT;
+        await this.delay(700);   
+        this.swordwave = new Swordwave(this.game, this.knight.x, this.knight.y + 80, this.knight.facing);
+        this.game.entities.splice(1, 0, this.swordwave);
+        await this.delay(100);
+        this.knight.inCutscene = false;
+        this.game.camera.inCutscene = false;
+        this.knight.moveable = true;
+        }
+        this.knight.inCutscene = false;
+        this.game.camera.inCutscene = false;
+
+    }
+
+    
 
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));

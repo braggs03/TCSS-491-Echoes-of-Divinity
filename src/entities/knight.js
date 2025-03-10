@@ -67,7 +67,7 @@ class Knight {
         
         this.hasDoubleJump = true;
         this.hasDoubleJumped = false;
-        this.hasWaveAttack = true;
+        this.hasWaveAttack = false;
         this.dead = false;
 
         this.hasShield = true;
@@ -83,11 +83,11 @@ class Knight {
 
         this.runSound = new Audio("./resources/SoundEffects/run.ogg");
         this.runSound.loop = true;
-        this.runSound.playbackRate = 10;
+        this.runSound.playbackRate = 5;
         this.runSound.volume = 0.2;
         this.attackSound = new Audio("./resources/SoundEffects/knightAttack.ogg");
         this.attackSound.loop = false;
-        this.runSound.playbackRate = 1;
+        this.attackSound.playbackRate = 1;
         this.attackSound.volume = 0.2;
         this.jumpSound = new Audio("./resources/SoundEffects/jump.ogg");
         this.jumpSound.loop = false;
@@ -97,6 +97,12 @@ class Knight {
         this.rollSound.loop = false;
         this.rollSound.playbackRate = 1;
         this.rollSound.volume = 0.2;
+        // this.swordwaveSound = new Audio("./resources/SoundEffects/swordwave.ogg");
+        // this.swordwaveSound.loop = false;
+        // this.swordwaveSound.playbackRate = 2;
+        // this.swordwaveSound.volume = 0.2;
+        
+
 
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
@@ -479,6 +485,7 @@ class Knight {
                     }
                 }
                 if (this.rollSound.paused) {
+                    this.runSound.pause();
                     this.rollSound.play();
                 }
                 this.updateBB();
@@ -498,6 +505,7 @@ class Knight {
                 } else {
                     this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
                     if(this.jumpSound.paused) {
+                        this.runSound.pause();
                         this.jumpSound.play();
                     }
                 }
@@ -554,13 +562,14 @@ class Knight {
                             this.setState(this.chosenState);
                             this.currentStamina = 0;
                             if (this.attackSound.paused) {
+                                this.runSound.pause();
                                 this.attackSound.play();
                             }
                             this.hitTargets = [];
                             
                             setTimeout(() => {
                                 this.attackAnimationActive = false;
-                            }, 900);
+                            }, 700);
                         }
                     }
                 } else if (this.game.keys["w"]) { // Swordwave projectile
@@ -572,16 +581,21 @@ class Knight {
                         this.attackAnimationActive = true;
                         this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack2' : this.currentState = 'LeftAttack2';
                         this.setState(this.chosenState);
-                        //todo: set for different attack animation
+                        if (this.attackSound.paused) {
+                            this.runSound.pause();
+                            this.attackSound.play();
+                        }
                         setTimeout(() => {
                         this.swordwave = new Swordwave(this.game, this.x, this.y + 80, this.facing);
                         this.game.entities.splice(1, 0, this.swordwave);
                         console.log(`projectile @ ("${knight.x}, ${knight.y}")`);
                         }, 700);
                         this.currentStamina = 0;
-                        if (this.attackSound.paused) {
-                            this.attackSound.play();
-                        }
+                        // if (this.swordwaveSound.paused) {
+                        //     this.runSound.pause();
+                        //     this.swordwaveSound.play();
+                        // }
+                        this.runSound.pause();
                         this.hitTargets = [];
 
                         setTimeout(() => {
