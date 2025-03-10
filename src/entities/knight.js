@@ -38,8 +38,8 @@ class Knight {
         this.bheight = 0;
         this.stamina = 1000;
         this.currentStamina = this.stamina;
-        this.staminaRegen = 100;
-        this.meleeAttackStaminaCost = 300;
+        this.staminaRegen = 500;
+        this.meleeAttackStaminaCost = 200;
         this.rangedAttackStaminaCost = 1000;
 
         this.emberCount = 0;
@@ -70,7 +70,7 @@ class Knight {
         
         this.hasDoubleJump = true;
         this.hasDoubleJumped = false;
-        this.hasWaveAttack = false;
+        this.hasWaveAttack = true;
         this.dead = false;
 
         this.hasShield = true;
