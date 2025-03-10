@@ -42,7 +42,7 @@ class Knight {
         this.meleeAttackStaminaCost = 300;
         this.rangedAttackStaminaCost = 1000;
 
-        this.emberCount = 7000;
+        this.emberCount = 0;
         
         this.maxPotionCount = 3;
         this.potionCount = this.maxPotionCount;

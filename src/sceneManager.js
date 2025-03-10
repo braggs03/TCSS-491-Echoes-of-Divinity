@@ -13,15 +13,15 @@ class SceneManager {
         this.menuButtonTimer = 0.15;
         this.menuButtonCooldown = 0.15;
         this.escReleased = true;
-        this.tutorialCutsceneDone = true;
-        this.shopkeeperCutsceneDone = true;
+        this.tutorialCutsceneDone = false;
+        this.shopkeeperCutsceneDone = false;
         this.oneCutsceneDone = false;
-        this.twoCutsceneDone = true;
+        this.twoCutsceneDone = false;
         this.threeCutsceneDone = false;
         this.fourCutsceneDone = false;
-        this.bossoneCutsceneDone = true;
-        this.bosstwoCutsceneDone = true;
-        this.bossthreeCutsceneDone = true;
+        this.bossoneCutsceneDone = false;
+        this.bosstwoCutsceneDone = false;
+        this.bossthreeCutsceneDone = false;
         this.emberAnimation = new Animator(
             ASSET_MANAGER.getAsset(EMBER), 
             0, 96,        // Starting x, y position in spritesheet
