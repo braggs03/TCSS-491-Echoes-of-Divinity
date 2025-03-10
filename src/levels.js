@@ -107,7 +107,7 @@ let levels = {
         bonFire: [{ x: 13300, y: 472, level: "one" }],
         lostSword:[{ x:14450, y:-2470 }],
         knightStatue: [{ x: 14350, y: -2885}],
-        cutscene: [{startX: 14100, cutsceneNum: 10}],
+        cutscene: [{startX: 14100, cutsceneNum: 11}],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
 
