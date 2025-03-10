@@ -80,7 +80,7 @@ class SceneManager {
         }
     }
 
-    loadLevel(levelIndex, transition, title, dead, end) {
+    loadLevel(levelIndex, transition, title, dead, end) { 
         this.fire = this.game.entities.find(entity => entity instanceof Bonfire);
         if (this.fire) {
             if (!this.fire.sound.paused) {
