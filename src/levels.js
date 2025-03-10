@@ -134,8 +134,8 @@ let levels = {
         maxHeight: -4000,
         minHeight: 0,
         startPosition: {
-            x: 1900,
-            y: -3800,
+            x: 87,
+            y: 300,
         },
         endPosition: {
             x: 14470,
