@@ -520,6 +520,9 @@ class GameControlsMenu {
         ctx.textBaseline = 'top';
         ctx.fillText("Game Controls", PARAMS.SCREENWIDTH / 2, this.windowY + 20);
         
+        this.controlSections[1].controls[1].description = 
+        this.game.camera.knight.hasWaveAttack ? "Sword Wave" : "???";
+
         this.controlSections.forEach(section => {
             this.drawControlSection(ctx, section);
         });
