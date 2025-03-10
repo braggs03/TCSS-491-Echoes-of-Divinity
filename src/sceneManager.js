@@ -34,8 +34,8 @@ class SceneManager {
         this.discoveredCheckpoints = [];
         this.discoveredCheckpointsLevel = [];
 
-        // this.loadLevel('startScreen', false, true, false, false);
-        this.loadLevel('one', false, false, false, false);
+        this.loadLevel('startScreen', false, true, false, false);
+        // this.loadLevel('one', false, false, false, false);
     };
 
     saveEntities() {
@@ -723,7 +723,8 @@ class SceneManager {
                         this.shopkeeperCutsceneDone = true
                     }
                     if (this.level === levels.one) {
-                        this.oneCutsceneDone = true
+                        this.oneCutsceneDone = false
+
                     }
                     if (this.level === levels.two) {
                         this.twoCutsceneDone = true

@@ -64,7 +64,7 @@ class Knight {
         
         this.hasDoubleJump = true;
         this.hasDoubleJumped = false;
-        this.hasWaveAttack = true;
+        this.hasWaveAttack = false;
         this.dead = false;
         
 
@@ -567,7 +567,10 @@ class Knight {
                         this.attackAnimationActive = true;
                         this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack2' : this.currentState = 'LeftAttack2';
                         this.setState(this.chosenState);
-                        //todo: set for different attack animation
+                        if (this.attackSound.paused) {
+                            this.runSound.pause();
+                            this.attackSound.play();
+                        }
                         setTimeout(() => {
                         this.swordwave = new Swordwave(this.game, this.x, this.y + 80, this.facing);
                         this.game.entities.splice(1, 0, this.swordwave);

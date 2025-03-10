@@ -4,7 +4,7 @@ class CutsceneManager {
         this.cutsceneArray = [new CutsceneOne(this.game), new CutsceneTwo(this.game),
             new CutsceneThree(this.game), new CutsceneFour(this.game), new CutsceneFive(this.game),
             new CutsceneSix(this.game), new CutsceneSeven(this.game), new CutsceneEight(this.game),
-            new CutsceneNine(this.game), new CutsceneTen(this.game), new CutsceneEleven(this.game),]
+            new CutsceneNine(this.game), new CutsceneTen(this.game), new CutsceneTwelve(this.game),]
     }
 }
 
@@ -480,13 +480,13 @@ class CutsceneTen {
     }
 }
 
-class CutsceneEleven {
+class CutsceneTwelve {
     constructor(game) {
         this.game = game;
         this.knight = this.game.entities.find(entity=> entity instanceof Knight);
     }
 
-    async run() {  
+    async run() { 
         if(this.knight.y < -2600) {   
         this.knight.moveable = false;
         await this.delay(700);   
