@@ -661,6 +661,7 @@ class SceneManager {
     
 
     update() {
+
         if (!this.game.keys["f"]) {
             this.fReleased = true; 
         }
@@ -741,14 +742,17 @@ class SceneManager {
                 || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
                 || this.level === levels.one && this.oneCutsceneDone
                 || this.level === levels.two && this.twoCutsceneDone
-                //|| this.level === levels.three && this.threeCutsceneDone
+                || this.level === levels.three && this.threeCutsceneDone
                 || this.level === levels.four && this.fourCutsceneDone
                 || this.level === levels.bossOne && this.bossoneCutsceneDone
                 || this.level === levels.bossTwo && this.bosstwoCutsceneDone) {
 
             } else {
+                console.log("Got here! 1")
                 if (this.cutsceneCounter !== this.cutscene.length) {
+                    console.log("Got here! 2")
                     if (!this.inCutscene && this.knight.x >= this.cutscene[this.cutsceneCounter].startX) {
+                        console.log("Got here! 3")
                         this.inCutscene = true;
                         this.scene = this.cutsceneManager.cutsceneArray[this.cutscene[this.cutsceneCounter].cutsceneNum];
                         this.cutsceneCounter++;
@@ -771,6 +775,9 @@ class SceneManager {
                     }
                     if (this.level === levels.bossOne) {
                         this.bossoneCutsceneDone = true
+                    }
+                    if (this.level === levels.three) {
+                        this.threeCutsceneDone = true
                     }
                 }
             }

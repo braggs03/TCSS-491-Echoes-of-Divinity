@@ -382,6 +382,9 @@ class CutsceneEight {
     }
 
     async run() {
+        this.knight.inCutscene = true;
+        this.reina.inCutscene = true;
+        this.knight.setState('RightIdle')
         this.game.camera.showInteractive(this.reina, "reina5");
         await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
@@ -394,7 +397,12 @@ class CutsceneEight {
         await this.delay(4000);
         this.game.camera.removeInteractive();
         this.knight.hasDoubleJump = true;
-        this.game.camera.showInteractive(this.knight, "obtainDoubleJump")
+        this.game.camera.showInteractive(this.knight, "obtainDoubleJump");
+        await this.delay(4000);
+        this.game.camera.removeInteractive();
+        this.knight.inCutscene = false;
+        this.reina.inCutscene = false;
+        this.game.camera.inCutscene = false;
     }
 
     delay(ms) {
