@@ -5,7 +5,8 @@ class CutsceneManager {
             new CutsceneThree(this.game), new CutsceneFour(this.game), new CutsceneFive(this.game),
             new CutsceneSix(this.game), new CutsceneSeven(this.game), new CutsceneEight(this.game),
             new CutsceneNine(this.game), new CutsceneTen(this.game), new CutsceneEleven(this.game), 
-            new CutsceneTwelve(this.game),]
+            new CutsceneTwelve(this.game), new CutsceneThirteen(this.game), new CutsceneFourteen(this.game),
+            new CutsceneFifteen(this.game),]
     }
 }
 
@@ -382,8 +383,13 @@ class CutsceneEight {
     }
 
     async run() {
+        this.knight.inCutscene = true;
+        this.reina.inCutscene = true;
+        this.knight.velocityX = 0;
+        this.knight.setState('RightIdle')
+
         this.game.camera.showInteractive(this.reina, "reina5");
-        await this.delay(4000);
+        await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
@@ -395,6 +401,12 @@ class CutsceneEight {
         this.game.camera.removeInteractive();
         this.knight.hasDoubleJump = true;
         this.game.camera.showInteractive(this.knight, "obtainDoubleJump")
+        await this.delay(4000);
+        this.game.camera.removeInteractive();
+
+        this.knight.inCutscene = false;
+        this.reina.inCutscene = false;
+        this.game.camera.inCutscene = false;
     }
 
     delay(ms) {
@@ -571,6 +583,9 @@ class CutsceneEleven {
     }
 }
 
+/*
+    Obtain Sword Slash Cutscene
+ */
 class CutsceneTwelve {
     constructor(game) {
         this.game = game;
@@ -606,7 +621,138 @@ class CutsceneTwelve {
 
     }
 
-    
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+/*
+    Azucena Final Cutscene
+ */
+class CutsceneThirteen {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.azucena = this.game.entities.find(entity => entity instanceof Azucena);
+    }
+
+    async run() {
+        this.knight.inCutscene = true;
+        this.azucena.inCutscene = true;
+        this.knight.velocityX = 0;
+        this.knight.setState('RightIdle');
+
+        this.game.camera.showInteractive(this.azucena, "azucena13");
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.removeInteractive();
+
+
+        this.knight.inCutscene = false;
+        this.azucena.inCutscene = false;
+        this.game.camera.inCutscene = false;
+
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+/*
+    Reina Final Cutscene
+ */
+class CutsceneFourteen {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.reina = this.game.entities.find(entity => entity instanceof Reina);
+    }
+
+    async run() {
+        this.knight.inCutscene = true;
+        this.reina.inCutscene = true;
+        this.knight.velocityX = 0;
+        this.knight.setState('RightIdle');
+
+        this.game.camera.showInteractive(this.reina, "reina6");
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.removeInteractive();
+
+        this.knight.inCutscene = false;
+        this.reina.inCutscene = false;
+        this.game.camera.inCutscene = false;
+
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+/*
+    Boss 3 Intro Cutscene
+ */
+class CutsceneFifteen {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.duma = this.game.entities.find(entity => entity instanceof Duma);
+    }
+
+    async run() {
+        this.knight.inCutscene = true;
+        this.knight.invincible = true;
+        this.duma.inCutscene = true;
+
+        this.knight.setState('RightRoll')
+        this.duma.goDown = true;
+
+        while (this.duma.goDown) {
+            await this.delay (16);
+        }
+
+        this.game.camera.showInteractive(this.duma, "duma1");
+        console.log(this.game.entities)
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.removeInteractive();
+
+        this.knight.inCutscene = false;
+        this.duma.inCutscene = false;
+        this.game.camera.inCutscene = false;
+
+    }
 
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));

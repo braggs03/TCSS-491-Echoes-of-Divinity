@@ -19,6 +19,7 @@ class SceneManager {
         this.twoCutsceneDone = false;
         this.threeCutsceneDone = false;
         this.fourCutsceneDone = false;
+        this.fiveCutsceneDone = false;
         this.bossoneCutsceneDone = false;
         this.bosstwoCutsceneDone = false;
         this.bossthreeCutsceneDone = false;
@@ -40,7 +41,7 @@ class SceneManager {
 
         this.lucanDead = false;
         this.celesDead = false;        
-        this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('bossThree', false, false, false, false);
         // this.loadLevel('one', false, false, false, false);
     };
 
@@ -743,6 +744,7 @@ class SceneManager {
                 || this.level === levels.two && this.twoCutsceneDone
                 //|| this.level === levels.three && this.threeCutsceneDone
                 || this.level === levels.four && this.fourCutsceneDone
+                || this.level === levels.five && this.fiveCutsceneDone
                 || this.level === levels.bossOne && this.bossoneCutsceneDone
                 || this.level === levels.bossTwo && this.bosstwoCutsceneDone) {
 
@@ -764,13 +766,24 @@ class SceneManager {
                     }
                     if (this.level === levels.one) {
                         this.oneCutsceneDone = false
-
                     }
                     if (this.level === levels.two) {
-                        this.twoCutsceneDone = true
+                        this.twoCutsceneDone = false
+                    }
+                    if (this.level === levels.three) {
+                        this.threeCutsceneDone = false
+                    }
+                    if (this.level === levels.four) {
+                        this.fourCutsceneDone = false
+                    }
+                    if (this.level === levels.five) {
+                        this.fiveCutsceneDone = true
                     }
                     if (this.level === levels.bossOne) {
                         this.bossoneCutsceneDone = true
+                    }
+                    if (this.level === levels.bossTwo) {
+                        this.bosstwoCutsceneDone = true
                     }
                 }
             }
@@ -867,10 +880,18 @@ class SceneManager {
         }
 
         if (this.level === levels.bossTwo) {
-            if (this.knight.x <= -210) {
+            if (this.knight.x <= -245) {
                 //this.loadlevel()
             } else if (this.knight.x >= 1170) {
                 this.loadLevel('four', true, false, false, false)
+            }
+        }
+
+        if (this.level === levels.five) {
+            if (this.knight.x <= -245) {
+                this.loadLevel('four', true, false, false, true)
+            } else if (this.knight.x >= 2005) {
+                this.loadLevel('bossThree', true, false, false, false)
             }
         }
     };

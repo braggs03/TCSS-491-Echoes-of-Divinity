@@ -49,7 +49,7 @@ let levels = {
     },
 
     tutorial: {
-        width: 1500,
+        width: 1350,
         maxHeight: 0,
         minHeight: 0,
         startPosition: {
@@ -176,9 +176,11 @@ let levels = {
             x: -200,
             y: 430,
         },
-        dungeonWall: [{ x: 0, y: 0, h: 5 }, { x: 51, y: 0, h: 3 }],
-        reina: [{ x: 200, y: 536 }],
-        azucena: [{ x: 100, y: 500 }],
+        dungeonWall: [{ x: 0, y: 0, h: 3 }, { x: 51, y: 0, h: 3 }],
+        reina: [{ x: 1600, y: 536 }],
+        azucena: [{ x: 600, y: 500 }],
+        bonFire: [ { x: 1750, y: 465, level: "five" }],
+        cutscene: [{startX: 373, cutsceneNum: 12}, {startX: 1402, cutsceneNum: 13}],
         dungeonGround: [{ x: -2, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
@@ -252,14 +254,15 @@ let levels = {
         width: 0,
         height: 0,
         startPosition: {
-            x: 200,
+            x: -200,
             y: 430,
         },
         wallspike: [{ x: 10, y: 405},  {x: 1100, y: 405}],
-        duma: [{ x: 750, y: 275 }],
-        dungeonWall: [{ x: 31, y: 0, h: 5 }, { x: 0, y: 0, h: 5 }],
-        dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }, { x: 7.2, y: 9.2, w: 1, h: 1 }, { x: 0.1, y: 9.2, w: 1, h: 1 }],
+        duma: [{ x: 750, y: -400 }], //275 -400
+        dungeonWall: [{ x: 31, y: 0, h: 5 }, { x: 0, y: 0, h: 3 }],
+        dungeonGround: [{ x: -2, y: 17, w: 40, h: 1 }, { x: 7.2, y: 9.2, w: 1, h: 1 }, { x: 0.1, y: 9.2, w: 1, h: 1 }],
         nightBackground: [{ x:0, y:0, w:50, h: 1}],
+        cutscene: [{startX: -300, cutsceneNum: 14}],
     },
 
     AzucenaAfterStory: {

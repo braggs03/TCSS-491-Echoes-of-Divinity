@@ -10,7 +10,7 @@ class Duma {
         this.height = 100;
         this.bheight = 0;
         this.healthBar = new HealthBar(this);
-        this.inCutscene = false;
+        this.inCutscene = true;
         this.specialAttackRun = false;
         this.specialAttack2Run = false;
         this.specialAttackX = false;
@@ -29,6 +29,11 @@ class Duma {
         this.counterTwo = 5000;
         this.dead = false;
         this.pushBack = false;
+
+        this.wingsSound = new Audio("./resources/SoundEffects/wingsflapping.ogg");
+        this.wingsSound.loop = true;
+        this.wingsSound.playbackRate = 2;
+        this.wingsSound.volume = 0.2;
 
         this.fireSound = new Audio("./resources/SoundEffects/fireAttack.ogg");
         this.fireSound.loop = true;
@@ -97,6 +102,14 @@ class Duma {
     }
 
     update() {
+        if (this.currentState === 'LeftIdle' || this.currentState === 'RightIdle') {
+            if (this.wingsSound.paused) {
+                this.wingsSound.play();
+            }
+        } else {
+            this.wingsSound.pause();
+        }
+
         if (this.bodyBB) {
             this.fireSound.play();
         } else {
@@ -120,6 +133,17 @@ class Duma {
             this.target = this.game.entities.find(entity =>
                 entity instanceof Knight && !entity.dead
             );
+        }
+
+        if (this.goDown) {
+            if (this.y < 275) {
+                this.y += 200 * this.game.clockTick;
+                return;
+            } else {
+                this.goDown = false;
+                this.specialAttackRun= false;
+                this.specialAttack2Run = false;
+            }
         }
 
         if (this.inCutscene) {
@@ -208,17 +232,6 @@ class Duma {
             this.counterTwo = 0;
             this.offsetDone = false
             this.specialAttackRun = true
-        }
-
-        if (this.goDown) {
-            if (this.y < 275) {
-                this.y += 200 * this.game.clockTick;
-                return;
-            } else {
-                this.goDown = false;
-                this.specialAttackRun= false;
-                this.specialAttack2Run = false;
-            }
         }
 
         if (this.goLeft) {

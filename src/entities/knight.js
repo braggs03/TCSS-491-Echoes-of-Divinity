@@ -86,7 +86,7 @@ class Knight {
 
         this.runSound = new Audio("./resources/SoundEffects/run.ogg");
         this.runSound.loop = true;
-        this.runSound.playbackRate = 5;
+        this.runSound.playbackRate = 3;
         this.runSound.volume = 0.2;
         this.attackSound = new Audio("./resources/SoundEffects/knightAttack.ogg");
         this.attackSound.loop = false;

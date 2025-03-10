@@ -29,7 +29,7 @@ const text = {
 
     azucena4: [
         ["Here we can keep safe" , "as you make your way to Duma."],
-        ["4th wall break: Light the Emberlight (Campfire) for a checkpoint"],
+        ["4th wall break: Light", "the Emberlight (Campfire)", "for a checkpoint"],
     ],
 
     azucena5: [
@@ -123,11 +123,11 @@ const text = {
     ],
 
     azucena13: [
-        ["This is it, Duma awaits"],
-        ["I doubt his forces will sit", "idly as you fight."],
+        ["This is it, Duma awaits."],
+        ["I doubt his forces will sit", "idly by as you battle."],
         ["Reina and I shall hold the line."],
         ["I have no doubt", "you will succeed."],
-        ["Show no fear."],
+        ["I await your return."],
     ],
 
     reina6: [
@@ -135,7 +135,7 @@ const text = {
         ["The end of our long journey."],
         ["..."],
         ["I can't lie as", "well as Azucena."],
-        ["I'm terrified of", "what's to come."],
+        ["I worry Duma will prove", "too much for you."],
         ["Whatever happens..."],
         ["Walk tall, my dearest friend."],
     ],
@@ -148,7 +148,7 @@ const text = {
         ["You cannot rule yourselves."],
         ["You can't even save yourselves."],
         ["You will submit to my power,"],
-        [""],
+       // [""],
     ],
 
     azucena_end: [
