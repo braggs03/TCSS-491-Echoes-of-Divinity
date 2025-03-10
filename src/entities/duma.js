@@ -6,7 +6,7 @@ class Duma {
         this.y = y
         this.updateBB();
         this.maxHp = 4000;
-        this.hp = 3100;
+        this.hp = 100;
         this.height = 100;
         this.bheight = 0;
         this.healthBar = new HealthBar(this);
@@ -15,6 +15,7 @@ class Duma {
         this.specialAttack2Run = false;
         this.specialAttackX = false;
         this.specialAttackY = false;
+        this.goUp = false;
         this.goDown = false;
         this.goRight = false;
         this.goLeft = false;
@@ -109,6 +110,7 @@ class Duma {
         } else {
             this.wingsSound.pause();
         }
+        this.updateBB();
 
         if (this.bodyBB) {
             this.fireSound.play();
@@ -119,13 +121,7 @@ class Duma {
             }
         }
 
-        if (this.game.keys["i"]) {
-            this.specialAttack2();
-        }
-
         if (this.dead) {
-            this.fireBomb = new FireBomb(this.game, this.x, this.y + 50)
-            this.game.entities.splice(1, 0, this.fireBomb);
             return;
         }
 
@@ -133,6 +129,26 @@ class Duma {
             this.target = this.game.entities.find(entity =>
                 entity instanceof Knight && !entity.dead
             );
+        }
+        if (this.goUp) {
+            if (this.facingLeft) {
+                if (this.x > 470) {
+                    this.x -= 200 * this.game.clockTick;
+                } else {
+                    this.specialAttackX = true;
+                }
+            } else {
+                if (this.x < 370) {
+                    this.x += 200 * this.game.clockTick;
+                } else {
+                    this.specialAttackX = true;
+                }
+            }
+            if (this.y > 0) {
+                this.y -= 200 * this.game.clockTick;
+            } else {
+                this.specialAttackY = true;
+            }
         }
 
         if (this.goDown) {
@@ -158,7 +174,7 @@ class Duma {
             this.specialAttack2Run = false;
             this.specialAttackRun = false;
             this.attackChargeRun = false;
-            this.setState('LeftIdle')
+            this.goUp = true;
             this.dead = true;
             return;
         }
@@ -461,8 +477,6 @@ class Duma {
                 this.target.takeDamage(50);
             }
         }
-
-        this.updateBB();
     }
 
     specialAttack() {

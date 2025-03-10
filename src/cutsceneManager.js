@@ -6,7 +6,7 @@ class CutsceneManager {
             new CutsceneSix(this.game), new CutsceneSeven(this.game), new CutsceneEight(this.game),
             new CutsceneNine(this.game), new CutsceneTen(this.game), new CutsceneEleven(this.game), 
             new CutsceneTwelve(this.game), new CutsceneThirteen(this.game), new CutsceneFourteen(this.game),
-            new CutsceneFifteen(this.game),]
+            new CutsceneFifteen(this.game), new CutsceneSixteen(this.game)]
     }
 }
 
@@ -727,12 +727,18 @@ class CutsceneFifteen {
         this.knight.setState('RightRoll')
         this.duma.goDown = true;
 
+        while (this.knight.currentState === 'RightRoll') {
+            await this.delay(16);
+        }
+
+        let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 3);
+        walls.forEach(wall => wall.h = 5);
+
         while (this.duma.goDown) {
             await this.delay (16);
         }
 
         this.game.camera.showInteractive(this.duma, "duma1");
-        console.log(this.game.entities)
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
@@ -744,6 +750,70 @@ class CutsceneFifteen {
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
+        this.game.camera.music = new Audio(DUMA_MUSIC);
+        this.game.camera.music.loop = true;
+        this.game.camera.music.volume = 0.1;
+
+        // Ensure the audio is fully loaded before allowing playback
+        this.game.camera.music.addEventListener('canplaythrough', () => {
+            this.game.camera.music.play();
+        });
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.removeInteractive();
+
+        this.knight.inCutscene = false;
+        this.duma.inCutscene = false;
+        this.game.camera.inCutscene = false;
+
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+/*
+    Boss 3 Ending Cutscene
+ */
+class CutsceneSixteen {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.duma = this.game.entities.find(entity => entity instanceof Duma);
+        this.azucena = this.game.entities.find(entity => entity instanceof Reina);
+    }
+
+    async run() {
+        this.knight.inCutscene = true;
+        this.knight.invincible = true;
+        this.duma.inCutscene = true;
+
+        if (!this.duma.specialAttackX && !this.duma.specialAttackY) {
+            this.duma.goUp = true;
+        }
+
+
+        this.game.camera.showInteractive(this.duma, "duma2");
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.music = new Audio(DUMA_MUSIC);
+        this.game.camera.music.loop = true;
+        this.game.camera.music.volume = 0.1;
+
+        // Ensure the audio is fully loaded before allowing playback
+        this.game.camera.music.addEventListener('canplaythrough', () => {
+            this.game.camera.music.play();
+        });
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
         this.game.camera.removeInteractive();
