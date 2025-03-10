@@ -135,7 +135,7 @@ let levels = {
         dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
         dungeonDoor: [{ x: 124, y: 361, level: "one", end: true }],
         cutscene: [{startX: 10800, cutsceneNum: 3}, {startX: 11250, cutsceneNum: 4}],
-        reina: [{ x: 11100, y: 439 }],
+        reina: [{ x: 11100, y: 433 }],
         azucena: [{ x: 11200, y: 400 }],
     },
 

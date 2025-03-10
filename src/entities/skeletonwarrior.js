@@ -108,6 +108,7 @@ class SkeletonWarrior {
                     this.setState('RightDead');
                 }
             }
+            this.updateBB();
             return;
         }
 

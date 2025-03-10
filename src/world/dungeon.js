@@ -249,15 +249,12 @@ class Bonfire {
 
         this.BB = new BoundingBox(this.x + 81 - this.game.camera.x,  this.y + 50 - this.game.camera.y, BONFIRE_HEIGHT * 2.2, BONFIRE_HEIGHT * 4.3);
 
-        if (this.game.keys["f"] && !this.keypressed) {
+        if (!this.discovered && this.game.keys["f"] && !this.keypressed) {
             this.game.entities.forEach((entity) => {
                 if (entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
                     this.activateCheckpoint();
                     if (this.sound.paused) {
                         this.sound.play();
-                    }
-                    if (this.knight) {
-                        this.knight.reset();
                     }
                     this.keypressed = true;
                 }
@@ -266,7 +263,7 @@ class Bonfire {
             this.fReleased = true;
         }
 
-        if (this.game.keys["t"] && !this.keypressed) {
+        if (this.game.keys["f"] && !this.keypressed) {
             this.game.entities.forEach((entity) => {
                 if (entity.BB && this.BB.collide(entity.BB) && entity instanceof Knight) {
                     this.game.camera.openCheckpointMenu(this);
@@ -275,7 +272,7 @@ class Bonfire {
             });
         }
 
-        if (!this.game.keys["f"] && !this.game.keys["t"]) {
+        if (!this.game.keys["f"]) {
             this.keypressed = false;
         }
     }

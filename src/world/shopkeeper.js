@@ -159,13 +159,19 @@ const POTION_WIDTH = 16;
 const POTION_HEIGHT = 16;
 
 class Potion {
-    constructor(game, x, y) {
-        Object.assign(this, {game, x, y});
-
+    constructor(game, self) {
+        Object.assign(this, {game, self});
+        this.x = this.self.x;
+        this.y = this.self.y;
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 4;
+        this.bought = this.self.bought;
         this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);
     };
+
+    save() {
+        this.self.bought = this.bought;
+    }
 
     update() {
         this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, POTION_WIDTH * this.scale, POTION_HEIGHT * this.scale);

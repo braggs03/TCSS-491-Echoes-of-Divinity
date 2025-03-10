@@ -75,8 +75,6 @@ class MechaGolem {
     }
     
     takeDamage(amount) {
-        if (!this.engaged && !this.aggro) return;
-
         this.hp -= amount;
 
         if (this.hp <= 0) {
@@ -201,15 +199,11 @@ class MechaGolem {
 
             if (distance > this.range && this.aggro) {
                 this.resetAggro();
-            }
-
-            else if (!this.engaged && this.BB.collide(this.target.BB)) {
+            } else if (!this.engaged && this.BB.collide(this.target.BB)) {
                 this.aggro = true;
                 this.engaged = true;
                 this.updateBB(); 
-            }
-  
-            else if (this.aggro) {
+            } else if (this.aggro) {
                 if (this.BB.collide(this.target.BB)) {
                     if (!this.attackInProgress && this.attackCooldown <= 0) {
                         this.attack();
@@ -271,15 +265,18 @@ class MechaGolem {
         this.canAttackAgain = false; 
         this.animator = this.facing === RIGHT ? this.rangeAttackRight() : this.rangeAttackLeft();
 
+        const knightX = this.target.x;
+        const knightY = this.target.y;
+
         setTimeout(() => {
             const dx = Math.min(this.target.BB.x - this.BB.right, this.target.BB.right - this.BB.x);
             const distance = Math.abs(dx);
             if (distance > this.minAttackRange) {
                 if (this.facing === LEFT) {
-                    const projectile = new MechaProjectile(this.game, this.x + 100, this.y + 200, this.target.x + KNIGHT_X_OFFSET + KNIGHT_WIDTH / 2, this.target.y + KNIGHT_Y_OFFSET + KNIGHT_HEIGHT / 2, this.facing);
+                    const projectile = new MechaProjectile(this.game, this.x + 100, this.y + 200, knightX + KNIGHT_X_OFFSET + KNIGHT_WIDTH / 2, knightY + KNIGHT_Y_OFFSET + KNIGHT_HEIGHT / 2, this.facing);
                     this.game.entities.splice(0, 0, projectile);
                 } else {
-                    const projectile = new MechaProjectile(this.game, this.x + 200, this.y + 200, this.target.x + KNIGHT_X_OFFSET + KNIGHT_WIDTH / 2, this.target.y + KNIGHT_Y_OFFSET + KNIGHT_HEIGHT / 2, this.facing);
+                    const projectile = new MechaProjectile(this.game, this.x + 200, this.y + 200, knightX + KNIGHT_X_OFFSET + KNIGHT_WIDTH / 2, knightY + KNIGHT_Y_OFFSET + KNIGHT_HEIGHT / 2, this.facing);
                     this.game.entities.splice(0, 0, projectile);
                 }
             }

@@ -36,8 +36,11 @@ class Knight {
         this.shield = 200;
         this.height = 110;
         this.bheight = 0;
-        this.stamina = 100;
-        this.currentStamina = 100;
+        this.stamina = 1000;
+        this.currentStamina = this.stamina;
+        this.staminaRegen = 100;
+        this.meleeAttackStaminaCost = 300;
+        this.rangedAttackStaminaCost = 1000;
 
         this.emberCount = 7000;
         
@@ -285,8 +288,13 @@ class Knight {
     update() {
         const clockTick = this.game.clockTick;
 
-        if (this.currentStamina < this.stamina && this.currentState !== "RightRoll" && !this.currentState !== "LeftRoll") {
-            this.currentStamina = Math.min(this.currentStamina + 80 * this.game.clockTick, this.stamina);
+        if (this.currentStamina < this.stamina && this.currentState !== "RightRoll" 
+            && this.currentState !== "LeftRoll" && this.currentState !== "LeftAttack1" 
+            && this.currentState !== "LeftAttack2" && this.currentState !== "RightAttack1" 
+            && this.currentState !== "RightAttack2" && this.currentState !== "RightAttack2" 
+            && this.currentState !== "LeftJump" && this.currentState !== "RightJump"
+        ) {
+            this.currentStamina = Math.min(this.currentStamina + this.staminaRegen * this.game.clockTick, this.stamina);
         }
     
         if (this.y > VOID_HEIGHT) {
@@ -311,7 +319,7 @@ class Knight {
         this.game.entities.forEach((entity) => {
             if (entity.BB && knight.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(knight.BB);
-                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonWall1 || entity instanceof DungeonSpike || entity instanceof DungeonWall || entity instanceof DungeonGround4) {
+                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonWall1 || entity instanceof DungeonSpike || entity instanceof DungeonWall2 || entity instanceof DungeonGround4) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
 
@@ -365,6 +373,8 @@ class Knight {
                 } else if (entity instanceof Potion) {
                     if (this.game.keys["f"]) {
                         if (this.buyPotion()) {
+                            entity.bought = true;
+                            entity.save();
                             entity.removeFromWorld = true;
                         }
                     }
@@ -433,10 +443,9 @@ class Knight {
                 this.setState(this.chosenState);
                 this.pauseSound();
             }
-            return;
         }
     
-        if (!this.dead) {
+        if (!this.dead && !this.inCutscene) {
             if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1' || this.currentState === 'RightAttack2'|| this.currentState === 'LeftAttack2') {
                 const currentFrame = this.animations[this.currentState].currentFrame();
                 if (currentFrame === 0) {
@@ -555,12 +564,13 @@ class Knight {
                 && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
                 if (this.game.keys["e"]) {
                     if (!this.attackAnimationActive) {
-                        if (this.currentStamina === this.stamina) {
+                        console.log(this.currentStamina >= this.meleeAttackStaminaCost);
+                        if (this.currentStamina >= this.meleeAttackStaminaCost) {
                             this.velocityX = 0;
                             this.attackAnimationActive = true;
                             this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack1' : this.currentState = 'LeftAttack1';
                             this.setState(this.chosenState);
-                            this.currentStamina = 0;
+                            this.currentStamina -= this.meleeAttackStaminaCost;
                             if (this.attackSound.paused) {
                                 this.runSound.pause();
                                 this.attackSound.play();
@@ -574,7 +584,7 @@ class Knight {
                     }
                 } else if (this.game.keys["w"]) { // Swordwave projectile
                     if (!this.attackAnimationActive && this.hasWaveAttack) {
-                        if (this.currentStamina < this.stamina) {
+                        if (this.currentStamina < this.rangedAttackStaminaCost) {
                             return;
                         }
                         this.velocityX = 0;
