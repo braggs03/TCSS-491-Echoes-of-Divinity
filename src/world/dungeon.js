@@ -933,7 +933,7 @@ class LostSword {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y});
         this.animator = this.lostsword();
-        this.scale = 2;
+        this.scale = 3;
         this.BB = new BoundingBox(this.x - this.game.camera.x , this.y - this.game.camera.y, LOSTSWORD_WIDTH, LOSTSWORD_HEIGHT);
     };
 

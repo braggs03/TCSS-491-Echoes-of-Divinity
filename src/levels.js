@@ -105,7 +105,7 @@ let levels = {
         dungeonWall: [{ x: 0, y: 0, h: 6}, { x: 370, y: 0, h: 5}],
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
         bonFire: [{ x: 13300, y: 472, level: "one" }],
-        lostSword:[{ x:14450, y:-2470 }],
+        lostSword:[{ x:14400, y:-2500 }],
         knightStatue: [{ x: 14350, y: -2885}],
         cutscene: [{startX: 14100, cutsceneNum: 11}],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],

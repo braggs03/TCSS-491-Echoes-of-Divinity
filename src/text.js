@@ -158,4 +158,9 @@ const text = {
         ["I'm not gonna bother making credits right now"],
         ["This is all you're getting, bye"]
     ],
+
+    obtainSwordwave : [
+        ["OBTAINED SWORDWAVE"],
+        ["Press W to use"],
+    ],
 }
