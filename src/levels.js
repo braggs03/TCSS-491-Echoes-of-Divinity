@@ -184,7 +184,10 @@ let levels = {
                       { x: 64.9, y:-3600, h: 30}
                      ],
         dungeonDoor: [{ x: 14500, y: 465, level: "two", end: false }],
-        bonFire: [{ x: 300, y: 472, level: "three" }],
+        bonFire: [{ x: 700, y: 472, level: "three" }],
+        reina: [{ x: 460, y: 536}],
+        azucena: [{ x: 2200 , y: -3780}],
+        cutscene: [{startX: 230, cutsceneNum: 7}, {startX: 2000, cutsceneNum: 8}],
     },
 
     four: {

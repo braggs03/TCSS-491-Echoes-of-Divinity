@@ -223,8 +223,6 @@ class MechaGolem {
             this.attackCooldown -= this.attackCooldownFactor * this.game.clockTick;
         }
 
-        console.dir(this.game.camera.levelIndex)
-
         this.x = Math.round(this.x);
         this.y = Math.round(this.y);
 
