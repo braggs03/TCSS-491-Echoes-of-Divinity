@@ -6,6 +6,7 @@ ASSET_MANAGER.queueDownload(AZUCENA);
 ASSET_MANAGER.queueDownload(REINA);
 ASSET_MANAGER.queueDownload("./resources/Magic/Lightning.png");
 ASSET_MANAGER.queueDownload("./resources/knight/swordwave.png");
+ASSET_MANAGER.queueDownload("./resources/knight/lostsword.png");
 ASSET_MANAGER.queueDownload("./resources/Magic/Fire-bomb.png");
 
 // MechaGolem
@@ -86,6 +87,7 @@ ASSET_MANAGER.queueDownload(BACKGROUND_MUSIC);
 ASSET_MANAGER.queueDownload(MAIN_MUSIC);
 ASSET_MANAGER.queueDownload(LUCAN_MUSIC);
 ASSET_MANAGER.queueDownload(CELES_MUSIC);
+ASSET_MANAGER.queueDownload(DUMA_MUSIC);
 
 // Sound Effects
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/emberLight.ogg");
@@ -97,6 +99,7 @@ ASSET_MANAGER.queueDownload("./resources/SoundEffects/openDoor.ogg");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/run.ogg");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/roll.ogg");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/lightning.ogg");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/swordwave.ogg");
 
 
 ASSET_MANAGER.downloadAll(() => {

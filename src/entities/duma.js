@@ -6,7 +6,7 @@ class Duma {
         this.y = y
         this.updateBB();
         this.maxHp = 4000;
-        this.hp = 4000;
+        this.hp = 3100;
         this.height = 100;
         this.bheight = 0;
         this.healthBar = new HealthBar(this);
@@ -21,12 +21,14 @@ class Duma {
         this.facingLeft = true;
         this.attackChargeAvailable = true;
         this.attackChargeRun = false;
+        this.attackChargeInProgress = false;
         this.phaseOne = true;
         this.specialAttackAvailable = true;
         this.counter = 800;
         this.counterOne = 2000;
         this.counterTwo = 5000;
         this.dead = false;
+        this.pushBack = false;
 
         this.fireSound = new Audio("./resources/SoundEffects/fireAttack.ogg");
         this.fireSound.loop = true;
@@ -104,18 +106,24 @@ class Duma {
             }
         }
 
+        if (this.game.keys["i"]) {
+            this.specialAttack2();
+        }
+
         if (this.dead) {
             this.fireBomb = new FireBomb(this.game, this.x, this.y + 50)
             this.game.entities.splice(1, 0, this.fireBomb);
             return;
         }
-        if (this.inCutscene) {
-            return;
-        }
+
         if (!this.target) {
             this.target = this.game.entities.find(entity =>
                 entity instanceof Knight && !entity.dead
             );
+        }
+
+        if (this.inCutscene) {
+            return;
         }
 
         if (this.hp <= 0) {
@@ -129,123 +137,6 @@ class Duma {
             this.setState('LeftIdle')
             this.dead = true;
             return;
-        }
-
-        if (this.hp < 3000 && this.attackChargeAvailable && !this.specialAttackRun && !this.specialAttack2Run && !this.goLeft && !this.goRight) {
-            this.attackChargeRun = true;
-            if (this.facingLeft) {
-                this.goLeft = true;
-                this.x -= 200;
-                this.y -= 120;
-                this.setState('LeftAttack1')
-            } else {
-                this.goRight = true;
-                this.x -= 20;
-                this.y -= 120;
-                this.setState('RightAttack1')
-            }
-            this.attackChargeAvailable = false;
-            this.counterOne = 0;
-        }
-
-        if (this.hp < 1500 && this.specialAttackAvailable  && !this.attackChargeRun && !this.goLeft && !this.goRight) {
-            this.specialAttackAvailable = false;
-            this.counterTwo = 0;
-            this.offsetDone = false
-            this.specialAttackRun = true
-        }
-
-        if (this.goDown) {
-            if (this.y < 275) {
-                this.y += 200 * this.game.clockTick;
-            } else {
-                this.goDown = false;
-                this.specialAttack2Run = false;
-            }
-        }
-
-        if (this.goLeft) {
-            this.facingLeft = true;
-            if (this.currentState === 'LeftAttack1') {
-                this.leftSide = 30;
-            } else {
-                this.leftSide = 120;
-            }
-            if (this.x > this.leftSide) {
-                if (this.currentState === 'LeftAttack1') {
-                    if (this.animations[this.currentState].currentFrame() > 4) {
-                        if (this.attackChargeRun) {
-                            this.x -= 500 * this.game.clockTick;
-                        } else {
-                            this.x -= 300 * this.game.clockTick;
-                        }
-                    }
-                } else {
-                    if (this.attackChargeRun) {
-                        this.x -= 500 * this.game.clockTick;
-                    } else {
-                        this.x -= 300 * this.game.clockTick;
-                    }
-                }
-            } else {
-                if (this.currentState === 'LeftIdle') {
-                    if (this.attackChargeRun) {
-                        this.attackChargeRun = false;
-                        this.goLeft = false;
-                        this.goRight = true;
-                        this.x -= 20;
-                        this.y -= 120;
-                        this.setState('RightAttack1')
-                    } else {
-                        this.x -= 60;
-                        this.facingLeft = false;
-                        this.setState('RightIdle')
-                        this.goLeft = false;
-                    }
-                }
-            }
-        }
-
-        if (this.goRight) {
-            this.facingLeft = false;
-            if (this.currentState === 'RightAttack1') {
-                this.RightSide = 830;
-            } else {
-                this.RightSide = 700;
-            }
-            if (this.x < this.RightSide) {
-                if (this.currentState === 'RightAttack1') {
-                    if (this.animations[this.currentState].currentFrame() > 4) {
-                        if (this.attackChargeRun) {
-                            this.x += 500 * this.game.clockTick;
-                        } else {
-                            this.x += 300 * this.game.clockTick;
-                        }
-                    }
-                } else {
-                    if (this.attackChargeRun) {
-                        this.x += 500 * this.game.clockTick;
-                    } else {
-                        this.x += 300 * this.game.clockTick;
-                    }
-                }
-            } else {
-                if (this.currentState === 'RightIdle') {
-                    if (this.attackChargeRun) {
-                        this.attackChargeRun = false
-                        this.goRight = false;
-                        this.goLeft = true;
-                        this.x -= 200;
-                        this.y -= 120;
-                        this.setState('LeftAttack1')
-                    } else {
-                        this.x += 60;
-                        this.setState('LeftIdle')
-                        this.facingLeft = true;
-                        this.goRight = false;
-                    }
-                }
-            }
         }
 
         if (this.animations[this.currentState].getDone()) {
@@ -267,6 +158,162 @@ class Duma {
                 this.y += 120;
                 this.loopCount = 0;
                 this.setState('RightIdle')
+            }
+        }
+
+        if (this.hp <= 3000 && this.attackChargeAvailable && !this.specialAttackRun && !this.specialAttack2Run && !this.goLeft && !this.goRight && !this.pushBack && (this.currentState !== 'LeftAttack2' || this.currentState !== 'RightAttack2')) {
+            if (this.facingLeft) {
+                this.x -= 70;
+                this.y -= 120;
+                this.setState('LeftAttack2');
+            } else {
+                this.x -= 70;
+                this.y -= 120;
+                this.setState('RightAttack2');
+            }
+            this.pushBack = true;
+        }
+
+        if (!this.specialAttackRun && !this.specialAttack2Run && (this.currentState === 'LeftAttack2' || this.currentState === 'RightAttack2')) {
+            if (this.animations[this.currentState].currentFrame() === 6) {
+                if (this.facingLeft) {
+                    this.target.velocityX = -3000;
+                } else {
+                    this.target.velocityX = 3000;
+                }
+            }
+            return;
+        }
+
+        if (this.hp <= 3000 && this.attackChargeAvailable && !this.specialAttackRun && !this.specialAttack2Run && !this.goLeft && !this.goRight && this.pushBack && (this.currentState !== 'LeftAttack2' || this.currentState !== 'RightAttack2')) {
+            this.pushBack = false
+            this.attackChargeRun = true;
+            if (this.facingLeft) {
+                this.goLeft = true;
+                this.x -= 200;
+                this.y -= 120;
+                this.setState('LeftAttack1')
+            } else {
+                this.goRight = true;
+                this.x -= 20;
+                this.y -= 120;
+                this.setState('RightAttack1')
+            }
+            this.attackChargeAvailable = false;
+            this.counterOne = 0;
+        }
+
+        if (this.hp < 1500 && this.specialAttackAvailable  && !this.attackChargeRun && !this.goLeft && !this.goRight && !this.goDown) {
+            this.specialAttackAvailable = false;
+            this.counterTwo = 0;
+            this.offsetDone = false
+            this.specialAttackRun = true
+        }
+
+        if (this.goDown) {
+            if (this.y < 275) {
+                this.y += 200 * this.game.clockTick;
+                return;
+            } else {
+                this.goDown = false;
+                this.specialAttackRun= false;
+                this.specialAttack2Run = false;
+            }
+        }
+
+        if (this.goLeft) {
+            this.facingLeft = true;
+            if (this.currentState === 'LeftAttack1') {
+                this.leftSide = 0;
+            } else {
+                this.leftSide = 120;
+            }
+            if (this.x > this.leftSide) {
+                if (this.currentState === 'LeftAttack1') {
+                    if (this.animations[this.currentState].currentFrame() > 4) {
+                        if (this.attackChargeRun || this.attackChargeInProgress) {
+                            this.x -= 500 * this.game.clockTick;
+                        } else {
+                            this.x -= 300 * this.game.clockTick;
+                        }
+                    }
+                } else {
+                    if (this.attackChargeRun || this.attackChargeInProgress) {
+                        this.x -= 500 * this.game.clockTick;
+                    } else {
+                        this.x -= 300 * this.game.clockTick;
+                    }
+                }
+            } else {
+                if (this.currentState === 'LeftAttack1') {
+                    this.x += 200;
+                    this.y += 120;
+                    this.loopCount = 0;
+                    this.setState('LeftIdle')
+                }
+                if (this.currentState === 'LeftIdle') {
+                    if (this.attackChargeRun) {
+                        this.attackChargeRun = false;
+                        this.attackChargeInProgress = true;
+                        this.goLeft = false;
+                        this.goRight = true;
+                        this.x -= 20;
+                        this.y -= 120;
+                        this.setState('RightAttack1')
+                    } else {
+                        this.attackChargeInProgress = false;
+                        this.x -= 60;
+                        this.facingLeft = false;
+                        this.setState('RightIdle')
+                        this.goLeft = false;
+                    }
+                }
+            }
+        }
+
+        if (this.goRight) {
+            this.facingLeft = false;
+            this.RightSide = 700;
+            if (this.x < this.RightSide) {
+                if (this.currentState === 'RightAttack1') {
+                    if (this.animations[this.currentState].currentFrame() > 4) {
+                        if (this.attackChargeRun || this.attackChargeInProgress) {
+                            this.x += 500 * this.game.clockTick;
+                        } else {
+                            this.x += 300 * this.game.clockTick;
+                        }
+                    }
+                } else {
+                    if (this.attackChargeRun || this.attackChargeInProgress) {
+                        this.x += 500 * this.game.clockTick;
+                    } else {
+                        this.x += 300 * this.game.clockTick;
+                    }
+                }
+            } else {
+                if (this.currentState === 'RightAttack1') {
+                    this.x += 20;
+                    this.y += 120;
+                    this.loopCount = 0;
+                    this.setState('RightIdle')
+                }
+                if (this.currentState === 'RightIdle') {
+                    if (this.attackChargeRun) {
+                        this.attackChargeRun = false
+                        this.attackChargeInProgress = true;
+                        this.goRight = false;
+                        this.goLeft = true;
+                        this.x -= 200;
+                        this.y -= 120;
+                        this.setState('LeftAttack1')
+                    } else {
+                        this.attackChargeInProgress = false;
+                        this.x += 60;
+                        this.setState('LeftIdle')
+                        this.facingLeft = true;
+                        this.goRight = false;
+                    }
+                }
             }
         }
 
@@ -362,14 +409,19 @@ class Duma {
                     this.specialAttackY = false;
                     this.offsetDone = false
                     this.specialAttack();
-                    this.specialAttackRun= false;
+                    if (!(this.hp <= 1000)) {
+                        this.goDown = true;
+                    }
                 }
             }
-            return;
         }
 
         if (this.currentState === 'LeftAttack2' || this.currentState === 'RightAttack2') {
-            if (this.hp < 2000 && !this.specialAttack2Run) {
+            if (this.hp <= 1000 && !this.specialAttack2Run) {
+                this.specialAttackX = false;
+                this.specialAttackY = false;
+                this.specialAttack();
+                this.specialAttackRun= false;
                 this.specialAttack2Run = true;
                 setTimeout(() => {
                     if (this.facingLeft) {
@@ -412,26 +464,18 @@ class Duma {
     }
 
     specialAttack2() {
-        this.lightning = new Lightning(this.game, 0, 40, true)
-        this.game.entities.splice(1, 0, this.lightning);
-        this.lightning = new Lightning(this.game, 100, 40, true)
-        this.game.entities.splice(1, 0, this.lightning);
+        this.lightning = new Lightning(this.game, -30, -270, true)
+        this.game.entities.splice(this.game.entities.length - 1, 0, this.lightning);
         this.lightning = new Lightning(this.game, 200, 40, true)
-        this.game.entities.splice(1, 0, this.lightning);
-        this.lightning = new Lightning(this.game, 300, 40, true)
         this.game.entities.splice(1, 0, this.lightning);
         this.lightning = new Lightning(this.game, 400, 40, true)
         this.game.entities.splice(1, 0, this.lightning);
-        this.lightning = new Lightning(this.game, 500, 40, true)
-        this.game.entities.splice(1, 0, this.lightning);
         this.lightning = new Lightning(this.game, 600, 40, true)
         this.game.entities.splice(1, 0, this.lightning);
-        this.lightning = new Lightning(this.game, 700, 40, true)
+        this.lightning = new Lightning(this.game, 810, 40, true)
         this.game.entities.splice(1, 0, this.lightning);
-        this.lightning = new Lightning(this.game, 800, 40, true)
-        this.game.entities.splice(1, 0, this.lightning);
-        this.lightning = new Lightning(this.game, 950, -280, true)
-        this.game.entities.splice(1, 0, this.lightning);
+        this.lightning = new Lightning(this.game, 1000, -270, true)
+        this.game.entities.splice(this.game.entities.length - 1, 0, this.lightning);
     }
 
     draw(ctx) {

@@ -22,7 +22,7 @@ class Lightning {
 
     updateBB() {
         if (this.animator.currentFrame() > 3) {
-            this.BB = new BoundingBox(this.x - this.game.camera.x + 30, this.y + 96, 200, 1000);
+            this.BB = new BoundingBox(this.x - this.game.camera.x + 30, this.y + 96, 200, 550);
         } else {
             this.BB = new BoundingBox(this.x - this.game.camera.x + 30, this.y + 96, 200, 1);
         }

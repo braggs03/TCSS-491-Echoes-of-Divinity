@@ -17,7 +17,11 @@ class SceneManager {
         this.shopkeeperCutsceneDone = false;
         this.oneCutsceneDone = false;
         this.twoCutsceneDone = false;
-        this.bossoneCutsceneDone = false;        
+        this.threeCutsceneDone = false;
+        this.fourCutsceneDone = false;
+        this.bossoneCutsceneDone = false;
+        this.bosstwoCutsceneDone = false;
+        this.bossthreeCutsceneDone = false;
         this.emberAnimation = new Animator(
             ASSET_MANAGER.getAsset(EMBER), 
             0, 96,        // Starting x, y position in spritesheet
@@ -30,10 +34,14 @@ class SceneManager {
         this.currentCheckpoint = null;
         this.knight = new Knight(this.game, this.x, this.y);
         this.deadcheckpoint = false;
+        this.doormove = false;
         this.discoveredCheckpoints = ["Rest"];
         this.discoveredCheckpointsLevel = [];
 
-        this.loadLevel('three', false, false, false, false);
+        this.lucanDead = false;
+        this.celesDead = false;        
+        this.loadLevel('startScreen', false, true, false, false);
+        // this.loadLevel('one', false, false, false, false);
     };
 
     saveEntities() {
@@ -79,7 +87,7 @@ class SceneManager {
                 this.fire.sound.volume = 0;
             }
         }
-
+        this.alreadyDone = false
         this.checkpoint = false;
         this.title = title;        
         this.level = levels[levelIndex];
@@ -97,7 +105,7 @@ class SceneManager {
 
         
         if (!this.title) {
-            if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint) {
+            if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint && !this.doormove) {
                 this.knight.x = this.currentCheckpoint.x;
                 this.knight.y = this.currentCheckpoint.y;
                 if (levelIndex === "two") {
@@ -129,6 +137,7 @@ class SceneManager {
             this.game.addEntity(new TransitionScreen(this.game, levelIndex, dead, end))
             return;
         }
+        this.doormove = false;
 
         if(this.level === levels.one || this.level === levels.two && this.music !== new Audio(BACKGROUND_MUSIC)) {
             this.music = new Audio(BACKGROUND_MUSIC);
@@ -136,10 +145,15 @@ class SceneManager {
         }
 
         if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
-            this.knight.x = this.knight.x + 200;
             this.music = new Audio(LUCAN_MUSIC);
             this.music.loop = true;
         }
+
+        if (this.level === levels.bossTwo && this.bosstwoCutsceneDone) {
+            this.music = new Audio(CELES_MUSIC);
+            this.music.loop = true;
+        }
+
         if (this.music) {
             this.music.preload = 'auto';
             this.music.volume = 0.1;
@@ -154,7 +168,7 @@ class SceneManager {
                 });
             }
             this.game.textOverlay = this.level.text;
-            this.game.textOverlay.background = "transparent"
+            this.game.textOverlay.background = "transparent";
         }
 
         if(this.level.title) {
@@ -192,7 +206,7 @@ class SceneManager {
                 let azucena = this.level.azucena[i];
                 this.game.addEntity(new Azucena(this.game, azucena.x, azucena.y, azucena.text));
             }
-            if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
+            if ((this.level === levels.bossOne && this.bossoneCutsceneDone) || (this.level === levels.bossTwo && this.bosstwoCutsceneDone)) {
                 this.azucena = this.game.entities.find((entities) => entities instanceof Azucena)
                 this.azucena.x = -300;
             }
@@ -235,7 +249,9 @@ class SceneManager {
         if (this.level.lucan) {
             for (let i = 0; i < this.level.lucan.length; i++) {
                 let lucan = this.level.lucan[i];
-                this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
+                if (!this.lucanDead) {
+                    this.game.addEntity(new NightbornWarrior(this.game, lucan.x, lucan.y));
+                }
             }
         }
 
@@ -276,6 +292,13 @@ class SceneManager {
             for (let i = 0; i < this.level.movingPlatform.length; i++) {
                 let ground = this.level.movingPlatform[i];
                 this.game.addEntity(new MovingPlatform(this.game, ground.x, ground.y, ground.w, ground.h, ground.endX, ground.endY, ground.isVertical));
+            }
+        }
+
+        if (this.level.lostSword) {
+            for (let i = 0; i < this.level.lostSword.length; i++) {
+                let sword = this.level.lostSword[i];
+                this.game.addEntity(new LostSword(this.game, sword.x, sword.y));
             }
         }
 
@@ -408,7 +431,7 @@ class SceneManager {
                 let background2 = this.level.dungeonBackground2[i];
                 this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
             }
-        }
+        }        
 
         if (this.level.dungeonGround2) {
             for (let i = 0; i < this.level.dungeonGround2.length; i++) {
@@ -513,6 +536,7 @@ class SceneManager {
                 this.game.addEntity(new tutorialBackground(this.game, background.x, background.y, background.w, background.h));
             }
         }
+
 
         if (this.level.cutscene) {
             this.cutsceneManager = new CutsceneManager(this.game);
@@ -637,6 +661,17 @@ class SceneManager {
     
 
     update() {
+        if (!this.game.keys["f"]) {
+            this.fReleased = true; 
+        }
+
+        const reina = this.game.entities.find((entity) => entity instanceof Reina);
+        if (this.fReleased && !this.shopMenu && this.level === levels["shopkeeper"] && reina && reina.BB.collide(this.knight.BB) && this.game.keys["f"]) {
+            this.fReleased = false;
+            this.game.keys["f"] = false;
+            this.game.camera.showShopMenu();
+        }
+
         if (this.game.keys["Escape"] && this.escReleased) {
             console.log("Escape pressed - escReleased:", this.escReleased,
                  "Control menu:", !!this.controlsMenu,
@@ -666,27 +701,50 @@ class SceneManager {
                     this.music.volume = 0;
                 }
             } else {
-
                 if (this.level === levels.shopkeeper || this.level === levels.startScreen) {
                     this.music.volume = 0;
                 } else if (!this.knight.inCutscene) {
-                    this.music.volume = 0.1
+                    if (this.level === levels.bossTwo && this.celesDead) {
+
+                    } else {
+                        this.music.volume = 0.1
+                    }
                 }
             }
         }
         if (this.cutsceneManager) {
             if (this.level === levels.tutorial) {
                 this.skeletons = this.game.entities.find(entity => entity instanceof SkeletonWarrior);
-                if (!this.skeletons) {
+                if (!this.skeletons && !this.alreadyDone) {
                     this.tutorialCutsceneDone = false;
+                    this.alreadyDone = true;
                     this.game.camera.cutscene.push({startX: -300, cutsceneNum: 1})
+                }
+            }
+            if (this.level === levels.bossOne) {
+                if (this.bossoneCutsceneDone && !this.lucanDead  && !this.alreadyDone) {
+                    this.cutsceneCounter = 1;
+                    this.alreadyDone = true;
+                    this.bossoneCutsceneDone = false;
+                    this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
+                }
+            }
+            if (this.level === levels.bossTwo) {
+                if (this.bosstwoCutsceneDone && !this.celesDead  && !this.alreadyDone) {
+                    this.cutsceneCounter = 1;
+                    this.alreadyDone = true;
+                    this.bosstwoCutsceneDone = false;
+                    this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
                 }
             }
             if (this.level === levels.tutorial && this.tutorialCutsceneDone
                 || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
                 || this.level === levels.one && this.oneCutsceneDone
                 || this.level === levels.two && this.twoCutsceneDone
-                || this.level === levels.bossOne && this.bossoneCutsceneDone) {
+                //|| this.level === levels.three && this.threeCutsceneDone
+                || this.level === levels.four && this.fourCutsceneDone
+                || this.level === levels.bossOne && this.bossoneCutsceneDone
+                || this.level === levels.bossTwo && this.bosstwoCutsceneDone) {
 
             } else {
                 if (this.cutsceneCounter !== this.cutscene.length) {
@@ -705,7 +763,8 @@ class SceneManager {
                         this.shopkeeperCutsceneDone = true
                     }
                     if (this.level === levels.one) {
-                        this.oneCutsceneDone = true
+                        this.oneCutsceneDone = false
+
                     }
                     if (this.level === levels.two) {
                         this.twoCutsceneDone = true
@@ -799,6 +858,21 @@ class SceneManager {
             this.y = this.level.maxheight;
         }
 
+        if (this.level === levels.bossOne) {
+            if (this.knight.x <= -245) {
+                this.loadLevel('two', true, false, false, true);
+            } else if (this.knight.x >= 1975) {
+                //this.loadLevel('three', true, false, false, false)
+            }
+        }
+
+        if (this.level === levels.bossTwo) {
+            if (this.knight.x <= -210) {
+                //this.loadlevel()
+            } else if (this.knight.x >= 1170) {
+                this.loadLevel('four', true, false, false, false)
+            }
+        }
     };
 
     userInterface(ctx) {
@@ -880,6 +954,9 @@ class SceneManager {
             this.userInterface(ctx);
         }
         testInteractable(this.game, ctx);
+        if (this.controlsMenu) {
+            this.controlsMenu.draw(ctx); 
+        }
         if (PARAMS.DEBUG) {
             ctx.fillStyle = "White";
             ctx.strokeStyle = "Black";

@@ -5,9 +5,14 @@ class Swordwave {
         this.y = y;
         this.speed = 1000;
         this.removeFromWorld = false;
-        this.damage = 100;
-        this.expiretime = 2;
+        this.damage = 400;
+        this.expiretime = 1;
         this.hitTargets = [];
+
+        this.swordwaveSound = new Audio("./resources/SoundEffects/swordwave.ogg");
+        this.swordwaveSound.loop = false;
+        this.swordwaveSound.playbackRate = 1;
+        this.swordwaveSound.volume = 0.2;
 
         if (direction) {
         this.direction = RIGHT;
@@ -28,11 +33,17 @@ class Swordwave {
             //right direction
 		    this.x += this.speed * this.game.clockTick;
             this.BB = new BoundingBox(this.x - this.game.camera.x, this.y + 40 - this.game.camera.y, 300, 115);
+            if (this.swordwaveSound.paused) {
+                this.swordwaveSound.play();
+            }
         } else {
             //left direction
             this.currentState = "left"
             this.x -= this.speed * this.game.clockTick;
             this.BB = new BoundingBox(this.x + 90 - this.game.camera.x, this.y + 40 - this.game.camera.y, 300, 115);
+            if (this.swordwaveSound.paused) {
+                this.swordwaveSound.play();
+            }
         }
         if (this.expiretime <= 0) {
             this.removeFromWorld = true;

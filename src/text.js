@@ -29,7 +29,7 @@ const text = {
 
     azucena4: [
         ["Here we can keep safe" , "as you make your way to Duma."],
-        ["4th wall break: F to interact with us or items.", "G to use healing potion", "Light the Emberlight (Campfire) for a checkpoint"],
+        ["4th wall break: Light the Emberlight (Campfire) for a checkpoint"],
     ],
 
     azucena5: [
@@ -59,9 +59,13 @@ const text = {
     reina5: [
         ["..."],
         ["I'm sure Knight Commander Lucan", "would have enjoyed fighting you."],
-        ["He would want you to have this."],
-        ["..."],
-        ["Thank you for ending his suffering."],
+        ["Lucan's armor was once", "blessed by Mica."],
+        ["Granting him the ability", "to leap in air"],
+        ["I pray you find good use of it."],
+    ],
+
+    obtainDoubleJump: [
+        ["OBTAINED DOUBLE JUMP"]
     ],
 
     azucena8: [
@@ -79,10 +83,10 @@ const text = {
     ],
 
     azucena10: [
-        ["Celes??"],
-        ["But you're...."],
-        ["No, it doesn't matter I suppose."],
-        ["May I ask why you stand before us"],
+        ["Celes, so it was you."],
+        ["..."],
+        ["I don't suppose it matters", "why you're alive."],
+        ["More importantly, why do", "you stand against us?"],
     ],
 
 
@@ -90,14 +94,61 @@ const text = {
         ["You know better than anyone why."],
         ["The two of us were far more", "powerful than our elders."],
         ["Why must we bow down to experience?"],
-        ["Duma has promised me a world where", "power rules all"],
-        ["So here I stand now."]
+        ["Duma has promised me a world", "where power rules all."],
+        ["So, here I stand now."],
     ],
 
     azucena11: [
         ["..."],
         ["I see..."],
-        ["Don't let her suffer."],
+        ["Do what you must.", "Don't let her suffer."],
+    ],
+
+    celes3: [
+        ["Do not fret, I promise the same."]
+    ],
+
+    azucena12: [
+        ["..."],
+        ["She was always so talented."],
+        ["If only she had the", "patience to go with it."],
+        ["..."],
+        ["Sorry, I won't let this", "hold me back."],
+        ["Her barrier magic should", "prove useful to you."],
+        ["Let's end this before", "more lives are lost."],
+    ],
+
+    obtainBarrier: [
+        ["OBTAINED MAGIC BARRIER"]
+    ],
+
+    azucena13: [
+        ["This is it, Duma awaits"],
+        ["I doubt his forces will sit", "idly as you fight."],
+        ["Reina and I shall hold the line."],
+        ["I have no doubt", "you will succeed."],
+        ["Show no fear."],
+    ],
+
+    reina6: [
+        ["So, this is it."],
+        ["The end of our long journey."],
+        ["..."],
+        ["I can't lie as", "well as Azucena."],
+        ["I'm terrified of", "what's to come."],
+        ["Whatever happens..."],
+        ["Walk tall, my dearest friend."],
+    ],
+
+    duma1: [
+        ["Mica's Chosen..."],
+        ["To think my dear sister still", "scorns me even after death."],
+        ["Mankind has shown", "it's true nature."],
+        ["Mica was wrong."],
+        ["You cannot rule yourselves."],
+        ["You can't even save yourselves."],
+        ["You will submit to my power,"],
+        [""],
     ],
 
     azucena_end: [
@@ -106,12 +157,5 @@ const text = {
         ["So yeah, unfortunately you will not", "be saving the world today"],
         ["I'm not gonna bother making credits right now"],
         ["This is all you're getting, bye"]
-    ],
-
-    reina_shopkeeper: [
-        ["Hello Knight!"],
-        ["I am Reina."],
-        ["Feel free to purchase", "items from me if you", "have the embers to spare."],
-        ["Would you like to see", "what I have for sale?", "Press F to open shop."],
     ],
 }

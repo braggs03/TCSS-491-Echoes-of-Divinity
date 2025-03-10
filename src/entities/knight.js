@@ -31,6 +31,9 @@ class Knight {
         this.healthBar = new HealthBar(this);
         this.maxHp = 1000;
         this.hp = 1000;
+        this.shieldBar = new ShieldBar(this);
+        this.maxShield = 200;
+        this.shield = 200;
         this.height = 110;
         this.bheight = 0;
         this.stamina = 1000;
@@ -39,7 +42,7 @@ class Knight {
         this.meleeAttackStaminaCost = 300;
         this.rangedAttackStaminaCost = 1000;
 
-        this.emberCount = 100;
+        this.emberCount = 0;
         
         this.maxPotionCount = 3;
         this.potionCount = this.maxPotionCount;
@@ -67,8 +70,11 @@ class Knight {
         
         this.hasDoubleJump = true;
         this.hasDoubleJumped = false;
-        this.hasWaveAttack = true;
+        this.hasWaveAttack = false;
         this.dead = false;
+
+        this.hasShield = true;
+        this.isShielded = true;
         
 
         this.colliding = {
@@ -80,11 +86,11 @@ class Knight {
 
         this.runSound = new Audio("./resources/SoundEffects/run.ogg");
         this.runSound.loop = true;
-        this.runSound.playbackRate = 10;
+        this.runSound.playbackRate = 5;
         this.runSound.volume = 0.2;
         this.attackSound = new Audio("./resources/SoundEffects/knightAttack.ogg");
         this.attackSound.loop = false;
-        this.runSound.playbackRate = 1;
+        this.attackSound.playbackRate = 1;
         this.attackSound.volume = 0.2;
         this.jumpSound = new Audio("./resources/SoundEffects/jump.ogg");
         this.jumpSound.loop = false;
@@ -94,6 +100,12 @@ class Knight {
         this.rollSound.loop = false;
         this.rollSound.playbackRate = 1;
         this.rollSound.volume = 0.2;
+        // this.swordwaveSound = new Audio("./resources/SoundEffects/swordwave.ogg");
+        // this.swordwaveSound.loop = false;
+        // this.swordwaveSound.playbackRate = 2;
+        // this.swordwaveSound.volume = 0.2;
+        
+
 
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
@@ -180,12 +192,19 @@ class Knight {
     takeDamage(amount) {
         if (!this.invincible) {
             this.invincible = true;
-            this.hp -= amount;
+            if (!this.isShielded) {
+                this.hp -= amount;
+            } else {
+                this.shield -= amount;
+            }
             console.log(`knight takes ${amount} damage, remaining health: ${this.hp}`);
             if (this.hp <= 0) {
                 this.die();
             } else {
                 this.flickerDuration = 0.3; // Flicker for 0.5 seconds
+            }
+            if (this.shield <= 0) {
+                this.isShielded = false;
             }
         }
     }
@@ -193,6 +212,7 @@ class Knight {
     reset() {
         this.dead = false;
         this.hp = this.maxHp;
+        this.shield = this.maxShield;
         this.potionCount = this.maxPotionCount;
         this.removeFromWorld = false;
     }
@@ -299,7 +319,7 @@ class Knight {
         this.game.entities.forEach((entity) => {
             if (entity.BB && knight.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(knight.BB);
-                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonSpike || entity instanceof DungeonWall1 || entity instanceof DungeonGround4 || entity instanceof DungeonWall2) {
+                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonWall1 || entity instanceof DungeonSpike || entity instanceof DungeonWall2 || entity instanceof DungeonGround4) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
 
@@ -475,6 +495,7 @@ class Knight {
                     }
                 }
                 if (this.rollSound.paused) {
+                    this.runSound.pause();
                     this.rollSound.play();
                 }
                 this.updateBB();
@@ -494,6 +515,7 @@ class Knight {
                 } else {
                     this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
                     if(this.jumpSound.paused) {
+                        this.runSound.pause();
                         this.jumpSound.play();
                     }
                 }
@@ -551,13 +573,14 @@ class Knight {
                             this.setState(this.chosenState);
                             this.currentStamina -= this.meleeAttackStaminaCost;
                             if (this.attackSound.paused) {
+                                this.runSound.pause();
                                 this.attackSound.play();
                             }
                             this.hitTargets = [];
                             
                             setTimeout(() => {
                                 this.attackAnimationActive = false;
-                            }, 900);
+                            }, 700);
                         }
                     }
                 } else if (this.game.keys["w"]) { // Swordwave projectile
@@ -569,16 +592,21 @@ class Knight {
                         this.attackAnimationActive = true;
                         this.chosenState = this.facing === RIGHT ? this.currentState = 'RightAttack2' : this.currentState = 'LeftAttack2';
                         this.setState(this.chosenState);
-                        //todo: set for different attack animation
+                        if (this.attackSound.paused) {
+                            this.runSound.pause();
+                            this.attackSound.play();
+                        }
                         setTimeout(() => {
                         this.swordwave = new Swordwave(this.game, this.x, this.y + 80, this.facing);
                         this.game.entities.splice(1, 0, this.swordwave);
                         console.log(`projectile @ ("${knight.x}, ${knight.y}")`);
                         }, 700);
-                        this.currentStamina -= this.rangedAttackStaminaCost;
-                        if (this.attackSound.paused) {
-                            this.attackSound.play();
-                        }
+                        this.currentStamina = 0;
+                        // if (this.swordwaveSound.paused) {
+                        //     this.runSound.pause();
+                        //     this.swordwaveSound.play();
+                        // }
+                        this.runSound.pause();
                         this.hitTargets = [];
 
                         setTimeout(() => {
@@ -621,9 +649,20 @@ class Knight {
 
     draw(ctx) {
         if (this.flickerDuration > 0 && !this.flickerFlag) return;
+        if (this.hasShield && this.isShielded) {
+            // Set glow effect
+            ctx.save(); // Save canvas state
+            ctx.shadowColor = "rgba(0, 255, 255, 0.8)"; // Cyan glow
+            ctx.shadowBlur = 20; // Increase for a stronger glow
+        }
+
         this.animations[this.currentState].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 3);
+        ctx.restore(); // Restore canvas state to avoid affecting other drawings
         if (!this.inCutscene) {
             this.healthBar.draw(ctx);
+            if (this.hasShield && this.isShielded) {
+                this.shieldBar.draw(ctx);
+            }
         }
         this.game.entities.forEach(entity => {
             if (entity instanceof PotionEffect) {

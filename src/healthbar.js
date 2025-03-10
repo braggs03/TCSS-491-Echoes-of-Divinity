@@ -35,6 +35,46 @@ class HealthBar {
     }
 }
 
+class ShieldBar {
+    constructor(agent) {
+        this.agent = agent;
+    }
+
+    update() {
+
+    }
+
+    draw(ctx) {
+        let alwaysShow = this.agent instanceof Knight;
+        if (alwaysShow || this.agent.hp < this.agent.maxHp) { // Show only when damaged
+            let displayShield = Math.max(0, this.agent.shield);
+            let ratio = displayShield / this.agent.maxShield;
+            let barWidth = 120;
+            let barHeight = 10;
+            let barX = this.agent.x + 170 - this.agent.bheight - barWidth / 2 - this.agent.game.camera.x;
+            let barY = this.agent.y + this.agent.height - 40 - this.agent.game.camera.y;
+
+            ctx.fillStyle = "Red";
+            ctx.fillRect(barX, barY, barWidth, barHeight);
+            if (this.agent instanceof Celes) {
+                ctx.fillStyle = "rgba(255, 165, 0, 0.8)";
+            } else {
+                ctx.fillStyle = "Cyan";
+            }
+            ctx.fillRect(barX, barY, barWidth * ratio, barHeight);
+            ctx.strokeStyle = "Black";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(barX, barY, barWidth, barHeight);
+
+            ctx.fillStyle = "White";
+            ctx.font = '24px "Open+Sans"';
+            ctx.textAlign = "center";
+            ctx.fillStyle = '#000000';
+            ctx.textBaseline = 'top';
+        }
+    }
+}
+
 class PotionEffect {
     constructor(game, x, y, type, healAmount) {
         this.game = game;

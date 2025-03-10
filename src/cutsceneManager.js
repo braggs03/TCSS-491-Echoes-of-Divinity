@@ -4,7 +4,8 @@ class CutsceneManager {
         this.cutsceneArray = [new CutsceneOne(this.game), new CutsceneTwo(this.game),
             new CutsceneThree(this.game), new CutsceneFour(this.game), new CutsceneFive(this.game),
             new CutsceneSix(this.game), new CutsceneSeven(this.game), new CutsceneEight(this.game),
-            new CutsceneNine(this.game), new CutsceneTen(this.game),]
+            new CutsceneNine(this.game), new CutsceneTen(this.game), new CutsceneEleven(this.game), 
+            new CutsceneTwelve(this.game),]
     }
 }
 
@@ -240,7 +241,9 @@ class CutsceneSix {
     }
 
     async run() {
-        this.game.camera.music.pause();
+        if (this.game.camera.music) {
+            this.game.camera.music.pause();
+        }
         this.knight.inCutscene = true;
         this.lucan.inCutscene = true;
         this.lucan.setState('idleLeft')
@@ -335,11 +338,11 @@ class CutsceneSeven {
         this.azucena.y = -300;
         this.reina.y = -300;
         this.knight.inCutscene = true;
-        if (!this.game.camera.lucanDead) {
+        if (this.lucan && !this.game.camera.lucanDead) {
             this.lucan.inCutscene = true;
             this.lucan.setState('idleLeft')
         }
-        if (!this.game.camera.celesDead) {
+        if (this.celes && !this.game.camera.celesDead) {
             this.celes.inCutscene = true;
             this.celes.setState('idleLeft')
         }
@@ -390,6 +393,8 @@ class CutsceneEight {
         this.game.camera.interactable.currentDialog++;
         await this.delay(4000);
         this.game.camera.removeInteractive();
+        this.knight.hasDoubleJump = true;
+        this.game.camera.showInteractive(this.knight, "obtainDoubleJump")
     }
 
     delay(ms) {
@@ -444,7 +449,9 @@ class CutsceneTen {
     }
 
     async run() {
-        //this.game.camera.music.pause();
+        if (this.game.camera.music) {
+            this.game.camera.music.pause();
+        }
         this.knight.inCutscene = true;
         this.celes.inCutscene = true;
         this.celes.setState('LeftIdle')
@@ -463,17 +470,143 @@ class CutsceneTen {
         this.game.entities.splice(1, 0, this.lightning)
         await this.delay(500)
         this.celes.y = 450;
+        await this.delay (1000)
         this.game.camera.showInteractive(this.celes, "celes1");
         await this.delay(2000);
         this.game.camera.removeInteractive();
         this.game.camera.showInteractive(this.azucena, "azucena10");
+        await this.delay(2500);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2500);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2500);
+        this.game.camera.removeInteractive();
+        this.game.camera.showInteractive(this.celes, "celes2");
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(3000);
+        this.game.camera.removeInteractive();
+        this.game.camera.showInteractive(this.azucena, "azucena11");
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
-        this.game.camera.interactable.currentDialog++;
+        this.game.camera.removeInteractive();
+        this.azucena.setState(this.azucena.idleLeft())
+        this.azucena.goLeft = true;
+        while (this.azucena.x > -200) {
+            await this.delay (16);
+        }
+        this.azucena.goLeft = false;
+        let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 3);
+        walls.forEach(wall => wall.h = 5);
+        this.game.camera.showInteractive(this.celes, "celes3");
+        this.game.camera.music = new Audio(CELES_MUSIC);
+        this.game.camera.music.loop = true;
+        this.game.camera.music.volume = 0.1;
+
+        // Ensure the audio is fully loaded before allowing playback
+        this.game.camera.music.addEventListener('canplaythrough', () => {
+            this.game.camera.music.play();
+        });
+        await this.delay(3000);
+        this.game.camera.removeInteractive();
+        this.knight.inCutscene = false;
+        this.knight.moveable = true;
+        this.celes.inCutscene = false;
+        this.game.camera.inCutscene = false;
     }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+/*
+    Boss 2 Complete Cutscene.
+ */
+class CutsceneEleven {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.azucena = this.game.entities.find(entity=> entity instanceof Azucena);
+    }
+
+    async run() {
+        //this.game.camera.inCutscene = true;
+        this.knight.inCutscene = true;
+        this.azucena.inCutscene = true;
+
+        this.game.camera.showInteractive(this.azucena, "azucena12");
+        await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(4000);
+        this.game.camera.removeInteractive();
+        this.knight.hasShield = true;
+        this.game.camera.showInteractive(this.knight, "obtainBarrier")
+        await this.delay(4000);
+        this.game.camera.removeInteractive();
+        this.game.camera.inCutscene = true;
+        this.knight.inCutscene = false;
+        this.azucena.inCutscene = false;
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+class CutsceneTwelve {
+    constructor(game) {
+        this.game = game;
+        this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+    }
+
+    async run() { 
+        if(this.knight.y < -2600) {   
+        this.knight.moveable = false;
+        await this.delay(700);   
+        this.knight.inCutscene = true;
+        this.knight.moveable = true;
+        this.knight.setState('RightRun');
+        while (this.knight.x < 100) {
+            await this.delay (0.5);
+        }
+        this.knight.moveable = false;
+        await this.delay(300);
+        this.knight.setState('LeftIdle');
+        await this.delay(1000);
+        this.knight.setState('LeftAttack2');     
+        this.knight.facing = LEFT;
+        await this.delay(700);   
+        this.swordwave = new Swordwave(this.game, this.knight.x, this.knight.y + 80, this.knight.facing);
+        this.game.entities.splice(1, 0, this.swordwave);
+        await this.delay(100);
+        this.knight.inCutscene = false;
+        this.game.camera.inCutscene = false;
+        this.knight.moveable = true;
+        }
+        this.knight.inCutscene = false;
+        this.game.camera.inCutscene = false;
+
+    }
+
+    
 
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));

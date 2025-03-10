@@ -6,7 +6,7 @@ class Werewolf {
         this.y = y;
         this.maxHp = 1400;
         this.hp = 1400;
-        this.height = 350;
+        this.height = 90;
         this.bheight = 30;
         this.healthBar = new HealthBar(this);
         this.damage = 150;
@@ -72,9 +72,9 @@ class Werewolf {
 		this.lastBB = this.BB;
 		
 		if (this.aggro) {
-			this.BB = new BoundingBox(this.x - this.game.camera.x, this.y + 50, 256, 206);
+			this.BB = new BoundingBox(this.x - this.game.camera.x, this.y + 50 - this.game.camera.y, 256, 206);
 		} else {
-			this.BB = new BoundingBox(this.x - this.game.camera.x - 150, this.y + 170, 400, 88);
+			this.BB = new BoundingBox(this.x - this.game.camera.x - 150, this.y - this.game.camera.y + 170, 400, 88);
 		}
 	}
 	
@@ -305,7 +305,7 @@ class Werewolf {
 			if (!this.flickerFlag) return; 
 		}
 		
-		this.animators[this.state].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
+		this.animators[this.state].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 2);
 
 		if (this.healthBar) this.healthBar.draw(ctx);
 		if (this.BB) this.BB.draw(ctx);
