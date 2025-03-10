@@ -423,6 +423,7 @@ class Knight {
                 this.setState(this.chosenState);
                 this.pauseSound();
             }
+            this.velocityX = 0;
         }
     
         if (!this.dead && !this.inCutscene) {
@@ -603,6 +604,10 @@ class Knight {
                 this.velocityX = 0; 
                 this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
             }
+        }
+
+        if (PARAMS.DEBUG) {
+            this.hasDoubleJumped = false;
         }
 
         this.x += this.velocityX * clockTick;

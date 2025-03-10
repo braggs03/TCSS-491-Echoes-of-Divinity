@@ -129,6 +129,54 @@ let levels = {
         azucena: [{ x: 11200, y: 400 }],
     },
 
+    three: {
+        width: 1350,
+        maxHeight: -4000,
+        minHeight: 0,
+        startPosition: {
+            x: 1900,
+            y: -3800,
+        },
+        endPosition: {
+            x: 14470,
+            y: 465,
+        },
+        checkpoint2:{
+            x: 13700,
+            y: 465,
+        },
+        dungeonBackground: [{ x:0, y:0, w:28, h: 10}, 
+                            { x:744, y:-4000, w:20, h: 60}
+                           ],
+        dungeonGround: [
+                        { x: 0, y: 17, w: 7, h: 1 }, 
+                        { x: 11, y: 12, w: 4, h: 1 },  
+                        { x: 0, y: 0, w: 5, h: 1 }, 
+                        { x: 16, y: -5, w: 1, h: 1 },  
+                        { x: 5, y: -40, w: 1, h: 1 },  
+                        { x: 5, y: -50, w: 1, h: 1 },
+                        { x: 16, y: -60, w: 1, h: 1 },  
+                        { x: 8, y: -90, w: 10, h: 1 },  
+                        { x: 5, y: -99.2, w: 12, h: 1 }
+                       ],
+        movingPlatform: [
+                         {x:9, y:7, w:2, h:1, endX:68, endY:-10, isVertical: true}, 
+                         {x:12, y:0, w:2, h:1, endX:15, endY:-10, isVertical: false}, 
+                         {x:14, y:-15, w:2, h:1, endX:68, endY:-35, isVertical: true},
+                         {x:10, y:-30, w:1, h:1, endX:0, endY:-42, isVertical: true},
+                         {x:10, y:-70, w:2, h:1, endX:14, endY:-42, isVertical: false},
+                        ],
+
+        skeleton: [{ x: 1800, y: 314 },],
+        mechagolem: [{ x: 600, y: 2000 }, { x: 7500, y: 100}, { x: 11000, y: 350}, { x: 11000, y: -400}],
+        dungeonWall: [{ x: 0, y: 0, h: 2},
+                      { x: 18.4, y:-15500, h: 100}, 
+                      { x: 64.9, y:-3600, h: 30}
+                     ],
+        dungeonDoor: [{ x: 14500, y: 465, level: "two", end: false }],
+        bonFire: [{ x: 300, y: 472, level: "three" }],
+    },
+
     four: {
         width: 13545,
         maxHeight: -2000,
@@ -155,7 +203,6 @@ let levels = {
         eagle: [{ x: 950, y: 538}, { x: 2350, y: 538}, { x: 4450, y: 538}, { x: 11450, y: 538}, { x: 12850, y: 538}],
         eagle2: [{ x: 1700, y: 535}, { x: 3100, y: 535}, { x: 5200, y: 535},{ x: 12200, y: 535}, { x: 13600, y: 535}],
         wizard: [{ x: 3800, y: 438 }, { x: 5900, y: 438 }],
-
     },
 
     shopkeeper: {
