@@ -190,6 +190,8 @@ class NightbornWarrior {
             if (this.attackTimer >= attackDuration) {
                 this.attackInProgress = false;
                 this.attackTimer = 0;
+                this.nightbornAttack.play();
+                this.nightbornAttack.volume = 0.2;
                 
                 // Check if target is still in range for another attack
                 if (this.target && this.BB.collide(this.target.BB) && !this.target.dead) {
@@ -282,8 +284,6 @@ class NightbornWarrior {
         // Deal damage at 60% through animation (0.576s = 60% of 0.96s)
         setTimeout(() => {
             if (!this.dead && this.target && this.BB.collide(this.target.BB) && !this.target.dead) {
-                this.nightbornAttack.play();
-                this.nightbornAttack.volume = 0.2;
                 console.log("NightbornWarrior deals damage to Knight");
                 this.target.takeDamage(200);
             }
