@@ -148,7 +148,7 @@ let levels = {
             y: 465,
         },
         endPosition: {
-            x: 14470,
+            x: 14200,
             y: 465,
         },
         checkpoint4:{ //bonFire position change both
