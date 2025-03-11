@@ -101,7 +101,7 @@ let levels = {
             {x:106.5, y:12, w:1, h:1, endX:93, endY:-4, isVertical: true}], // 12 -4
         skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }, { x: 9000, y: 424 }, { x: 9200, y: 424 }, { x: 9400, y: 424 }, { x: 9600, y: 424 }],
         mechagolem: [{ x: 4500, y: 350 },{ x: 7500, y: 100},{ x: 11000, y: 350}, { x: 11000, y: -400}],
-        dungeonWall: [{ x: 0, y: 0, h: 6}, { x: 370, y: 0, h: 5}],
+        dungeonWall: [{ x: 0, y: -3500, h: 50}, { x: 370, y: -3500, h: 50}],
         dungeonDoor: [{ x: 117, y: 465, level: "shopkeeper", end: false }, { x: 14500, y: 465, level: "two", end: false }],
         bonFire: [{ x: 13300, y: 472, level: "one" }],
         lostSword:[{ x:14400, y:-2500 }],
