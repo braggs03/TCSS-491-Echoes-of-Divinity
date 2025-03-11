@@ -111,7 +111,7 @@ let levels = {
     },
 
     two: {
-        width: 10345,
+        width: 10360,
         height: 0,
         startPosition: {
             x: 87,
@@ -248,7 +248,7 @@ let levels = {
     shopkeeper: {
         width: 1085,
         minHeight: 0,
-        minHeight: 0,
+        maxHeight: 0,
         startPosition: {
             x: 70,
             y: 445,
@@ -281,7 +281,8 @@ let levels = {
 
     bossOne: {
         width: 800,
-        height: 0,
+        minHeight: 0,
+        maxHeight: 0,
         startPosition: {
             x: -200,
             y: 430,
@@ -297,7 +298,8 @@ let levels = {
 
     bossTwo: {
         width: 0,
-        height: 0,
+        minHeight: 0,
+        maxHeight: 0,
         startPosition: {
             x: -200,
             y: 430,
@@ -317,7 +319,8 @@ let levels = {
 
     bossThree: {
         width: 0,
-        height: 0,
+        minHeight: 0,
+        maxHeight: 0,
         startPosition: {
             x: -200,
             y: 430,
@@ -424,4 +427,14 @@ let levels = {
 
 let originalLevels = structuredClone(levels);
 
-
+const resetLevels = () => {
+    const excludeFields = ['cutscene', 'bonFire', 'potion'];
+    for (const levelName in originalLevels) {
+        const originalLevel = originalLevels[levelName];
+        for (const propName in originalLevel) {
+            if (!excludeFields.includes(propName)) {
+                levels[levelName][propName] = structuredClone(originalLevel[propName]);
+            }
+        }
+    }
+};
