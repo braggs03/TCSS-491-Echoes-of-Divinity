@@ -21,7 +21,7 @@ class Knight {
         this.decelerationX = 4000;
         
         this.velocityY = 0;
-        this.maxVelocityY = 900;
+        this.maxVelocityY = 1400;
         this.jumpSpeed = 1350;
         this.accelerationY = 4125; 
 
@@ -408,7 +408,7 @@ class Knight {
                             } else {
                                 this.colliding.up = true;
                                 knight.y -= overlap.y - 1;
-                                this.test = (MOVING_PLATFORMS_WIDTH / 2) * entity.velocityX * MOVING_PLATFORMS_WIDTH / 5; //test
+                                this.test = entity.velocityX; //test
                                 knight.x += this.test; 
                                 // console.log(this.test);                         
                                 this.hasDoubleJumped = false;
