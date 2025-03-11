@@ -629,6 +629,7 @@ class SceneManager {
 
     teleportToCheckpoint(knight) {
         this.deadcheckpoint = true;
+        resetLevels();
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
             if (levels[levelIndex]) { 
