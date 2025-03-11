@@ -719,11 +719,12 @@ class SceneManager {
                     this.music.volume = 0;
                 }
             } else {
-                if (this.level === levels.shopkeeper || this.level === levels.startScreen) {
+                if (this.level === levels.shopkeeper || this.level === levels.startScreen || this.level.five) {
                     this.music.volume = 0;
                 } else if (!this.knight.inCutscene) {
-                    if (this.level === levels.bossTwo && this.celesDead) {
-
+                    if (this.level === levels.bossOne && this.lucanDead ||
+                        this.level === levels.bossTwo && this.celesDead) {
+                        this.music.volume = 0;
                     } else {
                         this.music.volume = 0.1
                     }
