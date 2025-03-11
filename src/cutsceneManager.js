@@ -782,13 +782,13 @@ class CutsceneFifteen {
         this.game.camera.showInteractive(this.duma, "duma1");
         await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(2000);
+        await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(2000);
+        await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(2000);
+        await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
-        await this.delay(2000);
+        await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(2000);
         this.game.camera.music = new Audio(DUMA_MUSIC);

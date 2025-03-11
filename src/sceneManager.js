@@ -41,7 +41,7 @@ class SceneManager {
 
         this.lucanDead = false;
         this.celesDead = false;
-        this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('bossThree', false, false, false, false);
         // this.loadLevel('one', false, false, false, false);
     };
 
