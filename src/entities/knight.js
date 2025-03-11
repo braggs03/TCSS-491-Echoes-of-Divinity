@@ -21,7 +21,7 @@ class Knight {
         this.decelerationX = 4000;
         
         this.velocityY = 0;
-        this.maxVelocityY = 300000;
+        this.maxVelocityY = 900;
         this.jumpSpeed = 1350;
         this.accelerationY = 4125; 
 
@@ -520,7 +520,7 @@ class Knight {
                     }
                 }
                 this.velocityY += this.accelerationY * clockTick;
-                this.velocityY = Math.min(this.velocityY, this.maxVelocityY * clockTick);
+                this.velocityY = Math.min(this.velocityY, this.maxVelocityY);
             } else if (Math.abs(this.velocityX) > this.accelerationX * clockTick) {
                 this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
                 if (this.runSound.paused) {
