@@ -41,7 +41,7 @@ class SceneManager {
 
         this.lucanDead = false;
         this.celesDead = false;        
-        this.loadLevel('three', false, false, false, false);
+        this.loadLevel('startScreen', false, true, false, false);
     };
 
     saveEntities() {
@@ -801,7 +801,7 @@ class SceneManager {
                         this.shopkeeperCutsceneDone = true
                     }
                     if (this.level === levels.one) {
-                        this.oneCutsceneDone = true;
+                        this.oneCutsceneDone = false;
                     }
                     if (this.level === levels.two) {
                         this.twoCutsceneDone = true
@@ -959,7 +959,9 @@ class SceneManager {
             if (this.knight.x <= -280) {
                 this.loadLevel('bossOne', true, false, false, true)
             } else if (this.knight.x >= 3100) {
-                this.loadLevel('bossTwo', true, false, false, false)
+                this.game.camera.x = 0;
+                this.game.camera.y = 0;
+                this.loadLevel('bossTwo', true, false, false, false);
             }
         }
 

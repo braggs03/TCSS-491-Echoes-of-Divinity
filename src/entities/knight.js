@@ -47,7 +47,7 @@ class Knight {
         this.maxPotionCount = 3;
         this.potionCount = this.maxPotionCount;
         this.potionHealCount = 200;
-        this.potionCost = 50;
+        this.potionCost = 2000;
 
         this.gKeyPressed = false;
         
@@ -68,7 +68,7 @@ class Knight {
         
         this.animationLocked = false;
         
-        this.hasDoubleJump = true;
+        this.hasDoubleJump = false;
         this.hasDoubleJumped = false;
         this.hasWaveAttack = false;
         this.dead = false;
@@ -608,12 +608,14 @@ class Knight {
                 } else {
                     this.gKeyPressed = false;
                 }
-            }        
-    
-            if (!this.moveable) {
-                this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
-                this.velocityX = 0; 
-                this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
+            }
+        }
+
+        if (!this.moveable) {
+            this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
+            this.velocityX = 0; 
+            if (!this.colliding.up) {
+                this.velocityY = this.maxVelocityY;
             }
         }
 
