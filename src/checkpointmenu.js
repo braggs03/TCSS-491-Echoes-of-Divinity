@@ -53,7 +53,7 @@ class CheckpointMenu {
         ctx.fillStyle = "white";
         ctx.font = '20px "Open+Sans"';
         // console.log(this.entity)
-        ctx.fillText("Rest or Teleport to: (esc to exit)", PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2 - 30);
+        ctx.fillText("Rest or Teleport to: (enter to select and esc to exit)", PARAMS.SCREENWIDTH / 2, PARAMS.SCREENHEIGHT / 2 - 30);
 
         this.game.camera.discoveredCheckpoints.forEach((element, index) => {
             if (index === this.selectedIndex) {
