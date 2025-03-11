@@ -40,7 +40,7 @@ class SceneManager {
 
         this.lucanDead = false;
         this.celesDead = false;        
-        this.loadLevel('three', false, false, false, false);
+        this.loadLevel('startScreen', false, true, false, false);
         // this.loadLevel('one', false, false, false, false);
     };
 
@@ -598,10 +598,6 @@ class SceneManager {
         this.interactable = undefined;
     }
 
-    resetLevel(levelIndex) {
-        levels[levelIndex] = structuredClone(originalLevels[levelIndex]);
-    }
-
     openCheckpointMenu(entity) {
         this.knight.moveable = false;
         this.game.keys["f"] = false;
@@ -662,10 +658,20 @@ class SceneManager {
 
     update() {
 
-        if (this.levelIndex === "three" && this.knight.y <= -3839) {
-            this.level.width = 1900;
-        } else {
-            this.level.width = originalLevels[this.levelIndex].width;
+        if (this.levelIndex === "three") {
+            if (this.knight.y <= -3839) {
+                this.level.width = 1900;
+            } else {
+                this.level.width = originalLevels[this.levelIndex].width;
+            }
+        } 
+
+        if (this.levelIndex === "four") {
+            if (this.knight.x <= 6000 || this.knight.x >= 11000) {
+                this.level.minHeight = 0;
+            } else {
+                this.level.minHeight = originalLevels[this.levelIndex].minHeight;
+            }
         }
 
         if (!this.game.keys["f"]) {
@@ -976,10 +982,6 @@ class SceneManager {
             ctx.font = '10px Arial';
             ctx.textAlign = "left";
             ctx.textBaseline = 'top';
-            this.game.entities.map((entity) => {
-                ctx.fillText(entity.y, entity.x - this.x, entity.y - this.y);
-                ctx.fillText(entity.x, entity.x - this.x, entity.y - this.y - ctx.measureText(entity.y).actualBoundingBoxDescent);
-            });
             ctx.font = '40px Arial';
             const padding = 10;
             const offset = 10;
