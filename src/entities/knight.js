@@ -68,7 +68,7 @@ class Knight {
         
         this.animationLocked = false;
         
-        this.hasDoubleJump = false;
+        this.hasDoubleJump = true;
         this.hasDoubleJumped = false;
         this.hasWaveAttack = false;
         this.dead = false;
@@ -326,7 +326,7 @@ class Knight {
         this.game.entities.forEach((entity) => {
             if (entity.BB && knight.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(knight.BB);
-                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonWall1 || entity instanceof DungeonSpike || entity instanceof DungeonWall2 || entity instanceof DungeonGround4) {
+                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonWall1 || entity instanceof DungeonSpike || entity instanceof DungeonWall2 || entity instanceof DungeonGround4 || entity instanceof MovingPlatform) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
 
@@ -351,6 +351,10 @@ class Knight {
                             this.colliding.up = true;
                             knight.y -= overlap.y - 1;
                             this.hasDoubleJumped = false;
+
+                            if (entity instanceof MovingPlatform) {
+                                    knight.y += entity.speed * entity.direction * this.game.clockTick;;
+                            }
                         }
                         knight.velocityY = 0;                        
                     }
@@ -384,44 +388,6 @@ class Knight {
                             entity.save();
                             entity.removeFromWorld = true;
                         }
-                    }
-                } else if (entity instanceof MovingPlatform) { // Moving Platform
-                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
-                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
-
-                    if (horizontalCollision) {
-                        if (entity.BB.x < knight.BB.x) {
-                            knight.x += overlap.x;
-                        } else {
-                            knight.x -= overlap.x;
-                        }
-                        knight.velocityX = 0;
-                    }
-                    
-                    if (verticalCollision) {
-                        if (entity.isVertical) { //vertical movements
-                            if (entity.BB.y < knight.BB.y) {
-                                this.colliding.down = true;
-                                knight.y += overlap.y;
-                            } else {
-                                this.colliding.up = true;
-                                knight.y -= overlap.y - 1;                           
-                                this.hasDoubleJumped = false;
-                            }
-                        } else { // horizontal movements
-                            if (entity.BB.y < knight.BB.y) {
-                                this.colliding.down = true;
-                                knight.y += overlap.y;
-                            } else {
-                                this.colliding.up = true;
-                                knight.y -= overlap.y - 1;
-                                this.test = entity.velocityX; //test
-                                knight.x += this.test; 
-                                // console.log(this.test);                         
-                                this.hasDoubleJumped = false;
-                            }
-                        }
-                        // knight.velocityY = 0;
                     }
                 }
             }

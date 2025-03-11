@@ -558,6 +558,7 @@ class MovingPlatform {
         this.endX = endX * MOVING_PLATFORMS_WIDTH * this.scale;
         this.endY = endY * MOVING_PLATFORMS_HEIGHT * this.scale;
         this.direction = 1; // 1 for forward, -1 for reverse
+        this.speed = 400;
 
         this.velocityX; // Initialize horizontal velocity
         this.velocityY; // Initialize vertical velocity
@@ -566,17 +567,22 @@ class MovingPlatform {
     };
 
     update() {
+        const d = this.speed * this.direction * this.game.clockTick;
+        const knight = this.game.camera.knight;
         if (this.isVertical) { //Vertical
-            this.speed = 400;
-            this.y += this.speed * this.direction * this.game.clockTick;
-            this.velocityY = this.speed * this.direction * this.game.clockTick;
+            this.y += d;
+            this.velocityY = d;
+            
             if ((this.direction === 1 && this.y >= this.startY) || (this.direction === -1 && this.y <= this.endY)) {
                 this.direction *= -1;
             }
         } else { //Horizxontal
-            this.speed = 400;
-            this.x += this.speed * this.direction * this.game.clockTick;
-            this.velocityX = this.speed * this.direction * this.game.clockTick;
+            this.x += d;
+            this.velocityX = d;
+
+            if (this.BB.collide(knight.BB)) {
+                knight.x += d;
+            }
 
             if ((this.direction === 1 && this.x >= this.endX) || (this.direction === -1 && this.x <= this.startX)) {
                 this.direction *= -1;

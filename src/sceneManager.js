@@ -41,7 +41,7 @@ class SceneManager {
 
         this.lucanDead = false;
         this.celesDead = false;        
-        this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('three', false, false, false, false);
     };
 
     saveEntities() {
