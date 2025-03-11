@@ -25,9 +25,9 @@ class Azucena {
         this.BB = new BoundingBox(this.x + AZUCENA_X_OFFSET - this.game.camera.x, this.y + AZUCENA_Y_OFFSET - this.game.camera.y, AZUCENA_WIDTH, AZUCENA_HEIGHT);
         if (this.inCutscene) {
             if (this.goRight) {
-                this.x += 5;
+                this.x += 500 * this.game.clockTick;
             } else if (this.goLeft) {
-                this.x -=5;
+                this.x -= 500 * this.game.clockTick;
             }
             return;
         }

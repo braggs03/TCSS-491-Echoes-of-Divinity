@@ -88,6 +88,7 @@ ASSET_MANAGER.queueDownload(MAIN_MUSIC);
 ASSET_MANAGER.queueDownload(LUCAN_MUSIC);
 ASSET_MANAGER.queueDownload(CELES_MUSIC);
 ASSET_MANAGER.queueDownload(DUMA_MUSIC);
+ASSET_MANAGER.queueDownload(CREDITS_MUSIC);
 
 // Sound Effects
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/emberLight.ogg");

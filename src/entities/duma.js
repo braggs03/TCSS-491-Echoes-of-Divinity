@@ -6,7 +6,7 @@ class Duma {
         this.y = y
         this.updateBB();
         this.maxHp = 4000;
-        this.hp = 100;
+        this.hp = 4000;
         this.height = 100;
         this.bheight = 0;
         this.healthBar = new HealthBar(this);
@@ -30,6 +30,7 @@ class Duma {
         this.counterTwo = 5000;
         this.dead = false;
         this.pushBack = false;
+        this.removeFromWorld = false;
 
         this.wingsSound = new Audio("./resources/SoundEffects/wingsflapping.ogg");
         this.wingsSound.loop = true;
@@ -121,8 +122,44 @@ class Duma {
             }
         }
 
-        if (this.dead) {
-            return;
+        if (this.animations[this.currentState].getDone()) {
+            if (this.currentState === 'LeftAttack1') {
+                this.x += 200;
+                this.y += 120;
+                this.loopCount = 0;
+                this.setState('LeftIdle')
+            } else if (this.currentState === 'LeftAttack2') {
+                this.x += 70;
+                this.y += 120;
+                this.setState('LeftIdle')
+            } else if (this.currentState === 'RightAttack2') {
+                this.x += 70;
+                this.y += 120;
+                this.setState('RightIdle')
+            } else if (this.currentState === 'RightAttack1') {
+                console.log(true)
+                this.x += 20;
+                this.y += 120;
+                this.loopCount = 0;
+                this.setState('RightIdle')
+            }
+        }
+
+        if (this.currentState === 'LeftAttack1' || this.currentState === 'RightAttack1') {
+            let animation = this.animations[this.currentState];
+
+            if (!this.loopCount) this.loopCount = 0; // Initialize loop count
+
+            let frame8Time = animation.frameDuration * 8;
+            let frame10Time = animation.frameDuration * 10;
+            if (animation.elapsedTime >= frame10Time && this.loopCount < 7) {
+                if (animation.currentFrame() === 10) {
+                    this.loopCount++; // Increment loop count when frame 10 is reached
+                }
+                animation.elapsedTime = frame8Time;
+            } else if (this.loopCount >= 7 && animation.currentFrame() < 11) {
+                animation.elapsedTime += animation.frameDuration;
+            }
         }
 
         if (!this.target) {
@@ -144,11 +181,15 @@ class Duma {
                     this.specialAttackX = true;
                 }
             }
-            if (this.y > 0) {
+            if (this.y > 75) {
                 this.y -= 200 * this.game.clockTick;
             } else {
                 this.specialAttackY = true;
             }
+        }
+
+        if (this.specialAttackX && this.specialAttackY) {
+            this.goUp = false;
         }
 
         if (this.goDown) {
@@ -176,29 +217,9 @@ class Duma {
             this.attackChargeRun = false;
             this.goUp = true;
             this.dead = true;
+            this.game.camera.bossthreeCutsceneDone = false;
+            this.game.camera.cutscene.push({startX: -300, cutsceneNum: 15})
             return;
-        }
-
-        if (this.animations[this.currentState].getDone()) {
-            if (this.currentState === 'LeftAttack1') {
-                this.x += 200;
-                this.y += 120;
-                this.loopCount = 0;
-                this.setState('LeftIdle')
-            } else if (this.currentState === 'LeftAttack2') {
-                this.x += 70;
-                this.y += 120;
-                this.setState('LeftIdle')
-            } else if (this.currentState === 'RightAttack2') {
-                this.x += 70;
-                this.y += 120;
-                this.setState('RightIdle')
-            } else if (this.currentState === 'RightAttack1') {
-                this.x += 20;
-                this.y += 120;
-                this.loopCount = 0;
-                this.setState('RightIdle')
-            }
         }
 
         if (this.hp <= 3000 && this.attackChargeAvailable && !this.specialAttackRun && !this.specialAttack2Run && !this.goLeft && !this.goRight && !this.pushBack && (this.currentState !== 'LeftAttack2' || this.currentState !== 'RightAttack2')) {
@@ -217,9 +238,9 @@ class Duma {
         if (!this.specialAttackRun && !this.specialAttack2Run && (this.currentState === 'LeftAttack2' || this.currentState === 'RightAttack2')) {
             if (this.animations[this.currentState].currentFrame() === 6) {
                 if (this.facingLeft) {
-                    this.target.velocityX = -3000;
+                    this.target.velocityX = -2500;
                 } else {
-                    this.target.velocityX = 3000;
+                    this.target.velocityX = 2500;
                 }
             }
             return;
@@ -343,23 +364,6 @@ class Duma {
                         this.goRight = false;
                     }
                 }
-            }
-        }
-
-        if (this.currentState === 'LeftAttack1' || this.currentState === 'RightAttack1') {
-            let animation = this.animations[this.currentState];
-
-            if (!this.loopCount) this.loopCount = 0; // Initialize loop count
-
-            let frame8Time = animation.frameDuration * 8;
-            let frame10Time = animation.frameDuration * 10;
-            if (animation.elapsedTime >= frame10Time && this.loopCount < 7) {
-                if (animation.currentFrame() === 10) {
-                    this.loopCount++; // Increment loop count when frame 10 is reached
-                }
-                animation.elapsedTime = frame8Time;
-            } else if (this.loopCount >= 7 && animation.currentFrame() < 11) {
-                animation.elapsedTime += animation.frameDuration;
             }
         }
 

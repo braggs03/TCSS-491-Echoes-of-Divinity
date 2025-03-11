@@ -427,7 +427,7 @@ class Knight {
                 this.x += this.maxVelocityX * clockTick;
                 if (this.runSound.paused) {this.runSound.play();}
             } else if (this.currentState === "LeftRun") {
-                this.x -= this.velocityX * clockTick;
+                this.x -= this.maxVelocityX * clockTick;
                 if (this.runSound.paused) {this.runSound.play();}
             } else if (this.currentState === "RightRoll") {
                 this.x += this.rollSpeed * clockTick;
