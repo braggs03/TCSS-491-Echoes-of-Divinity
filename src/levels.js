@@ -196,7 +196,7 @@ let levels = {
 
     four: {
         width: 13545,
-        maxHeight: -2000,
+        maxHeight: 0,
         minHeight: 2000,
         startPosition: {
             x: 215,
