@@ -941,10 +941,10 @@ class SceneManager {
         
         if (this.level.minHeight > this.knight.y - middlepointY && this.level.maxHeight < this.knight.y - middlepointY) {
             this.y = this.knight.y - middlepointY;
-        } else if (this.level.minheight > this.knight.y - middlepointY) {
-            this.y = this.level.minheight;
-        } else if (this.level.maxheight > this.knight.y - middlepointY) {
-            this.y = this.level.maxheight;
+        } else if (this.level.maxHeight < this.knight.y - middlepointY) {
+            this.y = this.level.minHeight;
+        } else if (this.level.minHeight > this.knight.y - middlepointY) {
+            this.y = this.level.maxHeight;
         }
 
         if (this.level === levels.bossOne) {
@@ -959,8 +959,6 @@ class SceneManager {
             if (this.knight.x <= -280) {
                 this.loadLevel('bossOne', true, false, false, true)
             } else if (this.knight.x >= 3100) {
-                this.game.camera.x = 0;
-                this.game.camera.y = 0;
                 this.loadLevel('bossTwo', true, false, false, false);
             }
         }
@@ -983,6 +981,7 @@ class SceneManager {
     };
 
     userInterface(ctx) {
+        ctx.globalAlpha = 1;
         if (this.game.textOverlay) {
             if (this.level === levels.mainMenu) {
                 ctx.globalAlpha = 1;
@@ -1007,49 +1006,47 @@ class SceneManager {
             //hud
             ctx.globalAlpha = 1;
             
-
             ctx.fillStyle = "White";
             ctx.font = '36px "Open+Sans"';
             ctx.textAlign = "center";
             ctx.textBaseline = 'top';
-
+            if (this.levelIndex != "mainMenu") {
+    
+                
+                ctx.fillText(this.knight.emberCount, 160, 100);
             
-            ctx.fillText(this.knight.emberCount, 160, 100);
-        
-            
-            this.emberAnimation.drawFrame(
-                this.game.clockTick,
-                ctx,
-                80, 85,     
-                3.5          
-            );
-
-            
-            ctx.fillText(this.knight.potionCount, 285, 100);
-            const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
-            ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
-            
-            //stamina bar
-            let barWidth = 180; 
-            let barHeight = 25; 
-            let barX = 330; 
-            let barY = 100; 
-            let ratio = this.knight.currentStamina / this.knight.stamina;
-
-            ctx.fillStyle = "White";
-            ctx.font = '20px "Open+Sans"'; 
-            ctx.textAlign = "center";
-            ctx.fillText("STAMINA", barX + barWidth/2, barY - 25);
-
-            ctx.fillStyle = "#333333";
-            ctx.fillRect(barX, barY, barWidth, barHeight);
-
-            ctx.fillStyle = "#FFFF00"; 
-            ctx.fillRect(barX, barY, barWidth * ratio, barHeight);
-
-            ctx.strokeStyle = "#000000";
-            ctx.lineWidth = 2;
-            ctx.strokeRect(barX, barY, barWidth, barHeight);
+                
+                this.emberAnimation.drawFrame(
+                    this.game.clockTick,
+                    ctx,
+                    80, 85,     
+                    3.5          
+                );
+    
+                
+                ctx.fillText(this.knight.potionCount, 285, 100);
+                const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
+                ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
+                
+                //stamina bar
+                let barWidth = 180; 
+                let barHeight = 25; 
+                let barX = 330; 
+                let barY = 100; 
+                let ratio = this.knight.currentStamina / this.knight.stamina;
+    
+                ctx.fillText("STAMINA", barX + barWidth/2, barY - 25);
+    
+                ctx.fillStyle = "#333333";
+                ctx.fillRect(barX, barY, barWidth, barHeight);
+    
+                ctx.fillStyle = "#FFFF00"; 
+                ctx.fillRect(barX, barY, barWidth * ratio, barHeight);
+    
+                ctx.strokeStyle = "#000000";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(barX, barY, barWidth, barHeight);
+            }
         }
     };
 
