@@ -128,7 +128,7 @@ let levels = {
         bonFire: [ { x: 10850, y: 368, level: "two" }],
         dungeonBackground3: [{ x:0, y:0, w:3, h: 1}],
         dungeonGround2: [{ x: 0, y: 14.4, w: 6, h: 1 }, {x:7, y: 14.4, w: 8, h:1},{ x: 16, y: 14.4, w: 19, h: 1 }, {x: 36, y: 14.4, w: 8, h: 1}, {x: 45, y: 14.4, w: 8, h: 1}, {x: 54, y: 14.4, w: 10, h: 1}, {x: 64, y: 14.4, w: 16, h:1}, { x: 0, y: 0, w: 75, h: 1 }],
-        gorgon: [{ x: 1500, y: 325 }, {x: 3000, y: 325}, {x: 4900, y: 325}, {x: 5900, y: 325}, {x: 8000, y: 325}],
+        gorgon: [{ x: 1500, y: 320 }, {x: 3000, y: 320}, {x: 4900, y: 320}, {x: 5900, y: 320}, {x: 8000, y: 320}],
         wallspike: [{x: 4450, y: 185}, {x: 4225, y: 185}, {x: 3700, y: 185}, {x: 9000, y: 185}, {x: 8870, y: 185}],
         dungeonWall: [{ x: 0, y: 0, h: 4 }, { x: 290, y: 0, h: 2}],
         dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
@@ -136,6 +136,62 @@ let levels = {
         cutscene: [{startX: 10800, cutsceneNum: 3}, {startX: 11250, cutsceneNum: 4}],
         reina: [{ x: 11100, y: 433 }],
         azucena: [{ x: 11200, y: 400 }],
+    },
+
+    three: {
+        width: 1350,
+        maxHeight: -4000,
+        minHeight: 0,
+        startPosition: {
+            x: 87,
+            y: 300,
+        },
+        endPosition: {
+            x: 14470,
+            y: 465,
+        },
+        checkpoint2:{
+            x: 13700,
+            y: 465,
+        },
+        dungeonBackground: [
+                            { x:0, y:0, w:28, h: 10}, 
+                            { x:744, y:-4000, w:20, h: 60},
+                            { x:2600, y:-4050, w:10, h: 5}
+                           ],
+        dungeonGround: [
+                        { x: 0, y: 17, w: 7, h: 1 }, 
+                        { x: 10, y: 12, w: 4, h: 1 },  
+                        { x: 0, y: 0, w: 5, h: 1 }, 
+                        { x: 16, y: -5, w: 1, h: 1 },  
+                        { x: 5, y: -40, w: 1, h: 1 },  
+                        { x: 5, y: -50, w: 1, h: 1 },
+                        { x: 16, y: -60, w: 1, h: 1 },  
+                        { x: 8, y: -90, w: 20, h: 1 },  
+                        { x: 5, y: -100, w: 20, h: 1 }
+                       ],
+        movingPlatform: [
+                         {x:9, y:7, w:2, h:1, endX:68, endY:-10, isVertical: true}, 
+                         {x:12, y:0, w:2, h:1, endX:15, endY:-10, isVertical: false}, 
+                         {x:14, y:-15, w:2, h:1, endX:68, endY:-35, isVertical: true},
+                         {x:10, y:-30, w:1, h:1, endX:0, endY:-42, isVertical: true},
+                         {x:10, y:-70, w:2, h:1, endX:14, endY:-42, isVertical: false},
+                         {x:17, y:-85, w:1, h:1, endX:0, endY:-92, isVertical: true},
+                         {x:10, y:-90, w:2, h:1, endX:14, endY:-42, isVertical: false},
+                         {x:7.5, y:-95, w:1, h:1, endX:0, endY:-110, isVertical: true},
+                        ],
+
+        skeleton: [{ x: 1800, y: 314 }],
+        dungeonWall: [{ x: 0, y: 0, h: 2},
+                      { x: 18.4, y:-15500, h: 100}, 
+                      { x: 64.9, y:-3590, h: 30},
+                      { x: 78.5, y:-4000, h: 1}
+                     ],
+        dungeonDoor: [{ x: 14500, y: 465, level: "two", end: false }],
+        bonFire: [{ x: 700, y: 472, level: "three" }],
+        reina: [{ x: 460, y: 536}],
+        azucena: [{ x: 2820 , y: -3780}],
+        // cutscene: [{startX: 230, cutsceneNum: 7}, {startX: 2620, cutsceneNum: 8}],
     },
 
     four: {
@@ -184,7 +240,7 @@ let levels = {
         reina: [{ x: 1600, y: 536 }],
         azucena: [{ x: 600, y: 500 }],
         bonFire: [ { x: 1750, y: 465, level: "five" }],
-        //cutscene: [{startX: 373, cutsceneNum: 12}, {startX: 1402, cutsceneNum: 13}],
+        cutscene: [{startX: 373, cutsceneNum: 12}, {startX: 1402, cutsceneNum: 13}],
         dungeonGround: [{ x: -2, y: 17, w: 40, h: 1 }, { x: 0, y: 0, w: 40, h: 1 }],
         dungeonBackground2: [{ x:0, y:0, w:50, h: 1}],
     },
@@ -365,8 +421,6 @@ let levels = {
         ]
     },
 };
-
-
 
 let originalLevels = structuredClone(levels);
 

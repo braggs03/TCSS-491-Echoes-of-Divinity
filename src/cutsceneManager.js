@@ -437,7 +437,6 @@ class CutsceneEight {
         this.game.camera.showInteractive(this.knight, "obtainDoubleJump")
         await this.delay(4000);
         this.game.camera.removeInteractive();
-
         this.knight.inCutscene = false;
         this.reina.inCutscene = false;
         this.game.camera.inCutscene = false;

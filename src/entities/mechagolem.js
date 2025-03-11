@@ -25,8 +25,8 @@ class MechaGolem {
         this.target = null;
         this.range = 1000;
         this.attackRange = 500;
-        this.minAttackRange = 350;
-        this.aggroRange = 700;
+        this.minAttackRange = this.game.camera.levelIndex === "three" ? 0 : 350;
+        this.aggroRange = this.game.camera.levelIndex === "three" ? 1000 : 700;
         this.attackRange = 80;
         this.idleCooldown = 0; 
         this.canAttackAgain = true; 
@@ -64,7 +64,7 @@ class MechaGolem {
         if (this.engaged) {
             this.BB = new BoundingBox(this.x - this.game.camera.x + 96, this.y + 96 - this.game.camera.y, 200, 200);
         } else {
-            this.BB = new BoundingBox(this.x - this.game.camera.x - 128, this.y + 96 - this.game.camera.y, this.aggroRange, 200);
+            this.BB = new BoundingBox(this.x - this.game.camera.x - this.aggroRange / 2 + 200, this.y + 96 - this.game.camera.y, this.aggroRange, 200);
         }
     }
 
@@ -217,7 +217,7 @@ class MechaGolem {
                     }
                 } else if (distance > this.attackRange && this.aggro && !this.attackInProgress && this.attackCooldown <= 0) {
                     this.rangeAttack();
-                } else if (!this.attackInProgress) {
+                } else if (!this.attackInProgress && this.game.camera.levelIndex !== "three") {
                     this.x += knightLeft > knightRight ? this.game.clockTick * this.speed : this.game.clockTick * -this.speed;
                     this.animator = this.idleAnimator;
                 }

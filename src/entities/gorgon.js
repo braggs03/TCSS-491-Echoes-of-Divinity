@@ -35,8 +35,8 @@ class Gorgon {
 
         this.animations = {
             // LeftAttack1: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack1.png"), 2048, 0, 128, 128, 16, 0.08, true, false),
-            LeftAttack2: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack2.png"), 896, 0, 128, 128, 7, 0.08, true, false),
-            LeftAttack3: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack3.png"), 1280, 0, 128, 128, 10, 0.08, true, false),
+            LeftAttack2: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack2.png"), 896, 0, 128, 128, 7, 0.055, true, false),
+            LeftAttack3: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack3.png"), 1280, 0, 128, 128, 10, 0.055, true, false),
             LeftDead: new Animator(ASSET_MANAGER.getAsset(GORGON + "Dead.png"), 384, 0, 128, 128, 3, 0.2, true, false),
             LeftHurt: new Animator(ASSET_MANAGER.getAsset(GORGON + "Hurt.png"), 384, 0, 128, 128, 3, 0.1, true, false),
             LeftIdle1: new Animator(ASSET_MANAGER.getAsset(GORGON + "Idle1.png"), 896, 0, 128, 128, 7, 0.15, true, true),
@@ -45,8 +45,8 @@ class Gorgon {
             LeftSpecial: new Animator(ASSET_MANAGER.getAsset(GORGON + "Special.png"), 640, 0, 128, 128, 5, 0.15, true, false),
             LeftWalk: new Animator(ASSET_MANAGER.getAsset(GORGON + "Walk.png"), 1664, 0, 128, 128, 13, 0.08, true, true),
             // RightAttack1: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack1.png"), 0, 0, 128, 128, 16, 0.08, false, false),
-            RightAttack2: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack2.png"), 0, 0, 128, 128, 7, 0.08, false, false),
-            RightAttack3: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack3.png"), 0, 0, 128, 128, 10, 0.08, false, false),
+            RightAttack2: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack2.png"), 0, 0, 128, 128, 7, 0.055, false, false),
+            RightAttack3: new Animator(ASSET_MANAGER.getAsset(GORGON + "Attack3.png"), 0, 0, 128, 128, 10, 0.055, false, false),
             RightDead: new Animator(ASSET_MANAGER.getAsset(GORGON + "Dead.png"), 0, 0, 128, 128, 3, 0.2, false, false),
             RightHurt: new Animator(ASSET_MANAGER.getAsset(GORGON + "Hurt.png"), 0, 0, 128, 128, 3, 0.15, false, false),
             RightIdle1: new Animator(ASSET_MANAGER.getAsset(GORGON + "Idle1.png"), 0, 0, 128, 128, 7, 0.15, false, true),

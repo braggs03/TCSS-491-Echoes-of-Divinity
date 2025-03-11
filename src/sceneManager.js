@@ -609,10 +609,6 @@ class SceneManager {
         this.interactable = undefined;
     }
 
-    resetLevel(levelIndex) {
-        levels[levelIndex] = structuredClone(originalLevels[levelIndex]);
-    }
-
     openCheckpointMenu(entity) {
         this.knight.moveable = false;
         this.game.keys["f"] = false;
@@ -672,6 +668,23 @@ class SceneManager {
     
 
     update() {
+
+        if (this.levelIndex === "three") {
+            if (this.knight.y <= -3839) {
+                this.level.width = 1900;
+            } else {
+                this.level.width = originalLevels[this.levelIndex].width;
+            }
+        } 
+
+        if (this.levelIndex === "four") {
+            if (this.knight.x <= 6000 || this.knight.x >= 11000) {
+                this.level.minHeight = 0;
+            } else {
+                this.level.minHeight = originalLevels[this.levelIndex].minHeight;
+            }
+        }
+
         if (!this.game.keys["f"]) {
             this.fReleased = true; 
         }
@@ -772,8 +785,11 @@ class SceneManager {
                     }
                 }
             } else {
+                console.log("Got here! 1")
                 if (this.cutsceneCounter !== this.cutscene.length) {
+                    console.log("Got here! 2")
                     if (!this.inCutscene && this.knight.x >= this.cutscene[this.cutsceneCounter].startX) {
+                        console.log("Got here! 3")
                         this.inCutscene = true;
                         this.scene = this.cutsceneManager.cutsceneArray[this.cutscene[this.cutsceneCounter].cutsceneNum];
                         this.cutsceneCounter++;
@@ -1052,10 +1068,6 @@ class SceneManager {
             ctx.font = '10px Arial';
             ctx.textAlign = "left";
             ctx.textBaseline = 'top';
-            this.game.entities.map((entity) => {
-                ctx.fillText(entity.y, entity.x - this.x, entity.y - this.y);
-                ctx.fillText(entity.x, entity.x - this.x, entity.y - this.y - ctx.measureText(entity.y).actualBoundingBoxDescent);
-            });
             ctx.font = '40px Arial';
             const padding = 10;
             const offset = 10;

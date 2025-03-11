@@ -33,11 +33,12 @@ class DungeonWall {
         Object.assign(this, { game, x, y, h });
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5;
-        this.BB = new BoundingBox(this.x * DUNEGON_WALL_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * h * this.scale);
+        this.BB = new BoundingBox(this.x * DUNEGON_WALL_WIDTH * this.scale - this.game.camera.x,  this.y - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.h * this.scale);
+
     };
 
     update() {
-        this.BB = new BoundingBox(this.x * DUNEGON_WALL_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_WALL_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.h * this.scale);
+        this.BB = new BoundingBox(this.x * DUNEGON_WALL_WIDTH * this.scale - this.game.camera.x,  this.y - this.game.camera.y, DUNEGON_WALL_WIDTH * this.scale, DUNEGON_WALL_HEIGHT * this.h * this.scale);
     };
 
     draw(ctx) {
@@ -549,12 +550,13 @@ class MovingPlatform {
 
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 4;
-        this.speed = 3;
 
-        this.startX = x;
-        this.startY = y;
-        this.endX = endX;
-        this.endY = endY;
+        this.x = x * MOVING_PLATFORMS_WIDTH * this.scale;
+        this.y = y * MOVING_PLATFORMS_HEIGHT * this.scale;
+        this.startX = x * MOVING_PLATFORMS_WIDTH * this.scale;
+        this.startY = y * MOVING_PLATFORMS_HEIGHT * this.scale;
+        this.endX = endX * MOVING_PLATFORMS_WIDTH * this.scale;
+        this.endY = endY * MOVING_PLATFORMS_HEIGHT * this.scale;
         this.direction = 1; // 1 for forward, -1 for reverse
 
         this.velocityX; // Initialize horizontal velocity
@@ -565,13 +567,14 @@ class MovingPlatform {
 
     update() {
         if (this.isVertical) { //Vertical
-            this.speed = 10;
+            this.speed = 400;
             this.y += this.speed * this.direction * this.game.clockTick;
             this.velocityY = this.speed * this.direction * this.game.clockTick;
             if ((this.direction === 1 && this.y >= this.startY) || (this.direction === -1 && this.y <= this.endY)) {
                 this.direction *= -1;
             }
         } else { //Horizxontal
+            this.speed = 400;
             this.x += this.speed * this.direction * this.game.clockTick;
             this.velocityX = this.speed * this.direction * this.game.clockTick;
 
@@ -580,13 +583,13 @@ class MovingPlatform {
             }
         }
 
-        this.BB = new BoundingBox(this.x * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x,  this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.w * this.scale, MOVING_PLATFORMS_HEIGHT * this.h * this.scale);
+        this.BB = new BoundingBox(this.x - this.game.camera.x,  this.y - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.w * this.scale, MOVING_PLATFORMS_HEIGHT * this.h * this.scale);
     };
 
     draw(ctx) {
         for (let l = 0; l < this.h; l++) {
             for (let k = 0; k < this.w; k++) {
-                ctx.drawImage(this.spritesheet, 127, 1216, MOVING_PLATFORMS_WIDTH, MOVING_PLATFORMS_HEIGHT, this.x * MOVING_PLATFORMS_WIDTH * this.scale + k * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x, this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.scale, MOVING_PLATFORMS_HEIGHT * this.scale);
+                ctx.drawImage(this.spritesheet, 127, 1216, MOVING_PLATFORMS_WIDTH, MOVING_PLATFORMS_HEIGHT, this.x + k * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x, this.y - this.game.camera.y, MOVING_PLATFORMS_WIDTH * this.scale, MOVING_PLATFORMS_HEIGHT * this.scale);
             }
         }
         this.BB.draw(ctx);
