@@ -68,9 +68,9 @@ class Knight {
         
         this.animationLocked = false;
         
-        this.hasDoubleJump = true;
+        this.hasDoubleJump = false;
         this.hasDoubleJumped = false;
-        this.hasWaveAttack = true;
+        this.hasWaveAttack = false;
         this.dead = false;
 
         this.hasShield = false;

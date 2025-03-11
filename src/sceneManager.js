@@ -785,11 +785,8 @@ class SceneManager {
                     }
                 }
             } else {
-                console.log("Got here! 1")
                 if (this.cutsceneCounter !== this.cutscene.length) {
-                    console.log("Got here! 2")
                     if (!this.inCutscene && this.knight.x >= this.cutscene[this.cutsceneCounter].startX) {
-                        console.log("Got here! 3")
                         this.inCutscene = true;
                         this.scene = this.cutsceneManager.cutsceneArray[this.cutscene[this.cutsceneCounter].cutsceneNum];
                         this.cutsceneCounter++;
