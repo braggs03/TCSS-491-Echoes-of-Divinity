@@ -662,6 +662,12 @@ class SceneManager {
 
     update() {
 
+        if (this.levelIndex === "three" && this.knight.y <= -3839) {
+            this.level.width = 1900;
+        } else {
+            this.level.width = originalLevels[this.levelIndex].width;
+        }
+
         if (!this.game.keys["f"]) {
             this.fReleased = true; 
         }

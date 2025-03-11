@@ -72,6 +72,20 @@ class Gorgon {
         }
     }
 
+    die() {
+        if (this.hp <= 0) {
+            if (this.target) {
+                this.target.emberCount += 300;
+            }
+            if (this.facingLeft) {
+                this.setState('LeftDead');
+            } else {
+                this.setState('RightDead');
+            }
+             this.dead = true;
+        }
+    }
+
     setState(state) {
         for (let key in this.animations) {
             if (this.currentState === key) {
@@ -92,12 +106,12 @@ class Gorgon {
         this.lastBB = this.BB;
         if (this.aggro) {
             if (this.facing == LEFT) {
-                this.BB = new BoundingBox(this.x - this.game.camera.x + 90, this.y + 100 - this.game.camera.y, GORGON_WIDTH, 150);
+                this.BB = new BoundingBox(this.x - this.game.camera.x + 90, this.y + 105 - this.game.camera.y, GORGON_WIDTH, 150);
             } else {
-                this.BB = new BoundingBox(this.x - this.game.camera.x + 90, this.y + 100 - this.game.camera.y, GORGON_WIDTH, 150);
+                this.BB = new BoundingBox(this.x - this.game.camera.x + 90, this.y + 105 - this.game.camera.y, GORGON_WIDTH, 150);
             }
         } else {
-            this.BB = new BoundingBox(this.x - this.game.camera.x + GORGON_WIDTH / 2 - this.range / 2  + 96, this.y + 100 - this.game.camera.y, this.range, 150);
+            this.BB = new BoundingBox(this.x - this.game.camera.x + GORGON_WIDTH / 2 - this.range / 2  + 96, this.y + 105 - this.game.camera.y, this.range, 150);
         }
     }
 
@@ -108,17 +122,6 @@ class Gorgon {
         }
         if (this.dead) {
             return;
-        }
-        if (this.hp <= 0) {
-            if (this.target) {
-                this.target.emberCount += 300;
-            }
-            if (this.facingLeft) {
-                this.setState('LeftDead');
-            } else {
-                this.setState('RightDead');
-            }
-             this.dead = true;
         }
 
         let gorgon = this;
