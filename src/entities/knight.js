@@ -215,6 +215,7 @@ class Knight {
         this.shield = this.maxShield;
         this.potionCount = this.maxPotionCount;
         this.removeFromWorld = false;
+        resetLevels();
     }
 
     die() {
