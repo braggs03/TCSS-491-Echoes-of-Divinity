@@ -7,6 +7,7 @@ ASSET_MANAGER.queueDownload(REINA);
 ASSET_MANAGER.queueDownload("./resources/Magic/Lightning.png");
 ASSET_MANAGER.queueDownload("./resources/knight/swordwave.png");
 ASSET_MANAGER.queueDownload("./resources/knight/lostsword.png");
+ASSET_MANAGER.queueDownload("./resources/Magic/Fire-bomb.png");
 
 // MechaGolem
 ASSET_MANAGER.queueDownload(MECHA_GOLEM);

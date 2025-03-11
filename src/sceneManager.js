@@ -954,6 +954,9 @@ class SceneManager {
             this.userInterface(ctx);
         }
         testInteractable(this.game, ctx);
+        if (this.controlsMenu) {
+            this.controlsMenu.draw(ctx); 
+        }
         if (PARAMS.DEBUG) {
             ctx.fillStyle = "White";
             ctx.strokeStyle = "Black";
