@@ -144,10 +144,10 @@ const text = {
         ["Mica's Chosen..."],
         ["To think my dear sister still", "scorns me even after death."],
         ["Mankind has shown", "it's true nature."],
-        ["Mica was wrong."],
         ["You cannot rule yourselves."],
         ["You can't even save yourselves."],
-        ["You will submit to my power,"],
+        ["You will submit."],
+        ["Only I can guide you,", "to the future."],
     ],
 
     duma2: [

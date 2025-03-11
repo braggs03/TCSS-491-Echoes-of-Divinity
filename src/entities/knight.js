@@ -73,7 +73,7 @@ class Knight {
         this.hasWaveAttack = false;
         this.dead = false;
 
-        this.hasShield = true;
+        this.hasShield = false;
         this.isShielded = true;
         
 

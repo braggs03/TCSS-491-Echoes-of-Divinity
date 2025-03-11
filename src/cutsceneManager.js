@@ -362,6 +362,7 @@ class CutsceneSeven {
             while (this.knight.x < 200) {
                 await this.delay (16);
             }
+            this.knight.velocityX = 0;
             this.knight.setState('RightIdle');
             let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 3);
             if (this.game.level === levels.bossOne && !this.game.camera.lucanDead ||
@@ -379,10 +380,11 @@ class CutsceneSeven {
             }
         } else {
             this.knight.setState('RightRoll');
-
-            while (this.knight.currentState === 'RightRoll') {
-                await this.delay(16);
+            while (this.knight.x < 200 && this.knight.currentState === 'RightRoll') {
+                await this.delay (16);
             }
+            this.knight.velocityX = 0;
+            this.knight.setState('RightIdle');
 
             let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 3);
             walls.forEach(wall => wall.h = 5);
@@ -586,11 +588,17 @@ class CutsceneEleven {
     async run() {
         this.knight.inCutscene = true;
         this.azucena.inCutscene = true;
+        this.knight.setState('RightIdle');
+        this.knight.velocityX = 0;
 
         this.game.camera.showInteractive(this.azucena, "azucena12");
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
         await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(4000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
         this.game.camera.interactable.currentDialog++;
         await this.delay(4000);
         this.game.camera.interactable.currentDialog++;
@@ -600,9 +608,9 @@ class CutsceneEleven {
         this.game.camera.removeInteractive();
         this.knight.hasShield = true;
         this.game.camera.showInteractive(this.knight, "obtainBarrier")
-        await this.delay(4000);
+        await this.delay(2000);
         this.game.camera.removeInteractive();
-        this.game.camera.inCutscene = true;
+        this.game.camera.inCutscene = false;
         this.knight.inCutscene = false;
         this.azucena.inCutscene = false;
     }
@@ -756,9 +764,11 @@ class CutsceneFifteen {
         this.knight.setState('RightRoll')
         this.duma.goDown = true;
 
-        while (this.knight.currentState === 'RightRoll') {
-            await this.delay(16);
+        while (this.knight.x < 200 && this.knight.currentState === 'RightRoll') {
+            await this.delay (16);
         }
+        this.knight.velocityX = 0;
+        this.knight.setState('RightIdle');
 
         let walls = this.game.entities.filter(e => e instanceof DungeonWall && e.h === 3);
         walls.forEach(wall => wall.h = 5);
@@ -792,6 +802,7 @@ class CutsceneFifteen {
         this.game.camera.removeInteractive();
 
         this.knight.inCutscene = false;
+        this.duma.goDown = false;
         this.duma.inCutscene = false;
         this.game.camera.inCutscene = false;
 
