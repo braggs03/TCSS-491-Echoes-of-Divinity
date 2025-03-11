@@ -105,6 +105,8 @@ ASSET_MANAGER.queueDownload("./resources/SoundEffects/skeletonhit.mp3");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/skeletondeath.mp3");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/knighthit.mp3");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/knightdeath.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/gorgonhit.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/gorgondeath.mp3");
 
 
 ASSET_MANAGER.downloadAll(() => {
