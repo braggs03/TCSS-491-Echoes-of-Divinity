@@ -47,7 +47,7 @@ class Knight {
         this.maxPotionCount = 3;
         this.potionCount = this.maxPotionCount;
         this.potionHealCount = 200;
-        this.potionCost = 50;
+        this.potionCost = 2000;
 
         this.gKeyPressed = false;
         
@@ -481,28 +481,6 @@ class Knight {
                     this.pauseSound();
                 }
             }
-        
-            if (!this.colliding.up) {
-                if (this.velocityY > 0) {
-                    this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
-                } else {
-                    this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
-                    if(this.jumpSound.paused) {
-                        this.runSound.pause();
-                        this.jumpSound.play();
-                    }
-                }
-                this.velocityY += this.accelerationY * clockTick;
-                this.velocityY = Math.min(this.velocityY, this.maxVelocityY);
-            } else if (Math.abs(this.velocityX) > this.accelerationX * clockTick) {
-                this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
-                if (this.runSound.paused) {
-                    this.runSound.play();
-                }
-            } else {
-                this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
-                this.pauseSound();
-            }
     
             if (this.game.keys["ArrowUp"]) {
                 if (this.colliding.up) {
@@ -606,6 +584,28 @@ class Knight {
                 this.velocityX = 0; 
                 this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
             }
+        }
+
+        if (!this.colliding.up) {
+            if (this.velocityY > 0) {
+                this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
+            } else {
+                this.facing == LEFT ? this.setState("LeftJump") : this.setState("RightJump");
+                if(this.jumpSound.paused) {
+                    this.runSound.pause();
+                    this.jumpSound.play();
+                }
+            }
+            this.velocityY += this.accelerationY * clockTick;
+            this.velocityY = Math.min(this.velocityY, this.maxVelocityY);
+        } else if (Math.abs(this.velocityX) > this.accelerationX * clockTick) {
+            this.setState(this.facing === RIGHT ? "RightRun" : "LeftRun");
+            if (this.runSound.paused) {
+                this.runSound.play();
+            }
+        } else if (!this.dead) {
+            this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
+            this.pauseSound();
         }
 
         if (PARAMS.DEBUG) {
