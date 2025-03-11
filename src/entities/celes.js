@@ -4,7 +4,7 @@ class Celes {
         this.x = x;
         this.y = y;
         this.maxHp = 2000;
-        this.hp = 100;
+        this.hp = 2000;
         this.height = 100;
         this.bheight = 0;
         this.healthBar = new HealthBar(this);

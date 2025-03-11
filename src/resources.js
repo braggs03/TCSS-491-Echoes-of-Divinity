@@ -32,3 +32,4 @@ const MAIN_MUSIC = './resources/maintheme.ogg';
 const LUCAN_MUSIC = './resources/LucanTheme.ogg';
 const CELES_MUSIC = './resources/CelesTheme.ogg';
 const DUMA_MUSIC = './resources/DumaTheme.ogg';
+const CREDITS_MUSIC = './resources/creditsTheme.ogg';

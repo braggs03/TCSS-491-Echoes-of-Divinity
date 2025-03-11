@@ -88,6 +88,7 @@ ASSET_MANAGER.queueDownload(MAIN_MUSIC);
 ASSET_MANAGER.queueDownload(LUCAN_MUSIC);
 ASSET_MANAGER.queueDownload(CELES_MUSIC);
 ASSET_MANAGER.queueDownload(DUMA_MUSIC);
+ASSET_MANAGER.queueDownload(CREDITS_MUSIC);
 
 // Sound Effects
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/emberLight.ogg");
@@ -113,6 +114,7 @@ ASSET_MANAGER.queueDownload("./resources/SoundEffects/werewolfdeath.mp3");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/nightbornhit.mp3");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/nightborndeath.mp3");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/nightbornattack.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/wingsflapping.ogg");
 
 
 ASSET_MANAGER.downloadAll(() => {

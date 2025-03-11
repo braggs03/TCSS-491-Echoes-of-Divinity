@@ -4,6 +4,7 @@ class FireBomb {
         this.x = x;
         this.y = y;
         this.target = null;
+        this.scale = 5;
         this.removeFromWorld = false;
         this.damageDone = false;
         this.BB = new BoundingBox(this.x - this.game.camera.x + 30, this.y + 50, 270, 200);
@@ -31,7 +32,7 @@ class FireBomb {
     }
 
     draw(ctx) {
-        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 5);
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
         this.BB.draw(ctx);
     }
 }

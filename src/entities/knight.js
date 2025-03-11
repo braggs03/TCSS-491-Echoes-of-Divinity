@@ -73,7 +73,7 @@ class Knight {
         this.hasWaveAttack = true;
         this.dead = false;
 
-        this.hasShield = true;
+        this.hasShield = false;
         this.isShielded = true;
         
 
@@ -86,7 +86,7 @@ class Knight {
 
         this.runSound = new Audio("./resources/SoundEffects/run.ogg");
         this.runSound.loop = true;
-        this.runSound.playbackRate = 5;
+        this.runSound.playbackRate = 3;
         this.runSound.volume = 0.2;
         this.attackSound = new Audio("./resources/SoundEffects/knightAttack.ogg");
         this.attackSound.loop = false;
@@ -434,7 +434,7 @@ class Knight {
                 this.x += this.maxVelocityX * clockTick;
                 if (this.runSound.paused) {this.runSound.play();}
             } else if (this.currentState === "LeftRun") {
-                this.x -= this.velocityX * clockTick;
+                this.x -= this.maxVelocityX * clockTick;
                 if (this.runSound.paused) {this.runSound.play();}
             } else if (this.currentState === "RightRoll") {
                 this.x += this.rollSpeed * clockTick;

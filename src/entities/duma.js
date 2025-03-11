@@ -6,15 +6,16 @@ class Duma {
         this.y = y
         this.updateBB();
         this.maxHp = 4000;
-        this.hp = 3100;
+        this.hp = 4000;
         this.height = 100;
         this.bheight = 0;
         this.healthBar = new HealthBar(this);
-        this.inCutscene = false;
+        this.inCutscene = true;
         this.specialAttackRun = false;
         this.specialAttack2Run = false;
         this.specialAttackX = false;
         this.specialAttackY = false;
+        this.goUp = false;
         this.goDown = false;
         this.goRight = false;
         this.goLeft = false;
@@ -29,6 +30,12 @@ class Duma {
         this.counterTwo = 5000;
         this.dead = false;
         this.pushBack = false;
+        this.removeFromWorld = false;
+
+        this.wingsSound = new Audio("./resources/SoundEffects/wingsflapping.ogg");
+        this.wingsSound.loop = true;
+        this.wingsSound.playbackRate = 2;
+        this.wingsSound.volume = 0.2;
 
         this.fireSound = new Audio("./resources/SoundEffects/fireAttack.ogg");
         this.fireSound.loop = true;
@@ -97,6 +104,15 @@ class Duma {
     }
 
     update() {
+        if (this.currentState === 'LeftIdle' || this.currentState === 'RightIdle') {
+            if (this.wingsSound.paused) {
+                this.wingsSound.play();
+            }
+        } else {
+            this.wingsSound.pause();
+        }
+        this.updateBB();
+
         if (this.bodyBB) {
             this.fireSound.play();
         } else {
@@ -104,39 +120,6 @@ class Duma {
                 this.fireSound.paused;
                 this.fireSound.currentTime = 0;
             }
-        }
-
-        if (this.game.keys["i"]) {
-            this.specialAttack2();
-        }
-
-        if (this.dead) {
-            this.fireBomb = new FireBomb(this.game, this.x, this.y + 50)
-            this.game.entities.splice(1, 0, this.fireBomb);
-            return;
-        }
-
-        if (!this.target) {
-            this.target = this.game.entities.find(entity =>
-                entity instanceof Knight && !entity.dead
-            );
-        }
-
-        if (this.inCutscene) {
-            return;
-        }
-
-        if (this.hp <= 0) {
-            this.inCutscene = true;
-            this.goLeft = false;
-            this.goRight = false;
-            this.goDown = false;
-            this.specialAttack2Run = false;
-            this.specialAttackRun = false;
-            this.attackChargeRun = false;
-            this.setState('LeftIdle')
-            this.dead = true;
-            return;
         }
 
         if (this.animations[this.currentState].getDone()) {
@@ -154,11 +137,89 @@ class Duma {
                 this.y += 120;
                 this.setState('RightIdle')
             } else if (this.currentState === 'RightAttack1') {
+                console.log(true)
                 this.x += 20;
                 this.y += 120;
                 this.loopCount = 0;
                 this.setState('RightIdle')
             }
+        }
+
+        if (this.currentState === 'LeftAttack1' || this.currentState === 'RightAttack1') {
+            let animation = this.animations[this.currentState];
+
+            if (!this.loopCount) this.loopCount = 0; // Initialize loop count
+
+            let frame8Time = animation.frameDuration * 8;
+            let frame10Time = animation.frameDuration * 10;
+            if (animation.elapsedTime >= frame10Time && this.loopCount < 7) {
+                if (animation.currentFrame() === 10) {
+                    this.loopCount++; // Increment loop count when frame 10 is reached
+                }
+                animation.elapsedTime = frame8Time;
+            } else if (this.loopCount >= 7 && animation.currentFrame() < 11) {
+                animation.elapsedTime += animation.frameDuration;
+            }
+        }
+
+        if (!this.target) {
+            this.target = this.game.entities.find(entity =>
+                entity instanceof Knight && !entity.dead
+            );
+        }
+        if (this.goUp) {
+            if (this.facingLeft) {
+                if (this.x > 470) {
+                    this.x -= 200 * this.game.clockTick;
+                } else {
+                    this.specialAttackX = true;
+                }
+            } else {
+                if (this.x < 370) {
+                    this.x += 200 * this.game.clockTick;
+                } else {
+                    this.specialAttackX = true;
+                }
+            }
+            if (this.y > 75) {
+                this.y -= 200 * this.game.clockTick;
+            } else {
+                this.specialAttackY = true;
+            }
+        }
+
+        if (this.specialAttackX && this.specialAttackY) {
+            this.goUp = false;
+        }
+
+        if (this.goDown) {
+            if (this.y < 275) {
+                this.y += 200 * this.game.clockTick;
+                return;
+            } else {
+                this.goDown = false;
+                this.specialAttackRun= false;
+                this.specialAttack2Run = false;
+            }
+        }
+
+        if (this.inCutscene) {
+            return;
+        }
+
+        if (this.hp <= 0) {
+            this.inCutscene = true;
+            this.goLeft = false;
+            this.goRight = false;
+            this.goDown = false;
+            this.specialAttack2Run = false;
+            this.specialAttackRun = false;
+            this.attackChargeRun = false;
+            this.goUp = true;
+            this.dead = true;
+            this.game.camera.bossthreeCutsceneDone = false;
+            this.game.camera.cutscene.push({startX: -300, cutsceneNum: 15})
+            return;
         }
 
         if (this.hp <= 3000 && this.attackChargeAvailable && !this.specialAttackRun && !this.specialAttack2Run && !this.goLeft && !this.goRight && !this.pushBack && (this.currentState !== 'LeftAttack2' || this.currentState !== 'RightAttack2')) {
@@ -177,9 +238,9 @@ class Duma {
         if (!this.specialAttackRun && !this.specialAttack2Run && (this.currentState === 'LeftAttack2' || this.currentState === 'RightAttack2')) {
             if (this.animations[this.currentState].currentFrame() === 6) {
                 if (this.facingLeft) {
-                    this.target.velocityX = -3000;
+                    this.target.velocityX = -2500;
                 } else {
-                    this.target.velocityX = 3000;
+                    this.target.velocityX = 2500;
                 }
             }
             return;
@@ -208,17 +269,6 @@ class Duma {
             this.counterTwo = 0;
             this.offsetDone = false
             this.specialAttackRun = true
-        }
-
-        if (this.goDown) {
-            if (this.y < 275) {
-                this.y += 200 * this.game.clockTick;
-                return;
-            } else {
-                this.goDown = false;
-                this.specialAttackRun= false;
-                this.specialAttack2Run = false;
-            }
         }
 
         if (this.goLeft) {
@@ -314,23 +364,6 @@ class Duma {
                         this.goRight = false;
                     }
                 }
-            }
-        }
-
-        if (this.currentState === 'LeftAttack1' || this.currentState === 'RightAttack1') {
-            let animation = this.animations[this.currentState];
-
-            if (!this.loopCount) this.loopCount = 0; // Initialize loop count
-
-            let frame8Time = animation.frameDuration * 8;
-            let frame10Time = animation.frameDuration * 10;
-            if (animation.elapsedTime >= frame10Time && this.loopCount < 7) {
-                if (animation.currentFrame() === 10) {
-                    this.loopCount++; // Increment loop count when frame 10 is reached
-                }
-                animation.elapsedTime = frame8Time;
-            } else if (this.loopCount >= 7 && animation.currentFrame() < 11) {
-                animation.elapsedTime += animation.frameDuration;
             }
         }
 
@@ -448,8 +481,6 @@ class Duma {
                 this.target.takeDamage(50);
             }
         }
-
-        this.updateBB();
     }
 
     specialAttack() {
