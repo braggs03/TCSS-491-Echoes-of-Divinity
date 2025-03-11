@@ -352,7 +352,7 @@ class Knight {
                             knight.y -= overlap.y - 1;
                             this.hasDoubleJumped = false;
 
-                            if (entity instanceof MovingPlatform) {
+                            if (entity instanceof MovingPlatform && entity.isVertical) {
                                     knight.y += entity.speed * entity.direction * this.game.clockTick;;
                             }
                         }
