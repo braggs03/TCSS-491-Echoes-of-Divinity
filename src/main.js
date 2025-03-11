@@ -110,6 +110,9 @@ ASSET_MANAGER.queueDownload("./resources/SoundEffects/gorgonhit.mp3");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/gorgondeath.mp3");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/werewolfhit.mp3");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/werewolfdeath.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/nightbornhit.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/nightborndeath.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/nightbornattack.mp3");
 
 
 ASSET_MANAGER.downloadAll(() => {
