@@ -801,7 +801,7 @@ class SceneManager {
                         this.shopkeeperCutsceneDone = true
                     }
                     if (this.level === levels.one) {
-                        this.oneCutsceneDone = true;
+                        this.oneCutsceneDone = false;
                     }
                     if (this.level === levels.two) {
                         this.twoCutsceneDone = true

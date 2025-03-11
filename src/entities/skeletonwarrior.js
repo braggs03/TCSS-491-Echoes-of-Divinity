@@ -99,7 +99,7 @@ class SkeletonWarrior {
     takeDamage(damageAmount) {
         this.hp -= damageAmount;
         this.skeletonHit.play();
-        this.skeletonHit.volume = 0.2;
+        this.skeletonHit.volume = 0.1;
     }
 
 	update() {
