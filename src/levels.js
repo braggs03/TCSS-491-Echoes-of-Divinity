@@ -168,8 +168,8 @@ let levels = {
                         { x: 5, y: -40, w: 1, h: 1 },  
                         { x: 5, y: -50, w: 1, h: 1 },
                         { x: 16, y: -60, w: 1, h: 1 },  
-                        { x: 8, y: -90, w: 13, h: 1 },  
-                        { x: 5, y: -100, w: 16, h: 1 }
+                        { x: 8, y: -90, w: 20, h: 1 },  
+                        { x: 5, y: -100, w: 20, h: 1 }
                        ],
         movingPlatform: [
                          {x:9, y:7, w:2, h:1, endX:68, endY:-10, isVertical: true}, 
