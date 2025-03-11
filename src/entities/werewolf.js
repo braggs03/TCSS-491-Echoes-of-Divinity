@@ -109,6 +109,7 @@ class Werewolf {
         if (this.dead) return;
         
         this.dead = true;
+        this.werewolfHit.muted = true;
         this.werewolfDeath.play();
         this.werewolfDeath.volume = 0.2;
         
@@ -124,6 +125,10 @@ class Werewolf {
         
         setTimeout(() => {
             this.removeFromWorld = true;
+        }, 1000); 
+
+        setTimeout(() => {
+            this.werewolfHit.muted = false;
         }, 1000); 
     }
 
