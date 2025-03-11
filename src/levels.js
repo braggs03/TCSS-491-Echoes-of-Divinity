@@ -61,7 +61,6 @@ let levels = {
         cutscene: [{startX: -100, cutsceneNum: 0}],
         dungeonGround: [{ x: 0, y: 17, w: 40, h: 1 }],
         skeleton: [{ x: 1200, y: 424 }, { x: 1400, y: 424 }, { x: 1600, y: 424 }, { x: 1800, y: 424 }],
-        lightning: [{x: -40, y: 40}],
         nightBackground: [{ x:0, y:0, w:50, h: 1}],
         townBackground: [{ x:0, y:0, w:50, h: 1}],
     },

@@ -39,6 +39,8 @@ class CutsceneOne {
             await this.delay (16);
         }
         this.azucena.goRight = false;
+        let wall = { x: 0, y: 0, h: 6};
+        this.game.entities.splice(this.game.entities.length - 1, 0, wall);
         this.azucena.setState(this.azucena.idleLeft())
         this.game.camera.showInteractive(this.reina, "reina1");
         await this.delay(2000);
