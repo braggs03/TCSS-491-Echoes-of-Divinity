@@ -428,7 +428,7 @@ let levels = {
 let originalLevels = structuredClone(levels);
 
 const resetLevels = () => {
-    const excludeFields = ['cutscene', 'bonFire', 'potion'];
+    const excludeFields = ['cutscene', 'bonFire', 'potion', 'duma', 'lucan', 'celes'];
     for (const levelName in originalLevels) {
         const originalLevel = originalLevels[levelName];
         for (const propName in originalLevel) {
