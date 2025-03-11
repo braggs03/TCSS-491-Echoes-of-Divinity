@@ -596,7 +596,12 @@ class CutsceneTwelve {
         await this.delay(700);   
         this.swordwave = new Swordwave(this.game, this.knight.x, this.knight.y + 80, this.knight.facing);
         this.game.entities.splice(1, 0, this.swordwave);
-        await this.delay(100);
+        await this.delay(1000);
+        this.game.camera.showInteractive(this.knight, "obtainSwordwave")
+        await this.delay(2000);
+        this.game.camera.interactable.currentDialog++;
+        await this.delay(2000);
+        this.game.camera.removeInteractive();
         this.knight.inCutscene = false;
         this.game.camera.inCutscene = false;
         this.knight.moveable = true;

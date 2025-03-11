@@ -40,8 +40,8 @@ class SceneManager {
 
         this.lucanDead = false;
         this.celesDead = false;        
-        this.loadLevel('startScreen', false, true, false, false);
-        // this.loadLevel('one', false, false, false, false);
+        // this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('bossOne', false, false, false, false);
     };
 
     saveEntities() {
@@ -80,7 +80,7 @@ class SceneManager {
         }
     }
 
-    loadLevel(levelIndex, transition, title, dead, end) {
+    loadLevel(levelIndex, transition, title, dead, end) { 
         this.fire = this.game.entities.find(entity => entity instanceof Bonfire);
         if (this.fire) {
             if (!this.fire.sound.paused) {

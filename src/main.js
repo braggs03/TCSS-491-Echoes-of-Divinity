@@ -100,6 +100,19 @@ ASSET_MANAGER.queueDownload("./resources/SoundEffects/run.ogg");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/roll.ogg");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/lightning.ogg");
 ASSET_MANAGER.queueDownload("./resources/SoundEffects/swordwave.ogg");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/golemhit.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/golemdeath.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/skeletonhit.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/skeletondeath.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/knighthit.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/knightdeath.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/gorgonhit.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/gorgondeath.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/werewolfhit.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/werewolfdeath.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/nightbornhit.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/nightborndeath.mp3");
+ASSET_MANAGER.queueDownload("./resources/SoundEffects/nightbornattack.mp3");
 
 
 ASSET_MANAGER.downloadAll(() => {

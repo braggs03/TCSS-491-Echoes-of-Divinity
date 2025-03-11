@@ -45,6 +45,9 @@ class MechaGolem {
 
         this.idleAnimator = this.idleRight();
         this.animator = this.idleAnimator;
+
+        this.golemHit = new Audio("./resources/SoundEffects/golemhit.mp3");
+        this.golemDeath = new Audio("./resources/SoundEffects/golemdeath.mp3");
         this.updateBB();
     }
 
@@ -76,8 +79,12 @@ class MechaGolem {
     
     takeDamage(amount) {
         this.hp -= amount;
+        this.golemHit.play();
+        this.golemHit.volume = 0.5;
 
         if (this.hp <= 0) {
+            this.golemDeath.play();
+            this.golemDeath.volume = 0.2;
             this.die();
         } else {
             this.flickerDuration = 0.4;

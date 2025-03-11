@@ -38,8 +38,8 @@ class Knight {
         this.bheight = 0;
         this.stamina = 1000;
         this.currentStamina = this.stamina;
-        this.staminaRegen = 100;
-        this.meleeAttackStaminaCost = 300;
+        this.staminaRegen = 500;
+        this.meleeAttackStaminaCost = 200;
         this.rangedAttackStaminaCost = 1000;
 
         this.emberCount = 0;
@@ -70,7 +70,7 @@ class Knight {
         
         this.hasDoubleJump = true;
         this.hasDoubleJumped = false;
-        this.hasWaveAttack = false;
+        this.hasWaveAttack = true;
         this.dead = false;
 
         this.hasShield = true;
@@ -100,10 +100,8 @@ class Knight {
         this.rollSound.loop = false;
         this.rollSound.playbackRate = 1;
         this.rollSound.volume = 0.2;
-        // this.swordwaveSound = new Audio("./resources/SoundEffects/swordwave.ogg");
-        // this.swordwaveSound.loop = false;
-        // this.swordwaveSound.playbackRate = 2;
-        // this.swordwaveSound.volume = 0.2;
+        this.knightHit = new Audio("./resources/SoundEffects/knighthit.mp3");
+        this.knightDeath = new Audio("./resources/SoundEffects/knightdeath.mp3");
         
 
 
@@ -193,6 +191,8 @@ class Knight {
         if (!this.invincible) {
             this.invincible = true;
             if (!this.isShielded) {
+                this.knightHit.play();
+                this.knightHit.volume = 0.2;
                 this.hp -= amount;
             } else {
                 this.shield -= amount;
@@ -220,18 +220,25 @@ class Knight {
     die() {
         if (!this.dead) {
             this.dead = true;
+            this.knightHit.muted = true;
+            this.knightDeath.play();
+            this.knightDeath.volume = 0.3;
             this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
             console.log("Knight has died!");
             this.velocityX = 0;
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
-                this.game.camera.respawnKnight(this);
+                this.game.camera.respawnKnight(this); 
             }, 1000);
+
+            setTimeout(() => {
+                this.knightHit.muted = false; 
+            }, 5000);
             // Adjust timing to match the death animation duration
 
             this.game.camera.emberDrop = new EmberDrop(this.game, this.x + KNIGHT_X_OFFSET, this.y + KNIGHT_HEIGHT, this.emberCount, this.game.camera.levelIndex);
-            this.emberCount = 0;
+            this.emberCount = 0;          
         }
     }
     usePotion() {
