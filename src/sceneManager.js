@@ -19,7 +19,7 @@ class SceneManager {
         this.twoCutsceneDone = false;
         this.threeCutsceneDone = false;
         this.fourCutsceneDone = false;
-        this.fiveCutsceneDone = false;
+        this.fiveCutsceneDone = true;
         this.bossoneCutsceneDone = false;
         this.bosstwoCutsceneDone = false;
         this.bossthreeCutsceneDone = false;
@@ -41,7 +41,7 @@ class SceneManager {
 
         this.lucanDead = false;
         this.celesDead = false;
-        this.loadLevel('startScreen', false, true, false, false);
+        this.loadLevel('five', false, false, false, false);
     };
 
     saveEntities() {
