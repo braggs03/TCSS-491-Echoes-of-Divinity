@@ -657,6 +657,7 @@ class SceneManager {
     }
 
     openCheckpointMenu(entity) {
+        if (this.teleportMenu) return;
         this.knight.moveable = false;
         this.game.keys["f"] = false;
         this.teleportMenu = new CheckpointMenu(this.game, entity);
