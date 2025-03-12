@@ -81,6 +81,11 @@ class SceneManager {
     }
 
     loadLevel(levelIndex, transition, title, dead, end) {
+        if (this.oneCutsceneDone) {
+            if (!this.knight.hasWaveAttack) {
+                this.oneCutsceneDone = false;
+            }
+        }
         this.fire = this.game.entities.find(entity => entity instanceof Bonfire);
         if (this.fire) {
             if (!this.fire.sound.paused) {
