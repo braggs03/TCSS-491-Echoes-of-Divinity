@@ -983,6 +983,12 @@ class SceneManager {
             }
         }
 
+        if (this.level === levels.four) {
+            if (this.knight.x <= -200) {
+                this.loadLevel('bossTwo', true, false, false, true)
+            }
+        }
+
         if (this.level === levels.five) {
             if (this.knight.x <= -245) {
                 this.loadLevel('four', true, false, false, true)
