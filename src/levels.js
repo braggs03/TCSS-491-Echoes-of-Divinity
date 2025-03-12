@@ -147,7 +147,7 @@ let levels = {
             y: 300,
         },
         endPosition: {
-            x: 14470,
+            x: 14370,
             y: 465,
         },
         checkpoint2:{
