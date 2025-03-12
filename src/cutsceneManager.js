@@ -639,16 +639,17 @@ class CutsceneTwelve {
     constructor(game) {
         this.game = game;
         this.knight = this.game.entities.find(entity=> entity instanceof Knight);
+        this.LostSword = this.game.entities.find(entity=> entity instanceof LostSword);
     }
 
     async run() { 
         if(this.knight.y < -2600) {   
             this.knight.inCutscene = true;
             this.knight.moveable = false;
+            this.knight.setState('RightIdle');
             await this.delay(300);
             this.knight.setState('RightRun');
-            while (this.knight.x == this.swordwave) {
-                await this.delay (0.3);
+            while (this.knight.x == this.LostSword.x) {
             }
             await this.delay(300);
             this.knight.setState('LeftIdle');
