@@ -63,7 +63,14 @@ function testInteractable(game, ctx) {
                 if (!entity.dialogCompleted) {
                     if (entity.text && game.keys["f"]) {
                         game.camera.showInteractive(entity, entity.text);
-                    } else if (entity.text || (entity instanceof Bonfire) || entity instanceof DungeonDoor || entity instanceof Potion) {
+                    } else if (
+                        entity.text 
+                        || (entity instanceof Bonfire) 
+                        || entity instanceof DungeonDoor 
+                        || entity instanceof Potion 
+                        || entity instanceof DungeonDoor2
+                        || (game.camera.levelIndex == 'shopkeeper' && entity instanceof Reina && !game.camera.shopMenu)
+                    ) {
                         ctx.fillStyle = "Black";
                         ctx.strokeStyle = "Black";
                         ctx.font = '30px "Open+Sans"';

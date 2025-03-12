@@ -47,7 +47,7 @@ class Knight {
         this.maxPotionCount = 3;
         this.potionCount = this.maxPotionCount;
         this.potionHealCount = 200;
-        this.potionCost = 50;
+        this.potionCost = 2000;
 
         this.gKeyPressed = false;
 
@@ -216,6 +216,7 @@ class Knight {
         this.shield = this.maxShield;
         this.potionCount = this.maxPotionCount;
         this.removeFromWorld = false;
+        resetLevels();
     }
 
     die() {
@@ -326,7 +327,16 @@ class Knight {
         this.game.entities.forEach((entity) => {
             if (entity.BB && knight.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(knight.BB);
-                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonWall1 || entity instanceof DungeonSpike || entity instanceof DungeonWall2 || entity instanceof DungeonGround4 || entity instanceof MovingPlatform) {
+                if (
+                    entity instanceof DungeonGround 
+                    || entity instanceof DungeonGround2 
+                    || entity instanceof DungeonWall 
+                    || entity instanceof DungeonWall1 
+                    || entity instanceof DungeonSpike 
+                    || entity instanceof DungeonWall2 
+                    || entity instanceof DungeonGround4 
+                    || entity instanceof MovingPlatform
+                ) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
 
@@ -600,11 +610,13 @@ class Knight {
                     this.gKeyPressed = false;
                 }
             }
+        }
 
-            if (!this.moveable) {
-                this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
-                this.velocityX = 0;
-                this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
+        if (!this.moveable) {
+            this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
+            this.velocityX = 0; 
+            if (!this.colliding.up) {
+                this.velocityY = this.maxVelocityY;
             }
         }
 

@@ -349,7 +349,7 @@ class CutsceneSeven {
         }
         if (this.celes && !this.game.camera.celesDead) {
             this.celes.inCutscene = true;
-            this.celes.setState('idleLeft')
+            this.celes.setState('LeftIdle')
         }
         if (this.duma) {
             this.duma.inCutscene = true;

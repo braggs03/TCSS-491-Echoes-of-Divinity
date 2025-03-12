@@ -674,6 +674,7 @@ class SceneManager {
 
     teleportToCheckpoint(knight) {
         this.deadcheckpoint = true;
+        resetLevels();
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
             if (levels[levelIndex]) {
@@ -952,10 +953,10 @@ class SceneManager {
 
         if (this.level.minHeight > this.knight.y - middlepointY && this.level.maxHeight < this.knight.y - middlepointY) {
             this.y = this.knight.y - middlepointY;
-        } else if (this.level.minheight > this.knight.y - middlepointY) {
-            this.y = this.level.minheight;
-        } else if (this.level.maxheight > this.knight.y - middlepointY) {
-            this.y = this.level.maxheight;
+        } else if (this.level.maxHeight < this.knight.y - middlepointY) {
+            this.y = this.level.minHeight;
+        } else if (this.level.minHeight > this.knight.y - middlepointY) {
+            this.y = this.level.maxHeight;
         }
 
         if (this.level === levels.bossOne) {
@@ -970,9 +971,7 @@ class SceneManager {
             if (this.knight.x <= -280) {
                 this.loadLevel('bossOne', true, false, false, true)
             } else if (this.knight.x >= 3100) {
-                this.game.camera.x = 0;
-                this.game.camera.y = 0;
-                this.loadLevel('bossTwo', true, false, false, false)
+                this.loadLevel('bossTwo', true, false, false, false);
             }
         }
 
@@ -994,6 +993,7 @@ class SceneManager {
     };
 
     userInterface(ctx) {
+        ctx.globalAlpha = 1;
         if (this.game.textOverlay) {
             // Set default opacity
             ctx.globalAlpha = 1;

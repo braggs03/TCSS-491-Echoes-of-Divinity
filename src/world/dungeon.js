@@ -572,7 +572,7 @@ class MovingPlatform {
         if (this.isVertical) { //Vertical
             this.y += d;
             this.velocityY = d;
-
+            
             if ((this.direction === 1 && this.y >= this.startY) || (this.direction === -1 && this.y <= this.endY)) {
                 this.direction *= -1;
             }
