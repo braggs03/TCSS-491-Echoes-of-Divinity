@@ -993,7 +993,6 @@ class SceneManager {
     };
 
     userInterface(ctx) {
-        ctx.globalAlpha = 1;
         if (this.game.textOverlay) {
             // Set default opacity
             ctx.globalAlpha = 1;
@@ -1029,7 +1028,7 @@ class SceneManager {
             ctx.globalAlpha = 1;
         } 
         // Only draw HUD elements during actual gameplay (not in menu/title screens)
-        else {
+        else if (this.level !== levels.mainMenu && this.level !== levels.startScreen && this.level !== levels.storyRecap) {
             // HUD elements
             ctx.globalAlpha = 1;
             
@@ -1043,8 +1042,8 @@ class SceneManager {
             this.emberAnimation.drawFrame(
                 this.game.clockTick,
                 ctx,
-                80, 85,
-                3.5
+                80, 85,     
+                3.5          
             );
             
             ctx.fillText(this.knight.potionCount, 285, 100);
@@ -1059,7 +1058,7 @@ class SceneManager {
             let ratio = this.knight.currentStamina / this.knight.stamina;
     
             ctx.fillStyle = "White";
-            ctx.font = '20px "Open+Sans"';
+            ctx.font = '20px "Open+Sans"'; 
             ctx.textAlign = "center";
             ctx.fillText("STAMINA", barX + barWidth/2, barY - 25);
     
