@@ -424,7 +424,7 @@ let levels = {
         maxHeight: 600,
         minHeight: 0,
         background: "black",
-        fadeTime: 1500,
+        fadeTime: 500,
         text: [
             { x: 640, y: 360, message: "THANK YOU", font: "60px Arial", color: "white" },
         ]

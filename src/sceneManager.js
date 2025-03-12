@@ -121,10 +121,7 @@ class SceneManager {
             } else if (end) {
                 this.knight.x = this.level.endPosition.x;
                 this.knight.y = this.level.endPosition.y;
-                console.log(this.x);
                 this.x = this.level.width;
-                console.log(this.x);
-                console.log(this.level.width);
                 console.log(`Loading level ${levelIndex} @ default end spawn (${this.level.endPosition.x}, ${this.level.endPosition.y})`);
             } else {
                 this.knight.x = this.level.startPosition.x;
@@ -133,6 +130,11 @@ class SceneManager {
             }
             this.game.addEntity(this.knight);
             this.game.ctx.fillRect(50, 50, 100, 100);
+        } else {
+            this.knight.x = undefined;
+            this.knight.y = undefined;
+            this.x = 0;
+            this.y = 0;
         }
 
         if (transition && this.level !== levels.tutorial) {
@@ -736,6 +738,7 @@ class SceneManager {
 
         if (this.level === levels.emptyScreen) {
             if (this.music.currentTime >= 35) {
+                this.inCutscene = false;
                 this.loadLevel('AzucenaAfterStory', false, true, false, false);
             }
         }
@@ -813,7 +816,7 @@ class SceneManager {
                         this.shopkeeperCutsceneDone = true
                     }
                     if (this.level === levels.one) {
-                        this.oneCutsceneDone = false;
+                        this.oneCutsceneDone = true;
                     }
                     if (this.level === levels.two) {
                         this.twoCutsceneDone = true
@@ -834,7 +837,6 @@ class SceneManager {
                         this.bosstwoCutsceneDone = true
                     }
                     if (this.level === levels.bossThree) {
-                        console.log(true)
                         this.bossthreeCutsceneDone = true
                     }
                 }
@@ -848,6 +850,7 @@ class SceneManager {
                 if (this.game.keys[' ']) {
                     this.loadLevel('storyRecap', false, true, false, false);
                 } else if (this.game.keys['Enter']) {
+                    this.game.keys["Enter"] = false;
                     this.loadLevel('mainMenu', false, true, false, false);
                 }
 
@@ -858,7 +861,38 @@ class SceneManager {
             }
             if (this.level === levels.storyRecap) {
                 if (this.game.keys['Enter']) {
+                    this.game.keys["Enter"] = false;
                     this.loadLevel('mainMenu', false, true, false, false);
+                }
+            }
+            if (this.level === levels.emptyScreen) {
+                if (this.game.keys['Enter']) {
+                    this.game.keys["Enter"] = false;
+                    this.loadLevel('AzucenaAfterStory', false, true, false, false);
+                }
+            }
+            if (this.level === levels.AzucenaAfterStory) {
+                if (this.game.keys['Enter']) {
+                    this.game.keys["Enter"] = false;
+                    this.loadLevel('ReinaAfterStory', false, true, false, false);
+                }
+            }
+            if (this.level === levels.ReinaAfterStory) {
+                if (this.game.keys['Enter']) {
+                    this.game.keys["Enter"] = false;
+                    this.loadLevel('ChosenAfterStory', false, true, false, false);
+                }
+            }
+            if (this.level === levels.ChosenAfterStory) {
+                if (this.game.keys['Enter']) {
+                    this.game.keys["Enter"] = false;
+                    this.loadLevel('Credits', false, true, false, false);
+                }
+            }
+            if (this.level === levels.Credits) {
+                if (this.game.keys['Enter']) {
+                    this.game.keys["Enter"] = false;
+                    this.loadLevel('ThankYou', false, true, false, false);
                 }
             }
             if (this.game.textOverlay) {
@@ -927,7 +961,10 @@ class SceneManager {
                     this.bosstwoCutsceneDone = false;
                     this.bossthreeCutsceneDone = false;
                     setTimeout(() => {
-                        this.loadLevel("startScreen", true, true, false, false);  // Load the next level
+                        this.music.pause()
+                        this.music.volume = 0;
+                        this.music = null;
+                        this.loadLevel("startScreen", false, true, false, false);  // Load the next level
                     }, 6000);
                 }
             }

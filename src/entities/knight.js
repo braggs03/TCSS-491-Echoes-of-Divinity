@@ -549,7 +549,6 @@ class Knight {
                 && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
                 if (this.game.keys["e"]) {
                     if (!this.attackAnimationActive) {
-                        console.log(this.currentStamina >= this.meleeAttackStaminaCost);
                         if (this.currentStamina >= this.meleeAttackStaminaCost) {
                             this.velocityX = 0;
                             this.attackAnimationActive = true;
