@@ -178,8 +178,6 @@ class NightbornWarrior {
             if (this.attackTimer >= attackDuration) {
                 this.attackInProgress = false;
                 this.attackTimer = 0;
-                this.nightbornAttack.play();
-                this.nightbornAttack.volume = 0.2;
                 
                 // Check if target is still in range for another attack
                 if (this.target && this.BB.collide(this.target.BB) && !this.target.dead) {
