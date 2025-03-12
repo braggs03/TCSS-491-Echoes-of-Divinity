@@ -1016,7 +1016,7 @@ class SceneManager {
             ctx.globalAlpha = 1;
         } 
         // Only draw HUD elements during actual gameplay (not in menu/title screens)
-        else if (this.level !== levels.mainMenu && this.level !== levels.startScreen && this.level !== levels.storyRecap) {
+        else {
             // HUD elements
             ctx.globalAlpha = 1;
             
