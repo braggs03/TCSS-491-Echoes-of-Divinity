@@ -648,10 +648,9 @@ class CutsceneTwelve {
             this.knight.inCutscene = true;
             this.knight.moveable = true;
             this.knight.setState('RightRun');
-            while (this.knight.x < 100) {
-                await this.delay (0.5);
+            while (this.knight.x === this.swordwave) {
+                await this.delay (0.3);
             }
-            this.knight.moveable = false;
             await this.delay(300);
             this.knight.setState('LeftIdle');
             await this.delay(1000);
