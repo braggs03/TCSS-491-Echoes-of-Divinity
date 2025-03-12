@@ -3,8 +3,8 @@ class Celes {
         this.game = game;
         this.x = x;
         this.y = y;
-        this.maxHp = 2000;
-        this.hp = 2000;
+        this.maxHp = 3000;
+        this.hp = 3000;
         this.height = 100;
         this.bheight = 0;
         this.healthBar = new HealthBar(this);
