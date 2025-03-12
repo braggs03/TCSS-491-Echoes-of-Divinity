@@ -22,7 +22,6 @@ class Werewolf {
         this.maxVelocityY = 990;
         this.accelerationY = 4125;
 
-        this.werewolfHit = new Audio("./resources/SoundEffects/werewolfhit.mp3");
         this.werewolfDeath = new Audio("./resources/SoundEffects/werewolfdeath.mp3");
         
         // Create bounding box
@@ -84,8 +83,6 @@ class Werewolf {
     
     takeDamage(amount) {
 		if (!this.invincible) {
-            this.werewolfHit.play();
-            this.werewolfHit.volume = 0.2;
 			this.hp -= amount;
 			console.log(`Werewolf taking ${amount} damage, health: ${this.hp}/${this.maxHp}`);
 			
@@ -109,7 +106,6 @@ class Werewolf {
         if (this.dead) return;
         
         this.dead = true;
-        this.werewolfHit.muted = true;
         this.werewolfDeath.play();
         this.werewolfDeath.volume = 0.2;
         
@@ -125,11 +121,7 @@ class Werewolf {
         
         setTimeout(() => {
             this.removeFromWorld = true;
-        }, 1000); 
-
-        setTimeout(() => {
-            this.werewolfHit.muted = false;
-        }, 1000); 
+        }, 1000);
     }
 
     update() {

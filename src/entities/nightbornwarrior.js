@@ -30,12 +30,11 @@ class NightbornWarrior {
         this.runSound = new Audio("./resources/SoundEffects/run.ogg");
         this.runSound.loop = true;
         this.runSound.playbackRate = 10;
-        this.attackSound = new Audio("./resources/SoundEffects/run.ogg");
+        this.runSound.volume = 0.2
+        this.attackSound = new Audio("./resources/SoundEffects/nightbornattack.mp3");
         this.attackSound.loop = false;
         this.attackSound.playbackRate = 1;
-        this.nightbornAttack = new Audio("./resources/SoundEffects/nightbornattack.mp3");
-        this.nightbornHit = new Audio("./resources/SoundEffects/nightbornhit.mp3");
-        this.nightbornDeath = new Audio("./resources/SoundEffects/nightborndeath.mp3");
+        this.attackSound.volume = 0.2;
 
         this.spritesheet = ASSET_MANAGER.getAsset("./resources/nightBorneWarrior/NightBorneWarrior.png");
         this.sprite = ASSET_MANAGER.getAsset("./resources/nightBorneWarrior/NightBorneflip.png");
@@ -86,8 +85,6 @@ class NightbornWarrior {
     }
 
     takeDamage(amount) {
-        this.nightbornHit.play();
-        this.nightbornHit.volume = 0.1;
         if (!this.splitTransition) {this.hp -= amount;}
         if (this.hp <= 700) {
             if (!this.split) {
@@ -98,11 +95,9 @@ class NightbornWarrior {
                     this.inCutscene = true;
                     this.invinsible = true;
                     this.split = true;
-                    this.nightbornHit.muted = true; 
                 }
             }
         }
-        this.nightbornHit.muted = false; 
         if (this.invinsible) return;
             // Only change to hurt animation if not attacking
         if (!this.attackInProgress) {
@@ -119,17 +114,10 @@ class NightbornWarrior {
         this.dead = true;
         this.attackInProgress = false;
         this.state = this.facing === RIGHT ? 'DeathRight' : 'DeathLeft';
-        this.nightbornHit.muted = true;
-        this.nightbornDeath.play();
-        this.nightbornDeath.volume = 0.2;
         setTimeout(() => {
             this.removeFromWorld = true;
         }, 2000);
 
-        setTimeout(() => {
-        this.nightbornHit.muted = false;
-        }, 2000);
-        
         if (!this.clone) {
             this.game.camera.lucanDead = true;
             this.game.camera.bossoneCutsceneDone = false;
@@ -269,6 +257,7 @@ class NightbornWarrior {
     }
 
     attack() {
+        this.attackSound.currentTime = 0;
         if (!this.target || this.target.dead || this.attackInProgress) return;
 
         // Reset attack animators to ensure full animation plays
@@ -283,6 +272,7 @@ class NightbornWarrior {
         
         // Deal damage at 60% through animation (0.576s = 60% of 0.96s)
         setTimeout(() => {
+            this.attackSound.play();
             if (!this.dead && this.target && this.BB.collide(this.target.BB) && !this.target.dead) {
                 console.log("NightbornWarrior deals damage to Knight");
                 this.target.takeDamage(200);

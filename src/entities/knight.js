@@ -17,13 +17,13 @@ class Knight {
 
         this.velocityX = 0;
         this.maxVelocityX = 825;
-        this.accelerationX = 6000; 
+        this.accelerationX = 6000;
         this.decelerationX = 4000;
-        
+
         this.velocityY = 0;
         this.maxVelocityY = 1400;
         this.jumpSpeed = 1350;
-        this.accelerationY = 4125; 
+        this.accelerationY = 4125;
 
         this.rollSpeed = 825;
 
@@ -43,14 +43,14 @@ class Knight {
         this.rangedAttackStaminaCost = 1000;
 
         this.emberCount = 0;
-        
+
         this.maxPotionCount = 3;
         this.potionCount = this.maxPotionCount;
         this.potionHealCount = 200;
         this.potionCost = 50;
 
         this.gKeyPressed = false;
-        
+
         this.invincible = false;
 
         this.attackspeed = 0.1
@@ -58,24 +58,24 @@ class Knight {
         this.attackCooldown = false;
         this.attackAnimationActive = false;
         this.attackHitRegistered = false;
-        
+
         this.removeFromWorld = false;
-        
+
         this.facing = RIGHT;
-        
+
         this.flickerFlag = true;
         this.flickerDuration = 0;
-        
+
         this.animationLocked = false;
-        
+
         this.hasDoubleJump = false;
         this.hasDoubleJumped = false;
         this.hasWaveAttack = false;
         this.dead = false;
 
         this.hasShield = false;
-        this.isShielded = true;
-        
+        this.isShielded = false;
+
 
         this.colliding = {
             left: false, // Knight is to the right of the wall.
@@ -101,9 +101,11 @@ class Knight {
         this.rollSound.playbackRate = 1;
         this.rollSound.volume = 0.2;
         this.knightHit = new Audio("./resources/SoundEffects/knighthit.mp3");
+        this.knightHit.loop = false;
+        this.knightHit.volume = 0.2;
         this.knightDeath = new Audio("./resources/SoundEffects/knightdeath.mp3");
-        
-
+        this.knightDeath.loop = false;
+        this.knightDeath.volume = 0.2;
 
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(KNIGHT_SPRITE), 0, 0, 120, 80, 6, this.attackspeed, false, false),
@@ -188,11 +190,10 @@ class Knight {
     }
 
     takeDamage(amount) {
-        if (!this.invincible) {
+        if (!this.invincible && !this.inCutscene) {
             this.invincible = true;
             if (!this.isShielded) {
                 this.knightHit.play();
-                this.knightHit.volume = 0.2;
                 this.hp -= amount;
             } else {
                 this.shield -= amount;
@@ -222,23 +223,22 @@ class Knight {
             this.dead = true;
             this.knightHit.muted = true;
             this.knightDeath.play();
-            this.knightDeath.volume = 0.3;
             this.currentState = this.facing === RIGHT ? 'RightDeath' : 'LeftDeath';
             console.log("Knight has died!");
             this.velocityX = 0;
             // Optionally mark for removal after the death animation
             setTimeout(() => {
                 this.removeFromWorld = true;
-                this.game.camera.respawnKnight(this); 
+                this.game.camera.respawnKnight(this);
             }, 1000);
 
             setTimeout(() => {
-                this.knightHit.muted = false; 
+                this.knightHit.muted = false;
             }, 5000);
             // Adjust timing to match the death animation duration
 
             this.game.camera.emberDrop = new EmberDrop(this.game, this.x + KNIGHT_X_OFFSET, this.y + KNIGHT_HEIGHT, this.emberCount, this.game.camera.levelIndex);
-            this.emberCount = 0;          
+            this.emberCount = 0;
         }
     }
     usePotion() {
@@ -246,15 +246,15 @@ class Knight {
             this.potionCount -= 1;
             const healAmount = Math.min(this.potionHealCount, this.maxHp - this.hp);
             this.hp = Math.min(this.hp + this.potionHealCount, this.maxHp);
-            
+
             this.game.addEntity(new PotionEffect(
                 this.game,
                 this.x + KNIGHT_WIDTH + 50,  // Position slightly to the right of player
                 this.y + 50,                 // Position above the player
                 "health",
-                healAmount                   
+                healAmount
             ));
-            
+
             console.log(`Used potion: Healed for ${healAmount} HP. Potions remaining: ${this.potionCount}`);
             return true;
         }
@@ -295,15 +295,15 @@ class Knight {
     update() {
         const clockTick = this.game.clockTick;
 
-        if (this.currentStamina < this.stamina && this.currentState !== "RightRoll" 
-            && this.currentState !== "LeftRoll" && this.currentState !== "LeftAttack1" 
-            && this.currentState !== "LeftAttack2" && this.currentState !== "RightAttack1" 
-            && this.currentState !== "RightAttack2" && this.currentState !== "RightAttack2" 
+        if (this.currentStamina < this.stamina && this.currentState !== "RightRoll"
+            && this.currentState !== "LeftRoll" && this.currentState !== "LeftAttack1"
+            && this.currentState !== "LeftAttack2" && this.currentState !== "RightAttack1"
+            && this.currentState !== "RightAttack2" && this.currentState !== "RightAttack2"
             && this.currentState !== "LeftJump" && this.currentState !== "RightJump"
         ) {
             this.currentStamina = Math.min(this.currentStamina + this.staminaRegen * this.game.clockTick, this.stamina);
         }
-    
+
         if (this.y > VOID_HEIGHT) {
             this.die();
         }
@@ -314,7 +314,7 @@ class Knight {
         } else {
             this.invincible = false;
         }
-        
+
         this.colliding = {
             right: false,
             left: false,
@@ -322,11 +322,11 @@ class Knight {
             up: false,
         }
         let knight = this;
-        
+
         this.game.entities.forEach((entity) => {
             if (entity.BB && knight.BB.collide(entity.BB)) {
                 const overlap = entity.BB.overlap(knight.BB);
-                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonWall1 || entity instanceof DungeonSpike || entity instanceof DungeonWall2 || entity instanceof DungeonGround4) {
+                if (entity instanceof DungeonGround || entity instanceof DungeonGround2 || entity instanceof DungeonWall || entity instanceof DungeonWall1 || entity instanceof DungeonSpike || entity instanceof DungeonWall2 || entity instanceof DungeonGround4 || entity instanceof MovingPlatform) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
 
@@ -338,12 +338,12 @@ class Knight {
                         }
                         knight.velocityX = 0;
                     }
-                    
+
                     if (verticalCollision) {
                         if (entity.BB.y < knight.BB.y) {
                             this.colliding.down = true;
                             knight.y += overlap.y;
-                            
+
                             if (entity instanceof DungeonSpike) {
                                 this.takeDamage(entity.damage);
                             }
@@ -351,13 +351,17 @@ class Knight {
                             this.colliding.up = true;
                             knight.y -= overlap.y - 1;
                             this.hasDoubleJumped = false;
+
+                            if (entity instanceof MovingPlatform && entity.isVertical) {
+                                knight.y += entity.speed * entity.direction * this.game.clockTick;;
+                            }
                         }
-                        knight.velocityY = 0;                        
+                        knight.velocityY = 0;
                     }
                 } else if (entity instanceof DungeonBridge) {
                     let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
                     let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
-                
+
                     if (horizontalCollision) {
                         if (entity.BB.x < knight.BB.x) {
                             knight.x += overlap.x;
@@ -366,7 +370,7 @@ class Knight {
                         }
                         knight.velocityX = 0;
                     }
-                
+
                     if (verticalCollision) {
                         if (entity.BB.y < knight.BB.y) {
                             this.colliding.down = true;
@@ -384,44 +388,6 @@ class Knight {
                             entity.save();
                             entity.removeFromWorld = true;
                         }
-                    }
-                } else if (entity instanceof MovingPlatform) { // Moving Platform
-                    let horizontalCollision = overlap.x > 0 && overlap.x < overlap.y;
-                    let verticalCollision = overlap.y > 0 && overlap.y < overlap.x;
-
-                    if (horizontalCollision) {
-                        if (entity.BB.x < knight.BB.x) {
-                            knight.x += overlap.x;
-                        } else {
-                            knight.x -= overlap.x;
-                        }
-                        knight.velocityX = 0;
-                    }
-                    
-                    if (verticalCollision) {
-                        if (entity.isVertical) { //vertical movements
-                            if (entity.BB.y < knight.BB.y) {
-                                this.colliding.down = true;
-                                knight.y += overlap.y;
-                            } else {
-                                this.colliding.up = true;
-                                knight.y -= overlap.y - 1;                           
-                                this.hasDoubleJumped = false;
-                            }
-                        } else { // horizontal movements
-                            if (entity.BB.y < knight.BB.y) {
-                                this.colliding.down = true;
-                                knight.y += overlap.y;
-                            } else {
-                                this.colliding.up = true;
-                                knight.y -= overlap.y - 1;
-                                this.test = entity.velocityX; //test
-                                knight.x += this.test; 
-                                // console.log(this.test);                         
-                                this.hasDoubleJumped = false;
-                            }
-                        }
-                        // knight.velocityY = 0;
                     }
                 }
             }
@@ -452,14 +418,14 @@ class Knight {
             }
             this.velocityX = 0;
         }
-    
+
         if (!this.dead && !this.inCutscene) {
             if (this.currentState === 'RightAttack1' || this.currentState === 'LeftAttack1' || this.currentState === 'RightAttack2'|| this.currentState === 'LeftAttack2') {
                 const currentFrame = this.animations[this.currentState].currentFrame();
                 if (currentFrame === 0) {
                     this.hitTargets = [];
                 }
-                
+
                 if (currentFrame >= 2 && currentFrame < 4) {
                     this.game.entities.forEach(entity => {
                         if ((typeof entity.takeDamage === 'function' && !(entity instanceof Knight)) &&
@@ -471,7 +437,7 @@ class Knight {
                         }
                     });
                 }
-        
+
                 if (!this.animations[this.currentState].getDone()) {
                     return;
                 } else {
@@ -482,7 +448,7 @@ class Knight {
                     this.hitTargets = [];
                 }
             }
-    
+
             if (this.currentState === 'RightRoll' || this.currentState === 'LeftRoll') {
                 if (this.currentState == 'RightRoll') {
                     if (!this.colliding.left) {
@@ -515,7 +481,7 @@ class Knight {
                     this.pauseSound();
                 }
             }
-        
+
             if (!this.colliding.up) {
                 if (this.velocityY > 0) {
                     this.facing == LEFT ? this.setState("LeftFall") : this.setState("RightFall");
@@ -537,22 +503,22 @@ class Knight {
                 this.setState(this.facing === RIGHT ? "RightIdle" : "LeftIdle");
                 this.pauseSound();
             }
-    
+
             if (this.game.keys["ArrowUp"]) {
                 if (this.colliding.up) {
                     this.colliding.up = false;
-                    this.velocityY = -this.jumpSpeed; 
+                    this.velocityY = -this.jumpSpeed;
                     this.hasDoubleJumped = false;
                 } else if (this.hasDoubleJump && !this.hasDoubleJumped && this.arrowUpReleased) {
                     this.colliding.up = false;
-                    this.velocityY = -this.jumpSpeed; 
+                    this.velocityY = -this.jumpSpeed;
                     this.hasDoubleJumped = true;
                 }
                 this.arrowUpReleased = false;
             } else {
                 this.arrowUpReleased = true;
             }
-            
+
             if (this.game.keys["ArrowLeft"] && !this.colliding.right) {
                 this.facing = LEFT;
                 this.velocityX -= this.accelerationX * clockTick;
@@ -568,7 +534,7 @@ class Knight {
                     this.velocityX = Math.min(0, this.velocityX + this.decelerationX * clockTick);
                 }
             }
-           
+
             if (this.currentState !== 'RightFall' && this.currentState !== 'LeftFall'
                 && this.currentState !== 'RightJump' && this.currentState !== 'LeftJump') {
                 if (this.game.keys["e"]) {
@@ -585,7 +551,7 @@ class Knight {
                                 this.attackSound.play();
                             }
                             this.hitTargets = [];
-                            
+
                             setTimeout(() => {
                                 this.attackAnimationActive = false;
                             }, 700);
@@ -605,9 +571,9 @@ class Knight {
                             this.attackSound.play();
                         }
                         setTimeout(() => {
-                        this.swordwave = new Swordwave(this.game, this.x, this.y + 80, this.facing);
-                        this.game.entities.splice(1, 0, this.swordwave);
-                        console.log(`projectile @ ("${knight.x}, ${knight.y}")`);
+                            this.swordwave = new Swordwave(this.game, this.x, this.y + 80, this.facing);
+                            this.game.entities.splice(1, 0, this.swordwave);
+                            console.log(`projectile @ ("${knight.x}, ${knight.y}")`);
                         }, 700);
                         this.currentStamina = 0;
                         // if (this.swordwaveSound.paused) {
@@ -620,7 +586,7 @@ class Knight {
                         setTimeout(() => {
                             this.attackAnimationActive = false;
                         }, 900);
-                    }                  
+                    }
                 } else if (this.game.keys["r"]) {
                     this.chosenState = this.facing === RIGHT ? this.currentState = "RightRoll" : this.currentState = "LeftRoll";
                     this.invincible = true;
@@ -633,11 +599,11 @@ class Knight {
                 } else {
                     this.gKeyPressed = false;
                 }
-            }        
-    
+            }
+
             if (!this.moveable) {
                 this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
-                this.velocityX = 0; 
+                this.velocityX = 0;
                 this.velocityY = this.velocityY < 0 ? 0 : this.velocityY;
             }
         }
@@ -648,10 +614,10 @@ class Knight {
 
         this.x += this.velocityX * clockTick;
         this.y += this.velocityY * clockTick;
-        
+
         this.x = Math.round(this.x * 100) / 100;
         this.y = Math.round(this.y * 100) / 100;
-        
+
         this.updateBB();
     }
 

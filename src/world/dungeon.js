@@ -215,7 +215,7 @@ class Bonfire {
         this.x = this.self.x;
         this.y = this.self.y;
         this.discovered = this.self.discovered ? this.self.discovered : false;
-        this.isCurrent = this.self.isCurrent ? this.self.isCurrent : false; 
+        this.isCurrent = this.self.isCurrent ? this.self.isCurrent : false;
         this.level = this.self.level;
         this.sound = new Audio("./resources/SoundEffects/emberLight.ogg");
         this.sound.loop = true;
@@ -432,7 +432,7 @@ class DungeonWall2 {
     update() {
         this.BB = new BoundingBox(this.x * DUNEGON_WALL2_WIDTH * this.scale - this.game.camera.x,  this.y * DUNEGON_WALL2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL2_WIDTH * this.scale, DUNEGON_WALL2_HEIGHT * this.h * this.scale);
     };
-    
+
     draw(ctx) {
         for (let l = 0; l < this.h; l++) {
             ctx.drawImage(this.spritesheet, 329, 1400, DUNEGON_WALL2_WIDTH, DUNEGON_WALL2_HEIGHT, (this.x * DUNEGON_WALL2_WIDTH * this.scale) - this.game.camera.x, this.y + l * DUNEGON_WALL2_HEIGHT * this.scale - this.game.camera.y, DUNEGON_WALL2_WIDTH * this.scale, DUNEGON_WALL2_HEIGHT * this.scale);
@@ -530,7 +530,7 @@ class EmberDrop {
 
     emberDrop() {
         return new Animator(
-            ASSET_MANAGER.getAsset(EMBER), 
+            ASSET_MANAGER.getAsset(EMBER),
             0, 96,        // Starting x, y position in spritesheet
             16, 16,       // Width and height of each frame
             5,            // Number of frames
@@ -558,25 +558,31 @@ class MovingPlatform {
         this.endX = endX * MOVING_PLATFORMS_WIDTH * this.scale;
         this.endY = endY * MOVING_PLATFORMS_HEIGHT * this.scale;
         this.direction = 1; // 1 for forward, -1 for reverse
+        this.speed = 400;
 
         this.velocityX; // Initialize horizontal velocity
         this.velocityY; // Initialize vertical velocity
-        
+
         this.BB = new BoundingBox(this.x * MOVING_PLATFORMS_WIDTH * this.scale - this.game.camera.x,  this.y * MOVING_PLATFORMS_HEIGHT * this.scale - this.game.camera.y, MOVING_PLATFORMS_WIDTH * w * this.scale, MOVING_PLATFORMS_HEIGHT * h * this.scale);
     };
 
     update() {
+        const d = this.speed * this.direction * this.game.clockTick;
+        const knight = this.game.camera.knight;
         if (this.isVertical) { //Vertical
-            this.speed = 400;
-            this.y += this.speed * this.direction * this.game.clockTick;
-            this.velocityY = this.speed * this.direction * this.game.clockTick;
+            this.y += d;
+            this.velocityY = d;
+
             if ((this.direction === 1 && this.y >= this.startY) || (this.direction === -1 && this.y <= this.endY)) {
                 this.direction *= -1;
             }
         } else { //Horizxontal
-            this.speed = 400;
-            this.x += this.speed * this.direction * this.game.clockTick;
-            this.velocityX = this.speed * this.direction * this.game.clockTick;
+            this.x += d;
+            this.velocityX = d;
+
+            if (this.BB.collide(knight.BB)) {
+                knight.x += d;
+            }
 
             if ((this.direction === 1 && this.x >= this.endX) || (this.direction === -1 && this.x <= this.startX)) {
                 this.direction *= -1;
@@ -629,18 +635,18 @@ class DungeonGround4 {
         this.spritesheet = ASSET_MANAGER.getAsset(DUNGEON);
         this.scale = 5;
         this.BB = new BoundingBox(
-            this.x * DUNEGON_GROUND4_WIDTH * this.scale - this.game.camera.x,  
-            this.y * DUNEGON_GROUND4_HEIGHT * this.scale - this.game.camera.y, 
-            DUNEGON_GROUND4_WIDTH * w * this.scale, 
+            this.x * DUNEGON_GROUND4_WIDTH * this.scale - this.game.camera.x,
+            this.y * DUNEGON_GROUND4_HEIGHT * this.scale - this.game.camera.y,
+            DUNEGON_GROUND4_WIDTH * w * this.scale,
             DUNEGON_GROUND4_HEIGHT * h * this.scale
         );
     };
 
     update() {
         this.BB = new BoundingBox(
-            this.x * DUNEGON_GROUND4_WIDTH * this.scale - this.game.camera.x,  
-            this.y * DUNEGON_GROUND4_HEIGHT * this.scale - this.game.camera.y, 
-            DUNEGON_GROUND4_WIDTH * this.w * this.scale, 
+            this.x * DUNEGON_GROUND4_WIDTH * this.scale - this.game.camera.x,
+            this.y * DUNEGON_GROUND4_HEIGHT * this.scale - this.game.camera.y,
+            DUNEGON_GROUND4_WIDTH * this.w * this.scale,
             DUNEGON_GROUND4_HEIGHT * this.h * this.scale
         );
     };
@@ -649,13 +655,13 @@ class DungeonGround4 {
         for (let l = 0; l < this.h; l++) {
             for (let k = 0; k < this.w; k++) {
                 ctx.drawImage(
-                    this.spritesheet, 
+                    this.spritesheet,
                     104, 1432,  // Sprite coordinates from your earlier description
-                    DUNEGON_GROUND4_WIDTH, 
-                    DUNEGON_GROUND4_HEIGHT, 
-                    this.x * DUNEGON_GROUND4_WIDTH * this.scale + (k * DUNEGON_GROUND4_WIDTH * this.scale) - this.game.camera.x, 
-                    this.y * DUNEGON_GROUND4_HEIGHT * this.scale - this.game.camera.y, 
-                    DUNEGON_GROUND4_WIDTH * this.scale, 
+                    DUNEGON_GROUND4_WIDTH,
+                    DUNEGON_GROUND4_HEIGHT,
+                    this.x * DUNEGON_GROUND4_WIDTH * this.scale + (k * DUNEGON_GROUND4_WIDTH * this.scale) - this.game.camera.x,
+                    this.y * DUNEGON_GROUND4_HEIGHT * this.scale - this.game.camera.y,
+                    DUNEGON_GROUND4_WIDTH * this.scale,
                     DUNEGON_GROUND4_HEIGHT * this.scale
                 );
             }
@@ -795,16 +801,16 @@ class FireBomb2 {
         this.removeFromWorld = false;
         this.damageDone = false;
         this.bombTimer = 0;
-        this.bombInterval = 2; 
+        this.bombInterval = 2;
 
         this.BB = new BoundingBox(
-            this.x - this.game.camera.x + 30, 
-            this.y - this.game.camera.y + 50, 
-            270, 
+            this.x - this.game.camera.x + 30,
+            this.y - this.game.camera.y + 50,
+            270,
             200
         );
         this.animator = new Animator(
-            ASSET_MANAGER.getAsset("./resources/Magic/Fire-bomb.png"), 
+            ASSET_MANAGER.getAsset("./resources/Magic/Fire-bomb.png"),
             0, 0, 64, 64, 14, 0.075, false, false
         );
 
@@ -812,11 +818,11 @@ class FireBomb2 {
     }
 
     update() {
-       
+
         this.BB = new BoundingBox(
-            this.x - this.game.camera.x + 30, 
-            this.y - this.game.camera.y + 50, 
-            270, 
+            this.x - this.game.camera.x + 30,
+            this.y - this.game.camera.y + 50,
+            270,
             200
         );
 
@@ -836,31 +842,31 @@ class FireBomb2 {
             );
         }
 
-        
+
         if (this.animator.currentFrame() > 8) {
             if (this.target && this.target.BB) {
 
                 if (this.BB.collide(this.target.BB)) {
                     if (!this.damageDone) {
-                        
+
                         this.target.takeDamage(100);
                         this.damageDone = true;
                     }
                 } else {
-                    
+
                 }
             }
         }
     }
 
     draw(ctx) {
-        
+
         if (!this.animator.getDone() || this.bombTimer < this.bombInterval) {
             this.animator.drawFrame(
-                this.game.clockTick, 
-                ctx, 
-                this.x - this.game.camera.x, 
-                this.y - this.game.camera.y, 
+                this.game.clockTick,
+                ctx,
+                this.x - this.game.camera.x,
+                this.y - this.game.camera.y,
                 5
             );
             this.BB.draw(ctx);
@@ -955,7 +961,7 @@ class LostSword {
 
     lostsword() {
         return new Animator(
-            ASSET_MANAGER.getAsset("./resources/knight/lostsword.png"), 
+            ASSET_MANAGER.getAsset("./resources/knight/lostsword.png"),
             0, 0,        // Starting x, y position in spritesheet
             32, 32,       // Width and height of each frame
             8,            // Number of frames
