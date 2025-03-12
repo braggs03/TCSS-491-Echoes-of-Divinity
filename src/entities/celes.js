@@ -98,6 +98,14 @@ class Celes {
     }
 
     update() {
+        if (this.target && this.target.hp <= 0) {
+            clearTimeout(this.One);
+            clearTimeout(this.Two);
+            clearTimeout(this.Three);
+            clearTimeout(this.Four);
+            clearTimeout(this.Five);
+            clearTimeout(this.Six);
+        }
         if (this.dead) {
             while (this.game.camera.music.volume > 0.0) {
                 this.game.camera.music.volume = Math.max ( this.game.camera.music.volume - (0.1 * this.game.clockTick), 0.0);
@@ -215,32 +223,32 @@ class Celes {
         }, 500)
 
 
-        setTimeout(() => {
+        this.One = setTimeout(() => {
             this.lightning = new Lightning(this.game, this.target.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning);
         }, this.lightningTime);
 
-        setTimeout(() => {
+        this.Two = setTimeout(() => {
             this.lightning = new Lightning(this.game, this.target.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning);
         }, this.lightningTime * 2);
 
-        setTimeout(() => {
+        this.Three = setTimeout(() => {
             this.lightning = new Lightning(this.game, this.target.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning);
         }, this.lightningTime * 3);
 
-        setTimeout(() => {
+        this.Four = setTimeout(() => {
             this.lightning = new Lightning(this.game, this.target.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning);
         }, this.lightningTime * 4);
 
-        setTimeout(() => {
+        this.Five = setTimeout(() => {
             this.lightning = new Lightning(this.game, this.target.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning)
         }, this.lightningTime * 5);
 
-        setTimeout(() => {
+        this.Six = setTimeout(() => {
             this.lightning = new Lightning(this.game, this.x, 40, true)
             this.game.entities.splice(1, 0, this.lightning)
             this.isLightning = false;

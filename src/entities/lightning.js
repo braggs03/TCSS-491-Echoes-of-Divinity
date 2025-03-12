@@ -44,17 +44,19 @@ class Lightning {
                 this.target.die();
             }
         } else {
-            if (this.target.BB && this.BB.collide(this.target.BB)) {
-                if (!this.damageDone) {
-                    this.target.takeDamage(200);
-                    this.damageDone = true;
+            if (this.target) {
+                if (this.target.BB && this.BB.collide(this.target.BB)) {
+                    if (!this.damageDone) {
+                        this.target.takeDamage(200);
+                        this.damageDone = true;
+                    }
                 }
-            }
-            if (this.animator.getDone()) {
-                this.run = false;
-                this.removeFromWorld = true;
-                this.done = true;
-                ///this.sound.pause();
+                if (this.animator.getDone()) {
+                    this.run = false;
+                    this.removeFromWorld = true;
+                    this.done = true;
+                    ///this.sound.pause();
+                }
             }
         }
     }
