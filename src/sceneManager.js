@@ -133,6 +133,11 @@ class SceneManager {
             }
             this.game.addEntity(this.knight);
             this.game.ctx.fillRect(50, 50, 100, 100);
+        } else {
+            this.knight.x = undefined;
+            this.knight.y = undefined;
+            this.x = 0;
+            this.y = 0;
         }
 
         if (transition && this.level !== levels.tutorial) {
