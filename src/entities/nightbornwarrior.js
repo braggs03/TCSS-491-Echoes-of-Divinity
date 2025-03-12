@@ -162,9 +162,9 @@ class NightbornWarrior {
         this.updateBB();
         if (this.inCutscene) {
             if (this.state === "runLeft") {
-                this.x -= 10;
+                this.x -= 825 * this.game.clockTick;
             } else if (this.state === "runRight") {
-                this.x += 10;
+                this.x += 825 * this.game.clockTick;
             }
             return;
         }
