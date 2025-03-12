@@ -255,7 +255,7 @@ class NightbornWarrior {
     }
 
     attack() {
-        this.attackSound.currentTime = 0;
+        // this.attackSound.currentTime = 0;
         if (!this.target || this.target.dead || this.attackInProgress) return;
 
         // Reset attack animators to ensure full animation plays
