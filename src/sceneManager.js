@@ -102,10 +102,6 @@ class SceneManager {
         this.game.textOverlay = null;
         this.x = 0;
         this.cutsceneCounter = 0;
-        if (this.level === levels.two && this.twoCutsceneDone && !transition) {
-            this.cutsceneCounter = 1;
-            this.twoCutsceneDone = false;
-        }
         this.cutsceneStartTime = Date.now();
 
 
@@ -1024,6 +1020,12 @@ class SceneManager {
         if (this.level === levels.four) {
             if (this.knight.x <= -200) {
                 this.loadLevel('bossTwo', true, false, false, true)
+            }
+        }
+
+        if (this.level === levels.two) {
+            if (this.knight.x >= 11538) {
+                this.loadLevel('bossOne', true, false, false, false)
             }
         }
 

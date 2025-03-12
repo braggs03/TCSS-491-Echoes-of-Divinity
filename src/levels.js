@@ -133,7 +133,7 @@ let levels = {
         dungeonWall: [{ x: 0, y: 0, h: 4 }, { x: 290, y: 0, h: 2}],
         dungeonWaterfall: [{x: 950, y: 219}, { x: 2345, y: 219}, {x: 5445, y:219}, {x: 6835, y: 219}, {x: 8235, y: 219}],
         dungeonDoor: [{ x: 124, y: 361, level: "one", end: true }],
-        cutscene: [{startX: 10800, cutsceneNum: 3}, {startX: 11250, cutsceneNum: 4}],
+        cutscene: [{startX: 10800, cutsceneNum: 3}],
         reina: [{ x: 11100, y: 433 }],
         azucena: [{ x: 11200, y: 400 }],
     },
@@ -143,12 +143,12 @@ let levels = {
         maxHeight: -4000,
         minHeight: 0,
         startPosition: {
-            x: 87,
-            y: 300,
+            x: -70,
+            y: 441,
         },
         endPosition: {
-            x: 14370,
-            y: 465,
+            x: 2904,
+            y: -3839,
         },
         checkpoint2:{
             x: 13700,
