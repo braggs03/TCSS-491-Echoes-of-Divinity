@@ -286,6 +286,11 @@ let levels = {
             x: -200,
             y: 430,
         },
+
+        endPosition: {
+            x: 1848,
+            y: 441,
+        },
         cutscene: [{startX: -300, cutsceneNum: 5}],
         dungeonWall: [{ x: 0, y: 0, h: 3 }, { x: 51, y: 0, h: 3 }],
         reina: [{ x: 200, y: 536 }],

@@ -24,7 +24,7 @@ class SceneManager {
         this.bosstwoCutsceneDone = false;
         this.bossthreeCutsceneDone = false;
         this.emberAnimation = new Animator(
-            ASSET_MANAGER.getAsset(EMBER), 
+            ASSET_MANAGER.getAsset(EMBER),
             0, 96,        // Starting x, y position in spritesheet
             16, 16,       // Width and height of each frame
             5,            // Number of frames
@@ -40,7 +40,7 @@ class SceneManager {
         this.discoveredCheckpointsLevel = [];
 
         this.lucanDead = false;
-        this.celesDead = false;        
+        this.celesDead = false;
         this.loadLevel('startScreen', false, true, false, false);
     };
 
@@ -80,7 +80,7 @@ class SceneManager {
         }
     }
 
-    loadLevel(levelIndex, transition, title, dead, end) { 
+    loadLevel(levelIndex, transition, title, dead, end) {
         this.fire = this.game.entities.find(entity => entity instanceof Bonfire);
         if (this.fire) {
             if (!this.fire.sound.paused) {
@@ -89,7 +89,7 @@ class SceneManager {
         }
         this.alreadyDone = false
         this.checkpoint = false;
-        this.title = title;        
+        this.title = title;
         this.level = levels[levelIndex];
         this.levelIndex = levelIndex;
         this.saveEntities();
@@ -103,7 +103,7 @@ class SceneManager {
         }
         this.cutsceneStartTime = Date.now();
 
-        
+
         if (!this.title) {
             if (this.currentCheckpoint && this.currentCheckpoint.level === levelIndex && this.deadcheckpoint && !this.doormove) {
                 this.knight.x = this.currentCheckpoint.x;
@@ -112,7 +112,7 @@ class SceneManager {
                     // Force camera to position at the bonfire
                     this.x = Math.max(0, Math.min(this.level.width, this.knight.x - (PARAMS.SCREENWIDTH / 2)));
                 }
-                console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);     
+                console.log(`Loading level ${levelIndex} @ checkpoint (${this.currentCheckpoint.x}, ${this.currentCheckpoint.y})`);
             } else if (end) {
                 this.knight.x = this.level.endPosition.x;
                 this.knight.y = this.level.endPosition.y;
@@ -143,6 +143,12 @@ class SceneManager {
             || this.level === levels.four) && this.music !== new Audio(BACKGROUND_MUSIC)) {
             this.music = new Audio(BACKGROUND_MUSIC);
             this.music.loop = true;
+        }
+
+        if (this.level === levels.five) {
+            if (this.music) {
+                this.music = null;
+            }
         }
 
         if (this.level === levels.bossOne && this.bossoneCutsceneDone) {
@@ -442,7 +448,7 @@ class SceneManager {
                 let background2 = this.level.dungeonBackground2[i];
                 this.game.addEntity(new DungeonBackground2(this.game, background2.x, background2.y, background2.w, background2.h));
             }
-        }        
+        }
 
         if (this.level.dungeonGround2) {
             for (let i = 0; i < this.level.dungeonGround2.length; i++) {
@@ -519,7 +525,7 @@ class SceneManager {
                 this.game.addEntity(new DungeonBridge(this.game, bridge.x, bridge.y));
             }
         }
-        
+
         if (this.level.dungeonGround4) {
             for (let i = 0; i < this.level.dungeonGround4.length; i++) {
                 let ground4 = this.level.dungeonGround4[i];
@@ -554,8 +560,42 @@ class SceneManager {
             this.cutscene = this.level.cutscene;
         }
 
+        if (this.level === levels.tutorial && this.tutorialCutsceneDone
+            || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
+            || this.level === levels.one && this.oneCutsceneDone
+            || this.level === levels.two && this.twoCutsceneDone
+            || this.level === levels.three && this.threeCutsceneDone
+            || this.level === levels.four && this.fourCutsceneDone
+            || this.level === levels.five && this.fiveCutsceneDone
+            || this.level === levels.bossOne && this.bossoneCutsceneDone
+            || this.level === levels.bossTwo && this.bosstwoCutsceneDone
+            || this.level === levels.bossThree && this.bossthreeCutsceneDone) {
+            this.cutsceneCounter = this.cutscene.length;
+            if (this.level === levels.bossOne) {
+                if (this.bossoneCutsceneDone && !this.lucanDead && !this.alreadyDone) {
+                    this.alreadyDone = true;
+                    this.bossoneCutsceneDone = false;
+                    this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
+                }
+            }
+            if (this.level === levels.bossTwo) {
+                if (this.bosstwoCutsceneDone && !this.celesDead  && !this.alreadyDone) {
+                    this.alreadyDone = true;
+                    this.bosstwoCutsceneDone = false;
+                    this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
+                }
+            }
+            if (this.level === levels.bossThree) {
+                if (this.bossthreeCutsceneDone && !this.alreadyDone) {
+                    this.alreadyDone = true;
+                    this.bossthreeCutsceneDone = false;
+                    this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
+                }
+            }
+        }
+
         this.loadEmberDrop();
-        
+
         this.knight.removeFromWorld = false;
     };
     showShopMenu() {
@@ -565,7 +605,7 @@ class SceneManager {
         this.game.entities = [];
         this.game.addEntity(this.shopMenu);
         oldEntities.map((entity) => this.game.addEntity(entity));
-        
+
         console.log("Opened shop menu");
     }
     closeShopMenu() {
@@ -573,12 +613,12 @@ class SceneManager {
             this.knight.moveable = true;
             this.shopMenu.removeFromWorld = true;
             this.shopMenu = null;
-            
+
             // Reset key states
             this.game.keys["Enter"] = false;
             this.game.keys["Escape"] = false;
             this.escReleased = true;
-            
+
             console.log("Shop menu closed with key states reset");
         }
     }
@@ -616,7 +656,7 @@ class SceneManager {
         let oldEntities = this.game.entities;
         this.game.entities = [];
         this.game.addEntity(this.teleportMenu);
-        oldEntities.map((entity) => this.game.addEntity(entity)); 
+        oldEntities.map((entity) => this.game.addEntity(entity));
         console.log("opened checkpoint menu");
     }
 
@@ -631,31 +671,31 @@ class SceneManager {
         this.deadcheckpoint = true;
         if (this.currentCheckpoint) {
             const levelIndex = this.currentCheckpoint.level;
-            if (levels[levelIndex]) { 
+            if (levels[levelIndex]) {
                 this.loadLevel(levelIndex, true, false, false, false);
                 console.log(`Respawn @ checkpoint (${knight.x}, ${knight.y}) @ level ${levelIndex}`);
             } else {
                 console.error(`Checkpoint "${levelIndex}" not found.`);
             }
-        }         
-            
+        }
+
     }
     showControlsMenu() {
         // Don't show if already showing another menu or in cutscene
         if (this.inCutscene || this.interactable || this.shopMenu || this.teleportMenu || this.controlsMenu) {
             return;
         }
-        
+
         this.knight.moveable = false;
         this.controlsMenu = new GameControlsMenu(this.game, this);
         this.game.keys["Escape"] = false;
-        
+
         // Add the controls menu to entities
         let oldEntities = this.game.entities;
         this.game.entities = [];
         this.game.addEntity(this.controlsMenu);
         oldEntities.map((entity) => this.game.addEntity(entity));
-        
+
         console.log("opened controls menu");
     }
     closeControlsMenu() {
@@ -665,17 +705,16 @@ class SceneManager {
             this.controlsMenu = null;
         }
     }
-    
+
 
     update() {
-
         if (this.levelIndex === "three") {
             if (this.knight.y <= -3839) {
                 this.level.width = 1900;
             } else {
                 this.level.width = originalLevels[this.levelIndex].width;
             }
-        } 
+        }
 
         if (this.levelIndex === "four") {
             if (this.knight.x <= 6000 || this.knight.x >= 11000) {
@@ -686,7 +725,7 @@ class SceneManager {
         }
 
         if (!this.game.keys["f"]) {
-            this.fReleased = true; 
+            this.fReleased = true;
         }
 
         if (this.level === levels.emptyScreen) {
@@ -704,11 +743,11 @@ class SceneManager {
 
         if (this.game.keys["Escape"] && this.escReleased) {
             console.log("Escape pressed - escReleased:", this.escReleased,
-                 "Control menu:", !!this.controlsMenu,
+                "Control menu:", !!this.controlsMenu,
                 "Shop menu:", !!this.shopMenu);
-                
+
             this.escReleased = false;
-            
+
             // Only open menu with Escape, don't close with it
             if (!this.controlsMenu && !this.inCutscene && !this.interactable && !this.shopMenu && !this.teleportMenu) {
                 this.showControlsMenu();
@@ -716,7 +755,7 @@ class SceneManager {
         } else if (!this.game.keys["Escape"]) {
             this.escReleased = true;
         }
-        
+
         // if (this.game.keys["Escape"] && !this.inCutscene && !this.interactable && 
         //     !this.shopMenu && !this.teleportMenu && !this.controlsMenu && this.escReleased) {
         //     this.escReleased = false;
@@ -752,39 +791,6 @@ class SceneManager {
                     this.game.camera.cutscene.push({startX: -300, cutsceneNum: 1})
                 }
             }
-            if (this.level === levels.tutorial && this.tutorialCutsceneDone
-                || this.level === levels.shopkeeper && this.shopkeeperCutsceneDone
-                || this.level === levels.one && this.oneCutsceneDone
-                || this.level === levels.two && this.twoCutsceneDone
-                || this.level === levels.three && this.threeCutsceneDone
-                || this.level === levels.four && this.fourCutsceneDone
-                || this.level === levels.five && this.fiveCutsceneDone
-                || this.level === levels.bossOne && this.bossoneCutsceneDone
-                || this.level === levels.bossTwo && this.bosstwoCutsceneDone
-                || this.level === levels.bossThree && this.bossthreeCutsceneDone) {
-                this.cutsceneCounter = this.cutscene.length;
-                if (this.level === levels.bossOne) {
-                    if (this.bossoneCutsceneDone && !this.lucanDead  && !this.alreadyDone) {
-                        this.alreadyDone = true;
-                        this.bossoneCutsceneDone = false;
-                        this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
-                    }
-                }
-                if (this.level === levels.bossTwo) {
-                    if (this.bosstwoCutsceneDone && !this.celesDead  && !this.alreadyDone) {
-                        this.alreadyDone = true;
-                        this.bosstwoCutsceneDone = false;
-                        this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
-                    }
-                }
-                if (this.level === levels.bossThree) {
-                    if (this.bossthreeCutsceneDone && !this.alreadyDone) {
-                        this.alreadyDone = true;
-                        this.bossthreeCutsceneDone = false;
-                        this.game.camera.cutscene.push({startX: -300, cutsceneNum: 6})
-                    }
-                }
-            } else {
                 if (this.cutsceneCounter !== this.cutscene.length) {
                     if (!this.inCutscene && this.knight.x >= this.cutscene[this.cutsceneCounter].startX) {
                         this.inCutscene = true;
@@ -822,11 +828,11 @@ class SceneManager {
                         this.bosstwoCutsceneDone = true
                     }
                     if (this.level === levels.bossThree) {
+                        console.log(true)
                         this.bossthreeCutsceneDone = true
                     }
                 }
             }
-        }
         if (this.title) {
             if (this.level === levels.startScreen && (this.game.keys[' '] || this.game.keys['Enter'])) {
                 this.music = new Audio(MAIN_MUSIC);
@@ -929,7 +935,7 @@ class SceneManager {
         //this.x = this.knight.x - middlepointX;
 
         let middlepointY = PARAMS.SCREENHEIGHT / 2 - KNIGHT_Y_OFFSET - KNIGHT_HEIGHT / 2;
-            
+
 
         if (0 < this.knight.x - middlepointX && this.level.width > this.knight.x - middlepointX) {
             this.x = this.knight.x - middlepointX;
@@ -938,7 +944,7 @@ class SceneManager {
         } else if (this.level.width < this.knight.x - middlepointX) {
             this.x = this.level.width;
         }
-        
+
         if (this.level.minHeight > this.knight.y - middlepointY && this.level.maxHeight < this.knight.y - middlepointY) {
             this.y = this.knight.y - middlepointY;
         } else if (this.level.minheight > this.knight.y - middlepointY) {
@@ -959,6 +965,8 @@ class SceneManager {
             if (this.knight.x <= -280) {
                 this.loadLevel('bossOne', true, false, false, true)
             } else if (this.knight.x >= 3100) {
+                this.game.camera.x = 0;
+                this.game.camera.y = 0;
                 this.loadLevel('bossTwo', true, false, false, false)
             }
         }
@@ -1004,45 +1012,45 @@ class SceneManager {
         } else {
             //hud
             ctx.globalAlpha = 1;
-            
+
 
             ctx.fillStyle = "White";
             ctx.font = '36px "Open+Sans"';
             ctx.textAlign = "center";
             ctx.textBaseline = 'top';
 
-            
+
             ctx.fillText(this.knight.emberCount, 160, 100);
-        
-            
+
+
             this.emberAnimation.drawFrame(
                 this.game.clockTick,
                 ctx,
-                80, 85,     
-                3.5          
+                80, 85,
+                3.5
             );
 
-            
+
             ctx.fillText(this.knight.potionCount, 285, 100);
             const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
             ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
-            
+
             //stamina bar
-            let barWidth = 180; 
-            let barHeight = 25; 
-            let barX = 330; 
-            let barY = 100; 
+            let barWidth = 180;
+            let barHeight = 25;
+            let barX = 330;
+            let barY = 100;
             let ratio = this.knight.currentStamina / this.knight.stamina;
 
             ctx.fillStyle = "White";
-            ctx.font = '20px "Open+Sans"'; 
+            ctx.font = '20px "Open+Sans"';
             ctx.textAlign = "center";
             ctx.fillText("STAMINA", barX + barWidth/2, barY - 25);
 
             ctx.fillStyle = "#333333";
             ctx.fillRect(barX, barY, barWidth, barHeight);
 
-            ctx.fillStyle = "#FFFF00"; 
+            ctx.fillStyle = "#FFFF00";
             ctx.fillRect(barX, barY, barWidth * ratio, barHeight);
 
             ctx.strokeStyle = "#000000";
@@ -1057,7 +1065,7 @@ class SceneManager {
         }
         testInteractable(this.game, ctx);
         if (this.controlsMenu) {
-            this.controlsMenu.draw(ctx); 
+            this.controlsMenu.draw(ctx);
         }
         if (PARAMS.DEBUG) {
             ctx.fillStyle = "White";

@@ -30,7 +30,9 @@ class SkeletonWarrior {
         this.accelerationY = 4125; 
 
         this.skeletonHit = new Audio("./resources/SoundEffects/skeletonhit.mp3");
+        this.skeletonHit.volume = 0.2;
         this.skeletonDeath = new Audio("./resources/SoundEffects/skeletondeath.mp3");
+        this.skeletonDeath.volume = 0.2;
 
         this.animations = {
             RightAttack1 : new Animator(ASSET_MANAGER.getAsset(SKELETON_WARRIOR + "Attack_1.png"), 0, 0, 130, 200, 5, 0.1, false, false),
@@ -99,7 +101,6 @@ class SkeletonWarrior {
     takeDamage(damageAmount) {
         this.hp -= damageAmount;
         this.skeletonHit.play();
-        this.skeletonHit.volume = 0.2;
     }
 
 	update() {
@@ -173,7 +174,6 @@ class SkeletonWarrior {
 
         if (this.hp <= 0) {
             this.skeletonDeath.play();
-            this.skeletonDeath.volume = 0.2;
             setTimeout(() => {
                 this.removeFromWorld = true;
             }, 1000);

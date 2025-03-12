@@ -28,7 +28,6 @@ class Gorgon {
         this.speed = 400;
         this.damage = 100;
 
-        this.gorgonHit = new Audio("./resources/SoundEffects/gorgonhit.mp3")
         this.gorgonDeath = new Audio("./resources/SoundEffects/gorgondeath.mp3")
         this.healthBar = new HealthBar(this);
         this.updateBB();
@@ -69,9 +68,6 @@ class Gorgon {
     takeDamage(amount) {
 
         this.hp -= amount;
-
-        this.gorgonHit.play();
-        this.gorgonHit.volume = 0.2;
 
         if (this.hp <= 0) {
             this.die();

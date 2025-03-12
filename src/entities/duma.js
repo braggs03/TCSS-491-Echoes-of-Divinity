@@ -27,7 +27,7 @@ class Duma {
         this.specialAttackAvailable = true;
         this.counter = 800;
         this.counterOne = 2000;
-        this.counterTwo = 5000;
+        this.counterTwo = 3000;
         this.dead = false;
         this.pushBack = false;
         this.removeFromWorld = false;
@@ -167,6 +167,11 @@ class Duma {
                 entity instanceof Knight && !entity.dead
             );
         }
+        if (this.target.hp <= 0) {
+            this.fireSound.volume = 0;
+        }
+
+
         if (this.goUp) {
             if (this.facingLeft) {
                 if (this.x > 470) {
@@ -369,7 +374,7 @@ class Duma {
 
         if (!this.specialAttackAvailable) {
             if (this.counterTwo < 3000) {
-                this.counterTwo += 100 * this.game.clockTick;
+                this.counterTwo += 200 * this.game.clockTick;
             } else {
                 this.specialAttackAvailable = true;
             }
@@ -377,7 +382,7 @@ class Duma {
 
         if (!this.attackChargeAvailable) {
             if (this.counterOne < 2000) {
-                this.counterOne += 100 * this.game.clockTick;
+                this.counterOne += 200 * this.game.clockTick;
             } else {
                 this.attackChargeAvailable = true;
             }
