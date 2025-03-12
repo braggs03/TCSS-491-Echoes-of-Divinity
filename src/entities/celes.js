@@ -129,7 +129,7 @@ class Celes {
         }else if (this.currentState === 'LeftWalk') {
             this.x -= 150 * this.game.clockTick;
         }
-        if (this.hp <= 1500 && !this.inCutscene && this.counter >= 2000) {
+        if (this.hp <= 2500 && !this.inCutscene && this.counter >= 2000) {
             if (this.lightningTime > 500) {
                 this.lightningTime -= 500
             }
