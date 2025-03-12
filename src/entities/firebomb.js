@@ -24,7 +24,7 @@ class FireBomb {
         if (this.animator.currentFrame() > 8) {
             if (this.target.BB && this.BB.collide(this.target.BB)) {
                 if (!this.damageDone) {
-                    this.target.takeDamage(100);
+                    this.target.takeDamage(200);
                     this.damageDone = true;
                 }
             }
