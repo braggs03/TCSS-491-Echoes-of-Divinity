@@ -137,7 +137,6 @@ class Duma {
                 this.y += 120;
                 this.setState('RightIdle')
             } else if (this.currentState === 'RightAttack1') {
-                console.log(true)
                 this.x += 20;
                 this.y += 120;
                 this.loopCount = 0;
