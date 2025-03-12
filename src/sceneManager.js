@@ -982,38 +982,50 @@ class SceneManager {
 
     userInterface(ctx) {
         if (this.game.textOverlay) {
-            if (this.level === levels.mainMenu) {
-                ctx.globalAlpha = 1;
-            } else {
-                // Draw the black background
-                ctx.globalAlpha = 1
+            // Set default opacity
+            ctx.globalAlpha = 1;
+            
+            // Only draw background for screens that need it (not mainMenu or startScreen)
+            if (this.level !== levels.mainMenu && this.level !== levels.startScreen && this.level.background) {
                 ctx.fillStyle = this.level.background;
                 ctx.fillRect(0, 0, this.level.width, this.level.height);
-
-                // Loop through the texts and apply opacity
+            }
+    
+            // For main menu, draw all text immediately
+            if (this.level === levels.mainMenu) {
                 this.game.textOverlay.forEach(text => {
                     ctx.fillStyle = text.color;
                     ctx.font = text.font;
                     ctx.textAlign = "center";
-                    ctx.globalAlpha = text.opacity;  // Apply opacity
-
-                    // Draw the text
+                    ctx.globalAlpha = 1;  // Always fully visible for main menu
+                    ctx.fillText(text.message, text.x, text.y);
+                });
+            } 
+            // For story recap and other screens, use the fading effect
+            else {
+                this.game.textOverlay.forEach(text => {
+                    ctx.fillStyle = text.color;
+                    ctx.font = text.font;
+                    ctx.textAlign = "center";
+                    ctx.globalAlpha = text.opacity;  // Use the calculated opacity for fade effect
                     ctx.fillText(text.message, text.x, text.y);
                 });
             }
-        } else {
-            //hud
+            
+            // Reset opacity
+            ctx.globalAlpha = 1;
+        } 
+        // Only draw HUD elements during actual gameplay (not in menu/title screens)
+        else if (this.level !== levels.mainMenu && this.level !== levels.startScreen && this.level !== levels.storyRecap) {
+            // HUD elements
             ctx.globalAlpha = 1;
             
-
             ctx.fillStyle = "White";
             ctx.font = '36px "Open+Sans"';
             ctx.textAlign = "center";
             ctx.textBaseline = 'top';
-
             
             ctx.fillText(this.knight.emberCount, 160, 100);
-        
             
             this.emberAnimation.drawFrame(
                 this.game.clockTick,
@@ -1021,35 +1033,34 @@ class SceneManager {
                 80, 85,     
                 3.5          
             );
-
             
             ctx.fillText(this.knight.potionCount, 285, 100);
             const emberImage = ASSET_MANAGER.getAsset("./resources/dungeon.png");
             ctx.drawImage(emberImage, 1712, 2216, 16, 16, 200, 64, 64, 80);
             
-            //stamina bar
+            // Stamina bar
             let barWidth = 180; 
             let barHeight = 25; 
             let barX = 330; 
             let barY = 100; 
             let ratio = this.knight.currentStamina / this.knight.stamina;
-
+    
             ctx.fillStyle = "White";
             ctx.font = '20px "Open+Sans"'; 
             ctx.textAlign = "center";
             ctx.fillText("STAMINA", barX + barWidth/2, barY - 25);
-
+    
             ctx.fillStyle = "#333333";
             ctx.fillRect(barX, barY, barWidth, barHeight);
-
+    
             ctx.fillStyle = "#FFFF00"; 
             ctx.fillRect(barX, barY, barWidth * ratio, barHeight);
-
+    
             ctx.strokeStyle = "#000000";
             ctx.lineWidth = 2;
             ctx.strokeRect(barX, barY, barWidth, barHeight);
         }
-    };
+    }
 
     draw(ctx) {
         if (!this.inCutscene) {

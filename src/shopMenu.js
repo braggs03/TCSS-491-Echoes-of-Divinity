@@ -216,6 +216,22 @@ class ShopMenu {
        
         console.log(`Attack stamina cost decreased from ${oldStamina} to ${this.knight.stamina}`);
     }
+    applyStaminaBoost(quantity) {
+        const boostMultiplier = Math.pow(0.9, quantity); // 10% reduction per level
+        
+        // Reduce stamina costs instead of max stamina
+        const oldMeleeCost = this.knight.meleeAttackStaminaCost;
+        const oldRangedCost = this.knight.rangedAttackStaminaCost;
+        
+        // Apply the multiplier to reduce the stamina costs
+        this.knight.meleeAttackStaminaCost = Math.round(oldMeleeCost * boostMultiplier);
+        this.knight.rangedAttackStaminaCost = Math.round(oldRangedCost * boostMultiplier);
+        
+        // Log the changes
+        console.log(`Melee attack stamina cost decreased from ${oldMeleeCost} to ${this.knight.meleeAttackStaminaCost}`);
+        console.log(`Ranged attack stamina cost decreased from ${oldRangedCost} to ${this.knight.rangedAttackStaminaCost}`);
+        
+    }
     
     applyPotionBoost(quantity) {
         const boostMultiplier = Math.pow(1.1, quantity);
