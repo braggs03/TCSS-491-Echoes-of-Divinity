@@ -612,9 +612,7 @@ class Knight {
             }
         }
 
-        if (!this.moveable) {
-            this.setState(this.facing == LEFT ? "LeftIdle" : "RightIdle");
-            this.velocityX = 0; 
+        if (this.inCutscene) {
             if (!this.colliding.up) {
                 this.velocityY = this.maxVelocityY;
             }

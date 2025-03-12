@@ -168,6 +168,7 @@ class Duma {
             );
         }
         if (this.target.hp <= 0) {
+            this.fireSound.pause();
             this.fireSound.volume = 0;
         }
 
